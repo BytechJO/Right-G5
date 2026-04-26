@@ -1,11 +1,9 @@
 import React from "react";
-import page_9 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 9.png";
-import "./Page9.css"
+import page_9 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 9.png";
+import "./Page9.css";
 // import song from "../../../assets/audio/placeholders/song.mp3";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 const Page9 = ({ openPopup }) => {
- 
-
   return (
     <div
       className="page1-img-wrapper"
@@ -19,10 +17,11 @@ const Page9 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 4 })}
+          onClick={() => openPopup("exercise", { startIndex: 3 })}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
             x="0"
             y="0"
@@ -40,10 +39,33 @@ const Page9 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 4 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+      <div
+        className="click-icon-page9-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 5 })}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
             x="0"
             y="0"

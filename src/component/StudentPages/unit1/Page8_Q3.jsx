@@ -1,213 +1,324 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img from "../../../assets/imgs/test6.png";
-import Button from "../../Button";
-import WrongMark from "../../WrongMark";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 6.svg";
-import img7 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8/Ex B 7.svg";
+
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 1.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 2.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 3.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 4.svg";
+import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 5.svg";
+
 const Page8_Q3 = () => {
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [matches, setMatches] = useState({});
   const [showResult, setShowResult] = useState(false);
-  const questions = [
-    {
-      id: 1,
-      text: "Jad is older than his dad.",
-      answer: "false",
-      images: [img1], // صورة وحدة
-    },
-    {
-      id: 2,
-      text: "The giraffe is taller than the bear.",
-      answer: "true",
-      images: [img2, img3], // صورتين
-    },
-    {
-      id: 3,
-      text: "The bus is faster than the airplane.",
-      answer: "false",
-      images: [img4, img5],
-    },
-    {
-      id: 4,
-      text: "The car is bigger than the bike.",
-      answer: "true",
-      images: [img6, img7],
-    },
+  const [locked, setLocked] = useState(false);
+  const [selectedSentence, setSelectedSentence] = useState(null);
+
+  const imageRefs = useRef([]);
+  const sentenceRefs = useRef([]);
+  const containerRef = useRef(null);
+
+  const images = [
+    { id: 0, img: img1 },
+    { id: 1, img: img2 },
+    { id: 2, img: img3 },
+    { id: 3, img: img4 },
+    { id: 4, img: img5 },
   ];
 
-  const [answers, setAnswers] = useState({});
+  const sentences = [
+    { id: 0, text: "pancakes" },
+    { id: 1, text: "mirror" },
+    { id: 2, text: "face" },
+    { id: 3, text: "notebook" },
+    { id: 4, text: "pillow" },
+  ];
 
-  const [locked, setLocked] = useState(false);
-
-  const reset = () => {
-    setAnswers({ 1: "", 2: "", 3: "" });
-    setLocked(false);
-    setShowResult(false);
+  const correct = {
+    0: 4,
+    1: 1,
+    2: 0,
+    3: 3,
+    4: 2,
   };
 
-  const showAnswers = () => {
-    const filled = {};
-    questions.forEach((q) => {
-      filled[q.id] = q.answer;
-    });
-    setAnswers(filled);
-    setLocked(true);
-    setShowResult(true);
-  };
+  const selectImage = (id) => {
+    if (locked || showResult) return;
 
-  const checkAnswers = () => {
-    if (locked) return;
+    // إذا اختار جملة → اربط
+    if (selectedSentence !== null) {
+      setMatches((prev) => {
+        const updated = { ...prev };
 
-    if (questions.some((q) => !answers[q.id])) {
-      ValidationAlert.info("Please answer all questions");
+        Object.keys(updated).forEach((imgKey) => {
+          if (updated[imgKey] === selectedSentence) {
+            delete updated[imgKey];
+          }
+        });
+
+        updated[id] = selectedSentence;
+        return updated;
+      });
+
+      setSelectedSentence(null);
       return;
     }
 
-    let correct = 0;
+    // السلوك القديم (اختيار صورة)
+    setSelectedImg(id);
+  };
 
-    questions.forEach((q) => {
-      if (answers[q.id] === q.answer) correct++;
+  const selectSentence = (id) => {
+    if (locked || showResult) return;
+
+    // إذا في صورة مختارة → اربط
+    if (selectedImg !== null) {
+      setMatches((prev) => {
+        const updated = { ...prev };
+
+        Object.keys(updated).forEach((imgKey) => {
+          if (updated[imgKey] === id) {
+            delete updated[imgKey];
+          }
+        });
+
+        updated[selectedImg] = id;
+        return updated;
+      });
+
+      setSelectedImg(null);
+      return;
+    }
+    setSelectedSentence(id);
+  };
+  const checkAnswers = () => {
+    if (locked || showResult) return;
+
+    if (Object.keys(matches).length !== images.length) {
+      ValidationAlert.info("Please match all.");
+      return;
+    }
+
+    let correctCount = 0;
+
+    Object.entries(matches).forEach(([imgId, sentId]) => {
+      if (correct[imgId] === sentId) correctCount++;
     });
 
-    const total = questions.length;
+    const total = images.length;
 
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correct} / ${total}
-      </span>
-    </div>
+    const message = `
+        Score: ${correctCount} / ${total}
   `;
 
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      ValidationAlert.success(message);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(message);
+    } else {
+      ValidationAlert.warning(message);
+    }
 
     setShowResult(true);
     setLocked(true);
   };
+
+  const showAnswers = () => {
+    setMatches(correct);
+    setLocked(true);
+    setShowResult(true);
+  };
+
+  const reset = () => {
+    setSelectedSentence(null);
+    setSelectedImg(null);
+    setMatches({});
+    setShowResult(false);
+    setLocked(false);
+  };
+
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         padding: "30px",
+        position: "relative",
       }}
     >
-      <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
-            B
-          </span>
-          Look and write
-          <span style={{ color: "#2e3192" }}>true</span>or
-          <span style={{ color: "#2e3192" }}>false</span>.
+      <div
+        className="div-forall"
+        style={{
+          width: "100%",
+          maxWidth: "900px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+        }}
+      >
+        <h5 className="header-title-page8  mb-12">
+          <span className="ex-A mr-2.5">C</span>
+          Look, read, and match.{" "}
         </h5>
-        <div className=" flex flex-col  gap-8 mt-8">
-          {questions.map((q) => (
-            <div key={q.id} className="flex items-center">
-              <div className="flex items-center gap-4 w-[55%]">
-                <span className="font-bold text-xl">{q.id}</span>
-                <span className="text-[1.2rem]">{q.text}</span>
+
+        <div className="w-full flex flex-col items-center gap-50">
+          {/* 🔥 الصور فوق */}
+          <div className="grid grid-cols-5 w-full">
+            {images.map((img, i) => (
+              <div
+                key={i}
+                onClick={() => selectImage(i)}
+                className="flex flex-col items-center gap-2 cursor-pointer transition"
+              >
+                <img
+                  src={img.img}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "contain",
+                    border:
+                      selectedImg === i
+                        ? "3px solid #6d2980"
+                        : "3px solid transparent",
+                    borderRadius: "12px",
+                    padding: "4px",
+                    backgroundColor:
+                      selectedImg === i ? "#6d2980" : "transparent",
+                  }}
+                />
+
+                <div
+                  ref={(el) => (imageRefs.current[i] = el)} // 🔥 الريف هون على الدوت
+                  className="w-3 h-3 rounded-full mt-2 transition"
+                  style={{
+                    backgroundColor: selectedImg === i ? "#00AEEF" : "#00AEEF",
+                    transform: selectedImg === i ? "scale(1.4)" : "scale(1)",
+                   
+                  }}
+                ></div>
               </div>
+            ))}
+          </div>
 
-              <div className="flex flex-col items-center w-[25%]">
-                <div className="flex gap-6 mb-2">
-                  {["true", "false"].map((val) => {
-                    const isSelected = answers[q.id] === val;
-                    const isCorrect = q.answer === val;
+          {/* 🔥 الجمل تحت */}
+          <div className="grid grid-cols-5 w-full">
+            {sentences.map((sent, i) => (
+              <div
+                key={i}
+                onClick={() => selectSentence(i)}
+                className="relative flex flex-col items-center cursor-pointer"
+              >
+                {/* 🔥 الدوت */}
+                <div
+                  ref={(el) => (sentenceRefs.current[i] = el)} // 🔥 هون كمان
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full z-10 transition"
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "#00AEEF",
+                    transform:
+                      selectedSentence === i ? "scale(1.4)" : "scale(1)",
+                    boxShadow:
+                      selectedSentence === i
+                        ? "0 0 0 4px rgba(249,115,22,0.2)"
+                        : "none",
+                  }}
+                ></div>
 
-                    return (
+                {/* 🔥 البوكس */}
+                <div
+                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition"
+                  style={{
+                    border:
+                      selectedSentence === i
+                        ? "2px solid #f97316"
+                        : "2px solid transparent",
+                  }}
+                >
+                  {sent.text}
+                  {showResult &&
+                    Object.entries(matches).some(
+                      ([imgId, sentId]) =>
+                        sentId == i && correct[imgId] !== sentId,
+                    ) && (
                       <span
-                        key={val}
-                        onClick={() => {
-                          if (locked) return;
-                          setAnswers({ ...answers, [q.id]: val });
-                        }}
                         style={{
-                          position: "relative",
-                          cursor: "pointer",
-                          padding: "4px 12px",
-                          display: "inline-block",
+                          position: "absolute",
+                          top: "-10px",
+                          right: "-10px",
+                          transform: "translateY(-50%)",
+                          width: "20px",
+                          height: "20px",
+                          background: "#ef4444",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                          pointerEvents: "none",
+                          zIndex: 3,
                         }}
                       >
-                        {val}
-
-                        {/* الدائرة */}
-                        {isSelected && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "-6px",
-                              left: "-10px",
-                              right: "-10px",
-                              bottom: "-6px",
-                              border: isSelected
-                                ? showResult
-                                  ? isCorrect
-                                    ? "2px solid #1C398E"
-                                    : "2px solid #ef4444"
-                                  : "2px solid #1C398E"
-                                : "none",
-                              borderRadius: "20px",
-                              pointerEvents: "none",
-                            }}
-                          />
-                        )}
-
-                        {showResult && isSelected && !isCorrect && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              right: "-2px", // 🔥 حركها يمين
-                              top: "0px", // 🔥 حركها لأعلى
-                            }}
-                          >
-                            <WrongMark />
-                          </div>
-                        )}
+                        ✕
                       </span>
-                    );
-                  })}
+                    )}
                 </div>
-
-                {/* الخط */}
-                <div className="w-[70%] border-b-[3px] border-gray-500"></div>
               </div>
-
-              {/* الصورة */}
-                <div className="w-[50%] flex justify-center gap-2">
-                  {q.images.map((image, i) => (
-                    <img
-                      key={i}
-                      src={image}
-                      alt=""
-                      style={{
-                        width: q.images.length === 1 ? "100px" : "70px",
-                        height: "auto",
-                        objectFit: "contain",
-                      }}
-                    />
-                  ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        {/* BUTTONS */}
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+      </div>
+
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        {Object.entries(matches).map(([imgId, sentId], i) => {
+          const imgDot = imageRefs.current[imgId];
+          const sentDot = sentenceRefs.current[sentId];
+
+          if (!imgDot || !sentDot || !containerRef.current) return null;
+
+          const imgRect = imgDot.getBoundingClientRect();
+          const sentRect = sentDot.getBoundingClientRect();
+          const containerRect = containerRef.current.getBoundingClientRect();
+
+          const x1 = sentRect.left + sentRect.width / 2 - containerRect.left;
+          const y1 = sentRect.top + sentRect.height / 2 - containerRect.top;
+
+          const x2 = imgRect.left + imgRect.width / 2 - containerRect.left;
+          const y2 = imgRect.top + imgRect.height / 2 - containerRect.top;
+          return (
+            <g key={i}>
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="#6d2980"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={reset}>
+          Start Again ↻
+        </button>
+
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

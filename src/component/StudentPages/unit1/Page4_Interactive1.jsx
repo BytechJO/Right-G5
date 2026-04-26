@@ -8,7 +8,6 @@ const Page4_Interactive1 = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
     x1: 79.6,
     y1: 17.2,

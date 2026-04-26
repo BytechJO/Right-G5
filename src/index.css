@@ -44,7 +44,6 @@ button {
   flex-direction: column;
   width: 60%;
   justify-content: flex-start;
-  
 }
 .tooltip-text {
   visibility: hidden;
@@ -229,11 +228,21 @@ img {
 }
 
 .ex-A {
-  background: #ffca94;
+  background: #a785b2;
   font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
   color: white;
   font-weight: 700;
   font-size: 25px;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.ex-A-read {
+  background: #a785b2;
+  font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
   padding: 0px 10px;
   border-radius: 6px;
   font-weight: bold;
@@ -249,13 +258,25 @@ img {
 .header-title-page8 {
   font-size: 25px;
   font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
-  color: #f39b42;
+  color: #6d2980;
   font-weight: 700;
   display: flex;
   align-items: flex-start;
   gap: 5px;
   white-space: nowrap;
   width: 70%;
+}
+.header-title-page8-read {
+  font-size: 20px;
+  font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
+  color: #6d2980;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  white-space: nowrap;
+  width: 70%;
+  margin-bottom: 2;
 }
 .WB-header-title-page8 {
   font-size: 25px;

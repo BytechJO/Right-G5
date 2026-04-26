@@ -1,4 +1,3 @@
-
 /*===========page5============*/
 
 .headset-icon-CD-page5 {
@@ -9,7 +8,12 @@
   padding: 5px;
   cursor: pointer;
 }
-
+.click-icon-page5 {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  padding: 5px;
+}
 #CD-1-page5 {
   top: 3%;
   right: 4%;
@@ -31,14 +35,8 @@
 }
 
 .click-icon-page5 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  bottom: 14%;
-  left: 52%;
-  cursor: pointer;
+  bottom: 87.5%;
+  right: 69%;
 }
 .headset-icon-CD-page5-1 {
   position: absolute;

@@ -55,6 +55,7 @@
 .number-icon,
 .headset-icon-CD-page4-1,
 .headset-icon-CD-page4-2,
+.headset-icon-CD-page4-3,
 .click-icon-page4 {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -62,8 +63,8 @@
   padding: 5px;
 }
 .headset-icon-CD-page4-1 {
-  top: 7.5%;
-  right: 5.2%;
+  top: 18.5%;
+  right: 62.2%;
 }
 
 #num-4-page4 {
@@ -80,12 +81,22 @@
   top: 44%;
   left: 45%;
 }
-
-
+.click-icon-page4-3 {
+  bottom: 10.5%;
+  right: 37%;
+}
+.pauseBtn-icon-CD-page4 {
+  position: absolute;
+  top: 5.5%;
+  right: 53.8%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
 .headset-icon-CD-page4-2 {
   position: absolute;
-  top: 52.5%;
-  left: 26.5%;
+  top: 77%;
+  left: 27.6%;
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 2px;
@@ -93,8 +104,18 @@
   cursor: pointer;
   padding: 5px;
 }
-
-.click-icon-page4 {
+.headset-icon-CD-page4-3 {
+  position: absolute;
+  top: 87%;
+  left: 19.6%;
+  /* background-color: #6bcff6;
+  border-radius: 20px;
+  border: rgb(255, 255, 255) solid 2px;
+  padding: 5px; */
+  cursor: pointer;
+  padding: 5px;
+}
+.click-icon-page5 {
   position: absolute;
   /* background-color: #6bcff6;
   border-radius: 20px;
@@ -149,4 +170,3 @@
   top: 44%;
   left: 45%;
 }
-

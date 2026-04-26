@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import page_8 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 8.png";
+import page_8 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8.png";
 
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 import "./Page8.css"
@@ -80,29 +80,7 @@ const Page8 = ({ openPopup }) => {
           />
         </svg>
       </div>
-      <div
-        className="click-icon-page8-4 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 3 })}
-          // className="click-icon-page8-4 hover:scale-110 transition"
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid meet"
-          />
-        </svg>
-      </div>
+      
     </div>
   );
 };

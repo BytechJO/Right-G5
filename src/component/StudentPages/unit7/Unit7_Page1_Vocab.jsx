@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import backgroundImage from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/G5_U7_Pg_58.png";
-import page2_2 from "../../../assets/imgs/test.png";
 import vocabulary from "../../../assets/audio/ClassBook/Unit 7/P 58/Pg58_Vocab_Adult Lady.mp3";
 import vocabularyImg from "../../../assets/imgs/Voc.svg";
 import "./Unit7_Page1.css";

@@ -2,9 +2,9 @@ import sound1 from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.2_Adult L
 import sound2 from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.3_Adult Lady.mp3";
 import sound3 from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.4_Adult Lady.mp3";
 import Rabbit from "../../../assets/Page 01/Rabbit.svg";
-import img1 from "../../../assets/imgs/test.png";
-import img2 from "../../../assets/imgs/test.png";
-import img3 from "../../../assets/imgs/test.png";
+import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-01.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-02.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-03.svg";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import longAudio from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_Instruction1_Adult Lady.mp3";
 

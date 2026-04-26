@@ -1,242 +1,234 @@
-import React, { useState, useRef } from "react";
-import page4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4.png";
-import allUnitSound from "../../../assets/audio/ClassBook/Unit 1/unit1-page4-allunit.mp3";
-import Rabbit from "../../../assets/Page 01/Rabbit.svg";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/Asset 4.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/1-02.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/1-03.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/1-04.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/1-05.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 1 At The Basketball Game Folder/Page 4-5/1-06.svg";
-import sound1_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.1_Adult Lady.mp3";
-import sound2_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.2_Adult Lady.mp3";
-import sound3_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.3_Adult Lady.mp3";
-import sound4_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.4_Adult Lady.mp3";
-import sound5_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.5_Adult Lady.mp3";
-import sound6_letter from "../../../assets/audio/ClassBook/Unit 1/P 4/Pg4_1.6_Adult Lady.mp3";
-import Page4_Interactive1 from "./Page4_Interactive1";
-import Page4_vocabulary from "./Page4_vocabulary";
-import AudioWithCaption from "../../AudioWithCaption";
-import FourImagesWithAudio from "../../FourImagesWithAudio";
+import page4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4.png";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/000000 (1).svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 3.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 4.svg";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import longAudio from "../../../assets/audio/ClassBook/Unit 1/P 4/unit1-page4-listen.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 1/P 4/sound12.mp3";
+import longAudio from "../../../assets/audio/ClassBook/U1/PG 4/conversation1.mp3";
 import "./Page4.css";
+import Conversation from "../../Conversation";
+import wordJson from "../../../assets/json/conversation1_eng.json";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U1/PG 4/vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U1/PG 4/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U1/PG 4/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U1/PG 4/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U1/PG 4/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U1/PG 4/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U1/PG 4/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U1/PG 4/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U1/PG 4/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U1/PG 4/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U1/PG 4/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U1/PG 4/sound11.mp3";
+import CriticalThinking from "../../CriticalThinking";
+
 const Page4 = ({ openPopup }) => {
-  const audioRef = useRef(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  // أصوات الصور
-  const imageSounds = [
-    null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
-    new Audio(sound1_letter),
-    new Audio(sound2_letter),
-    new Audio(sound3_letter),
-    new Audio(sound4_letter),
-    new Audio(sound5_letter),
-    new Audio(sound6_letter),
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
   ];
   const captionsExample = [
     {
-      start: 0,
-      end: 4,
-      text: "Page four, unit one. At the basketball game.",
+      start: 0.56,
+      end: 5.799,
+      text: "Page four. Conversation. Listen and read, then say.",
     },
     {
-      start: 4.2,
-      end: 16.5,
-      text: "Page four, unit one, vocabulary. One, scoreboard. Two, young. Three, old. Four, small.",
+      start: 6.839,
+      end: 9.899,
+      text: "Wake up, Hansel. You'll be late for school.",
     },
     {
-      start: 17.5,
-      end: 57.24,
-      text: "Five, big. Six, referee. Seven, whistle. Eight, fast. Nine, slow. Ten, tall. Eleven, short. Twelve, basketball court. Page four, listen and read along. Short vowels. Cat, bed, fish, box, gum. Unit one, page five, reading. Listen and read along. Slow and steady wins the race. Page five, listen, read and repeat.",
+      start: 9.899,
+      end: 12.119,
+      text: "Uh-oh, how late am I?",
     },
-    { start: 57.239, end: 59.499, text: "Do you play basketball?" },
-    { start: 59.5, end: 62.18, text: " No, I play volleyball." },
     {
-      start: 62.5,
-      end: 71.11,
-      text: "Page five, listen and read along. Long vowels. Cake, bee, bike, home, cube.",
+      start: 12.119,
+      end: 16.1,
+      text: "It's almost 7:00. How did you forget to set your alarm?",
+    },
+    {
+      start: 16.15,
+      end: 19.1,
+      text: "I think I fell asleep while I was studying.",
+    },
+    {
+      start: 19.1,
+      end: 25.18,
+      text: "Oh, yes. You used your notebook as a pillow. How well do you know your math for your test today?",
+    },
+    {
+      start: 25.18,
+      end: 31.659,
+      text: "Actually, I know it pretty well. I've been reviewing all week. I think I was counting in my sleep.",
+    },
+    {
+      start: 31.659,
+      end: 37.059,
+      text: "Maybe you can do one more problem and figure the area of a pancake before you eat it.",
+    },
+    {
+      start: 37.059,
+      end: 43.379,
+      text: "Pancakes? How did you know that's what I wanted this morning? I'll be there right away. I'm starving.",
+    },
+    {
+      start: 44.399,
+      end: 48.599,
+      text: "You might want to wash your face first. It's blue on one side.",
+    },
+    {
+      start: 48.599,
+      end: 52.239,
+      text: "Blue? Where's a mirror? Am I sick?",
+    },
+    {
+      start: 52.239,
+      end: 56.319,
+      text: "Only with notebookitis. I think it's from the blue pen in your notebook.",
     },
   ];
-
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 27.7, y1: 17.8, sound: 1, isPrimary: true },
-
-    // الصوت الأول – منطقة إضافية
-    { x1: 0.03, y1: 15, x2: 29.76, y2: 27.29, sound: 1, isPrimary: false },
-
-    // الصوت الثاني – 27
-    { x1: 54.6, y1: 32.2, sound: 2, isPrimary: true },
-
-    // الصوت الثاني – الإضافية
-    { x1: 51.98, y1: 32.2, x2: 54.35, y2: 34.57, sound: 2, isPrimary: false },
-
-    // الصوت الثالث – الأساسية
-    { x1: 13.2, y1: 27.5, sound: 3, isPrimary: true },
-
-    // الصوت الثالث – الإضافية
-    { x1: 17.94, y1: 28.47, x2: 21.39, y2: 34.4, sound: 3, isPrimary: false },
-
-    // الصوت الرابع – الأساسية
-    { x1: 38.7, y1: 23.5, sound: 4, isPrimary: true },
-
-    // الصوت الرابع – الإضافية
-    { x1: 43.15, y1: 23.9, x2: 49.4, y2: 27.63, sound: 4, isPrimary: false },
-
-    // الصوت الخامس – الأساسية
-    { x1: 47.2, y1: 16.2, sound: 5, isPrimary: true },
-
-    // الصوت الخامس – الإضافية
-    { x1: 52.2, y1: 19, x2: 62.45, y2: 23.4, sound: 5, isPrimary: false },
-
-    // الصوت السادس – الأساسية
-    { x1: 89, y1: 50, sound: 6, isPrimary: true },
-
-    // الصوت السادس – الإضافية
-    { x1: 83.87, y1: 50.64, x2: 91.41, y2: 70.61, sound: 6, isPrimary: false },
-
-    // الصوت السابع – الأساسية
-    { x1: 79, y1: 47.9, sound: 7, isPrimary: true },
-
-    // الصوت الثامن – الأساسية
-    { x1: 61.2, y1: 53.7, sound: 8, isPrimary: true },
-
-    // الصوت الثامن – الإضافية
-    { x1: 58.66, y1: 44.89, x2: 70.51, y2: 66.38, sound: 8, isPrimary: false },
-
-    // الصوت التاسع – الأساسية
-    { x1: 39.4, y1: 38.8, sound: 9, isPrimary: true },
-
-    // الصوت التاسع – الإضافية
-    { x1: 33.67, y1: 39.81, x2: 36.9, y2: 48.93, sound: 9, isPrimary: false },
-
-    // الصوت العاشر – الأساسية
-    { x1: 78.2, y1: 39.3, sound: 10, isPrimary: true },
-
-    // الصوت  العاشر – الإضافية
-    { x1: 73.53, y1: 35.07, x2: 80.42, y2: 46.41, sound: 10, isPrimary: false },
-
-    // الصوت الحادي عشر – الأساسية
-    { x1: 61, y1: 36.3, sound: 11, isPrimary: true },
-
-    // الصوت الحادي عشر – الإضافية
-    { x1: 65.34, y1: 38.97, x2: 70.94, y2: 46.07, sound: 11, isPrimary: false },
-
-    // الصوت الثاني عشر – الأساسية
-    { x1: 29.8, y1: 68.4, sound: 12, isPrimary: true },
-
-    // الصوت الثاني عشر – الإضافية
-    { x1: 27.64, y1: 67.56, x2: 67.28, y2: 79.07, sound: 12, isPrimary: false },
+  const filteredSegments = wordJson.segments.slice(1);
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+    ],
+    [
+      filteredSegments[3]?.words || [],
+      filteredSegments[4]?.words || [],
+      filteredSegments[5]?.words || [],
+    ],
+    [filteredSegments[6]?.words || [], filteredSegments[7]?.words || []],
+    [
+      filteredSegments[8]?.words || [],
+      filteredSegments[9]?.words || [],
+      filteredSegments[10]?.words || [],
+    ],
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-  };
-  const captions = [
-    { start: 0, end: 3.5, text: "Page 4. Listen and read along." },
-    { start: 3.6, end: 8.9, text: " Short vowels. Cat, bed, fish, box, gum" },
+  const captionTimings = [
+    [captionsExample[1], captionsExample[2], captionsExample[3]],
+    [captionsExample[4], captionsExample[5], captionsExample[6]],
+    [captionsExample[7], captionsExample[8]],
+    [captionsExample[9], captionsExample[10], captionsExample[11]],
   ];
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        { speaker: "Mom", text: "Wake up, Hansel! You'll be late for school." },
+        { speaker: "Hansel", text: "Uh-oh! How late am I?" },
+        {
+          speaker: "Mom",
+          text: "It’s almost seven o’clock. How did you forget to set your alarm?",
+        },
+      ],
+    },
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "Hansel",
+          text: "I think I fell asleep while I was studying.",
+        },
+        {
+          speaker: "Mom",
+          text: "Oh, yes. You used your notebook as a pillow. How well do you know your math for your test today?",
+        },
+        {
+          speaker: "Hansel",
+          text: " Actually, I know it pretty well. I’ve been reviewing all week. I think I was counting in my sleep.",
+        },
+      ],
+    },
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Mom",
+          text: "Maybe you can do one more problem and figure the area of a pancake before you eat it.",
+        },
+        {
+          speaker: "Hansel",
+          text: " Pancakes! How did you know that’s what I wanted this morning? I’ll be there right away. I’m starving!",
+        },
+      ],
+    },
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Mom",
+          text: "You might want to wash your face first. It’s blue on one side.",
+        },
+        { speaker: "Hansel", text: "Blue! Where’s a mirror? Am I sick" },
+        {
+          speaker: "Mom",
+          text: "Only with notebook-it is. I think it’s from the blue pen in your notebook.",
+        },
+      ],
+    },
+  ];
+  const wordTimingsVoc = [
+    { start: 8.8, end: 11.1 },
+    { start: 11.2, end: 13.6 },
+    { start: 13.94, end: 15.5 },
+    { start: 16.4, end: 17.6 },
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
+    { start: 19.04, end: 20.26 },
+    { start: 21.6, end: 22.94 },
+    { start: 24.2, end: 25.38 },
+    { start: 26.8, end: 28.64 },
+
+    { start: 29.719, end: 31.5 },
+    { start: 32.32, end: 34.18 },
+    { start: 35.06, end: 37.06 },
+  ];
+
+  const captionVoc = [
+    {
+      start: 0.159,
+      end: 8.5,
+      text: "Page four, unit one vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
+    },
+
+    { start: 8.8, end: 11.1, text: "1. alarm." },
+    { start: 11.2, end: 13.6, text: "2. notebook." },
+    { start: 13.94, end: 15.5, text: "3. pillow." },
+    { start: 16.4, end: 17.6, text: "4. counting." },
+
+    { start: 19.04, end: 20.26, text: "5. face." },
+    { start: 21.6, end: 22.94, text: "6. figure." },
+    { start: 24.2, end: 25.38, text: "7. reviewing." },
+    { start: 26.8, end: 28.64, text: "8. pancakes." },
+
+    { start: 29.719, end: 31.5, text: "9. starving." },
+    { start: 32.32, end: 34.18, text: "10. actually." },
+    { start: 35.06, end: 37.06, text: "11. mirror." },
+  ];
   return (
     <>
       <div
         className="page1-img-wrapper"
         style={{ backgroundImage: `url(${page4})` }}
-        onClick={handleImageClick}
       >
-        <audio ref={audioRef} style={{ display: "none" }} />
-
-        {areas.map((area, index) => {
-          const isActive = activeAreaIndex === area.sound;
-
-          // ============================
-          // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-          // ============================
-          if (area.isPrimary) {
-            return (
-              <div
-                key={index}
-                className={`circle-area ${isActive ? "active" : ""}`}
-                style={{
-                  left: `${area.x1}%`,
-                  top: `${area.y1}%`,
-                }}
-                onClick={() => {
-                  setActiveAreaIndex(area.sound);
-                  playSound(sounds[area.sound]);
-                }}
-              ></div>
-            );
-          }
-
-          // ============================
-          // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-          //    عند الضغط عليها → تفعّل الدائرة الأساسية
-          // ============================
-          return (
-            <div
-              key={index}
-              className="clickable-area"
-              style={{
-                position: "absolute",
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-                width: `${area.x2 - area.x1}%`,
-                height: `${area.y2 - area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        })}
-
         <div
           className="headset-icon-CD-page4-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
@@ -247,7 +239,7 @@ const Page4 = ({ openPopup }) => {
             viewBox="0 0 90 90"
             onClick={() =>
               openPopup(
-                "audio",
+                "html",
                 <div
                   style={{
                     display: "flex",
@@ -255,9 +247,15 @@ const Page4 = ({ openPopup }) => {
                     alignContent: "center",
                   }}
                 >
-                  <AudioWithCaption
-                    src={allUnitSound}
+                  <Conversation
+                    title="Conversation"
+                    items={data}
+                    sound={longAudio}
                     captions={captionsExample}
+                    stopAtSecond={5.8}
+                    captionTimings={captionTimings}
+                    wordTimings={Voc}
+                    openPopup={openPopup}
                   />
                 </div>,
               )
@@ -275,54 +273,8 @@ const Page4 = ({ openPopup }) => {
             />
           </svg>
         </div>
-
-        <div
-          className="click-icon-page4-1 hover:scale-110 transition"
-          style={{ overflow: "visible" }}
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 90 90"
-            onClick={() => openPopup("html", <Page4_Interactive1 />)}
-            style={{ overflow: "visible" }}
-          >
-            <image
-              className="svg-img"
-              href={arrowBtn}
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid meet"
-            />
-          </svg>
-        </div>
-
         <div
           className="headset-icon-CD-page4-2 hover:scale-110 transition"
-          style={{ overflow: "visible" }}
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 90 90"
-            onClick={() => openPopup("html", <Page4_vocabulary />)}
-            style={{ overflow: "visible" }}
-          >
-            <image
-              className="svg-img"
-              href={arrowBtn}
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid meet"
-            />
-          </svg>
-        </div>
-        <div
-          className="click-icon-page4 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
           <svg
@@ -332,14 +284,71 @@ const Page4 = ({ openPopup }) => {
             onClick={() =>
               openPopup(
                 "html",
-                <FourImagesWithAudio
-                  images={[Rabbit, img1, img2, img3, img4, img5, img6]}
-                  audioSrc={longAudio}
-                  checkpoints={[0, 3.8, 5.4, 6.52, 7.12, 7.82, 8.56]}
-                  popupOpen={true}
-                  titleQ={"Listen and read along."}
-                  audioArr={imageSounds}
-                  captions={captions}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <Vocabulary
+                    title="VOCABULARY"
+                    subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                    sound={VocabularAudio}
+                    captions={captionVoc}
+                    stopAtSecond={8.5}
+                    sounds={sounds}
+                    wordTimings={wordTimingsVoc}
+                    words={[
+                      "alarm",
+                      "notebook",
+                      "pillow",
+                      "counting",
+                      "face",
+                      "figure",
+                      "reviewing",
+                      "pancakes",
+                      "starving",
+                      "actually",
+                      "mirror",
+                      "Uh-oh!",
+                      "fell asleep",
+                      "How did you know?",
+                      "right away",
+                      "on one side",
+                    ]}
+                  />
+                </div>,
+              )
+            }
+            style={{ overflow: "visible" }}
+          >
+            <image
+              className="svg-img"
+              href={audioBtn}
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMidYMid meet"
+            />
+          </svg>
+        </div>
+         <div
+          className="headset-icon-CD-page4-3 hover:scale-110 transition"
+          style={{ overflow: "visible" }}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 90 90"
+            onClick={() =>
+              openPopup(
+                "html",
+                <CriticalThinking
+                  title={
+                    "Why did Hansel’s mom say he could do an extra math problem?"
+                  }
                 />,
               )
             }

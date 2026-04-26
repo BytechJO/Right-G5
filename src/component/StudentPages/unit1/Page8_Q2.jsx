@@ -1,104 +1,82 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from "react";
-import "./Page8_Q2.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 1/P 8/unit1-pg8-EX-A.mp3";
-import ValidationAlert from "../../Popup/ValidationAlert";
+import React, { useState } from "react";
 import Button from "../../Button";
-import WrongMark from "../../WrongMark";
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Page8_Q2 = () => {
-  const groups = [
-    { words: ["may", "lake", "jam", "paint"], correct: [0, 1, 3] },
-    { words: ["bee", "bed", "feet", "tea"], correct: [0, 2, 3] },
-    { words: ["kite", "bike", "light", "fish"], correct: [0, 1, 2] },
-    { words: ["home", "boat", "box", "note"], correct: [0, 1, 3] },
-    { words: ["run", "blue", "sue", "tube"], correct: [1, 2, 3] },
-  ];
-  const [showResult2, setShowResult2] = useState(false);
-  const [selected, setSelected] = useState(groups.map(() => []));
-  const [showResult, setShowResult] = useState(false);
+  const [answers, setAnswers] = useState(Array(30).fill(""));
   const [locked, setLocked] = useState(false);
-
-  // ================================
-  // ✔ Captions Array
-  // ================================
-  const captions = [
-    {
-      start: 0.259,
-      end: 18.899,
-      text: "Page eight. Write activities. Exercise A, Number 2. Listen and circle the words with long vowel sounds. One, may, lake, jam, paint. Two, bee, bed,",
-    },
-    {
-      start: 19.939,
-      end: 26.959,
-      text: "feet, tea. Three, kite, bike, light,",
-    },
-    {
-      start: 27.979,
-      end: 28.379,
-      text: "fish.",
-    },
-    {
-      start: 29.739,
-      end: 31.319,
-      text: "Four, home,",
-    },
-    {
-      start: 32.34,
-      end: 32.799,
-      text: "boat,",
-    },
-    {
-      start: 33.86,
-      end: 34.36,
-      text: "box,",
-    },
-    {
-      start: 35.419,
-      end: 39.779,
-      text: "note. Five, run, blue,",
-    },
-    {
-      start: 40.819,
-      end: 42.919,
-      text: "Sue, tube",
-    },
+  const correct = [
+    "u",
+    "n", // 1 → u h-o n
+    "n",
+    "n",
+    "e",
+    "i",
+    "d",
+    "e", // 2 → one one side
+    "f",
+    "l",
+    "a",
+    "l",
+    "e",
+    "e", // 3
+    "o",
+    "w",
+    "d",
+    "i",
+    "d",
+    "y",
+    "o",
+    "u",
+    "n",
+    "o",
+    "w", // 4
+    "i",
+    "g",
+    "h",
+    "t",
+    "w",
+    "a",
+    "y", // 5
   ];
   const showAnswers = () => {
-    const correctSelections = groups.map((g) => g.correct);
-
-    setSelected(correctSelections);
-    setShowResult2(true);
+    setAnswers(correct);
     setLocked(true);
+  };
+  const reset = () => {
+    setAnswers(Array(32).fill(""));
+    setResult([]);
+    setLocked(false);
+  };
+  const [result, setResult] = useState([]);
+  const handleChange = (i, value) => {
+    const updated = [...answers];
+    updated[i] = value.slice(-1);
+    setAnswers(updated);
   };
 
   const checkAnswers = () => {
-    if (locked || showResult2) return;
+    if (locked) return;
 
-    const hasEmpty = selected.some((arr) => arr.length === 0);
-
-    if (hasEmpty) {
-      ValidationAlert.info("Please select at least one word in each group!");
+    // 🛑 validation
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields");
       return;
     }
 
     let correctCount = 0;
-    let total = 0;
 
-    groups.forEach((group, index) => {
-      total += group.correct.length;
-
-      group.correct.forEach((correctIndex) => {
-        if (selected[index].includes(correctIndex)) {
-          correctCount++;
-        }
-      });
+    answers.forEach((a, i) => {
+      if (a === correct[i]) correctCount++;
     });
 
+    const total = correct.length;
+
+    // 🎨 اللون
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
+    // 💬 الرسالة
     const msg = `
     <div style="font-size:20px;text-align:center;">
       <span style="color:${color}; font-weight:bold;">
@@ -107,165 +85,168 @@ const Page8_Q2 = () => {
     </div>
   `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    // 🔔 Alert
+    if (correctCount === total) {
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
 
-    setShowResult2(true);
+    // 🧠 حفظ النتيجة لكل حرف (عشان ❌ و ✔)
+    const res = answers.map((a, i) => a === correct[i]);
+    setResult(res);
+
     setLocked(true);
   };
 
-  const reset = () => {
-    setSelected(groups.map(() => []));
-    setShowResult(false);
-    setShowResult2(false);
-    setLocked(false);
-  };
+  const input = (i) => (
+    <span className="relative mx-1">
+      <input
+        disabled={locked}
+        value={answers[i]}
+        onChange={(e) => handleChange(i, e.target.value)}
+        maxLength={1}
+        className={`w-[35px] border-b outline-none text-center font-medium
+  ${locked && result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
+`}
+      />
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div className="div-forall">
+      {locked && result[i] === false && (
         <div
           style={{
+            position: "absolute",
+            top: "-2px",
+            left: "50%",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            fontSize: "12px",
             display: "flex",
-            flexDirection: "column",
-            gap: "30px",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
           }}
         >
-          <h5 className="header-title-page8">
-            <span style={{ color: "#2e3192", marginRight: "10px" }}>2</span>
-            Listen and circle the words with
-            <span style={{ color: "#2e3192" }}>long vowel</span> sounds.
-          </h5>
-          <QuestionAudioPlayer
-            src={sound1}
-            captions={captions}
-            stopAtSecond={9.2}
-          />
+          ✕
+        </div>
+      )}
+    </span>
+  );
+  return (
+    <div className="p-[30px] flex flex-col items-center">
+      <div className="div-forall">
+        <h5 className="header-title-page8 mb-18">
+          <span className="ex-A mr-2.5">B</span>
+          Write the missing letters to complete the expression.
+        </h5>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "25px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "35px",
-                marginTop: "30px",
-              }}
-            >
-              {groups.map((group, index) => (
-                <div
-                  key={index}
-                  style={{
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "-20px",
-                      fontWeight: "bold",
-                      fontSize: "16px",
-                    }}
-                  >
-                    {index + 1}
-                  </div>
+        <div className="space-y-7 text-[22px]">
+          {/* 1 */}
+          <div className="flex">
+            <b className="w-10">1</b>
 
-                  <div
-                    style={{
-                      background: "#FEF3E6",
-                      padding: "1vw 2.5vw",
-                      borderRadius: "1vw",
-                      minWidth: "7vw",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                    }}
-                  >
-                    {group.words.map((word, i) => {
-                      const isSelected = selected[index].includes(i);
-                      const isCorrect = group.correct.includes(i);
+            <div className="flex ">
+              {input(0)}
+              <span>h-o</span>
+              {input(1)}!
+            </div>
+          </div>
 
-                      return (
-                        <div
-                          key={i}
-                          onClick={() => {
-                            if (locked) return;
+          {/* 2 */}
+          <div className="flex">
+            <b className="w-10">2</b>
 
-                            const newSelected = [...selected];
+            <div className="flex gap-8">
+              <span>o{input(2)}</span>
+              <span>
+                o{input(3)}
+                {input(4)}
+              </span>
+              <span>
+                s{input(5)}
+                {input(6)}
+                {input(7)}
+              </span>
+            </div>
+          </div>
 
-                            if (newSelected[index].includes(i)) {
-                              newSelected[index] = newSelected[index].filter(
-                                (x) => x !== i,
-                              );
-                            } else {
-                              newSelected[index].push(i);
-                            }
+          {/* 3 */}
+          <div className="flex">
+            <b className="w-10">3</b>
 
-                            setSelected(newSelected);
-                          }}
-                          style={{
-                            fontSize: "18px",
-                            cursor: "pointer",
-                            position: "relative",
-                          }}
-                        >
-                          {word}
+            <div className="flex gap-8">
+              <span>
+                {input(8)}el{input(9)}
+              </span>
+              <span>
+                {input(10)}s{input(11)}
+                {input(12)}
+                {input(13)}p
+              </span>
+            </div>
+          </div>
 
-                          {isSelected && (
-                            <>
-                              {isSelected && (
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    top: "-4px",
-                                    left: "-6px",
-                                    right: "-6px",
-                                    bottom: "-4px",
-                                    border: isSelected
-                                      ? showResult2
-                                        ? isCorrect
-                                          ? "2px solid #1C398E" // صح → يضل أزرق
-                                          : "2px solid #ef4444" // غلط → أحمر
-                                        : "2px solid #1C398E" // قبل check
-                                      : "none",
-                                    borderRadius: "20px",
-                                    pointerEvents: "none",
-                                  }}
-                                />
-                              )}
+          {/* 4 */}
+          <div className="flex">
+            <b className="w-10">4</b>
 
-                              {/* ❌ علامة الغلط */}
-                              {showResult2 && !isCorrect && <WrongMark />}
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+            <div className="flex gap-8">
+              <span>
+                H{input(14)}
+                {input(15)}
+              </span>
+              <span>
+                {input(16)}
+                {input(17)}
+                {input(18)}
+              </span>
+              <span>
+                {input(19)}
+                {input(20)}
+                {input(21)}
+              </span>
+              <span>
+                k{input(22)}
+                {input(23)}
+                {input(24)}?
+              </span>
+            </div>
+          </div>
+
+          {/* 5 */}
+          <div className="flex">
+            <b className="w-10">5</b>
+
+            <div className="flex gap-8">
+              <span>
+                r{input(25)}
+                {input(26)}
+                {input(27)}
+                {input(28)}
+              </span>
+              <span>
+                a{input(29)}
+                {input(30)}
+                {input(31)}
+              </span>
             </div>
           </div>
         </div>
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
       </div>
+
+      <Button
+        handleShowAnswer={showAnswers}
+        handleStartAgain={reset}
+        checkAnswers={checkAnswers}
+      />
     </div>
   );
 };

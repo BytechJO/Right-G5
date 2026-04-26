@@ -2,15 +2,21 @@ import { useState, useEffect, useRef } from "react";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
-
-export default function QuestionAudioPlayer({
-  src,
-  captions = [],
-  stopAtSecond = null,
-}) {
+import { forwardRef, useImperativeHandle } from "react";
+const QuestionAudioPlayer = forwardRef(function QuestionAudioPlayer(
+  { src, captions = [], stopAtSecond = null, onTimeUpdate },
+  ref,
+) {
   const clickAudioRef = useRef(null);
   const audioRef = useRef(null);
-
+  useImperativeHandle(ref, () => ({
+    pause: () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    },
+  }));
   const [paused, setPaused] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -25,7 +31,7 @@ export default function QuestionAudioPlayer({
 
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -75,7 +81,7 @@ export default function QuestionAudioPlayer({
     if (activeIndex === -1 || activeIndex === null) return;
 
     const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
+    if (showCaption && el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
@@ -115,6 +121,8 @@ export default function QuestionAudioPlayer({
               const time = e.target.currentTime;
               setCurrent(time);
               updateCaption(time);
+
+              if (onTimeUpdate) onTimeUpdate(time); // 👈 المهم
             }}
             onLoadedMetadata={(e) => setDuration(e.target.duration)}
           />
@@ -124,22 +132,22 @@ export default function QuestionAudioPlayer({
             <span className="audio-time">
               {new Date(current * 1000).toISOString().substring(14, 19)}
             </span>
- <input
-                type="range"
-                className="audio-slider"
-                min="0"
-                max={duration}
-                value={current}
-                onChange={(e) => {
-                  audioRef.current.currentTime = e.target.value;
-                  updateCaption(Number(e.target.value));
-                }}
-                style={{
-                  background: `linear-gradient(to right, #430f68 ${
-                    (current / duration) * 100
-                  }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                }}
-              />
+            <input
+              type="range"
+              className="audio-slider"
+              min="0"
+              max={duration}
+              value={current}
+              onChange={(e) => {
+                audioRef.current.currentTime = e.target.value;
+                updateCaption(Number(e.target.value));
+              }}
+              style={{
+                background: `linear-gradient(to right, #430f68 ${
+                  (current / duration) * 100
+                }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+              }}
+            />
 
             <span className="audio-time">
               {new Date(duration * 1000).toISOString().substring(14, 19)}
@@ -176,7 +184,7 @@ export default function QuestionAudioPlayer({
 
             {/* play */}
             <button className="play-btn2" onClick={togglePlay}>
-              {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+              {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
             </button>
 
             {/* settings */}
@@ -215,4 +223,5 @@ export default function QuestionAudioPlayer({
       <audio ref={clickAudioRef} style={{ display: "none" }} />
     </div>
   );
-}
+});
+export default QuestionAudioPlayer;

@@ -7,8 +7,8 @@ import LeftSidebar from "./Book/Sidebars/LeftSidebar";
 import RightSidebar from "./Book/Sidebars/RightSidebar";
 // === cover img ===
 import workbookCover from "../assets/imgs/pages/workbook-cover.jpg";
-import stbookCover from "../assets/imgs/pages/classbook-cover.jpg";
-import teacherBookCover from "../assets/imgs/pages/classbook-cover.jpg";
+import stbookCover from "../assets/imgs/pages/classbook-cover.png";
+import teacherBookCover from "../assets/imgs/pages/classbook-cover.png";
 
 // === VIEWERS ===
 import FlashCardViewer from "./FlashCardPages/FlashCardPages";
