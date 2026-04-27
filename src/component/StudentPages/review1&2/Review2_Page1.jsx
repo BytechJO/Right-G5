@@ -1,4 +1,4 @@
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page 18.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 18.png";
 import "./Review2_Page1.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 

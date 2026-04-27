@@ -80,7 +80,7 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex gap-3 bg-gray-200 px-4 py-2 rounded mb-10 w-fit mx-auto"
+              className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto"
             >
               {questions[0].options.map((word, i) => {
                 const isUsed = answers.includes(word);
@@ -149,7 +149,30 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
                         color: value ? "#6D2980" : "#000",
                       }}
                     >
-                      {value}
+                      <span
+                        style={{
+                          padding: "2px 6px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          transition: "0.2s",
+                        }}
+                        onClick={() => {
+                          if (locked) return;
+
+                          const updated = [...answers];
+                          updated[i] = ""; // 🔥 رجّعها للبنك
+                          setAnswers(updated);
+                          onChange(updated);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "#E9D5FF"; // بنفسجي فاتح
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "transparent";
+                        }}
+                      >
+                        {value}
+                      </span>
                       {provided.placeholder}
                     </span>
                   )}

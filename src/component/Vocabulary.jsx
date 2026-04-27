@@ -76,17 +76,19 @@ const Vocabulary = ({
                 <div
                   key={i}
                   onClick={() => playWordAudio(num - 1)}
-                  className={`flex items-center justify-between border rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 shadow-sm
-                  ${
-                    isActive
-                      ? "bg-[#6D2980] text-white border-[#6D2980] shadow-md scale-[1.02]"
-                      : "bg-[#f8f5fc] hover:bg-[#6D2980] border-transparent hover:border-[#6D2980]"
-                  }`}
+                  className={`group flex items-center justify-between border rounded-xl px-4 py-3 cursor-pointer transition-all duration-300 shadow-sm
+${
+  isActive
+    ? "bg-[#6D2980] text-white border-[#6D2980] shadow-md scale-[1.02]"
+    : "bg-[#f8f5fc] hover:bg-[#6D2980] border-transparent hover:border-[#6D2980]"
+}`}
                 >
                   <div className="flex items-center">
                     <span
                       className={`font-bold text-sm mr-3 ${
-                        isActive ? "text-white/70" : "text-[#6D2980]"
+                        isActive
+                          ? "text-white"
+                          : "text-[#6D2980] group-hover:text-white"
                       }`}
                     >
                       {num}.
@@ -94,7 +96,9 @@ const Vocabulary = ({
 
                     <span
                       className={`font-medium ${
-                        isActive ? "text-white" : "text-gray-700"
+                        isActive
+                          ? "text-white"
+                          : "text-gray-700 group-hover:text-white"
                       }`}
                     >
                       {word}

@@ -22,6 +22,11 @@ import sound8 from "../../../assets/audio/ClassBook/U1/PG 4/sound8.mp3";
 import sound9 from "../../../assets/audio/ClassBook/U1/PG 4/sound9.mp3";
 import sound10 from "../../../assets/audio/ClassBook/U1/PG 4/sound10.mp3";
 import sound11 from "../../../assets/audio/ClassBook/U1/PG 4/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U1/PG 4/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U1/PG 4/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U1/PG 4/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U1/PG 4/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U1/PG 4/sound16.mp3";
 import CriticalThinking from "../../CriticalThinking";
 
 const Page4 = ({ openPopup }) => {
@@ -37,6 +42,11 @@ const Page4 = ({ openPopup }) => {
     sound9,
     sound10,
     sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+    sound16,
   ];
   const captionsExample = [
     {
@@ -200,6 +210,12 @@ const Page4 = ({ openPopup }) => {
     { start: 29.719, end: 31.5 },
     { start: 32.32, end: 34.18 },
     { start: 35.06, end: 37.06 },
+    { start: 37.719, end: 39.579 },
+    { start: 40.36, end: 42.499 },
+    { start: 43.279, end: 45.459 },
+
+    { start: 46.259, end: 48.459 },
+    { start: 49.52, end: 52.119 },
   ];
 
   const captionVoc = [
@@ -222,6 +238,13 @@ const Page4 = ({ openPopup }) => {
     { start: 29.719, end: 31.5, text: "9. starving." },
     { start: 32.32, end: 34.18, text: "10. actually." },
     { start: 35.06, end: 37.06, text: "11. mirror." },
+
+    { start: 37.719, end: 39.579, text: "12. uh-oh." },
+    { start: 40.36, end: 42.499, text: "13. fell asleep." },
+    { start: 43.279, end: 45.459, text: "14. how did you know?" },
+
+    { start: 46.259, end: 48.459, text: "15. right away." },
+    { start: 49.52, end: 52.119, text: "16. on one side." },
   ];
   return (
     <>
@@ -334,7 +357,7 @@ const Page4 = ({ openPopup }) => {
             />
           </svg>
         </div>
-         <div
+        <div
           className="headset-icon-CD-page4-3 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >

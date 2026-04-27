@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Rabbit from "../assets/Page 01/Rabbit.svg";
 
-const CriticalThinking = ({title}) => {
+const CriticalThinking = ({ title }) => {
   const [answer, setAnswer] = useState("");
 
   return (
@@ -13,13 +13,9 @@ const CriticalThinking = ({title}) => {
         alignItems: "center",
       }}
     >
-      {/* السؤال */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <img src={Rabbit} style={{ height: "50px" }} />
-        <h5 className="header-title-page8">
-            {title}
-          
-        </h5>
+      <div style={{ display: "flex", justifyContent: "center", width: "100%",marginTop: "20px"  }}>
+        <img src={Rabbit} style={{ height: "50px", width: "auto"}} />{" "}
+        <h5 className="header-title-page8">{title}</h5>
       </div>
 
       {/* الانبوت */}

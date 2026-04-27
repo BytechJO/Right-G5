@@ -1,247 +1,325 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page 10.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10.png";
 import "./Unit2_Page1.css";
-// import unit2_page1_CD8 from "../../../assets/img_unit2/sounds-unit2/CD8.Pg10_U2.Intro_Adult Lady.mp3";
-import longAudio from "../../../assets/audio/ClassBook/Unit 2/P 10/unit2-page10-listen.mp3";
-import Unit2_Page1_find from "./Unit2_Page1_find";
-import Unit2_Page1_Vocab from "./Unit2_Page1_Vocab";
-import Unit2_Page1_Read from "./Unit2_Pag1_Read";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U2/PG 10/conversation_p10.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import allUnit2 from "../../../assets/audio/ClassBook/Unit 2/P 10/unit2-pg10-allunit.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 2/P 10/sound12.mp3";
-import Rabbit from "../../../assets/Page 01/Rabbit.svg";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-01.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-02.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-03.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page10-11/1-04.svg";
-import sound1_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.1_Adult Lady.mp3";
-import sound2_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.2_Adult Lady.mp3";
-import sound3_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.3_Adult Lady.mp3";
-import sound4_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.4_Adult Lady.mp3";
-import FourImagesWithAudio from "../../FourImagesWithAudio";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U2/PG 10/vocab_U2.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U2/PG 10/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U2/PG 10/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U2/PG 10/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U2/PG 10/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U2/PG 10/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U2/PG 10/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U2/PG 10/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U2/PG 10/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U2/PG 10/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U2/PG 10/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U2/PG 10/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U2/PG 10/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U2/PG 10/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U2/PG 10/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U2/PG 10/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U2/PG 10/sound16.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 2.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 3.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 4.svg";
+import wordJson from "../../../assets/json/conversation2_eng.json";
+
 const Unit2_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Sarah",
+          text: "Dad! Are we going to the carnival that is coming to town?",
+        },
+        {
+          speaker: "Jack",
+          text: "That will be fun! Let’s go!",
+        },
+        {
+          speaker: "Dad",
+          text: "Not so fast. The man who trims the trees is coming tomorrow.",
+        },
+        {
+          speaker: "Sarah",
+          text: "Do you know what time?",
+        },
+      ],
+    },
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "Dad",
+          text: "Let’s see. He just said in the morning, but maybe I could call and ask him to come by first thing.",
+        },
+        {
+          speaker: "Jack",
+          text: "Yeah, and we could go to the carnival after the fun rides are open.",
+        },
+        {
+          speaker: "Sarah",
+          text: "Do you mean the rides that are crazy? You like to go on rides that are fast and twisty, don’t you, Jack?",
+        },
+      ],
+    },
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Dad",
+          text: "It was just a couple of years ago I was taking you on the merry-go-round!",
+        },
+        {
+          speaker: "Jack",
+          text: "The merry-go-round is for small children who are still babies!",
+        },
+        {
+          speaker: "Dad",
+          text: "You used to beg me to take you on the giraffe!",
+        },
+      ],
+    },
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Sarah",
+          text: "Oh, I still like the merry-go-round! I might go on a few of the faster rides with Jack, too.",
+        },
+        {
+          speaker: "Sarah",
+          text: "I’ll be the one who stays behind to take pictures.",
+        },
+        {
+          speaker: "Dad",
+          text: "Do you like fast rides, Dad?",
+        },
+        {
+          speaker: "Dad",
+          text: "No, I like to keep my feet on the ground… and my lunch in my stomach!",
+        },
+        {
+          speaker: "Jack",
+          text: "Well, that works out great! You can be the photographer.",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
     {
-      start: 0.659,
-      end: 6.559,
-      text: "Page ten, unit two, summer vacation. Page ten, unit two, vocabulary.",
+      start: 0.219,
+      end: 5.359,
+      text: "Page 10, Conversation. Listen and read, then say",
     },
     {
-      start: 7.819,
-      end: 55.179,
-      text: "One, France. Two, bus. Three, clock tower. Four, world map. Five, Nile River. Six, Egypt. Seven, pyramids. Eight, Australia. Nine, South America. Ten, Statue of Liberty. Eleven, tourist, tourists. Twelve, globe. Page ten. Listen and read along. Short U. Bug, runner, cup. Unit two, page eleven, reading. Listen and read along. Vacation in France.",
+      start: 5.359,
+      end: 8.679,
+      text: "Dad, are we going to the carnival that is coming to town?",
     },
     {
-      start: 56.299,
-      end: 89.139,
-      text: "Tom and his family love traveling. They always find exciting things when they travel. Often, they go to France during their summer vacation. They are never bored of France. They find that each part of France is different and interesting. Tom's family always spends two days in Paris. It is a beautiful city. They enjoy the food and places there. Sometimes they take a bus or train to other famous places in France too.",
+      start: 9.719,
+      end: 12.219,
+      text: "That will be fun. Let's go.",
     },
     {
-      start: 90.239,
-      end: 96.779,
-      text: "It is always fun to travel. Page eleven. Listen, read and repeat.",
+      start: 12.219,
+      end: 16.119,
+      text: "Not so fast. The man who trims the trees is coming tomorrow.",
     },
     {
-      start: 96.779,
-      end: 99.639,
-      text: "Where do you go on your summer vacation?",
+      start: 16.119,
+      end: 17.579,
+      text: "Do you know what time?",
     },
     {
-      start: 99.639,
-      end: 100.939,
-      text: "I usually go to Italy.",
+      start: 17.579,
+      end: 23.519,
+      text: "Let's see. He just said in the morning, but maybe I could call and ask him to come by first thing.",
     },
     {
-      start: 102.0,
-      end: 105.439,
-      text: "Page eleven. Listen and read along.",
+      start: 23.519,
+      end: 27.399,
+      text: "Yeah, and we could go to the carnival after the fun rides are open.",
+    },
+    {
+      start: 28.439,
+      end: 35.2,
+      text: "Do you mean the rides that are crazy? You like to go on rides that are fast and twisty, don't you, Jack?",
+    },
+    {
+      start: 35.2,
+      end: 39.559,
+      text: "It was just a couple of years ago I was taking you on the merry-go-round.",
+    },
+    {
+      start: 39.559,
+      end: 44.34,
+      text: "The merry-go-round is for small children who are still babies.",
+    },
+    {
+      start: 44.34,
+      end: 47.359,
+      text: "You used to beg me to take you on the giraffe.",
+    },
+    {
+      start: 47.36,
+      end: 55.139,
+      text: "Oh, I still like the merry-go-round. I might go on a few of the faster rides with Jack, too.",
+    },
+    {
+      start: 55.139,
+      end: 58.199,
+      text: "I'll be the one who stays behind to take pictures.",
+    },
+    {
+      start: 58.199,
+      end: 60.779,
+      text: "Do you like fast rides, Dad?",
+    },
+    {
+      start: 60.779,
+      end: 65.339,
+      text: "No, I like to keep my feet on the ground, and my lunch in my stomach.",
+    },
+    {
+      start: 65.339,
+      end: 68.839,
+      text: "Well, that works out great. You can be the photographer.",
     },
   ];
-  const captions = [
-    { start: 0, end: 3.5, text: "Page 4. Listen and read along." },
-    { start: 3.8, end: 7.54, text: " Short U. Bug, runner, cup" },
+  const captionTimings = [
+    [
+      captionsExample[1],
+      captionsExample[2],
+      captionsExample[3],
+      captionsExample[4], // 🔥 هاي أضفها
+    ],
+    [captionsExample[5], captionsExample[6], captionsExample[7]],
+    [captionsExample[8], captionsExample[9], captionsExample[10]],
+    [
+      captionsExample[11],
+      captionsExample[12],
+      captionsExample[13],
+      captionsExample[14],
+      captionsExample[15],
+    ],
   ];
-  const imageSounds = [
-    null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
-    new Audio(sound1_letter),
-    new Audio(sound2_letter),
-    new Audio(sound3_letter),
-    new Audio(sound4_letter),
+  const filteredSegments = wordJson.segments.slice(1);
+
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+      filteredSegments[3]?.words || [],
+    ],
+    [
+      filteredSegments[4]?.words || [],
+      filteredSegments[5]?.words || [],
+      filteredSegments[6]?.words || [],
+    ],
+    [
+      filteredSegments[7]?.words || [],
+      filteredSegments[8]?.words || [],
+      filteredSegments[9]?.words || [],
+    ],
+    [
+      filteredSegments[10]?.words || [],
+      filteredSegments[11]?.words || [],
+      filteredSegments[12]?.words || [],
+      filteredSegments[13]?.words || [],
+      filteredSegments[14]?.words || [],
+    ],
   ];
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 68.6, y1: 32.7, sound: 1, isPrimary: true },
 
-    // الصوت الثاني – 27
-    { x1: 68.1, y1: 15.7, sound: 2, isPrimary: true },
-
-    // الصوت الثاني – الإضافية
-    { x1: 65.77, y1: 18.66, x2: 79.65, y2: 26.27, sound: 2, isPrimary: false },
-
-    // الصوت الثالث – الأساسية
-    { x1: 80.8, y1: 10.4, sound: 3, isPrimary: true },
-
-    // الصوت الثالث – الإضافية
-    { x1: 77.84, y1: 12.23, x2: 81.28, y2: 17.48, sound: 3, isPrimary: false },
-
-    // الصوت الرابع – الأساسية
-    { x1: 60, y1: 37.9, sound: 4, isPrimary: true },
-
-    // الصوت الخامس – الأساسية
-    { x1: 57.5, y1: 68.6, sound: 5, isPrimary: true },
-
-    // الصوت الخامس – الإضافية
-    { x1: 56.51, y1: 65.2, x2: 60.42, y2: 75.63, sound: 5, isPrimary: false },
-
-    // الصوت السادس – الأساسية
-    { x1: 51.8, y1: 56.9, sound: 6, isPrimary: true },
-
-    // الصوت السابع – الأساسية
-    { x1: 44.6, y1: 62.3, sound: 7, isPrimary: true },
-    { x1: 38.41, y1: 61.47, x2: 53.71, y2: 66.04, sound: 7, isPrimary: false },
-
-    // الصوت الثامن – الأساسية
-    { x1: 84.2, y1: 47.9, sound: 8, isPrimary: true },
-
-    // الصوت الثامن – الإضافية
-    { x1: 79.56, y1: 47.09, x2: 89.9, y2: 53.69, sound: 8, isPrimary: false },
-
-    // الصوت التاسع – الأساسية
-    { x1: 28.4, y1: 43.5, sound: 9, isPrimary: true },
-
-    // الصوت التاسع – الإضافية
-    { x1: 22.68, y1: 40.15, x2: 33.24, y2: 53.35, sound: 9, isPrimary: false },
-
-    // الصوت العاشر – الأساسية
-    { x1: 32.2, y1: 22.5, sound: 10, isPrimary: true },
-
-    // الصوت  العاشر – الإضافية
-    { x1: 20.96, y1: 20.69, x2: 34.31, y2: 30.84, sound: 10, isPrimary: false },
-
-    // الصوت الحادي عشر – الأساسية
-    { x1: 33.7, y1: 74.5, sound: 11, isPrimary: true },
-
-    // الصوت الحادي عشر – الإضافية
-    { x1: 32.38, y1: 70.95, x2: 49.61, y2: 80.43, sound: 11, isPrimary: false },
-
-    // الصوت الثاني عشر – الأساسية
-    { x1: 83.4, y1: 64.4, sound: 12, isPrimary: true },
-
-    // الصوت الثاني عشر – الإضافية
-    { x1: 75.68, y1: 55.72, x2: 91.84, y2: 67.23, sound: 12, isPrimary: false },
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+    sound16,
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-  };
+  const captionVoc = [
+    {
+      start: 0.099,
+      end: 7.58,
+      text: "Page 10, Unit 2, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
+    },
 
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+    { start: 8.679, end: 11.019, text: "1. carnival." },
+    { start: 11.019, end: 13.579, text: "2. trims." },
+    { start: 13.579, end: 16.319, text: "3. crazy." },
+    { start: 16.319, end: 19.059, text: "4. twisty." },
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
+    { start: 19.059, end: 21.619, text: "5. couple." },
+    { start: 21.619, end: 24.439, text: "6. merry-go-round." },
+    { start: 24.439, end: 27.099, text: "7. still." },
+    { start: 27.099, end: 29.639, text: "8. bag." },
+
+    { start: 29.639, end: 32.599, text: "9. a few." },
+    { start: 32.599, end: 34.779, text: "10. giraffe." },
+    { start: 34.779, end: 37.879, text: "11. not so fast." },
+
+    { start: 37.879, end: 40.779, text: "12. let's see." },
+    { start: 40.779, end: 44.159, text: "13. first thing." },
+    { start: 44.159, end: 47.419, text: "14. stays behind." },
+
+    { start: 47.419, end: 51.18, text: "15. keep my feet on the ground." },
+    { start: 51.18, end: 53.419, text: "16. works out." },
+  ];
+  const wordTimingsVoc = [
+    { start: 8.679, end: 11.019 },
+    { start: 11.019, end: 13.579 },
+    { start: 13.579, end: 16.319 },
+    { start: 16.319, end: 19.059 },
+
+    { start: 19.059, end: 21.619 },
+    { start: 21.619, end: 24.439 },
+    { start: 24.439, end: 27.099 },
+    { start: 27.099, end: 29.639 },
+
+    { start: 29.639, end: 32.599 },
+    { start: 32.599, end: 34.779 },
+    { start: 34.779, end: 37.879 },
+
+    { start: 37.879, end: 40.779 },
+    { start: 40.779, end: 44.159 },
+    { start: 44.159, end: 47.419 },
+
+    { start: 47.419, end: 51.18 },
+    { start: 51.18, end: 53.419 },
+  ];
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-      {/* <img
-        src={page_1}
-        onClick={handleImageClick}
-        style={{ display: "block" }}
-      /> */}
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit2-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -250,7 +328,7 @@ const Unit2_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -258,7 +336,16 @@ const Unit2_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allUnit2} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={5.7}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                />
               </div>,
             )
           }
@@ -269,14 +356,14 @@ const Unit2_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit2-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -286,25 +373,58 @@ const Unit2_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit2_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={8}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "carnival",
+                    "trims",
+                    "crazy",
+                    "twisty",
+                    "couple",
+                    "merry-go-round",
+                    "still",
+                    "bag",
+                    "(a) few",
+                    "giraffe",
+                    "not so fast",
+                    "let's see",
+                    "first thing",
+                    "stays behind",
+                    "keep my feet on the ground",
+                    "works out",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit2-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -314,42 +434,8 @@ const Unit2_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit2_Page1_Vocab />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit2-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <FourImagesWithAudio
-                images={[Rabbit, img1, img2, img3, img4]}
-                audioSrc={longAudio}
-                checkpoints={[0, 3.2, 5.4, 6.52, 7.12]}
-                popupOpen={true}
-                titleQ={"Listen and read along."}
-                audioArr={imageSounds}
-                captions={captions}
+              <CriticalThinking
+                title={"Who is going to take pictures at the carnival?"}
               />,
             )
           }

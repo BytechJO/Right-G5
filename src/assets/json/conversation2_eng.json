@@ -1,0 +1,2146 @@
+{
+  "language_code": "eng",
+  "segments": [
+    {
+      "text": "Page 10, Conversation. Listen and read, then say ",
+      "start_time": 0.219,
+      "end_time": 5.359,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.219,
+          "end_time": 0.539
+        },
+        {
+          "text": " ",
+          "start_time": 0.539,
+          "end_time": 0.659
+        },
+        {
+          "text": "10,",
+          "start_time": 0.659,
+          "end_time": 0.899
+        },
+        {
+          "text": " ",
+          "start_time": 0.899,
+          "end_time": 1.099
+        },
+        {
+          "text": "Conversation.",
+          "start_time": 1.1,
+          "end_time": 1.86
+        },
+        {
+          "text": " ",
+          "start_time": 1.86,
+          "end_time": 2.419
+        },
+        {
+          "text": "Listen",
+          "start_time": 2.419,
+          "end_time": 2.799
+        },
+        {
+          "text": " ",
+          "start_time": 2.799,
+          "end_time": 2.96
+        },
+        {
+          "text": "and",
+          "start_time": 2.96,
+          "end_time": 3.079
+        },
+        {
+          "text": " ",
+          "start_time": 3.079,
+          "end_time": 3.179
+        },
+        {
+          "text": "read,",
+          "start_time": 3.179,
+          "end_time": 3.46
+        },
+        {
+          "text": " ",
+          "start_time": 3.46,
+          "end_time": 3.899
+        },
+        {
+          "text": "then",
+          "start_time": 3.899,
+          "end_time": 4.139
+        },
+        {
+          "text": " ",
+          "start_time": 4.139,
+          "end_time": 4.299
+        },
+        {
+          "text": "say",
+          "start_time": 4.299,
+          "end_time": 4.579
+        },
+        {
+          "text": " ",
+          "start_time": 4.579,
+          "end_time": 5.359
+        }
+      ]
+    },
+    {
+      "text": "Dad, are we going to the carnival that is coming to town? ",
+      "start_time": 5.359,
+      "end_time": 8.679,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Dad,",
+          "start_time": 5.359,
+          "end_time": 5.759
+        },
+        {
+          "text": " ",
+          "start_time": 5.759,
+          "end_time": 6.019
+        },
+        {
+          "text": "are",
+          "start_time": 6.019,
+          "end_time": 6.099
+        },
+        {
+          "text": " ",
+          "start_time": 6.099,
+          "end_time": 6.139
+        },
+        {
+          "text": "we",
+          "start_time": 6.139,
+          "end_time": 6.239
+        },
+        {
+          "text": " ",
+          "start_time": 6.239,
+          "end_time": 6.299
+        },
+        {
+          "text": "going",
+          "start_time": 6.299,
+          "end_time": 6.48
+        },
+        {
+          "text": " ",
+          "start_time": 6.48,
+          "end_time": 6.579
+        },
+        {
+          "text": "to",
+          "start_time": 6.579,
+          "end_time": 6.659
+        },
+        {
+          "text": " ",
+          "start_time": 6.659,
+          "end_time": 6.719
+        },
+        {
+          "text": "the",
+          "start_time": 6.719,
+          "end_time": 6.779
+        },
+        {
+          "text": " ",
+          "start_time": 6.779,
+          "end_time": 6.859
+        },
+        {
+          "text": "carnival",
+          "start_time": 6.859,
+          "end_time": 7.319
+        },
+        {
+          "text": " ",
+          "start_time": 7.319,
+          "end_time": 7.439
+        },
+        {
+          "text": "that",
+          "start_time": 7.44,
+          "end_time": 7.579
+        },
+        {
+          "text": " ",
+          "start_time": 7.579,
+          "end_time": 7.599
+        },
+        {
+          "text": "is",
+          "start_time": 7.599,
+          "end_time": 7.719
+        },
+        {
+          "text": " ",
+          "start_time": 7.719,
+          "end_time": 7.799
+        },
+        {
+          "text": "coming",
+          "start_time": 7.799,
+          "end_time": 8.179
+        },
+        {
+          "text": " ",
+          "start_time": 8.179,
+          "end_time": 8.219
+        },
+        {
+          "text": "to",
+          "start_time": 8.22,
+          "end_time": 8.3
+        },
+        {
+          "text": " ",
+          "start_time": 8.3,
+          "end_time": 8.399
+        },
+        {
+          "text": "town?",
+          "start_time": 8.399,
+          "end_time": 8.679
+        },
+        {
+          "text": " ",
+          "start_time": 8.679,
+          "end_time": 8.679
+        }
+      ]
+    },
+    {
+      "text": "That will be fun. Let's go. ",
+      "start_time": 9.719,
+      "end_time": 12.219,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "That",
+          "start_time": 9.719,
+          "end_time": 9.88
+        },
+        {
+          "text": " ",
+          "start_time": 9.88,
+          "end_time": 9.92
+        },
+        {
+          "text": "will",
+          "start_time": 9.92,
+          "end_time": 10.039
+        },
+        {
+          "text": " ",
+          "start_time": 10.039,
+          "end_time": 10.099
+        },
+        {
+          "text": "be",
+          "start_time": 10.099,
+          "end_time": 10.139
+        },
+        {
+          "text": " ",
+          "start_time": 10.139,
+          "end_time": 10.239
+        },
+        {
+          "text": "fun.",
+          "start_time": 10.239,
+          "end_time": 10.46
+        },
+        {
+          "text": " ",
+          "start_time": 10.46,
+          "end_time": 10.8
+        },
+        {
+          "text": "Let's",
+          "start_time": 10.8,
+          "end_time": 11.0
+        },
+        {
+          "text": " ",
+          "start_time": 11.0,
+          "end_time": 11.079
+        },
+        {
+          "text": "go.",
+          "start_time": 11.079,
+          "end_time": 11.3
+        },
+        {
+          "text": " ",
+          "start_time": 11.3,
+          "end_time": 12.219
+        }
+      ]
+    },
+    {
+      "text": "Not so fast. The man who trims the trees is coming tomorrow. ",
+      "start_time": 12.219,
+      "end_time": 16.119,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Not",
+          "start_time": 12.219,
+          "end_time": 12.38
+        },
+        {
+          "text": " ",
+          "start_time": 12.38,
+          "end_time": 12.439
+        },
+        {
+          "text": "so",
+          "start_time": 12.439,
+          "end_time": 12.599
+        },
+        {
+          "text": " ",
+          "start_time": 12.599,
+          "end_time": 12.679
+        },
+        {
+          "text": "fast.",
+          "start_time": 12.679,
+          "end_time": 13.099
+        },
+        {
+          "text": " ",
+          "start_time": 13.099,
+          "end_time": 13.42
+        },
+        {
+          "text": "The",
+          "start_time": 13.42,
+          "end_time": 13.479
+        },
+        {
+          "text": " ",
+          "start_time": 13.479,
+          "end_time": 13.559
+        },
+        {
+          "text": "man",
+          "start_time": 13.559,
+          "end_time": 13.759
+        },
+        {
+          "text": " ",
+          "start_time": 13.759,
+          "end_time": 13.799
+        },
+        {
+          "text": "who",
+          "start_time": 13.799,
+          "end_time": 13.899
+        },
+        {
+          "text": " ",
+          "start_time": 13.899,
+          "end_time": 13.96
+        },
+        {
+          "text": "trims",
+          "start_time": 13.96,
+          "end_time": 14.199
+        },
+        {
+          "text": " ",
+          "start_time": 14.199,
+          "end_time": 14.239
+        },
+        {
+          "text": "the",
+          "start_time": 14.239,
+          "end_time": 14.319
+        },
+        {
+          "text": " ",
+          "start_time": 14.319,
+          "end_time": 14.38
+        },
+        {
+          "text": "trees",
+          "start_time": 14.38,
+          "end_time": 14.619
+        },
+        {
+          "text": " ",
+          "start_time": 14.619,
+          "end_time": 14.679
+        },
+        {
+          "text": "is",
+          "start_time": 14.679,
+          "end_time": 14.759
+        },
+        {
+          "text": " ",
+          "start_time": 14.759,
+          "end_time": 14.799
+        },
+        {
+          "text": "coming",
+          "start_time": 14.799,
+          "end_time": 15.039
+        },
+        {
+          "text": " ",
+          "start_time": 15.039,
+          "end_time": 15.079
+        },
+        {
+          "text": "tomorrow.",
+          "start_time": 15.079,
+          "end_time": 15.519
+        },
+        {
+          "text": " ",
+          "start_time": 15.519,
+          "end_time": 16.119
+        }
+      ]
+    },
+    {
+      "text": "Do you know what time? ",
+      "start_time": 16.119,
+      "end_time": 17.579,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Do",
+          "start_time": 16.119,
+          "end_time": 16.159
+        },
+        {
+          "text": " ",
+          "start_time": 16.159,
+          "end_time": 16.199
+        },
+        {
+          "text": "you",
+          "start_time": 16.199,
+          "end_time": 16.319
+        },
+        {
+          "text": " ",
+          "start_time": 16.319,
+          "end_time": 16.359
+        },
+        {
+          "text": "know",
+          "start_time": 16.359,
+          "end_time": 16.459
+        },
+        {
+          "text": " ",
+          "start_time": 16.459,
+          "end_time": 16.539
+        },
+        {
+          "text": "what",
+          "start_time": 16.539,
+          "end_time": 16.659
+        },
+        {
+          "text": " ",
+          "start_time": 16.659,
+          "end_time": 16.739
+        },
+        {
+          "text": "time?",
+          "start_time": 16.739,
+          "end_time": 17.059
+        },
+        {
+          "text": " ",
+          "start_time": 17.059,
+          "end_time": 17.579
+        }
+      ]
+    },
+    {
+      "text": "Let's see. He just said in the morning, but maybe I could call and ask him to come by first thing. ",
+      "start_time": 17.579,
+      "end_time": 23.519,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Let's",
+          "start_time": 17.579,
+          "end_time": 17.799
+        },
+        {
+          "text": " ",
+          "start_time": 17.799,
+          "end_time": 17.879
+        },
+        {
+          "text": "see.",
+          "start_time": 17.879,
+          "end_time": 18.1
+        },
+        {
+          "text": " ",
+          "start_time": 18.1,
+          "end_time": 18.539
+        },
+        {
+          "text": "He",
+          "start_time": 18.539,
+          "end_time": 18.639
+        },
+        {
+          "text": " ",
+          "start_time": 18.639,
+          "end_time": 18.699
+        },
+        {
+          "text": "just",
+          "start_time": 18.699,
+          "end_time": 18.879
+        },
+        {
+          "text": " ",
+          "start_time": 18.879,
+          "end_time": 18.939
+        },
+        {
+          "text": "said",
+          "start_time": 18.939,
+          "end_time": 19.119
+        },
+        {
+          "text": " ",
+          "start_time": 19.119,
+          "end_time": 19.159
+        },
+        {
+          "text": "in",
+          "start_time": 19.159,
+          "end_time": 19.219
+        },
+        {
+          "text": " ",
+          "start_time": 19.219,
+          "end_time": 19.26
+        },
+        {
+          "text": "the",
+          "start_time": 19.26,
+          "end_time": 19.319
+        },
+        {
+          "text": " ",
+          "start_time": 19.319,
+          "end_time": 19.379
+        },
+        {
+          "text": "morning,",
+          "start_time": 19.379,
+          "end_time": 19.719
+        },
+        {
+          "text": " ",
+          "start_time": 19.719,
+          "end_time": 19.899
+        },
+        {
+          "text": "but",
+          "start_time": 19.899,
+          "end_time": 20.02
+        },
+        {
+          "text": " ",
+          "start_time": 20.02,
+          "end_time": 20.1
+        },
+        {
+          "text": "maybe",
+          "start_time": 20.1,
+          "end_time": 20.319
+        },
+        {
+          "text": " ",
+          "start_time": 20.319,
+          "end_time": 20.379
+        },
+        {
+          "text": "I",
+          "start_time": 20.379,
+          "end_time": 20.399
+        },
+        {
+          "text": " ",
+          "start_time": 20.399,
+          "end_time": 20.459
+        },
+        {
+          "text": "could",
+          "start_time": 20.459,
+          "end_time": 20.619
+        },
+        {
+          "text": " ",
+          "start_time": 20.619,
+          "end_time": 20.699
+        },
+        {
+          "text": "call",
+          "start_time": 20.699,
+          "end_time": 20.959
+        },
+        {
+          "text": " ",
+          "start_time": 20.959,
+          "end_time": 21.019
+        },
+        {
+          "text": "and",
+          "start_time": 21.02,
+          "end_time": 21.139
+        },
+        {
+          "text": " ",
+          "start_time": 21.139,
+          "end_time": 21.219
+        },
+        {
+          "text": "ask",
+          "start_time": 21.219,
+          "end_time": 21.379
+        },
+        {
+          "text": " ",
+          "start_time": 21.379,
+          "end_time": 21.42
+        },
+        {
+          "text": "him",
+          "start_time": 21.42,
+          "end_time": 21.539
+        },
+        {
+          "text": " ",
+          "start_time": 21.539,
+          "end_time": 21.579
+        },
+        {
+          "text": "to",
+          "start_time": 21.579,
+          "end_time": 21.639
+        },
+        {
+          "text": " ",
+          "start_time": 21.639,
+          "end_time": 21.699
+        },
+        {
+          "text": "come",
+          "start_time": 21.699,
+          "end_time": 21.819
+        },
+        {
+          "text": " ",
+          "start_time": 21.819,
+          "end_time": 21.899
+        },
+        {
+          "text": "by",
+          "start_time": 21.899,
+          "end_time": 22.119
+        },
+        {
+          "text": " ",
+          "start_time": 22.119,
+          "end_time": 22.159
+        },
+        {
+          "text": "first",
+          "start_time": 22.159,
+          "end_time": 22.419
+        },
+        {
+          "text": " ",
+          "start_time": 22.419,
+          "end_time": 22.459
+        },
+        {
+          "text": "thing.",
+          "start_time": 22.459,
+          "end_time": 22.76
+        },
+        {
+          "text": " ",
+          "start_time": 22.76,
+          "end_time": 23.519
+        }
+      ]
+    },
+    {
+      "text": "Yeah, and we could go to the carnival after the fun rides are open. ",
+      "start_time": 23.519,
+      "end_time": 27.399,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Yeah,",
+          "start_time": 23.519,
+          "end_time": 23.76
+        },
+        {
+          "text": " ",
+          "start_time": 23.76,
+          "end_time": 24.179
+        },
+        {
+          "text": "and",
+          "start_time": 24.18,
+          "end_time": 24.34
+        },
+        {
+          "text": " ",
+          "start_time": 24.34,
+          "end_time": 24.399
+        },
+        {
+          "text": "we",
+          "start_time": 24.399,
+          "end_time": 24.459
+        },
+        {
+          "text": " ",
+          "start_time": 24.459,
+          "end_time": 24.539
+        },
+        {
+          "text": "could",
+          "start_time": 24.539,
+          "end_time": 24.68
+        },
+        {
+          "text": " ",
+          "start_time": 24.68,
+          "end_time": 24.739
+        },
+        {
+          "text": "go",
+          "start_time": 24.739,
+          "end_time": 24.899
+        },
+        {
+          "text": " ",
+          "start_time": 24.899,
+          "end_time": 24.939
+        },
+        {
+          "text": "to",
+          "start_time": 24.939,
+          "end_time": 25.0
+        },
+        {
+          "text": " ",
+          "start_time": 25.0,
+          "end_time": 25.059
+        },
+        {
+          "text": "the",
+          "start_time": 25.059,
+          "end_time": 25.159
+        },
+        {
+          "text": " ",
+          "start_time": 25.159,
+          "end_time": 25.239
+        },
+        {
+          "text": "carnival",
+          "start_time": 25.239,
+          "end_time": 25.76
+        },
+        {
+          "text": " ",
+          "start_time": 25.76,
+          "end_time": 25.859
+        },
+        {
+          "text": "after",
+          "start_time": 25.859,
+          "end_time": 26.079
+        },
+        {
+          "text": " ",
+          "start_time": 26.079,
+          "end_time": 26.139
+        },
+        {
+          "text": "the",
+          "start_time": 26.139,
+          "end_time": 26.199
+        },
+        {
+          "text": " ",
+          "start_time": 26.199,
+          "end_time": 26.339
+        },
+        {
+          "text": "fun",
+          "start_time": 26.34,
+          "end_time": 26.539
+        },
+        {
+          "text": " ",
+          "start_time": 26.539,
+          "end_time": 26.619
+        },
+        {
+          "text": "rides",
+          "start_time": 26.619,
+          "end_time": 26.879
+        },
+        {
+          "text": " ",
+          "start_time": 26.879,
+          "end_time": 26.939
+        },
+        {
+          "text": "are",
+          "start_time": 26.939,
+          "end_time": 27.059
+        },
+        {
+          "text": " ",
+          "start_time": 27.059,
+          "end_time": 27.139
+        },
+        {
+          "text": "open.",
+          "start_time": 27.139,
+          "end_time": 27.399
+        },
+        {
+          "text": " ",
+          "start_time": 27.399,
+          "end_time": 27.399
+        }
+      ]
+    },
+    {
+      "text": "Do you mean the rides that are crazy? You like to go on rides that are fast and twisty, don't you, Jack? ",
+      "start_time": 28.439,
+      "end_time": 35.2,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Do",
+          "start_time": 28.439,
+          "end_time": 28.479
+        },
+        {
+          "text": " ",
+          "start_time": 28.479,
+          "end_time": 28.519
+        },
+        {
+          "text": "you",
+          "start_time": 28.519,
+          "end_time": 28.639
+        },
+        {
+          "text": " ",
+          "start_time": 28.639,
+          "end_time": 28.699
+        },
+        {
+          "text": "mean",
+          "start_time": 28.699,
+          "end_time": 28.879
+        },
+        {
+          "text": " ",
+          "start_time": 28.879,
+          "end_time": 28.92
+        },
+        {
+          "text": "the",
+          "start_time": 28.92,
+          "end_time": 28.999
+        },
+        {
+          "text": " ",
+          "start_time": 28.999,
+          "end_time": 29.119
+        },
+        {
+          "text": "rides",
+          "start_time": 29.119,
+          "end_time": 29.379
+        },
+        {
+          "text": " ",
+          "start_time": 29.379,
+          "end_time": 29.439
+        },
+        {
+          "text": "that",
+          "start_time": 29.439,
+          "end_time": 29.559
+        },
+        {
+          "text": " ",
+          "start_time": 29.559,
+          "end_time": 29.599
+        },
+        {
+          "text": "are",
+          "start_time": 29.599,
+          "end_time": 29.76
+        },
+        {
+          "text": " ",
+          "start_time": 29.76,
+          "end_time": 29.84
+        },
+        {
+          "text": "crazy?",
+          "start_time": 29.84,
+          "end_time": 30.319
+        },
+        {
+          "text": " ",
+          "start_time": 30.319,
+          "end_time": 30.779
+        },
+        {
+          "text": "You",
+          "start_time": 30.779,
+          "end_time": 30.879
+        },
+        {
+          "text": " ",
+          "start_time": 30.879,
+          "end_time": 30.939
+        },
+        {
+          "text": "like",
+          "start_time": 30.939,
+          "end_time": 31.119
+        },
+        {
+          "text": " ",
+          "start_time": 31.119,
+          "end_time": 31.179
+        },
+        {
+          "text": "to",
+          "start_time": 31.179,
+          "end_time": 31.279
+        },
+        {
+          "text": " ",
+          "start_time": 31.279,
+          "end_time": 31.339
+        },
+        {
+          "text": "go",
+          "start_time": 31.34,
+          "end_time": 31.42
+        },
+        {
+          "text": " ",
+          "start_time": 31.42,
+          "end_time": 31.479
+        },
+        {
+          "text": "on",
+          "start_time": 31.479,
+          "end_time": 31.639
+        },
+        {
+          "text": " ",
+          "start_time": 31.639,
+          "end_time": 31.739
+        },
+        {
+          "text": "rides",
+          "start_time": 31.739,
+          "end_time": 32.079
+        },
+        {
+          "text": " ",
+          "start_time": 32.079,
+          "end_time": 32.099
+        },
+        {
+          "text": "that",
+          "start_time": 32.099,
+          "end_time": 32.259
+        },
+        {
+          "text": " ",
+          "start_time": 32.259,
+          "end_time": 32.279
+        },
+        {
+          "text": "are",
+          "start_time": 32.279,
+          "end_time": 32.36
+        },
+        {
+          "text": " ",
+          "start_time": 32.36,
+          "end_time": 32.439
+        },
+        {
+          "text": "fast",
+          "start_time": 32.439,
+          "end_time": 32.759
+        },
+        {
+          "text": " ",
+          "start_time": 32.759,
+          "end_time": 32.799
+        },
+        {
+          "text": "and",
+          "start_time": 32.799,
+          "end_time": 32.939
+        },
+        {
+          "text": " ",
+          "start_time": 32.939,
+          "end_time": 33.0
+        },
+        {
+          "text": "twisty,",
+          "start_time": 33.0,
+          "end_time": 33.54
+        },
+        {
+          "text": " ",
+          "start_time": 33.54,
+          "end_time": 33.799
+        },
+        {
+          "text": "don't",
+          "start_time": 33.799,
+          "end_time": 34.0
+        },
+        {
+          "text": " ",
+          "start_time": 34.0,
+          "end_time": 34.059
+        },
+        {
+          "text": "you,",
+          "start_time": 34.059,
+          "end_time": 34.159
+        },
+        {
+          "text": " ",
+          "start_time": 34.159,
+          "end_time": 34.219
+        },
+        {
+          "text": "Jack?",
+          "start_time": 34.219,
+          "end_time": 34.659
+        },
+        {
+          "text": " ",
+          "start_time": 34.659,
+          "end_time": 35.2
+        }
+      ]
+    },
+    {
+      "text": "It was just a couple of years ago I was taking you on the merry-go-round. ",
+      "start_time": 35.2,
+      "end_time": 39.559,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "It",
+          "start_time": 35.2,
+          "end_time": 35.319
+        },
+        {
+          "text": " ",
+          "start_time": 35.319,
+          "end_time": 35.36
+        },
+        {
+          "text": "was",
+          "start_time": 35.36,
+          "end_time": 35.559
+        },
+        {
+          "text": " ",
+          "start_time": 35.559,
+          "end_time": 35.639
+        },
+        {
+          "text": "just",
+          "start_time": 35.639,
+          "end_time": 35.819
+        },
+        {
+          "text": " ",
+          "start_time": 35.819,
+          "end_time": 35.86
+        },
+        {
+          "text": "a",
+          "start_time": 35.86,
+          "end_time": 35.919
+        },
+        {
+          "text": " ",
+          "start_time": 35.919,
+          "end_time": 35.979
+        },
+        {
+          "text": "couple",
+          "start_time": 35.979,
+          "end_time": 36.2
+        },
+        {
+          "text": " ",
+          "start_time": 36.2,
+          "end_time": 36.239
+        },
+        {
+          "text": "of",
+          "start_time": 36.239,
+          "end_time": 36.319
+        },
+        {
+          "text": " ",
+          "start_time": 36.319,
+          "end_time": 36.399
+        },
+        {
+          "text": "years",
+          "start_time": 36.399,
+          "end_time": 36.579
+        },
+        {
+          "text": " ",
+          "start_time": 36.579,
+          "end_time": 36.679
+        },
+        {
+          "text": "ago",
+          "start_time": 36.68,
+          "end_time": 36.88
+        },
+        {
+          "text": " ",
+          "start_time": 36.88,
+          "end_time": 37.059
+        },
+        {
+          "text": "I",
+          "start_time": 37.059,
+          "end_time": 37.079
+        },
+        {
+          "text": " ",
+          "start_time": 37.079,
+          "end_time": 37.159
+        },
+        {
+          "text": "was",
+          "start_time": 37.159,
+          "end_time": 37.299
+        },
+        {
+          "text": " ",
+          "start_time": 37.299,
+          "end_time": 37.36
+        },
+        {
+          "text": "taking",
+          "start_time": 37.36,
+          "end_time": 37.639
+        },
+        {
+          "text": " ",
+          "start_time": 37.639,
+          "end_time": 37.7
+        },
+        {
+          "text": "you",
+          "start_time": 37.7,
+          "end_time": 37.759
+        },
+        {
+          "text": " ",
+          "start_time": 37.759,
+          "end_time": 37.819
+        },
+        {
+          "text": "on",
+          "start_time": 37.819,
+          "end_time": 37.879
+        },
+        {
+          "text": " ",
+          "start_time": 37.879,
+          "end_time": 37.919
+        },
+        {
+          "text": "the",
+          "start_time": 37.919,
+          "end_time": 37.979
+        },
+        {
+          "text": " ",
+          "start_time": 37.979,
+          "end_time": 38.04
+        },
+        {
+          "text": "merry-go-round.",
+          "start_time": 38.04,
+          "end_time": 38.819
+        },
+        {
+          "text": " ",
+          "start_time": 38.819,
+          "end_time": 39.559
+        }
+      ]
+    },
+    {
+      "text": "The merry-go-round is for small children who are still babies. ",
+      "start_time": 39.559,
+      "end_time": 44.34,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "The",
+          "start_time": 39.559,
+          "end_time": 39.619
+        },
+        {
+          "text": " ",
+          "start_time": 39.619,
+          "end_time": 39.719
+        },
+        {
+          "text": "merry-go-round",
+          "start_time": 39.719,
+          "end_time": 40.759
+        },
+        {
+          "text": " ",
+          "start_time": 40.759,
+          "end_time": 40.84
+        },
+        {
+          "text": "is",
+          "start_time": 40.84,
+          "end_time": 40.939
+        },
+        {
+          "text": " ",
+          "start_time": 40.939,
+          "end_time": 41.02
+        },
+        {
+          "text": "for",
+          "start_time": 41.02,
+          "end_time": 41.159
+        },
+        {
+          "text": " ",
+          "start_time": 41.159,
+          "end_time": 41.299
+        },
+        {
+          "text": "small",
+          "start_time": 41.299,
+          "end_time": 41.679
+        },
+        {
+          "text": " ",
+          "start_time": 41.679,
+          "end_time": 41.759
+        },
+        {
+          "text": "children",
+          "start_time": 41.759,
+          "end_time": 42.159
+        },
+        {
+          "text": " ",
+          "start_time": 42.159,
+          "end_time": 42.279
+        },
+        {
+          "text": "who",
+          "start_time": 42.279,
+          "end_time": 42.38
+        },
+        {
+          "text": " ",
+          "start_time": 42.38,
+          "end_time": 42.419
+        },
+        {
+          "text": "are",
+          "start_time": 42.419,
+          "end_time": 42.559
+        },
+        {
+          "text": " ",
+          "start_time": 42.559,
+          "end_time": 42.619
+        },
+        {
+          "text": "still",
+          "start_time": 42.619,
+          "end_time": 42.939
+        },
+        {
+          "text": " ",
+          "start_time": 42.939,
+          "end_time": 43.02
+        },
+        {
+          "text": "babies.",
+          "start_time": 43.02,
+          "end_time": 43.599
+        },
+        {
+          "text": " ",
+          "start_time": 43.599,
+          "end_time": 44.34
+        }
+      ]
+    },
+    {
+      "text": "You used to beg me to take you on the giraffe. ",
+      "start_time": 44.34,
+      "end_time": 47.359,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "You",
+          "start_time": 44.34,
+          "end_time": 44.459
+        },
+        {
+          "text": " ",
+          "start_time": 44.459,
+          "end_time": 44.559
+        },
+        {
+          "text": "used",
+          "start_time": 44.559,
+          "end_time": 44.7
+        },
+        {
+          "text": " ",
+          "start_time": 44.7,
+          "end_time": 44.739
+        },
+        {
+          "text": "to",
+          "start_time": 44.739,
+          "end_time": 44.86
+        },
+        {
+          "text": " ",
+          "start_time": 44.86,
+          "end_time": 44.939
+        },
+        {
+          "text": "beg",
+          "start_time": 44.939,
+          "end_time": 45.139
+        },
+        {
+          "text": " ",
+          "start_time": 45.139,
+          "end_time": 45.2
+        },
+        {
+          "text": "me",
+          "start_time": 45.2,
+          "end_time": 45.299
+        },
+        {
+          "text": " ",
+          "start_time": 45.299,
+          "end_time": 45.34
+        },
+        {
+          "text": "to",
+          "start_time": 45.34,
+          "end_time": 45.459
+        },
+        {
+          "text": " ",
+          "start_time": 45.459,
+          "end_time": 45.5
+        },
+        {
+          "text": "take",
+          "start_time": 45.5,
+          "end_time": 45.72
+        },
+        {
+          "text": " ",
+          "start_time": 45.72,
+          "end_time": 45.759
+        },
+        {
+          "text": "you",
+          "start_time": 45.759,
+          "end_time": 45.84
+        },
+        {
+          "text": " ",
+          "start_time": 45.84,
+          "end_time": 45.879
+        },
+        {
+          "text": "on",
+          "start_time": 45.879,
+          "end_time": 45.979
+        },
+        {
+          "text": " ",
+          "start_time": 45.979,
+          "end_time": 46.0
+        },
+        {
+          "text": "the",
+          "start_time": 46.0,
+          "end_time": 46.059
+        },
+        {
+          "text": " ",
+          "start_time": 46.059,
+          "end_time": 46.139
+        },
+        {
+          "text": "giraffe.",
+          "start_time": 46.139,
+          "end_time": 46.659
+        },
+        {
+          "text": " ",
+          "start_time": 46.659,
+          "end_time": 47.359
+        }
+      ]
+    },
+    {
+      "text": "Oh, I still like the merry-go-round. I might go on a few of the faster rides with Jack, too. ",
+      "start_time": 47.36,
+      "end_time": 55.139,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Oh,",
+          "start_time": 47.36,
+          "end_time": 47.5
+        },
+        {
+          "text": " ",
+          "start_time": 47.5,
+          "end_time": 47.799
+        },
+        {
+          "text": "I",
+          "start_time": 47.799,
+          "end_time": 47.84
+        },
+        {
+          "text": " ",
+          "start_time": 47.84,
+          "end_time": 47.959
+        },
+        {
+          "text": "still",
+          "start_time": 47.959,
+          "end_time": 48.159
+        },
+        {
+          "text": " ",
+          "start_time": 48.159,
+          "end_time": 48.219
+        },
+        {
+          "text": "like",
+          "start_time": 48.219,
+          "end_time": 48.399
+        },
+        {
+          "text": " ",
+          "start_time": 48.399,
+          "end_time": 48.439
+        },
+        {
+          "text": "the",
+          "start_time": 48.439,
+          "end_time": 48.539
+        },
+        {
+          "text": " ",
+          "start_time": 48.539,
+          "end_time": 48.619
+        },
+        {
+          "text": "merry-go-round.",
+          "start_time": 48.619,
+          "end_time": 49.5
+        },
+        {
+          "text": " ",
+          "start_time": 49.5,
+          "end_time": 49.939
+        },
+        {
+          "text": "I",
+          "start_time": 49.939,
+          "end_time": 50.059
+        },
+        {
+          "text": " ",
+          "start_time": 50.059,
+          "end_time": 50.119
+        },
+        {
+          "text": "might",
+          "start_time": 50.119,
+          "end_time": 50.459
+        },
+        {
+          "text": " ",
+          "start_time": 50.459,
+          "end_time": 50.5
+        },
+        {
+          "text": "go",
+          "start_time": 50.5,
+          "end_time": 50.719
+        },
+        {
+          "text": " ",
+          "start_time": 50.719,
+          "end_time": 50.819
+        },
+        {
+          "text": "on",
+          "start_time": 50.819,
+          "end_time": 50.979
+        },
+        {
+          "text": " ",
+          "start_time": 50.979,
+          "end_time": 51.039
+        },
+        {
+          "text": "a",
+          "start_time": 51.039,
+          "end_time": 51.159
+        },
+        {
+          "text": " ",
+          "start_time": 51.159,
+          "end_time": 51.299
+        },
+        {
+          "text": "few",
+          "start_time": 51.299,
+          "end_time": 51.5
+        },
+        {
+          "text": " ",
+          "start_time": 51.5,
+          "end_time": 51.619
+        },
+        {
+          "text": "of",
+          "start_time": 51.619,
+          "end_time": 51.799
+        },
+        {
+          "text": " ",
+          "start_time": 51.799,
+          "end_time": 51.84
+        },
+        {
+          "text": "the",
+          "start_time": 51.84,
+          "end_time": 51.899
+        },
+        {
+          "text": " ",
+          "start_time": 51.899,
+          "end_time": 52.119
+        },
+        {
+          "text": "faster",
+          "start_time": 52.119,
+          "end_time": 52.759
+        },
+        {
+          "text": " ",
+          "start_time": 52.759,
+          "end_time": 52.84
+        },
+        {
+          "text": "rides",
+          "start_time": 52.84,
+          "end_time": 53.259
+        },
+        {
+          "text": " ",
+          "start_time": 53.259,
+          "end_time": 53.34
+        },
+        {
+          "text": "with",
+          "start_time": 53.34,
+          "end_time": 53.599
+        },
+        {
+          "text": " ",
+          "start_time": 53.599,
+          "end_time": 53.68
+        },
+        {
+          "text": "Jack,",
+          "start_time": 53.68,
+          "end_time": 54.02
+        },
+        {
+          "text": " ",
+          "start_time": 54.02,
+          "end_time": 54.079
+        },
+        {
+          "text": "too.",
+          "start_time": 54.079,
+          "end_time": 54.379
+        },
+        {
+          "text": " ",
+          "start_time": 54.379,
+          "end_time": 55.139
+        }
+      ]
+    },
+    {
+      "text": "I'll be the one who stays behind to take pictures. ",
+      "start_time": 55.139,
+      "end_time": 58.199,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "I'll",
+          "start_time": 55.139,
+          "end_time": 55.259
+        },
+        {
+          "text": " ",
+          "start_time": 55.259,
+          "end_time": 55.299
+        },
+        {
+          "text": "be",
+          "start_time": 55.299,
+          "end_time": 55.419
+        },
+        {
+          "text": " ",
+          "start_time": 55.419,
+          "end_time": 55.459
+        },
+        {
+          "text": "the",
+          "start_time": 55.459,
+          "end_time": 55.579
+        },
+        {
+          "text": " ",
+          "start_time": 55.579,
+          "end_time": 55.639
+        },
+        {
+          "text": "one",
+          "start_time": 55.639,
+          "end_time": 55.779
+        },
+        {
+          "text": " ",
+          "start_time": 55.779,
+          "end_time": 55.819
+        },
+        {
+          "text": "who",
+          "start_time": 55.819,
+          "end_time": 55.899
+        },
+        {
+          "text": " ",
+          "start_time": 55.899,
+          "end_time": 55.999
+        },
+        {
+          "text": "stays",
+          "start_time": 56.0,
+          "end_time": 56.239
+        },
+        {
+          "text": " ",
+          "start_time": 56.239,
+          "end_time": 56.259
+        },
+        {
+          "text": "behind",
+          "start_time": 56.259,
+          "end_time": 56.579
+        },
+        {
+          "text": " ",
+          "start_time": 56.579,
+          "end_time": 56.619
+        },
+        {
+          "text": "to",
+          "start_time": 56.619,
+          "end_time": 56.7
+        },
+        {
+          "text": " ",
+          "start_time": 56.7,
+          "end_time": 56.739
+        },
+        {
+          "text": "take",
+          "start_time": 56.739,
+          "end_time": 56.899
+        },
+        {
+          "text": " ",
+          "start_time": 56.899,
+          "end_time": 56.959
+        },
+        {
+          "text": "pictures.",
+          "start_time": 56.959,
+          "end_time": 57.5
+        },
+        {
+          "text": " ",
+          "start_time": 57.5,
+          "end_time": 58.199
+        }
+      ]
+    },
+    {
+      "text": "Do you like fast rides, Dad? ",
+      "start_time": 58.199,
+      "end_time": 60.779,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Do",
+          "start_time": 58.199,
+          "end_time": 58.299
+        },
+        {
+          "text": " ",
+          "start_time": 58.299,
+          "end_time": 58.379
+        },
+        {
+          "text": "you",
+          "start_time": 58.379,
+          "end_time": 58.52
+        },
+        {
+          "text": " ",
+          "start_time": 58.52,
+          "end_time": 58.719
+        },
+        {
+          "text": "like",
+          "start_time": 58.719,
+          "end_time": 58.859
+        },
+        {
+          "text": " ",
+          "start_time": 58.859,
+          "end_time": 58.979
+        },
+        {
+          "text": "fast",
+          "start_time": 58.979,
+          "end_time": 59.319
+        },
+        {
+          "text": " ",
+          "start_time": 59.319,
+          "end_time": 59.439
+        },
+        {
+          "text": "rides,",
+          "start_time": 59.439,
+          "end_time": 59.759
+        },
+        {
+          "text": " ",
+          "start_time": 59.759,
+          "end_time": 59.819
+        },
+        {
+          "text": "Dad?",
+          "start_time": 59.819,
+          "end_time": 60.159
+        },
+        {
+          "text": " ",
+          "start_time": 60.159,
+          "end_time": 60.779
+        }
+      ]
+    },
+    {
+      "text": "No, I like to keep my feet on the ground, and my lunch in my stomach. ",
+      "start_time": 60.779,
+      "end_time": 65.339,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "No,",
+          "start_time": 60.779,
+          "end_time": 61.179
+        },
+        {
+          "text": " ",
+          "start_time": 61.179,
+          "end_time": 61.299
+        },
+        {
+          "text": "I",
+          "start_time": 61.299,
+          "end_time": 61.319
+        },
+        {
+          "text": " ",
+          "start_time": 61.319,
+          "end_time": 61.399
+        },
+        {
+          "text": "like",
+          "start_time": 61.399,
+          "end_time": 61.559
+        },
+        {
+          "text": " ",
+          "start_time": 61.559,
+          "end_time": 61.559
+        },
+        {
+          "text": "to",
+          "start_time": 61.559,
+          "end_time": 61.659
+        },
+        {
+          "text": " ",
+          "start_time": 61.659,
+          "end_time": 61.699
+        },
+        {
+          "text": "keep",
+          "start_time": 61.699,
+          "end_time": 61.86
+        },
+        {
+          "text": " ",
+          "start_time": 61.86,
+          "end_time": 61.899
+        },
+        {
+          "text": "my",
+          "start_time": 61.899,
+          "end_time": 62.059
+        },
+        {
+          "text": " ",
+          "start_time": 62.059,
+          "end_time": 62.119
+        },
+        {
+          "text": "feet",
+          "start_time": 62.119,
+          "end_time": 62.259
+        },
+        {
+          "text": " ",
+          "start_time": 62.259,
+          "end_time": 62.299
+        },
+        {
+          "text": "on",
+          "start_time": 62.299,
+          "end_time": 62.379
+        },
+        {
+          "text": " ",
+          "start_time": 62.379,
+          "end_time": 62.399
+        },
+        {
+          "text": "the",
+          "start_time": 62.399,
+          "end_time": 62.459
+        },
+        {
+          "text": " ",
+          "start_time": 62.459,
+          "end_time": 62.5
+        },
+        {
+          "text": "ground,",
+          "start_time": 62.5,
+          "end_time": 62.799
+        },
+        {
+          "text": " ",
+          "start_time": 62.799,
+          "end_time": 63.119
+        },
+        {
+          "text": "and",
+          "start_time": 63.119,
+          "end_time": 63.359
+        },
+        {
+          "text": " ",
+          "start_time": 63.359,
+          "end_time": 63.399
+        },
+        {
+          "text": "my",
+          "start_time": 63.399,
+          "end_time": 63.579
+        },
+        {
+          "text": " ",
+          "start_time": 63.579,
+          "end_time": 63.619
+        },
+        {
+          "text": "lunch",
+          "start_time": 63.619,
+          "end_time": 63.919
+        },
+        {
+          "text": " ",
+          "start_time": 63.919,
+          "end_time": 63.979
+        },
+        {
+          "text": "in",
+          "start_time": 63.979,
+          "end_time": 64.08
+        },
+        {
+          "text": " ",
+          "start_time": 64.08,
+          "end_time": 64.119
+        },
+        {
+          "text": "my",
+          "start_time": 64.119,
+          "end_time": 64.279
+        },
+        {
+          "text": " ",
+          "start_time": 64.279,
+          "end_time": 64.339
+        },
+        {
+          "text": "stomach.",
+          "start_time": 64.339,
+          "end_time": 64.72
+        },
+        {
+          "text": " ",
+          "start_time": 64.72,
+          "end_time": 65.339
+        }
+      ]
+    },
+    {
+      "text": "Well, that works out great. You can be the photographer",
+      "start_time": 65.339,
+      "end_time": 68.839,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Well,",
+          "start_time": 65.339,
+          "end_time": 65.519
+        },
+        {
+          "text": " ",
+          "start_time": 65.519,
+          "end_time": 65.599
+        },
+        {
+          "text": "that",
+          "start_time": 65.599,
+          "end_time": 65.819
+        },
+        {
+          "text": " ",
+          "start_time": 65.819,
+          "end_time": 65.86
+        },
+        {
+          "text": "works",
+          "start_time": 65.86,
+          "end_time": 66.099
+        },
+        {
+          "text": " ",
+          "start_time": 66.099,
+          "end_time": 66.18
+        },
+        {
+          "text": "out",
+          "start_time": 66.18,
+          "end_time": 66.36
+        },
+        {
+          "text": " ",
+          "start_time": 66.36,
+          "end_time": 66.419
+        },
+        {
+          "text": "great.",
+          "start_time": 66.419,
+          "end_time": 66.779
+        },
+        {
+          "text": " ",
+          "start_time": 66.779,
+          "end_time": 67.019
+        },
+        {
+          "text": "You",
+          "start_time": 67.019,
+          "end_time": 67.139
+        },
+        {
+          "text": " ",
+          "start_time": 67.139,
+          "end_time": 67.159
+        },
+        {
+          "text": "can",
+          "start_time": 67.159,
+          "end_time": 67.319
+        },
+        {
+          "text": " ",
+          "start_time": 67.319,
+          "end_time": 67.359
+        },
+        {
+          "text": "be",
+          "start_time": 67.36,
+          "end_time": 67.479
+        },
+        {
+          "text": " ",
+          "start_time": 67.479,
+          "end_time": 67.519
+        },
+        {
+          "text": "the",
+          "start_time": 67.519,
+          "end_time": 67.579
+        },
+        {
+          "text": " ",
+          "start_time": 67.579,
+          "end_time": 67.68
+        },
+        {
+          "text": "photographer",
+          "start_time": 67.68,
+          "end_time": 68.839
+        }
+      ]
+    }
+  ]
+}

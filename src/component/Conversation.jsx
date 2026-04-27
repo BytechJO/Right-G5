@@ -81,13 +81,6 @@ const RenderWords = ({
   const passedCount = realWords.filter(
     (w) => currentTime >= w.start_time,
   ).length;
-  console.log("RenderWords", {
-    text,
-    words,
-    currentTime,
-    captionStart,
-    captionEnd,
-  });
   return (
     <span style={{ flex: 1 }}>
       {textWords.map((word, index) => {
@@ -120,7 +113,6 @@ const Conversation = ({
   stopAtSecond,
   wordTimings,
   captionTimings,
-  openPopup,
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [showVideo, setShowVideo] = useState(false);

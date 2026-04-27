@@ -1,5 +1,5 @@
 import React from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Page 16.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16.png";
 import "./Review1_Page1.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 // import Unit4_Page6_Q2 from "./Unit4_Page6_Q2";
