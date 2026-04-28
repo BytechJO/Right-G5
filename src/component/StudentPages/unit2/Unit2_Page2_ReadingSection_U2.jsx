@@ -1,21 +1,11 @@
-import React, { useState } from "react";
 import ReadingSection from "../../ReadingSection";
 import ComprehensionA from "./Unit2_Page2_ComprehensionA";
 import ComprehensionB from "./Unit2_Page2_ComprehensionB";
-import Button from "../../Button";
-import ValidationAlert from "../../Popup/ValidationAlert";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 11/SVG/Asset 1.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U2/PG 11/reading_U2.mp3";
 
 const ReadingSection_U2 = () => {
-  const [answersA, setAnswersA] = useState([]);
-  const [answersB, setAnswersB] = useState([]);
-  const [showTrigger, setShowTrigger] = useState(0);
-  const [resetTrigger, setResetTrigger] = useState(0);
-  const [locked, setLocked] = useState(false);
-  const [resultA, setResultA] = useState([]);
-  const [resultB, setResultB] = useState([]);
   const paragraphs = [
     "Twins are babies who are born at the same time from the same mom. Most of us know about twins who look the same and sometimes dress the same. Also, there are unusual sets of twins that are born very so often.",
 
@@ -46,86 +36,6 @@ const ReadingSection_U2 = () => {
     },
   ];
 
-  const correctA = [
-    "at the same time to the same mom",
-    "mirror image twins",
-    "Siamese twins",
-  ];
-
-  const correctBArray = ["dwarf", "unusual", "disability"];
-
-  const checkAll = () => {
-    if (locked) return;
-
-    // 🛑 VALIDATION
-    const isAEmpty = answersA.some((ans) => !ans || ans.trim() === "");
-
-    const isBEmpty = answersB.some((ans) => !ans || ans.trim() === "");
-    if (isAEmpty || isBEmpty) {
-      ValidationAlert.info("Please answer all questions first!");
-      return;
-    }
-
-    let correct = 0;
-    let total = 0;
-
-    const tempResultA = [];
-    const tempResultB = {};
-
-    // ====================
-    // 🔵 A
-    // ====================
-    correctA.forEach((ans, i) => {
-      total++;
-
-      const isCorrect = answersA[i]?.toLowerCase().trim() === ans.toLowerCase();
-
-      tempResultA[i] = isCorrect;
-
-      if (isCorrect) correct++;
-    });
-
-    // ====================
-    // 🔵 B
-    // ====================
-    correctBArray.forEach((ans, i) => {
-      total++;
-
-      const isCorrect = answersB[i]?.toLowerCase().trim() === ans.toLowerCase();
-
-      tempResultB[i] = isCorrect;
-
-      if (isCorrect) correct++;
-    });
-
-    // ====================
-    // 🔥 SET RESULTS
-    // ====================
-    setResultA(tempResultA);
-    setResultB(tempResultB);
-
-    // 🔒 LOCK
-    setLocked(true);
-
-    // ====================
-    // 🎯 SCORE
-    // ====================
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correct} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-  };
-
   return (
     <div className=" flex flex-col items-center">
       <ReadingSection
@@ -144,37 +54,11 @@ const ReadingSection_U2 = () => {
         stopAtSecond={8.5}
       />
 
-      <div className="w-[60%] mt-4 space-y-6 mb-20">
-        <ComprehensionA
-          onChange={setAnswersA}
-          showTrigger={showTrigger}
-          resetTrigger={resetTrigger}
-          locked={locked}
-          result={resultA}
-        />
+      <div className="w-[60%] mt-4 space-y-6 ">
+        <ComprehensionA />
 
-        <ComprehensionB
-          onChange={setAnswersB}
-          showTrigger={showTrigger}
-          resetTrigger={resetTrigger}
-          locked={locked}
-          result={resultB}
-        />
+        <ComprehensionB />
       </div>
-
-      <Button
-        checkAnswers={checkAll}
-        handleShowAnswer={() => {
-          setShowTrigger((p) => p + 1);
-          setLocked(true); // 🔒
-        }}
-        handleStartAgain={() => {
-          setResetTrigger((p) => p + 1);
-          setLocked(false);
-          setResultA([]); // 🔥 مهم
-          setResultB([]); // 🔥 مهم
-        }}
-      />
     </div>
   );
 };

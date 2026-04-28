@@ -1,40 +1,30 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 
-const GrammarB = ({ onChange, showTrigger, resetTrigger, locked }) => {
+const GrammarB = () => {
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [selected, setSelected] = useState("");
-
-  // 🔹 handle change
+  const [result, setResult] = useState([]);
+  const [locked, setLocked] = useState(false);
   const handleChange = (i, value) => {
     const updated = [...answers];
     updated[i] = value;
     setAnswers(updated);
-    onChange(updated); // 🔥 مهم
+
+    // 🔥 امسح الخطأ لما يعدل
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
-useEffect(() => {
-  if (resetTrigger) {
-    setSelected(""); // 🔥 يرجّع الدائرة
-  }
-}, [resetTrigger]);
-  // 🔹 reset
-  useEffect(() => {
-    if (resetTrigger) {
-      const empty = ["", "", "", ""];
-      setAnswers(empty);
-      onChange(empty);
-    }
-  }, [resetTrigger]);
-
-  // 🔹 show answer (ما في answers → نخليها فاضية)
-  useEffect(() => {
-    if (showTrigger) {
-      const empty = ["", "", "", ""];
-      setAnswers(empty);
-      onChange(empty);
-    }
-  }, [showTrigger]);
-
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+    setSelected("");
+    setResult([]);
+    setLocked(false);
+  };
   return (
     <div>
       {/* العنوان */}
@@ -57,10 +47,12 @@ useEffect(() => {
             cousin
           </span>
           <input
-            disabled={locked}
+            disabled={locked || result[0] === true}
             value={answers[0]}
             onChange={(e) => handleChange(0, e.target.value)}
-            className="border-b-2 border-black outline-none w-[300px] mx-2 text-[#6D2980] font-bold"
+            className={`border-b-2 outline-none text-[#6D2980] font-bold
+                ${result[0] === false ? "border-red-500" : "border-black"}
+              `}
           />
           ?
         </div>
@@ -79,10 +71,12 @@ useEffect(() => {
           </span>
           ,
           <input
-            disabled={locked}
+            disabled={locked || result[1] === true}
             value={answers[1]}
             onChange={(e) => handleChange(1, e.target.value)}
-            className="border-b-2 border-black outline-none w-[250px] mx-2 text-[#6D2980] font-bold"
+            className={`border-b-2 outline-none text-[#6D2980] font-bold
+                ${result[1] === false ? "border-red-500" : "border-black"}
+              `}
           />
           , can juggle four balls.
         </div>
@@ -100,10 +94,12 @@ useEffect(() => {
           </span>
           ,
           <input
-            disabled={locked}
+            disabled={locked || result[2] === true}
             value={answers[2]}
             onChange={(e) => handleChange(2, e.target.value)}
-            className="border-b-2 border-black outline-none w-[250px] mx-2 text-[#6D2980] font-bold"
+            className={`border-b-2 outline-none text-[#6D2980] font-bold
+                ${result[2] === false ? "border-red-500" : "border-black"}
+              `}
           />
           , can walk minutes after it is born.
         </div>
@@ -124,11 +120,30 @@ useEffect(() => {
           </span>
 
           <input
-            disabled={locked}
+            disabled={locked || result[3] === true}
             value={answers[3]}
             onChange={(e) => handleChange(3, e.target.value)}
-            className="border-b-2 border-black outline-none flex-1 mx-2 text-[#6D2980] font-bold"
-          />
+            className={`border-b-2 outline-none text-[#6D2980] font-bold
+                ${result[3] === false ? "border-red-500" : "border-black"}
+              `}
+          />.
+        </div>
+      </div>
+      {/* Buttons */}
+      <div className="flex justify-center gap-6 mt-8">
+        {/* Reset */}
+        <div className="relative group">
+          <div
+            onClick={handleReset}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaRedo size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Reset
+          </span>
         </div>
       </div>
     </div>

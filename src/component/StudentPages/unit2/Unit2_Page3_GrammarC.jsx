@@ -1,7 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 
-const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
+const GrammarC = () => {
+  const [selected, setSelected] = useState(null);
+  const [matches, setMatches] = useState({});
+  const [lines, setLines] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [locked, setLocked] = useState(false);
   const left = ["who", "which", "that"];
 
   const right = [
@@ -19,10 +26,6 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
   const wrapperRef = useRef(null);
   const leftRefs = useRef({});
   const rightRefs = useRef({});
-
-  const [selected, setSelected] = useState(null);
-  const [matches, setMatches] = useState({});
-  const [lines, setLines] = useState([]);
 
   const updateLines = (newMatches = matches) => {
     if (!wrapperRef.current) return;
@@ -55,19 +58,28 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
   };
 
   const handleLeft = (item) => {
-    if (result && result[item] === true) return; // 🔒 الصح بس
+    if (locked || matches[item] === correctB[item]) return;
     setSelected(item);
   };
 
   const handleRight = (item) => {
-    if (!selected) return;
+    if (!selected || locked) return;
 
-    // 🔥 إذا العنصر المختار صح → لا تعدل
-    if (result && result[selected] === true) return;
+    // 🔒 لا تعدل الصح
+    if (matches[selected] === correctB[selected]) return;
+
     setMatches((prev) => {
-      // 🔥 احذف أي عنصر مربوط بنفس الـ right
       const cleaned = Object.fromEntries(
-        Object.entries(prev).filter(([ value]) => value !== item),
+        Object.entries(prev).filter(([_, value]) => {
+          // 🔥 لا تحذف الصح
+          const leftKey = Object.keys(prev).find((k) => prev[k] === value);
+
+          if (value === item && prev[leftKey] === correctB[leftKey]) {
+            return true;
+          }
+
+          return value !== item;
+        }),
       );
 
       return {
@@ -76,9 +88,15 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
       };
     });
 
+    // 🔥 امسح الخطأ
+    setErrors((prev) => {
+      const copy = { ...prev };
+      delete copy[selected];
+      return copy;
+    });
+
     setSelected(null);
   };
-
   useEffect(() => {
     updateLines();
   }, [matches]);
@@ -90,29 +108,66 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [matches]);
 
-  useEffect(() => {
-    if (!showTrigger) return;
+  const handleCheck = () => {
+    if (locked) return;
 
+    if (Object.keys(matches).length !== left.length) {
+      ValidationAlert.info("Please match all items.");
+      return;
+    }
+
+    let correctCount = 0;
+    const newErrors = {};
+
+    left.forEach((item) => {
+      if (matches[item] === correctB[item]) {
+        correctCount++;
+        newErrors[item] = false;
+      } else {
+        newErrors[item] = true;
+      }
+    });
+
+    setErrors(newErrors);
+
+    const total = left.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+  const handleShow = () => {
     setMatches(correctB);
-    setSelected(null);
+    setErrors({});
+    setLocked(true);
     setTimeout(() => updateLines(correctB), 0);
-  }, [showTrigger]);
-
-  useEffect(() => {
-    if (!resetTrigger) return;
-
+  };
+  const handleReset = () => {
     setMatches({});
     setSelected(null);
     setLines([]);
-  }, [resetTrigger]);
-
-  useEffect(() => {
-    onChange(matches);
-  }, [matches]);
-
+    setErrors({});
+    setLocked(false);
+  };
   const isMatchedLeft = (item) => Object.keys(matches).includes(item);
   const isMatchedRight = (item) => Object.values(matches).includes(item);
-  const isWrong = (item) => result && result[item] === false;
+  const isWrong = (item) => errors[item];
   return (
     <div>
       <div className="flex items-center gap-3 mb-7">
@@ -209,6 +264,53 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger,  result }) => {
               <span>{item}</span>
             </div>
           ))}
+        </div>
+      </div>
+      {/* Buttons */}
+      <div className="flex justify-center gap-6 mt-8">
+        {/* Reset */}
+        <div className="relative group">
+          <div
+            onClick={handleReset}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaRedo size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Reset
+          </span>
+        </div>
+
+        {/* Show */}
+        <div className="relative group">
+          <div
+            onClick={handleShow}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaEye size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Show Answer
+          </span>
+        </div>
+
+        {/* Check */}
+        <div className="relative group">
+          <div
+            onClick={handleCheck}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaCheck size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Check Answer
+          </span>
         </div>
       </div>
     </div>

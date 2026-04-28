@@ -1,254 +1,245 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 8.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 9.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 10.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 11.svg";
+import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 12.svg";
+import grammer_u1 from "../../../assets/audio/ClassBook/U2/PG 15/sound_P15.mp3";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+const Page9_Q3 = () => {
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+  const [locked, setLocked] = useState(false);
+  const [result, setResult] = useState([]);
 
-import imgA from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 15/Ex D 1.svg";
-import imgB from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 15/Ex D 2.svg";
-import imgC from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 15/Ex D 3.svg";
-import imgD from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 15/Ex D 4.svg";
-import Button from "../../Button";
-import WrongMark from "../../WrongMark";
-
-const Unit2_Page6_Q1 = () => {
-  const questions = [
+  // ✅ الإجابات الصح
+  const correct = ["d", "c", "b", "e", "a"];
+  const captions = [
     {
-      id: 1,
-      img: imgA,
-      options: ["take the subway", "take a taxi"],
-      correct: "take the subway",
-    },
-    {
-      id: 2,
-      img: imgB,
-      options: ["take a bus", "ride a bike"],
-      correct: "ride a bike",
-    },
-    {
-      id: 3,
-      img: imgC,
-      options: ["ride a bike", "walk"],
-      correct: "walk",
-    },
-    {
-      id: 4,
-      img: imgD,
-      options: ["take a bus", "take a train"],
-      correct: "take a bus",
+      start: 0.319,
+      end: 44.899,
+      text: "Page 15, Write Activities, Exercise C. Listen, read, and match. The carnival comes to town this week, and the children are very excited. Tom is helping his dad with the car engine on Monday, so he is going to the carnival on Tuesday. Hansel goes to the carnival and hopes to get a trophy on Friday. Sarah is going to the carnival and riding the Ferris wheel on Monday. Sarah's dad takes care of his responsibilities on Wednesday, so he can go with her on Monday. Harley gets a trophy with his soccer team on Tuesday at the carnival, and Hansel eats apple pie on that day because it's his birthday. Helen's mom is sending her to get oil for the fridge motor next Monday. So after that, Helen is going to the carnival.",
     },
   ];
-  const [selected, setSelected] = useState({});
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
-  const handleSelect = (qId, option) => {
-    if (locked) return;
+  const handleChange = (i, val) => {
+    const updated = [...answers];
+    updated[i] = val.toLowerCase();
+    setAnswers(updated);
 
-    setSelected((prev) => ({
-      ...prev,
-      [qId]: option,
-    }));
-  };
-  const reset = () => {
-    setSelected({});
-    setLocked(false);
-    setShowResult(false);
-  };
-
-  const showAnswers = () => {
-    const filled = {};
-    questions.forEach((q) => {
-      filled[q.id] = q.correct;
+    // 🔥 امسح حالة الغلط أول ما يعدّل
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
     });
-    setSelected(filled);
-    setLocked(true);
   };
+
+  const input = (i) => (
+    <span className="relative mx-2">
+      <input
+        disabled={locked || result[i] === true}
+        value={answers[i]}
+        onChange={(e) => handleChange(i, e.target.value)}
+        maxLength={1}
+        className={`w-[40px] border-b outline-none text-center font-bold uppercase
+        ${result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
+      `}
+      />
+
+      {/* ❌ */}
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-10px",
+            right: "-10px",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  // ====================
+  // ✅ CHECK
+  // ====================
   const checkAnswers = () => {
     if (locked) return;
-    const hasEmpty = questions.some((q) => !selected[q.id]);
 
-    if (hasEmpty) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
       return;
     }
-    let correct = 0;
 
-    questions.forEach((q) => {
-      if (selected[q.id] === q.correct) correct++;
+    let correctCount = 0;
+
+    const res = answers.map((a, i) => {
+      const ok = a === correct[i];
+      if (ok) correctCount++;
+      return ok;
     });
 
-    const total = questions.length;
+    setResult(res);
+
+    const total = correct.length;
+
     const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-  <div style="font-size:20px;text-align:center;">
-    <span style="color:${color}; font-weight:bold;">
-      Score: ${correct} / ${total}
-    </span>
-  </div>
-`;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-    setShowResult(true);
-    setLocked(true);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  // ====================
+  // 👀 SHOW ANSWERS
+  // ====================
+  const showAnswers = () => {
+    setAnswers(correct);
+    setLocked(true);
+    setResult([true, true, true, true, true]);
+  };
+
+  // ====================
+  // 🔄 RESET
+  // ====================
+  const reset = () => {
+    setAnswers(["", "", "", "", ""]);
+    setLocked(false);
+    setResult([]);
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div className="div-forall">
-        <h5 className="header-title-page8 pb-2.5">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
-            D
-          </span>
-          Look, read, and circle.
+    <div className="p-8 flex flex-col items-center">
+        <div className="div-forall">
+        <h5 className="header-title-page8 mb-10">
+          <span className="ex-A mr-2">C</span>
+          Listen, read, and match
         </h5>
+        <QuestionAudioPlayer
+          src={grammer_u1}
+          captions={captions}
+          stopAtSecond={6.6}
+        />
+        <div className="flex justify-between w-full text-[18px] mb-10">
+          {" "}
+          {/* LEFT */}
+          <div className="space-y-25">
+            <div>
+              {input(0)} <span className="font-bold mr-2">1</span> Who goes to
+              the carnival and probably wins a trophy on Friday?
+            </div>
 
-        <div className=" mx-auto">
-          <div className="flex flex-col gap-10 items-center mb-10">
-            {[0, 2].map((startIndex) => (
-              <div key={startIndex} className="w-full">
-                <div className="flex justify-between px-10">
-                  {questions.slice(startIndex, startIndex + 2).map((q) => (
-                    <div
-                      key={q.id}
-                      className="flex flex-col items-start  w-[45%]"
-                    >
-                      {/* الصورة */}
-                      <div className="flex gap-2 items-start">
-                        <span className="font-bold text-lg">{q.id}</span>
-                        <img
-                          src={q.img}
-                          style={{
-                            height: "10vw",
-                            border: "2px solid #F79530",
-                            borderRadius: "10px",
-                          }}
-                        />
-                      </div>
+            <div>
+              {input(1)} <span className="font-bold mr-2 ">2</span> Who is
+              helping his dad with the car engine?
+            </div>
 
-                      <div className="flex flex-col items-start  mt-2">
-                        <div
-                          onClick={() => handleSelect(q.id, q.options[0])}
-                          style={{
-                            position: "relative",
-                            cursor: "pointer",
-                            padding: "4px 8px",
-                            marginLeft: "20px",
-                            fontSize: "18px",
-                            display: "inline-block",
-                          }}
-                        >
-                          {q.options[0]}
+            <div>
+              {input(2)} <span className="font-bold mr-2">3</span> Who gets a
+              trophy on Tuesday?
+            </div>
 
-                          {/* الدائرة */}
-                          {selected[q.id] === q.options[0] && (
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "-5px",
-                                left: "-8px",
-                                right: "-8px",
-                                bottom: "-5px",
-                                border:
-                                  selected[q.id] === q.options[0]
-                                    ? showResult
-                                      ? q.options[0] === q.correct
-                                        ? "2px solid #1C398E"
-                                        : "2px solid #ef4444"
-                                      : "2px solid #1C398E"
-                                    : "none",
-                                borderRadius: "20px",
-                                pointerEvents: "none",
-                              }}
-                            />
-                          )}
+            <div>
+              {input(3)} <span className="font-bold mr-2">4</span> Who gets a
+              trophy on Tuesday?
+            </div>
 
-                          {/* ❌ إذا غلط */}
-                          {showResult &&
-                            selected[q.id] === q.options[0] &&
-                            selected[q.id] !== q.correct && <WrongMark />}
-                        </div>
+            <div>
+              {input(4)} <span className="font-bold mr-2">5</span> Who eats
+              apple pie on his birthday?
+            </div>
+          </div>
+          {/* RIGHT */}
+          <div className="space-y-10 flex flex-col items-end">
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src={img1}
+                alt=""
+                style={{ height: "80px", objectFit: "contain" }}
+              />
+            </div>
 
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            width: "220px",
-                            fontSize: "18px",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <span>I</span>
-                          <span>to school.</span>
-                        </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src={img2}
+                alt=""
+                style={{ height: "80px", objectFit: "contain" }}
+              />
+            </div>
 
-                        <div style={{ width: "100%" }}>
-                          <div
-                            onClick={() => handleSelect(q.id, q.options[1])}
-                            style={{
-                              position: "relative",
-                              cursor: "pointer",
-                              padding: "4px 8px",
-                              marginLeft: "20px",
-                              fontSize: "18px",
-                              display: "inline-block",
-                            }}
-                          >
-                            {q.options[1]}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src={img3}
+                alt=""
+                style={{ height: "80px", objectFit: "contain" }}
+              />
+            </div>
 
-                            {/* الدائرة */}
-                            {selected[q.id] === q.options[1] && (
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  top: "-5px",
-                                  left: "-8px",
-                                  right: "-8px",
-                                  bottom: "-5px",
-                                  border:
-                                    selected[q.id] === q.options[1]
-                                      ? showResult
-                                        ? q.options[1] === q.correct
-                                          ? "2px solid #1C398E"
-                                          : "2px solid #ef4444"
-                                        : "2px solid #1C398E"
-                                      : "none",
-                                  borderRadius: "20px",
-                                  pointerEvents: "none",
-                                }}
-                              />
-                            )}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src={img4}
+                alt=""
+                style={{ height: "80px", objectFit: "contain" }}
+              />
+            </div>
 
-                            {/* ❌ إذا غلط */}
-                            {showResult &&
-                              selected[q.id] === q.options[1] &&
-                              selected[q.id] !== q.correct && <WrongMark />}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <img
+                src={img5}
+                alt=""
+                style={{ height: "80px", objectFit: "contain" }}
+              />
+            </div>
           </div>
         </div>
-        {/* BUTTONS */}
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+      </div>
+
+      {/* Buttons */}
+      <div className="action-buttons-container mt-6">
+        <button className="try-again-button" onClick={reset}>
+          Start Again ↻
+        </button>
+
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default Unit2_Page6_Q1;
+export default Page9_Q3;

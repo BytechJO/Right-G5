@@ -77,7 +77,6 @@ const Page8_Q3 = () => {
     )
       return;
 
-    // إذا في صورة مختارة → اربط
     if (selectedImg !== null) {
       setMatches((prev) => {
         const updated = { ...prev };
@@ -183,7 +182,7 @@ const Page8_Q3 = () => {
                 <img
                   src={img.img}
                   style={{
-                    width: "100px",
+                    width: "200px",
                     height: "100px",
                     objectFit: "contain",
                     border:
@@ -215,7 +214,7 @@ const Page8_Q3 = () => {
               <div
                 key={i}
                 onClick={() => selectSentence(i)}
-                className="relative flex flex-col items-center cursor-pointer"
+                className="relative flex flex-col items-center cursor-pointer "
               >
                 {/* 🔥 الدوت */}
                 <div
@@ -236,7 +235,7 @@ const Page8_Q3 = () => {
 
                 {/* 🔥 البوكس */}
                 <div
-                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition"
+                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]"
                   style={{
                     border:
                       selectedSentence === i
@@ -244,6 +243,7 @@ const Page8_Q3 = () => {
                         : "2px solid transparent",
                   }}
                 >
+                  <span className="font-bold mr-3">{i + 1}</span>
                   {sent.text}
                   {showResult &&
                     Object.entries(matches).some(

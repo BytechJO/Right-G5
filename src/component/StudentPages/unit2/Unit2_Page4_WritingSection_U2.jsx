@@ -1,15 +1,9 @@
-import React, { useState } from "react";
 import WritingA from "./Unit2_Page4_WritingA";
 import WritingB from "./Unit2_Page4_WritingB";
-import Button from "../../Button";
-import ValidationAlert from "../../Popup/ValidationAlert";
 import ReadingBG from "../../../assets/imgs/conversation.svg";
 import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 7/SVG/Asset 1.svg";
 
 const WritingSection_U1 = () => {
-
-  const [resetTrigger, setResetTrigger] = useState(0);
-
   return (
     <div>
       {/* العنوان */}
@@ -32,22 +26,9 @@ const WritingSection_U1 = () => {
           alt=""
           style={{ width: "auto", height: "500px", objectFit: "contain" }}
         />
-        <WritingA
-          resetTrigger={resetTrigger} // 👈 مهم
-        />
-        <WritingB resetTrigger={resetTrigger} />
+        <WritingA />
+        <WritingB />
       </div>
-      <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setResetTrigger((p) => p + 1);
-          }}
-        >
-          Start Again ↻
-        </button>
-      </div>
-      
     </div>
   );
 };

@@ -1,265 +1,204 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import imgA from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 16/Asset 17 (1).svg";
-import WrongMark from "../../WrongMark";
-import Button from "../../Button";
+const Page_Read_Write = () => {
+  const words = ["actually", "pancakes", "starving", "alarm", "face"];
 
-const Review1_Page1_Q1 = () => {
-  const answersBank = ["A", "B", "C", "D", "E", "F"];
+  const correct = ["pancakes", "alarm", "face", "starving", "actually"];
 
-  const questions = [
-    { id: 1, text: "Who is the oldest?", answer: "B" },
-    { id: 2, text: "Who is the tallest?", answer: "F" },
-    { id: 3, text: "Who is the shortest?", answer: "C" },
-    { id: 4, text: "Who is the saddest?", answer: "A" },
-    { id: 5, text: "Who is the loudest?", answer: "D" },
-    { id: 6, text: "Who is the thinnest?", answer: "E" },
-    {
-      id: 7,
-      text: "Which is your favorite clown? Why?",
-      answer: "",
-    },
-  ];
-  const [textAnswer, setTextAnswer] = useState("");
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+  const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const onDragEnd = (result) => {
-    if (!result.destination || locked) return;
 
-    const sentence = result.draggableId;
-    const id = result.destination.droppableId.split("-")[1];
-
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: sentence,
-    }));
-  };
-
-  const reset = () => {
-    setAnswers({});
-    setLocked(false);
-    setShowResult(false);
-  };
-
-  const showAnswers = () => {
-    const filled = {};
-    questions.forEach((q) => {
-      filled[q.id] = q.answer;
-    });
-    setAnswers(filled);
-    setLocked(true);
-  };
-
-  const checkAnswers = () => {
+  // ✅ CHECK
+  const handleCheck = () => {
     if (locked) return;
-    const requiredQuestions = questions.slice(0, 6);
 
-    if (Object.keys(answers).length < requiredQuestions.length) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Complete all answers.");
       return;
     }
 
-    let correct = 0;
-
-    requiredQuestions.forEach((q) => {
-      if (answers[q.id] === q.answer) correct++;
+    let correctCount = 0;
+ const normalize = (s) => s.toLowerCase().replace(/[.,]/g, "").trim();
+    const res = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(correct[i]);
+      if (ok) correctCount++;
+      return ok;
     });
 
-    const total = requiredQuestions.length;
+    setResult(res);
+
+    const total = correct.length;
 
     const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-  <div style="font-size:20px;text-align:center;">
-    <span style="color:${color}; font-weight:bold;">
-      Score: ${correct} / ${total}
-    </span>
-  </div>
-`;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-    setShowResult(true);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // 👀 SHOW
+  const handleShow = () => {
+    setAnswers(correct);
+    setResult([]);
     setLocked(true);
   };
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div className="div-forall">
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>A</span>
-            Look, read, and answer the questions.
-          </h5>
 
-          {/* IMAGES */}
-          <div >
-            <div className="flex justify-center gap-8 ">
-              <div className="relative">
-                <img
-                  src={imgA}
-                  style={{
-                    width: "100%",
-                    height: "40vh",
-                    objectFit: "contain",
-                  }}
-                />
+  // 🔄 RESET
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+    setResult([]);
+    setLocked(false);
+  };
+
+  // 🎯 input line
+  const input = (i, width = "w-[200px]") => (
+    <span className="relative inline-block mx-2">
+      <input
+        value={answers[i]}
+        onChange={(e) => {
+          if (result[i] === true) return;
+
+          const updated = [...answers];
+          updated[i] = e.target.value;
+          setAnswers(updated);
+
+          // 🔥 يمسح الخطأ
+          setResult((prev) => {
+            const copy = [...prev];
+            copy[i] = undefined;
+            return copy;
+          });
+        }}
+        className={`border-b-2 outline-none text-center text-[#6D2980] font-semibold bg-transparent
+        ${result[i] === false ? "border-red-500" : "border-black"}
+        ${width}`}
+      />
+
+      {/* ❌ */}
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-10px",
+            right: "-10px",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div className="div-forall">
+        <h5 className="header-title-page8">
+          <span className="mr-3 mb-10">A</span>
+          Read and write the correct word.
+        </h5>
+
+        <div className="flex justify-between gap-10">
+          {/* LEFT */}
+          <div className="space-y-12 text-[18px] ">
+            <div>
+              {" "}
+              <span className="mr-3 font-bold">1</span> I wanted to have syrup
+              on my {input(0)}.
+            </div>
+
+            <div>
+              {" "}
+              <span className="mr-3 font-bold">2</span> I set the {input(1)} so
+              I could wake up.
+            </div>
+
+            <div>
+              {" "}
+              <span className="mr-3 font-bold">3</span> Tim is going to wash his{" "}
+              {input(2)}.
+            </div>
+
+            <div>
+              {" "}
+              <span className="mr-3 font-bold">4</span> Jake was {input(3)}{" "}
+              after not eating all day.
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="font-bold w-[20px]">5</span>
+
+              <div className="flex-1">
+                Megan was {input(4)} very happy because her cousin would visit
+                soon.
               </div>
             </div>
-
-            {/* ANSWERS BANK */}
-
-            <Droppable droppableId="bank" direction="horizontal">
-              {(provided) => (
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className="flex flex-wrap gap-4 mb-5 mt-2"
-                    style={{
-                      display: "inline-flex", 
-                      border: "2px dashed #2c5287",
-                      borderRadius: "12px",
-                      padding: "10px",
-                    }}
-                  >
-                    {answersBank.map((a, index) => {
-                      const isUsed = Object.values(answers).includes(a);
-
-                      return (
-                        <Draggable
-                          key={a}
-                          draggableId={a}
-                          index={index}
-                          isDragDisabled={locked || isUsed}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                padding: "6px 14px",
-                                border: "2px solid #2c5287",
-                                borderRadius: "10px",
-                                background: "#fff",
-                                fontWeight: "bold",
-                                fontSize: "14px",
-                                cursor: isUsed ? "not-allowed" : "grab",
-                                opacity: isUsed ? 0.4 : 1,
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              {a}
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-
-                    {provided.placeholder}
-                  </div>
-                </div>
-              )}
-            </Droppable>
-
-            {/* QUESTIONS GRID */}
-
-            <div className="grid grid-cols-2 gap-x-16 mb-20 ">
-              {questions.map((q) => (
-                <div key={q.id}>
-                  <div className="flex gap-3 text-lg">
-                    <span className="font-bold">{q.id}</span>
-                    <p>{q.text}</p>
-                  </div>
-
-                  {q.id === 7 ? (
-                    <input
-                      value={textAnswer}
-                      onChange={(e) => setTextAnswer(e.target.value)}
-                      disabled={locked}
-                      placeholder="Type your answer..."
-                      className="border-b-2 border-black w-full mt-2 outline-none"
-                    />
-                  ) : (
-                    <Droppable droppableId={`answer-${q.id}`}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          style={{
-                            borderBottom: locked
-                              ? answers[q.id] === q.answer
-                                ? "2px solid #000" // صح
-                                : "2px solid #ef4444" // غلط
-                              : "2px solid #000",
-                          }}
-                          className=" min-h-10 mt-2"
-                        >
-                          <div
-                            style={{
-                              position: "relative",
-                              display: "inline-block",
-                            }}
-                          >
-                            <p>
-                              Clown{" "}
-                              <span
-                                style={{
-                                  color: answers[q.id] ? "#1C398E" : "#000",
-                                  fontWeight: answers[q.id] ? "bold" : "normal",
-                                }}
-                              >
-                                {answers[q.id] || "___"}
-                              </span>{" "}
-                              is the {q.text.split("the ")[1].replace("?", "")}.
-                            </p>
-
-                            {showResult &&
-                              answers[q.id] &&
-                              answers[q.id] !== q.answer && (
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    right: "-20px",
-                                    top: "0",
-                                  }}
-                                >
-                                  <WrongMark />
-                                </div>
-                              )}
-                          </div>
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
-          {/* BUTTONS */}
 
-          <Button
-            handleShowAnswer={showAnswers}
-            handleStartAgain={reset}
-            checkAnswers={checkAnswers}
-          />
+          {/* RIGHT WORD BANK */}
+          <div className="bg-[#E8E1EC]  rounded-xl flex flex-col gap-3 text-[18px] h-80 w-[150px] ">
+            {words.map((w, i) => (
+              <div key={i} className="px-4 py-3 rounded-lg text-center">
+                {w}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="action-buttons-container mt-6">
+          <button className="try-again-button" onClick={handleReset}>
+            Start Again ↻
+          </button>
+
+          <button onClick={handleShow} className="show-answer-btn">
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={handleCheck}>
+            Check Answer ✓
+          </button>
         </div>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 
-export default Review1_Page1_Q1;
+export default Page_Read_Write;
