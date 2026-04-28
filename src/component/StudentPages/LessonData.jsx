@@ -14,6 +14,7 @@ import Unit2_Page6_Q3 from "./unit2/Unit2_Page6_Q3";
 //review1&2
 import Review1_Page1_Q1 from "./review1&2/Review1_Page1_Q1";
 import Review1_Page1_Q2 from "./review1&2/Review1_Page1_Q2";
+import Review1_Page1_Q3 from "./review1&2/Review1_Page1_Q3";
 import Review1_Page2_Q1 from "./review1&2/Review1_Page2_Q1";
 import Review1_Page2_Q2 from "./review1&2/Review1_Page2_Q2";
 import Review1_Page2_Q3 from "./review1&2/Review1_Page2_Q3";
@@ -153,6 +154,7 @@ export const lessons = [
   //review1&2
   { component: Review1_Page1_Q1, unit: 2, isReview: true }, //11
   { component: Review1_Page1_Q2, unit: 2, isReview: true }, //12
+  { component: Review1_Page1_Q3, unit: 2, isReview: true }, //13
   { component: Review1_Page2_Q1, unit: 2, isReview: true }, //14
   { component: Review1_Page2_Q2, unit: 2, isReview: true }, //15
   { component: Review1_Page2_Q3, unit: 2, isReview: true }, //16

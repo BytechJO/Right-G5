@@ -1,8 +1,8 @@
 import page4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4.png";
-import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 1.svg";
-import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/000000 (1).svg";
-import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 3.svg";
-import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 4.svg";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 10.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 7.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 8.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 4/SVG/Asset 9.svg";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 import longAudio from "../../../assets/audio/ClassBook/U1/PG 4/conversation1.mp3";
