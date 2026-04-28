@@ -1,13 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
+import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
-const ComprehensionB = ({
-  onChange,
-  showTrigger,
-  resetTrigger,
-  locked,
-  result,
-}) => {
+const ComprehensionB = () => {
+  const [errors, setErrors] = useState({});
+  const [locked, setLocked] = useState(false);
   const left = ["tight", "deep", "far", "high"];
 
   const right = [
@@ -63,17 +60,21 @@ const ComprehensionB = ({
   };
 
   const handleLeft = (item) => {
-    if (locked) return;
+    if (locked || errors[item] === false) return;
     setSelected(item);
   };
-
   const handleRight = (item) => {
-    if (locked || !selected) return;
+    if (!selected || locked) return;
 
     setMatches((prev) => {
-      // 🔥 احذف أي عنصر مربوط بنفس الـ right
       const cleaned = Object.fromEntries(
-        Object.entries(prev).filter(([value]) => value !== item),
+        Object.entries(prev).filter(([leftKey, value]) => {
+          // 🔥 لا تحذف إذا هذا الربط صح
+          if (value === item && prev[leftKey] === correctB[leftKey]) {
+            return true;
+          }
+          return value !== item;
+        }),
       );
 
       return {
@@ -85,40 +86,74 @@ const ComprehensionB = ({
     setSelected(null);
   };
 
-  useEffect(() => {
-    updateLines();
-  }, [matches]);
+  const handleCheck = () => {
+    if (locked) return;
 
-  useEffect(() => {
-    const handleResize = () => updateLines();
+    if (Object.keys(matches).length !== left.length) {
+      ValidationAlert.info("Please match all items.");
+      return;
+    }
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [matches]);
+    let correctCount = 0;
+    const newErrors = {};
 
-  useEffect(() => {
-    if (!showTrigger) return;
+    left.forEach((item) => {
+      if (matches[item] === correctB[item]) {
+        correctCount++;
+        newErrors[item] = false;
+      } else {
+        newErrors[item] = true;
+      }
+    });
 
+    setErrors(newErrors);
+
+    const total = left.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+  const handleShow = () => {
     setMatches(correctB);
-    setSelected(null);
+    setErrors({});
+    setLocked(true);
     setTimeout(() => updateLines(correctB), 0);
-  }, [showTrigger]);
-
-  useEffect(() => {
-    if (!resetTrigger) return;
-
+  };
+  const handleReset = () => {
     setMatches({});
     setSelected(null);
     setLines([]);
-  }, [resetTrigger]);
-
+    setErrors({});
+    setLocked(false);
+  };
   useEffect(() => {
-    onChange(matches);
+    updateLines();
   }, [matches]);
-
+  useEffect(() => {
+    const handleResize = () => updateLines();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [matches]);
   const isMatchedLeft = (item) => Object.keys(matches).includes(item);
   const isMatchedRight = (item) => Object.values(matches).includes(item);
-  const isWrong = (item) => locked && result && result[item] === false;
+  const isWrong = (item) => errors[item];
   return (
     <div>
       <div className="flex items-center gap-3 mb-7">
@@ -153,7 +188,7 @@ const ComprehensionB = ({
             <div
               key={item}
               onClick={() => handleLeft(item)}
-              className={`cursor-pointer flex items-center justify-between px-2 py-1 rounded
+              className={` relative cursor-pointer flex items-center justify-between px-2 py-1 rounded
                 ${selected === item ? "bg-[#E9D5F5]" : ""}
             `}
             >
@@ -203,7 +238,10 @@ const ComprehensionB = ({
             <div
               key={item}
               ref={(el) => (rightRefs.current[item] = el)}
-              onClick={() => handleRight(item)}
+              onClick={() => {
+                if (locked) return;
+                handleRight(item);
+              }}
               className="cursor-pointer flex items-center gap-2"
             >
               <span
@@ -215,6 +253,53 @@ const ComprehensionB = ({
               <span>{item}</span>
             </div>
           ))}
+        </div>
+      </div>
+      {/* Buttons */}
+      <div className="flex justify-center gap-6 mt-8">
+        {/* Reset */}
+        <div className="relative group">
+          <div
+            onClick={handleReset}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaRedo size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Reset
+          </span>
+        </div>
+
+        {/* Show */}
+        <div className="relative group">
+          <div
+            onClick={handleShow}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaEye size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Show Answer
+          </span>
+        </div>
+
+        {/* Check */}
+        <div className="relative group">
+          <div
+            onClick={handleCheck}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaCheck size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Check Answer
+          </span>
         </div>
       </div>
     </div>

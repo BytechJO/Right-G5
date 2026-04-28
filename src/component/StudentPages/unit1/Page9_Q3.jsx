@@ -13,25 +13,29 @@ const Page9_Q3 = () => {
     const updated = [...answers];
     updated[i] = val.toLowerCase();
     setAnswers(updated);
+
+    // 🔥 امسح حالة الغلط أول ما يعدّل
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
 
   const input = (i) => (
     <span className="relative mx-2">
       <input
-        disabled={locked}
+        disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         maxLength={1}
         className={`w-[40px] border-b outline-none text-center font-bold uppercase
-          ${
-            locked && result[i] === false
-              ? "border-red-500 text-[#6D2980]"
-              : "border-black text-[#6D2980]"
-          }`}
+        ${result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
+      `}
       />
 
       {/* ❌ */}
-      {locked && result[i] === false && (
+      {result[i] === false && (
         <span
           style={{
             position: "absolute",
@@ -94,11 +98,14 @@ const Page9_Q3 = () => {
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-
-    setLocked(true);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
   // ====================

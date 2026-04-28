@@ -1,8 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
-const GrammarB = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
-  const correct = ["How long", "How much", "How fast", "How high"];
+const GrammarB = () => {
+  const correct = ["How long", "How much", "How far", "How high"];
 
   const questions = [
     "are your fingernails?",
@@ -12,44 +13,97 @@ const GrammarB = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
   ];
 
   const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [errors, setErrors] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-  useEffect(() => {
-    if (showTrigger) {
-      setAnswers(correct);
-      onChange(correct); // 🔥 مهم
-    }
-  }, [showTrigger]);
+  // 🔥 normalize
+  const normalize = (text) => {
+    return text.trim().toLowerCase().replace(/\.$/, "").replace(/\s+/g, " ");
+  };
 
-  useEffect(() => {
-    if (resetTrigger) {
-      const empty = ["", "", "", ""];
-      setAnswers(empty);
-      onChange(empty); // 🔥 مهم
+  // ✅ CHECK
+  const handleCheck = () => {
+    if (locked) return;
+
+    const isEmpty = answers.some((a) => !a || a.trim() === "");
+
+    if (isEmpty) {
+      ValidationAlert.info("Please complete all fields.");
+      return;
     }
-  }, [resetTrigger]);
-  const isWrong = (i) => result && result[i] === false;
+
+    let correctCount = 0;
+    const newErrors = [];
+
+    answers.forEach((ans, i) => {
+      if (normalize(ans) === normalize(correct[i])) {
+        correctCount++;
+        newErrors[i] = false; // ✅
+      } else {
+        newErrors[i] = true; // ❌
+      }
+    });
+
+    setErrors(newErrors);
+
+    const total = correct.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // 👁️ SHOW
+  const handleShow = () => {
+    setAnswers(correct);
+    setErrors([]); // 🔥 يمسح الأخطاء
+    setLocked(true);
+  };
+
+  // 🔄 RESET
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+    setErrors([]);
+    setLocked(false);
+  };
+
   const renderInput = (i) => (
     <span className="relative inline-block mx-2">
       <input
-        disabled={locked}
         value={answers[i]}
+        disabled={locked || errors[i] === false}
         onChange={(e) => {
           const updated = [...answers];
           updated[i] = e.target.value;
-
           setAnswers(updated);
-          onChange(updated); // 🔥 هون الحل
         }}
-        className={`border-b border-black outline-none w-[100px] text-center 
-          text-[#6D2980] font-semibold`}
+        className={`border-b outline-none w-[110px] text-center text-[#6D2980] font-semibold pr-6
+          ${errors[i] ? "border-red-500" : "border-black"}
+        `}
       />
 
-      {locked && isWrong(i) && (
+      {/* ❌ X */}
+      {errors[i] && (
         <div
           style={{
             position: "absolute",
             top: "15px",
-            left: "-10%",
+            left: "250%",
             transform: "translateY(-50%)",
             width: "22px",
             height: "22px",
@@ -74,37 +128,67 @@ const GrammarB = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
 
   return (
     <div>
-      {/* العنوان */}
+      {/* Title */}
       <h5 className="header-title-page8-read mb-7">
-        <span className="ex-A-read" style={{ marginRight: "10px" }}>
-          B
-        </span>
+        <span className="ex-A-read mr-2">B</span>
         Read and complete the questions.
       </h5>
 
-      <div className="grid grid-cols-2 gap-x-20 gap-y-7 text-[15px] max-w-[700px] ">
-        {/* 1 */}
-        <div>
-          <span className="font-bold mr-1">1</span>
-          {renderInput(0)} {questions[0]}
+      {/* Questions */}
+      <div className="grid grid-cols-2 gap-x-20 gap-y-7 text-[15px] max-w-[700px]">
+        {questions.map((q, i) => (
+          <div key={i}>
+            <span className="font-bold mr-1">{i + 1}</span>
+            {renderInput(i)} {q}
+          </div>
+        ))}
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-center gap-6 mt-8">
+        {/* Reset */}
+        <div className="relative group">
+          <div
+            onClick={handleReset}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaRedo size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Reset
+          </span>
         </div>
 
-        {/* 2 */}
-        <div>
-          <span className="font-bold mr-1">2</span>
-          {renderInput(1)} {questions[1]}
+        {/* Show */}
+        <div className="relative group">
+          <div
+            onClick={handleShow}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaEye size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Show Answer
+          </span>
         </div>
 
-        {/* 3 */}
-        <div>
-          <span className="font-bold mr-1">3</span>
-          {renderInput(2)} {questions[2]}
-        </div>
-
-        {/* 4 */}
-        <div>
-          <span className="font-bold mr-1">4</span>
-          {renderInput(3)} {questions[3]}
+        {/* Check */}
+        <div className="relative group">
+          <div
+            onClick={handleCheck}
+            className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
+          >
+            <div className="bg-white p-3 rounded-full shadow">
+              <FaCheck size={14} />
+            </div>
+          </div>
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            Check Answer
+          </span>
         </div>
       </div>
     </div>

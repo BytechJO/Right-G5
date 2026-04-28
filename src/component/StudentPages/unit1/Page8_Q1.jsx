@@ -15,7 +15,7 @@ const Page8_Q1 = () => {
     <input
       value={answers[i]}
       onChange={(e) => handleChange(i, e.target.value)}
-      className={`border-b border-black outline-none text-center mx-1 ${width}`}
+      className={`border-b border-black outline-none text-center text-[#6D2980] font-semibold mx-1 ${width}`}
     />
   );
 
@@ -37,7 +37,10 @@ const Page8_Q1 = () => {
           }}
         >
           <h5 className="header-title-page8">
-            <span className="ex-A" style={{ marginRight: "10px",marginBottom:50 }}>
+            <span
+              className="ex-A"
+              style={{ marginRight: "10px", marginBottom: 50 }}
+            >
               A
             </span>
             Use vocabulary words to make a summary of the conversation.

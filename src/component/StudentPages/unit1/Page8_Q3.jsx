@@ -43,7 +43,7 @@ const Page8_Q3 = () => {
   };
 
   const selectImage = (id) => {
-    if (locked || showResult) return;
+    if (matches[id] === correct[id]) return;
 
     // إذا اختار جملة → اربط
     if (selectedSentence !== null) {
@@ -66,10 +66,16 @@ const Page8_Q3 = () => {
 
     // السلوك القديم (اختيار صورة)
     setSelectedImg(id);
+    setShowResult(false);
   };
 
   const selectSentence = (id) => {
-    if (locked || showResult) return;
+    if (
+      Object.entries(matches).some(
+        ([imgId, sentId]) => sentId === id && correct[imgId] === sentId,
+      )
+    )
+      return;
 
     // إذا في صورة مختارة → اربط
     if (selectedImg !== null) {
@@ -87,12 +93,14 @@ const Page8_Q3 = () => {
       });
 
       setSelectedImg(null);
+
       return;
     }
     setSelectedSentence(id);
+    setShowResult(false);
   };
   const checkAnswers = () => {
-    if (locked || showResult) return;
+    if (locked) return;
 
     if (Object.keys(matches).length !== images.length) {
       ValidationAlert.info("Please match all.");
@@ -112,6 +120,7 @@ const Page8_Q3 = () => {
   `;
 
     if (correctCount === total) {
+      setLocked(true);
       ValidationAlert.success(message);
     } else if (correctCount === 0) {
       ValidationAlert.error(message);
@@ -120,7 +129,6 @@ const Page8_Q3 = () => {
     }
 
     setShowResult(true);
-    setLocked(true);
   };
 
   const showAnswers = () => {
@@ -195,7 +203,6 @@ const Page8_Q3 = () => {
                   style={{
                     backgroundColor: selectedImg === i ? "#00AEEF" : "#00AEEF",
                     transform: selectedImg === i ? "scale(1.4)" : "scale(1)",
-                   
                   }}
                 ></div>
               </div>

@@ -27,19 +27,27 @@ const Page9_Q1 = () => {
     const updated = [...answers];
     updated[i] = val;
     setAnswers(updated);
+
+    // يخفي X لما تعدل الغلط
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
 
   const input = (i, width = "w-[130px]") => (
     <span className="relative inline-block mx-1">
       <input
-        disabled={locked}
+        disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`border-b outline-none text-center text-[#6D2980] font-medium ${width}
-        ${locked && result[i] === false ? "border-red-500" : "border-black"}`}
+        ${result[i] === false ? "border-red-500" : "border-black"}
+      `}
       />
 
-      {locked && result[i] === false && (
+      {result[i] === false && (
         <span
           style={{
             position: "absolute",
@@ -102,11 +110,14 @@ const Page9_Q1 = () => {
     </div>
   `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-
-    setLocked(true);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
   // ====================
@@ -122,6 +133,7 @@ const Page9_Q1 = () => {
   // ====================
   const reset = () => {
     setAnswers(Array(8).fill(""));
+    setResult([]);
     setLocked(false);
   };
 

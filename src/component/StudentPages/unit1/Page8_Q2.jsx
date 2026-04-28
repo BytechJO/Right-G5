@@ -7,7 +7,7 @@ const Page8_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const correct = [
     "u",
-    "n", // 1 → u h-o n
+    "h", // 1 → u h-o n
     "n",
     "n",
     "e",
@@ -87,6 +87,7 @@ const Page8_Q2 = () => {
 
     // 🔔 Alert
     if (correctCount === total) {
+      setLocked(true);
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -97,23 +98,21 @@ const Page8_Q2 = () => {
     // 🧠 حفظ النتيجة لكل حرف (عشان ❌ و ✔)
     const res = answers.map((a, i) => a === correct[i]);
     setResult(res);
-
-    setLocked(true);
   };
 
   const input = (i) => (
     <span className="relative mx-1">
       <input
-        disabled={locked}
+        disabled={result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         maxLength={1}
-        className={`w-[35px] border-b outline-none text-center font-medium
-  ${locked && result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
-`}
+        className={`relative w-[35px] border-b outline-none text-center font-medium
+    ${result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
+  `}
       />
 
-      {locked && result[i] === false && (
+      {result[i] === false  && (
         <div
           style={{
             position: "absolute",

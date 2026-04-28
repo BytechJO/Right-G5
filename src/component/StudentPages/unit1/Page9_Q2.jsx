@@ -10,17 +10,25 @@ const Page9_Q2 = () => {
     const updated = [...answers];
     updated[i] = val;
     setAnswers(updated);
-  };
 
+    // 🔥 امسح حالة الغلط أول ما يعدّل
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
+  };
   const input = (i) => (
     <span className="relative">
       <input
-        disabled={locked}
+        disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
-        className={`border-b outline-none w-full mt-2 text-[#6D2980] font-medium ${locked && result[i] === false ? "border-red-500" : "border-black"}`}
+        className={`border-b outline-none w-full mt-2 text-[#6D2980] font-medium
+          ${result[i] === false ? "border-red-500" : "border-black"}
+        `}
       />
-      {locked && result[i] === false && (
+      {result[i] === false && (
         <span
           style={{
             position: "absolute",
@@ -136,19 +144,19 @@ const Page9_Q2 = () => {
 
     // 🔔 ALERT TYPE
     if (correctCount === total) {
+      setLocked(true);
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
-
-    setLocked(true);
   };
 
   // 🔄 Reset
   const reset = () => {
     setAnswers(["", "", "", ""]);
+    setResult([]); // 🔥 مهم
     setLocked(false);
   };
 

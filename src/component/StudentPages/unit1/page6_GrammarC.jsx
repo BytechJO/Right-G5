@@ -1,9 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import WrongMark from "../../WrongMark";
+import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
-const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
+const GrammarC = () => {
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [errors, setErrors] = useState([]);
+  const [locked, setLocked] = useState(false);
   const questions = [
     {
       sentence: "How many ____ would you like?",
@@ -27,23 +30,64 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
     },
   ];
 
-  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const handleCheck = () => {
+    if (locked) return;
 
-  useEffect(() => {
-    if (showTrigger) {
-      const correctAnswers = questions.map((q) => q.correct);
-      setAnswers(correctAnswers);
-      onChange(correctAnswers); // 🔥 مهم
-    }
-  }, [showTrigger]);
-  useEffect(() => {
-    if (resetTrigger) {
-      const empty = ["", "", "", ""];
-      setAnswers(empty);
-      onChange(empty); // 🔥 مهم
-    }
-  }, [resetTrigger]);
+    const isEmpty = answers.some((a) => !a || a.trim() === "");
 
+    if (isEmpty) {
+      ValidationAlert.info("Please complete all fields.");
+      return;
+    }
+
+    let correctCount = 0;
+    const newErrors = [];
+
+    questions.forEach((q, i) => {
+      if (answers[i] === q.correct) {
+        correctCount++;
+        newErrors[i] = false; // ✅
+      } else {
+        newErrors[i] = true; // ❌
+      }
+    });
+
+    setErrors(newErrors);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true); // 🔒 يقفل إذا كله صح
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const handleShow = () => {
+    const correctAnswers = questions.map((q) => q.correct);
+    setAnswers(correctAnswers);
+    setErrors([]); // يمسح الأخطاء
+    setLocked(true);
+  };
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+    setErrors([]);
+    setLocked(false);
+  };
   const onDragEnd = (res) => {
     if (!res.destination || locked) return;
 
@@ -58,7 +102,6 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
     updated[index] = word;
 
     setAnswers(updated);
-    onChange(updated); // 🔥 هذا أهم سطر
   };
 
   return (
@@ -121,7 +164,6 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
         {/* 🟡 الجمل */}
         <div className="flex flex-col gap-8 text-[15px]">
           {questions.map((q, i) => {
-            const isWrong = result && result[i] === false;
             const value = answers[i];
 
             return (
@@ -139,10 +181,8 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
                         display: "inline-flex",
                         justifyContent: "center",
                         minWidth: "100px",
-                        borderBottom: locked
-                          ? isWrong
-                            ? "2px solid #ef4444" // 🔴 غلط
-                            : "2px solid #000" // ⚫ صح
+                        borderBottom: errors[i]
+                          ? "2px solid #ef4444"
                           : "2px solid #000",
                         margin: "0 6px",
                         fontWeight: value ? "bold" : "normal",
@@ -157,12 +197,10 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
                           transition: "0.2s",
                         }}
                         onClick={() => {
-                          if (locked) return;
-
+                          if (errors[i] === false || locked) return;
                           const updated = [...answers];
                           updated[i] = ""; // 🔥 رجّعها للبنك
                           setAnswers(updated);
-                          onChange(updated);
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#E9D5FF"; // بنفسجي فاتح
@@ -181,7 +219,7 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
                 {q.sentence.split("____")[1]}
 
                 {/* ❌ */}
-                {locked && isWrong && (
+                {errors[i] && (
                   <div
                     style={{
                       position: "absolute",
@@ -209,6 +247,52 @@ const GrammarC = ({ onChange, showTrigger, resetTrigger, locked, result }) => {
               </div>
             );
           })}
+        </div>
+        <div className="flex justify-center gap-6 mt-8">
+          {/* Reset */}
+          <div className="relative group">
+            <div
+              onClick={handleReset}
+              className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+            >
+              <div className="bg-white p-3 rounded-full shadow">
+                <FaRedo size={14} />
+              </div>
+            </div>
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+              Reset
+            </span>
+          </div>
+
+          {/* Show */}
+          <div className="relative group">
+            <div
+              onClick={handleShow}
+              className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
+            >
+              <div className="bg-white p-3 rounded-full shadow">
+                <FaEye size={14} />
+              </div>
+            </div>
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+              Show Answer
+            </span>
+          </div>
+
+          {/* Check */}
+          <div className="relative group">
+            <div
+              onClick={handleCheck}
+              className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
+            >
+              <div className="bg-white p-3 rounded-full shadow">
+                <FaCheck size={14} />
+              </div>
+            </div>
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+              Check Answer
+            </span>
+          </div>
         </div>
       </div>
     </DragDropContext>

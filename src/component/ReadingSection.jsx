@@ -5,19 +5,15 @@ import QuestionAudioPlayer from "./QuestionAudioPlayer";
 import Button from "./Button";
 
 const ReadingSection = ({
-  mainTitle, 
-  title, 
+  mainTitle,
+  title,
   image,
   paragraphs = [],
   question,
   sound,
   captions,
   stopAtSecond,
-  children,
 }) => {
-  const [checkAnswers, setCheckAnswers] = React.useState(false);
-  const [showAnswers, setShowAnswers] = React.useState(false);
-  const [resetAll, setResetAll] = React.useState(false);
   return (
     <div className="p-6 flex flex-col items-center ">
       <div className="flex items-center gap-4 mb-4 w-[60%]">
@@ -96,25 +92,7 @@ const ReadingSection = ({
             Comprehension
           </div>
         </div>
-        {React.Children.map(children, (child) =>
-          React.cloneElement(child, {
-            checkAnswers,
-            showAnswers,
-            resetAll,
-          }),
-        )}
       </div>
-      <Button
-        handleShowAnswer={() => setShowAnswers(true)}
-        checkAnswers={() => setCheckAnswers(true)}
-        handleStartAgain={() => {
-          setResetAll(true);
-          setCheckAnswers(false);
-          setShowAnswers(false);
-
-          setTimeout(() => setResetAll(false), 0);
-        }}
-      />
     </div>
   );
 };
