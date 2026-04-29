@@ -123,7 +123,7 @@ const GrammarC = () => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto"
+              className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto mt-10"
             >
               {questions[0].options.map((word, i) => {
                 const isUsed = answers.includes(word);
