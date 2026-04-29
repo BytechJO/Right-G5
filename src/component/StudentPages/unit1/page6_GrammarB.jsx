@@ -135,7 +135,7 @@ const GrammarB = () => {
       </h5>
 
       {/* Questions */}
-      <div className="grid grid-cols-2 gap-x-20 gap-y-12 text-[15px] ">
+      <div className="grid grid-cols-2 gap-x-20 gap-y-12 text-[15px] mt-15">
         {questions.map((q, i) => (
           <div key={i}>
             <span className="font-bold mr-1">{i + 1}</span>
