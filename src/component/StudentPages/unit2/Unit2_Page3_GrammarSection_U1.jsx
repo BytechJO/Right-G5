@@ -2,7 +2,7 @@ import GrammarA from "./Unit2_Page3_GrammarA";
 import GrammarB from "./Unit2_Page3_GrammarB";
 import GrammarC from "./Unit2_Page3_GrammarC";
 import ReadingBG from "../../../assets/imgs/conversation.svg";
-import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 6/SVG/sch.svg";
+import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 13/SVG/Asset 8.svg";
 import grammer_u1 from "../../../assets/audio/ClassBook/U2/PG 12/grammer.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const GrammarSection_U1 = () => {

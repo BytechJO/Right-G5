@@ -1,7 +1,7 @@
 import WritingA from "./Unit2_Page4_WritingA";
 import WritingB from "./Unit2_Page4_WritingB";
 import ReadingBG from "../../../assets/imgs/conversation.svg";
-import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 7/SVG/Asset 1.svg";
+import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 13/SVG/Asset 25.svg";
 
 const WritingSection_U1 = () => {
   return (

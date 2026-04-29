@@ -1,11 +1,11 @@
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 20.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit2_Page1.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 2/P 20/unit2-pg20-readingall.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 2/P 20/Pg20_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 2/P 20/Pg20_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 2/P 20/Pg20_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 2/P 20/Pg20_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U2/PG 20/reading.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
@@ -18,44 +18,59 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
     {
-      start: 0.44,
-      end: 21.94,
-      text: 'Page 20, Reading. Helen and Her Questions. This is Helen. She always asks questions. "Which is bigger, Mom, the elephant or the cat?" asks Helen. Mom answers, "The elephant is bigger." "Which is longer, the bus or the train?" Helen asks her dad.',
+      start: 0.38,
+      end: 1.2,
+      text: "Page twenty.",
     },
     {
-      start: 22.98,
-      end: 37.98,
-      text: '"The train is longer. Trains can be quite long. Some are over three kilometers long," says Dad. "Wow," says Helen. She asks Stella, "Where do you travel on your vacations?"',
+      start: 3.0,
+      end: 15.62,
+      text: "A desert drought ends. How hot is it in the desert? Some desert temperatures can be over fifty-five degrees Celsius. The animals that live there are trying to stay cool. How can they find water?",
     },
     {
-      start: 39.04,
-      end: 51.74,
-      text: '"We often travel to Italy. We never visit Russia because it\'s too cold. It\'s one of the coldest countries in the world," replies Stella. "What do you do on the weekend, Tom?" asks Helen.',
+      start: 16.96,
+      end: 23.32,
+      text: "It isn't easy. In fact, a terrible drought has dried up the only water there was in Dry Desert.",
     },
     {
-      start: 52.769,
-      end: 62.05,
-      text: '"I always go fishing with my dad and uncle. Dad is a good fisherman. He catches lots of fish. I catch fish sometimes, too," Tom says.',
+      start: 24.46,
+      end: 87.02,
+      text: "Kathy the kangaroo rat, who jumps along her back legs, hasn't had a drink of water in a long time. How far has she jumped in search of water? Probably, she has jumped several kilometers now. Toad rests in the shade of a tall cactus. When will we get some rain? asks Leo the lizard. Kathy the kangaroo doesn't know. Some of the animals live inside the cactus, which keeps them cool.",
     },
     {
-      start: 63.1,
-      end: 74.92,
-      text: 'Helen sees John walking to school. She asks him, "How do you go to school?" John says, "I often walk to school. I rarely take the bus to school."',
+      start: 87.02,
+      end: 147.02,
+      text: 'Tiny Bird and Teeny Bird are neighbors. They live in this cactus. "When are we going to get some rain?" asks Teeny Bird. Tiny Bird doesn\'t know. Kathy the kangaroo rat is exhausted from running around. She decides to go back to her home that is underground. She needs to rest and stay cool.',
     },
     {
-      start: 76.02,
-      end: 81.78,
-      text: "Helen sees Tom riding in a taxi to school. Sarah and Jack take a bus to school.",
+      start: 147.02,
+      end: 176.88,
+      text: 'Kathy settles down in her home. She wonders to herself, "When are we going to get some rain?" Suddenly, the sky gets dark. Toad starts running down the dry riverbed. No water has flowed in this river for a long time. There is a crash of thunder. Lightning lights up the dark sky.',
     },
     {
-      start: 83.05,
-      end: 124.62,
-      text: '"What\'s your favorite TV show, Jack?" asks Helen. Jack explains, "I usually watch sports on TV. I never watch movies or the news. My dad likes watching news programs." Helen says, "I like nature programs. There is so much to learn. I learned that a deer runs faster than a polar bear, and that dolphins and monkeys are the most intelligent animals." "Which is more intelligent?" asks Jack. "They\'re the same," answers Helen. Helen hopes to be a news reporter one day so she can interview people and ask questions. That\'s Helen\'s biggest dream.',
+      start: 88.07,
+      end: 116.88,
+      text: '"We are getting some rain, finally," yells Toad. The long drought is over. "Hooray for the rain," shout all the animals. Toad is very happy to see the water falling from the sky.',
+    },
+    {
+      start: 116.88,
+      end: 136.88,
+      text: 'The insects come out from the ground. Toad eats the insects with his long tongue. "Mm," says Toad, "I love the rain. How long will it last?"',
+    },
+    {
+      start: 136.88,
+      end: 156.88,
+      text: "By evening, the rain clouds are gone. The rain has stopped, but the ground is wet. The river flows with water again.",
+    },
+    {
+      start: 159.04,
+      end: 166.9,
+      text: 'Coyote, who stands on a cliff by herself, is in a happy mood now that the drought has ended. "Ahooo," she calls to the moon.',
     },
   ];
   const clickableAreas = [
-    { x1: 15.9, y1: 39.4, x2: 51.14, y2: 50.0, sound: sound2 },
-    { x1: 55.83, y1:37.95, x2:93.81, y2: 50.29, sound: sound3 },
+    { x1: 15.11, y1: 34.06, x2: 52.38, y2: 49.29, sound: sound2 },
+    { x1: 55.40, y1: 34.23, x2: 93.81, y2: 50.29, sound: sound3 },
     { x1: 16.0, y1: 84.0, x2: 52.9, y2: 95.5, sound: sound4 },
     { x1: 56.0, y1: 83.5, x2: 93.7, y2: 95.9, sound: sound5 },
   ];

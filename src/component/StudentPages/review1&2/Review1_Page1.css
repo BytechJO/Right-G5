@@ -1,15 +1,15 @@
 .click-icon-review1-page1-2 {
   position: absolute;
   padding: 5px;
-  top: 63.5%;
-  left: 79%;
+  bottom: 56.4%;
+  left: 49%;
   cursor: pointer;
 }
 .click-icon-review1-page1-1 {
   position: absolute;
   padding: 5px;
   top: 9.3%;
-  left: 62%;
+  left: 44%;
   cursor: pointer;
 }
 .click-icon-review1-page1-3 {
@@ -18,8 +18,8 @@
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-  bottom: 53.5%;
-  left: 33%;
+  top: 57%;
+  left: 34%;
 
   cursor: pointer;
 }

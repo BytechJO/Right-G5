@@ -28,6 +28,7 @@ import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 
 import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 3.svg";
 import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 10/SVG/Asset 4.svg";
 import wordJson from "../../../assets/json/conversation2_eng.json";
+import video from "../../../assets/videos/grade 5 unit 2 page 10.mp4";
 
 const Unit2_Page1 = ({ openPopup }) => {
   // ==================== conversation data ==================== //
@@ -345,6 +346,7 @@ const Unit2_Page1 = ({ openPopup }) => {
                   captionTimings={captionTimings}
                   wordTimings={Voc}
                   openPopup={openPopup}
+                  video={video}
                 />
               </div>,
             )

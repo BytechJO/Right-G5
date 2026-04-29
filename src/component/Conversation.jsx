@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import conversationBG from "../assets/imgs/conversation.svg";
 import QuestionAudioPlayer from "./QuestionAudioPlayer";
 import pauseBtn from "../assets/Page 01/Right Video Button.svg";
-import video from "../assets/videos/grade 5 unit 10 page 82.mp4";
 
 const ConversationItem = React.memo(
   ({ number, dialogues, image, currentTime, wordsData = [], captions }) => {
@@ -113,6 +112,7 @@ const Conversation = ({
   stopAtSecond,
   wordTimings,
   captionTimings,
+  video,
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [showVideo, setShowVideo] = useState(false);

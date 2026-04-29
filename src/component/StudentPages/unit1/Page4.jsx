@@ -28,6 +28,7 @@ import sound14 from "../../../assets/audio/ClassBook/U1/PG 4/sound14.mp3";
 import sound15 from "../../../assets/audio/ClassBook/U1/PG 4/sound15.mp3";
 import sound16 from "../../../assets/audio/ClassBook/U1/PG 4/sound16.mp3";
 import CriticalThinking from "../../CriticalThinking";
+import video from "../../../assets/videos/grade 5 unit 1 page 4.mp4";
 
 const Page4 = ({ openPopup }) => {
   const sounds = [
@@ -279,6 +280,7 @@ const Page4 = ({ openPopup }) => {
                     captionTimings={captionTimings}
                     wordTimings={Voc}
                     openPopup={openPopup}
+                    video={video}
                   />
                 </div>,
               )

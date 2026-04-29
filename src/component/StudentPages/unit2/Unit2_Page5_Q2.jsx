@@ -134,6 +134,7 @@ const Unit2_Page5_Q2 = () => {
           position: "absolute",
           top: "-8px",
           right: "-10px",
+          transform: "translateY(-50%)",
           width: "20px",
           height: "20px",
           background: "#ef4444",
@@ -144,6 +145,10 @@ const Unit2_Page5_Q2 = () => {
           justifyContent: "center",
           fontSize: "12px",
           fontWeight: "bold",
+          border: "2px solid white",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          pointerEvents: "none",
+          zIndex: 3,
         }}
       >
         ✕

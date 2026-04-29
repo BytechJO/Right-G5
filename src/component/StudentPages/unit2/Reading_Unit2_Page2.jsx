@@ -2,20 +2,18 @@ import React, { useRef,useState } from "react";
 import page25 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 21.png";
 import "./Reading_Unit2_Page1.css";
 import { FaHeadphones } from "react-icons/fa";
-import sound1 from "../../../assets/audio/ClassBook/Unit 2/P 21/Pg21_1.5_Adult Lady.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 2/P 21/Pg21_1.6_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 2/P 21/Pg21_1.7_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 2/P 21/Pg21_1.8_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U2/PG 21/Pg21_1.5_Adult Lady.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U2/PG 21/Pg21_1.6_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U2/PG 21/Pg21_1.8_Adult Lady.mp3";
 const Reading_Unit2_Page2 = () => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const clickableAreas = [
-    { x1:7.67, y1: 37.22, x2: 46.13, y2: 50.16, sound: sound1 },
-    { x1: 48.22, y1: 35.78, x2:85.37, y2: 49.14, sound: sound2 },
-    { x1: 8.45, y1: 81.19, x2: 45.08, y2: 95.58, sound: sound3 },
-    { x1: 49.0, y1: 84.5, x2: 86.5, y2: 91.0, sound: sound4 },
+    { x1:10.43, y1: 33.89, x2: 47.92, y2: 48.95, sound: sound1 },
+    { x1: 50.93, y1: 33.89, x2:88.64, y2: 48.78, sound: sound2 },
+    { x1: 51.58, y1: 55.38, x2: 87.78, y2: 72.13, sound: sound3 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
