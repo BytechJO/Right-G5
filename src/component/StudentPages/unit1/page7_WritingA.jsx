@@ -156,7 +156,7 @@ const WritingA = () => {
       </h5>
 
       {/* Inputs */}
-      <div className="space-y-4">
+      <div className="space-y-4 mt-10">
         {/* Who */}
         <div className="flex items-center gap-2">
           <span className=" w-[70px]">Who?</span>
