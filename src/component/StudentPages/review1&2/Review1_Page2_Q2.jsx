@@ -125,7 +125,7 @@ const Review1_Page2_Q2 = () => {
     <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
       <div className="div-forall">
         <h5 className="header-title-page8 mb-15">
-          <span className="mr-2">D</span>
+          <span className="mr-2">E</span>
           Write the correct word <span className="text-[#31B7F5]">
             much
           </span> or <span className="text-[#31B7F5]">many</span>.
