@@ -149,7 +149,7 @@ const WritingA = () => {
       }}
     >
       <div className="div-forall">
-      <h5 className="header-title-page8-read mb-10">
+      <h5 className="header-title-page8-read">
         <span className="ex-A-read mr-2">A</span>
         Use the information from the article to write a short answer for each
         question.
@@ -224,7 +224,7 @@ const WritingA = () => {
             </div>
           </div>
 
-          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
           </span>
         </div>
@@ -240,7 +240,7 @@ const WritingA = () => {
             </div>
           </div>
 
-          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer
           </span>
         </div>

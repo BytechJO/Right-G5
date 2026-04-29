@@ -33,7 +33,7 @@ const GrammarB = () => {
         Add a relative clause to the sentence. Circle the noun it tells about.
       </h5>
 
-      <div className="flex flex-col gap-6 text-[15px] max-w-[900px]">
+      <div className="flex flex-col gap-6 text-[15px] mt-15">
         {/* 1 */}
         <div>
           <span className="font-bold mr-4">1</span>

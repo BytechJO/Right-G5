@@ -44,7 +44,7 @@ const GrammarSection_U1 = () => {
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />
-        <div className=" mt-4 space-y-15 mb-20">
+        <div className=" mt-4 space-y-15 mb-10">
           <GrammarA />
           <GrammarB />
           <GrammarC />

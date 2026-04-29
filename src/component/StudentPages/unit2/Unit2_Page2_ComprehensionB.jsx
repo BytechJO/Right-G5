@@ -118,7 +118,7 @@ const Unit2_Page2_ComprehensionB = () => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto"
+              className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto mt-4"
             >
               {questions[0].options.map((word, i) => {
                 const isUsed = answers.includes(word);
@@ -279,7 +279,7 @@ const Unit2_Page2_ComprehensionB = () => {
                 <FaEye size={14} />
               </div>
             </div>
-            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
               Show Answer
             </span>
           </div>
@@ -294,7 +294,7 @@ const Unit2_Page2_ComprehensionB = () => {
                 <FaCheck size={14} />
               </div>
             </div>
-            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
               Check Answer
             </span>
           </div>

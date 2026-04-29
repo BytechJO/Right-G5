@@ -41,13 +41,13 @@ const WritingB = () => {
       }}
     >
       <div className="div-forall">
-        <h5 className="header-title-page8-read mb-10">
+        <h5 className="header-title-page8-read ">
           <span className="ex-A-read mr-2">B</span>
           Choose a topic that interests you. Answer the questions below about
           your topic.
         </h5>
 
-        <div className="space-y-4 text-sm">
+        <div className="space-y-4 text-sm mt-10">
           {/* Topic */}
           <div className="flex items-center gap-2">
             <span>Topic:</span>
