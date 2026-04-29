@@ -34,7 +34,7 @@ const Review2_Page2_Q2 = () => {
   return (
     <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-15">
+        <h5 className="header-title-page8 mb-25">
           <span className="mr-3">E</span>
           Add a relative clause that tells about the noun next to it.
         </h5>
@@ -44,8 +44,8 @@ const Review2_Page2_Q2 = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "25px",
-            fontSize: "18px",
+            gap: "50px",
+            fontSize: "20px",
           }}
         >
           <div>

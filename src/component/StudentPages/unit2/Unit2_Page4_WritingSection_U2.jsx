@@ -20,7 +20,7 @@ const WritingSection_U1 = () => {
       </div>
 
       {/* المحتوى */}
-      <div className="flex flex-col w-[60%] mx-auto space-y-10 mb-15">
+      <div className="flex flex-col w-[60%] mx-auto space-y-10">
         <img
           src={img}
           alt=""

@@ -34,7 +34,7 @@ const WritingA = () => {
       </h5>
 
       {/* 1 */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mt-15">
         <span className="font-bold">1</span>
         <span className="whitespace-nowrap">Character’s name:</span>
         <input

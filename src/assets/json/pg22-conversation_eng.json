@@ -1,0 +1,1314 @@
+{
+  "language_code": "eng",
+  "segments": [
+    {
+      "text": "Page 22, conversation. Listen and read, then say ",
+      "start_time": 0.219,
+      "end_time": 5.939,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.219,
+          "end_time": 0.56
+        },
+        {
+          "text": " ",
+          "start_time": 0.56,
+          "end_time": 0.74
+        },
+        {
+          "text": "22,",
+          "start_time": 0.74,
+          "end_time": 1.24
+        },
+        {
+          "text": " ",
+          "start_time": 1.24,
+          "end_time": 1.399
+        },
+        {
+          "text": "conversation.",
+          "start_time": 1.399,
+          "end_time": 2.159
+        },
+        {
+          "text": " ",
+          "start_time": 2.159,
+          "end_time": 2.659
+        },
+        {
+          "text": "Listen",
+          "start_time": 2.659,
+          "end_time": 3.059
+        },
+        {
+          "text": " ",
+          "start_time": 3.059,
+          "end_time": 3.48
+        },
+        {
+          "text": "and",
+          "start_time": 3.48,
+          "end_time": 3.619
+        },
+        {
+          "text": " ",
+          "start_time": 3.619,
+          "end_time": 3.739
+        },
+        {
+          "text": "read,",
+          "start_time": 3.74,
+          "end_time": 4.039
+        },
+        {
+          "text": " ",
+          "start_time": 4.039,
+          "end_time": 4.539
+        },
+        {
+          "text": "then",
+          "start_time": 4.539,
+          "end_time": 4.779
+        },
+        {
+          "text": " ",
+          "start_time": 4.779,
+          "end_time": 4.979
+        },
+        {
+          "text": "say",
+          "start_time": 4.98,
+          "end_time": 5.239
+        },
+        {
+          "text": " ",
+          "start_time": 5.239,
+          "end_time": 5.939
+        }
+      ]
+    },
+    {
+      "text": "Hi, Sarah. This curry tastes great. Try some. ",
+      "start_time": 5.94,
+      "end_time": 9.46,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Hi,",
+          "start_time": 5.94,
+          "end_time": 6.079
+        },
+        {
+          "text": " ",
+          "start_time": 6.079,
+          "end_time": 6.199
+        },
+        {
+          "text": "Sarah.",
+          "start_time": 6.199,
+          "end_time": 6.579
+        },
+        {
+          "text": " ",
+          "start_time": 6.579,
+          "end_time": 7.059
+        },
+        {
+          "text": "This",
+          "start_time": 7.059,
+          "end_time": 7.179
+        },
+        {
+          "text": " ",
+          "start_time": 7.179,
+          "end_time": 7.299
+        },
+        {
+          "text": "curry",
+          "start_time": 7.299,
+          "end_time": 7.599
+        },
+        {
+          "text": " ",
+          "start_time": 7.599,
+          "end_time": 7.659
+        },
+        {
+          "text": "tastes",
+          "start_time": 7.659,
+          "end_time": 8.159
+        },
+        {
+          "text": " ",
+          "start_time": 8.159,
+          "end_time": 8.22
+        },
+        {
+          "text": "great.",
+          "start_time": 8.22,
+          "end_time": 8.559
+        },
+        {
+          "text": " ",
+          "start_time": 8.559,
+          "end_time": 8.939
+        },
+        {
+          "text": "Try",
+          "start_time": 8.939,
+          "end_time": 9.179
+        },
+        {
+          "text": " ",
+          "start_time": 9.179,
+          "end_time": 9.259
+        },
+        {
+          "text": "some.",
+          "start_time": 9.26,
+          "end_time": 9.46
+        },
+        {
+          "text": " ",
+          "start_time": 9.46,
+          "end_time": 9.46
+        }
+      ]
+    },
+    {
+      "text": "Thanks, Jack, but no way. Curry tastes funny. Can I make a sandwich? ",
+      "start_time": 10.479,
+      "end_time": 15.819,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Thanks,",
+          "start_time": 10.479,
+          "end_time": 10.8
+        },
+        {
+          "text": " ",
+          "start_time": 10.8,
+          "end_time": 10.979
+        },
+        {
+          "text": "Jack,",
+          "start_time": 10.979,
+          "end_time": 11.279
+        },
+        {
+          "text": " ",
+          "start_time": 11.279,
+          "end_time": 11.38
+        },
+        {
+          "text": "but",
+          "start_time": 11.38,
+          "end_time": 11.519
+        },
+        {
+          "text": " ",
+          "start_time": 11.519,
+          "end_time": 11.699
+        },
+        {
+          "text": "no",
+          "start_time": 11.699,
+          "end_time": 11.939
+        },
+        {
+          "text": " ",
+          "start_time": 11.939,
+          "end_time": 12.119
+        },
+        {
+          "text": "way.",
+          "start_time": 12.119,
+          "end_time": 12.46
+        },
+        {
+          "text": " ",
+          "start_time": 12.46,
+          "end_time": 12.819
+        },
+        {
+          "text": "Curry",
+          "start_time": 12.819,
+          "end_time": 13.099
+        },
+        {
+          "text": " ",
+          "start_time": 13.099,
+          "end_time": 13.219
+        },
+        {
+          "text": "tastes",
+          "start_time": 13.219,
+          "end_time": 13.619
+        },
+        {
+          "text": " ",
+          "start_time": 13.619,
+          "end_time": 13.859
+        },
+        {
+          "text": "funny.",
+          "start_time": 13.859,
+          "end_time": 14.219
+        },
+        {
+          "text": " ",
+          "start_time": 14.219,
+          "end_time": 14.559
+        },
+        {
+          "text": "Can",
+          "start_time": 14.559,
+          "end_time": 14.679
+        },
+        {
+          "text": " ",
+          "start_time": 14.679,
+          "end_time": 14.779
+        },
+        {
+          "text": "I",
+          "start_time": 14.779,
+          "end_time": 14.819
+        },
+        {
+          "text": " ",
+          "start_time": 14.819,
+          "end_time": 14.939
+        },
+        {
+          "text": "make",
+          "start_time": 14.939,
+          "end_time": 15.079
+        },
+        {
+          "text": " ",
+          "start_time": 15.079,
+          "end_time": 15.139
+        },
+        {
+          "text": "a",
+          "start_time": 15.139,
+          "end_time": 15.179
+        },
+        {
+          "text": " ",
+          "start_time": 15.179,
+          "end_time": 15.279
+        },
+        {
+          "text": "sandwich?",
+          "start_time": 15.279,
+          "end_time": 15.819
+        },
+        {
+          "text": " ",
+          "start_time": 15.819,
+          "end_time": 15.819
+        }
+      ]
+    },
+    {
+      "text": "Sure. Help yourself from the fridge and cupboards. ",
+      "start_time": 16.94,
+      "end_time": 19.499,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Sure.",
+          "start_time": 16.94,
+          "end_time": 17.199
+        },
+        {
+          "text": " ",
+          "start_time": 17.199,
+          "end_time": 17.479
+        },
+        {
+          "text": "Help",
+          "start_time": 17.479,
+          "end_time": 17.659
+        },
+        {
+          "text": " ",
+          "start_time": 17.659,
+          "end_time": 17.699
+        },
+        {
+          "text": "yourself",
+          "start_time": 17.699,
+          "end_time": 18.079
+        },
+        {
+          "text": " ",
+          "start_time": 18.079,
+          "end_time": 18.159
+        },
+        {
+          "text": "from",
+          "start_time": 18.159,
+          "end_time": 18.319
+        },
+        {
+          "text": " ",
+          "start_time": 18.319,
+          "end_time": 18.359
+        },
+        {
+          "text": "the",
+          "start_time": 18.359,
+          "end_time": 18.42
+        },
+        {
+          "text": " ",
+          "start_time": 18.42,
+          "end_time": 18.539
+        },
+        {
+          "text": "fridge",
+          "start_time": 18.539,
+          "end_time": 18.76
+        },
+        {
+          "text": " ",
+          "start_time": 18.76,
+          "end_time": 18.799
+        },
+        {
+          "text": "and",
+          "start_time": 18.799,
+          "end_time": 18.879
+        },
+        {
+          "text": " ",
+          "start_time": 18.879,
+          "end_time": 19.0
+        },
+        {
+          "text": "cupboards.",
+          "start_time": 19.0,
+          "end_time": 19.499
+        },
+        {
+          "text": " ",
+          "start_time": 19.499,
+          "end_time": 19.499
+        }
+      ]
+    },
+    {
+      "text": "You have rye bread. It is very tasty. ",
+      "start_time": 20.559,
+      "end_time": 23.279,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "You",
+          "start_time": 20.559,
+          "end_time": 20.659
+        },
+        {
+          "text": " ",
+          "start_time": 20.659,
+          "end_time": 20.739
+        },
+        {
+          "text": "have",
+          "start_time": 20.739,
+          "end_time": 20.939
+        },
+        {
+          "text": " ",
+          "start_time": 20.939,
+          "end_time": 21.039
+        },
+        {
+          "text": "rye",
+          "start_time": 21.039,
+          "end_time": 21.299
+        },
+        {
+          "text": " ",
+          "start_time": 21.299,
+          "end_time": 21.379
+        },
+        {
+          "text": "bread.",
+          "start_time": 21.379,
+          "end_time": 21.699
+        },
+        {
+          "text": " ",
+          "start_time": 21.699,
+          "end_time": 22.059
+        },
+        {
+          "text": "It",
+          "start_time": 22.059,
+          "end_time": 22.119
+        },
+        {
+          "text": " ",
+          "start_time": 22.119,
+          "end_time": 22.199
+        },
+        {
+          "text": "is",
+          "start_time": 22.199,
+          "end_time": 22.299
+        },
+        {
+          "text": " ",
+          "start_time": 22.299,
+          "end_time": 22.399
+        },
+        {
+          "text": "very",
+          "start_time": 22.399,
+          "end_time": 22.699
+        },
+        {
+          "text": " ",
+          "start_time": 22.699,
+          "end_time": 22.779
+        },
+        {
+          "text": "tasty.",
+          "start_time": 22.779,
+          "end_time": 23.279
+        },
+        {
+          "text": " ",
+          "start_time": 23.279,
+          "end_time": 23.279
+        }
+      ]
+    },
+    {
+      "text": "Rye bread is my favorite. ",
+      "start_time": 24.34,
+      "end_time": 25.819,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Rye",
+          "start_time": 24.34,
+          "end_time": 24.559
+        },
+        {
+          "text": " ",
+          "start_time": 24.559,
+          "end_time": 24.619
+        },
+        {
+          "text": "bread",
+          "start_time": 24.619,
+          "end_time": 24.84
+        },
+        {
+          "text": " ",
+          "start_time": 24.84,
+          "end_time": 24.899
+        },
+        {
+          "text": "is",
+          "start_time": 24.899,
+          "end_time": 25.0
+        },
+        {
+          "text": " ",
+          "start_time": 25.0,
+          "end_time": 25.059
+        },
+        {
+          "text": "my",
+          "start_time": 25.059,
+          "end_time": 25.26
+        },
+        {
+          "text": " ",
+          "start_time": 25.26,
+          "end_time": 25.34
+        },
+        {
+          "text": "favorite.",
+          "start_time": 25.34,
+          "end_time": 25.819
+        },
+        {
+          "text": " ",
+          "start_time": 25.819,
+          "end_time": 25.819
+        }
+      ]
+    },
+    {
+      "text": "Oh, here's a can of sardines. They are small, salty fish. I love them. ",
+      "start_time": 26.859,
+      "end_time": 32.52,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Oh,",
+          "start_time": 26.859,
+          "end_time": 27.039
+        },
+        {
+          "text": " ",
+          "start_time": 27.039,
+          "end_time": 27.339
+        },
+        {
+          "text": "here's",
+          "start_time": 27.34,
+          "end_time": 27.639
+        },
+        {
+          "text": " ",
+          "start_time": 27.639,
+          "end_time": 27.699
+        },
+        {
+          "text": "a",
+          "start_time": 27.699,
+          "end_time": 27.779
+        },
+        {
+          "text": " ",
+          "start_time": 27.779,
+          "end_time": 27.859
+        },
+        {
+          "text": "can",
+          "start_time": 27.859,
+          "end_time": 28.099
+        },
+        {
+          "text": " ",
+          "start_time": 28.099,
+          "end_time": 28.159
+        },
+        {
+          "text": "of",
+          "start_time": 28.159,
+          "end_time": 28.379
+        },
+        {
+          "text": " ",
+          "start_time": 28.379,
+          "end_time": 28.519
+        },
+        {
+          "text": "sardines.",
+          "start_time": 28.519,
+          "end_time": 29.179
+        },
+        {
+          "text": " ",
+          "start_time": 29.179,
+          "end_time": 29.499
+        },
+        {
+          "text": "They",
+          "start_time": 29.5,
+          "end_time": 29.639
+        },
+        {
+          "text": " ",
+          "start_time": 29.639,
+          "end_time": 29.699
+        },
+        {
+          "text": "are",
+          "start_time": 29.699,
+          "end_time": 29.84
+        },
+        {
+          "text": " ",
+          "start_time": 29.84,
+          "end_time": 29.92
+        },
+        {
+          "text": "small,",
+          "start_time": 29.92,
+          "end_time": 30.299
+        },
+        {
+          "text": " ",
+          "start_time": 30.299,
+          "end_time": 30.599
+        },
+        {
+          "text": "salty",
+          "start_time": 30.599,
+          "end_time": 31.019
+        },
+        {
+          "text": " ",
+          "start_time": 31.019,
+          "end_time": 31.099
+        },
+        {
+          "text": "fish.",
+          "start_time": 31.099,
+          "end_time": 31.479
+        },
+        {
+          "text": " ",
+          "start_time": 31.479,
+          "end_time": 31.859
+        },
+        {
+          "text": "I",
+          "start_time": 31.859,
+          "end_time": 31.999
+        },
+        {
+          "text": " ",
+          "start_time": 31.999,
+          "end_time": 32.059
+        },
+        {
+          "text": "love",
+          "start_time": 32.059,
+          "end_time": 32.299
+        },
+        {
+          "text": " ",
+          "start_time": 32.299,
+          "end_time": 32.36
+        },
+        {
+          "text": "them.",
+          "start_time": 32.36,
+          "end_time": 32.52
+        },
+        {
+          "text": " ",
+          "start_time": 32.52,
+          "end_time": 32.52
+        }
+      ]
+    },
+    {
+      "text": "Really? That doesn't sound good to me. ",
+      "start_time": 33.68,
+      "end_time": 36.879,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Really?",
+          "start_time": 33.68,
+          "end_time": 34.079
+        },
+        {
+          "text": " ",
+          "start_time": 34.079,
+          "end_time": 34.38
+        },
+        {
+          "text": "That",
+          "start_time": 34.38,
+          "end_time": 34.52
+        },
+        {
+          "text": " ",
+          "start_time": 34.52,
+          "end_time": 34.579
+        },
+        {
+          "text": "doesn't",
+          "start_time": 34.579,
+          "end_time": 34.86
+        },
+        {
+          "text": " ",
+          "start_time": 34.86,
+          "end_time": 34.939
+        },
+        {
+          "text": "sound",
+          "start_time": 34.939,
+          "end_time": 35.2
+        },
+        {
+          "text": " ",
+          "start_time": 35.2,
+          "end_time": 35.239
+        },
+        {
+          "text": "good",
+          "start_time": 35.239,
+          "end_time": 35.38
+        },
+        {
+          "text": " ",
+          "start_time": 35.38,
+          "end_time": 35.459
+        },
+        {
+          "text": "to",
+          "start_time": 35.459,
+          "end_time": 35.559
+        },
+        {
+          "text": " ",
+          "start_time": 35.559,
+          "end_time": 35.639
+        },
+        {
+          "text": "me.",
+          "start_time": 35.639,
+          "end_time": 35.879
+        },
+        {
+          "text": " ",
+          "start_time": 35.879,
+          "end_time": 36.879
+        }
+      ]
+    },
+    {
+      "text": "Do you have any peanut butter? ",
+      "start_time": 36.88,
+      "end_time": 38.419,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Do",
+          "start_time": 36.88,
+          "end_time": 36.939
+        },
+        {
+          "text": " ",
+          "start_time": 36.939,
+          "end_time": 36.979
+        },
+        {
+          "text": "you",
+          "start_time": 36.979,
+          "end_time": 37.079
+        },
+        {
+          "text": " ",
+          "start_time": 37.079,
+          "end_time": 37.179
+        },
+        {
+          "text": "have",
+          "start_time": 37.18,
+          "end_time": 37.319
+        },
+        {
+          "text": " ",
+          "start_time": 37.319,
+          "end_time": 37.38
+        },
+        {
+          "text": "any",
+          "start_time": 37.38,
+          "end_time": 37.599
+        },
+        {
+          "text": " ",
+          "start_time": 37.599,
+          "end_time": 37.68
+        },
+        {
+          "text": "peanut",
+          "start_time": 37.68,
+          "end_time": 37.959
+        },
+        {
+          "text": " ",
+          "start_time": 37.959,
+          "end_time": 38.059
+        },
+        {
+          "text": "butter?",
+          "start_time": 38.059,
+          "end_time": 38.419
+        },
+        {
+          "text": " ",
+          "start_time": 38.419,
+          "end_time": 38.419
+        }
+      ]
+    },
+    {
+      "text": "Yes, there's some peanut butter in the cupboard. ",
+      "start_time": 39.479,
+      "end_time": 42.239,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Yes,",
+          "start_time": 39.479,
+          "end_time": 39.719
+        },
+        {
+          "text": " ",
+          "start_time": 39.719,
+          "end_time": 39.879
+        },
+        {
+          "text": "there's",
+          "start_time": 39.879,
+          "end_time": 40.079
+        },
+        {
+          "text": " ",
+          "start_time": 40.079,
+          "end_time": 40.099
+        },
+        {
+          "text": "some",
+          "start_time": 40.099,
+          "end_time": 40.219
+        },
+        {
+          "text": " ",
+          "start_time": 40.219,
+          "end_time": 40.279
+        },
+        {
+          "text": "peanut",
+          "start_time": 40.279,
+          "end_time": 40.479
+        },
+        {
+          "text": " ",
+          "start_time": 40.479,
+          "end_time": 40.52
+        },
+        {
+          "text": "butter",
+          "start_time": 40.52,
+          "end_time": 40.719
+        },
+        {
+          "text": " ",
+          "start_time": 40.719,
+          "end_time": 40.759
+        },
+        {
+          "text": "in",
+          "start_time": 40.759,
+          "end_time": 40.819
+        },
+        {
+          "text": " ",
+          "start_time": 40.819,
+          "end_time": 40.879
+        },
+        {
+          "text": "the",
+          "start_time": 40.879,
+          "end_time": 40.939
+        },
+        {
+          "text": " ",
+          "start_time": 40.939,
+          "end_time": 41.0
+        },
+        {
+          "text": "cupboard.",
+          "start_time": 41.0,
+          "end_time": 41.319
+        },
+        {
+          "text": " ",
+          "start_time": 41.319,
+          "end_time": 42.239
+        }
+      ]
+    },
+    {
+      "text": "Now I'll just top off my sandwich with some marshmallows. ",
+      "start_time": 42.239,
+      "end_time": 46.119,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Now",
+          "start_time": 42.239,
+          "end_time": 42.399
+        },
+        {
+          "text": " ",
+          "start_time": 42.399,
+          "end_time": 42.499
+        },
+        {
+          "text": "I'll",
+          "start_time": 42.5,
+          "end_time": 42.639
+        },
+        {
+          "text": " ",
+          "start_time": 42.639,
+          "end_time": 42.739
+        },
+        {
+          "text": "just",
+          "start_time": 42.739,
+          "end_time": 42.899
+        },
+        {
+          "text": " ",
+          "start_time": 42.899,
+          "end_time": 42.959
+        },
+        {
+          "text": "top",
+          "start_time": 42.959,
+          "end_time": 43.2
+        },
+        {
+          "text": " ",
+          "start_time": 43.2,
+          "end_time": 43.279
+        },
+        {
+          "text": "off",
+          "start_time": 43.279,
+          "end_time": 43.459
+        },
+        {
+          "text": " ",
+          "start_time": 43.459,
+          "end_time": 43.52
+        },
+        {
+          "text": "my",
+          "start_time": 43.52,
+          "end_time": 43.7
+        },
+        {
+          "text": " ",
+          "start_time": 43.7,
+          "end_time": 43.779
+        },
+        {
+          "text": "sandwich",
+          "start_time": 43.779,
+          "end_time": 44.34
+        },
+        {
+          "text": " ",
+          "start_time": 44.34,
+          "end_time": 44.639
+        },
+        {
+          "text": "with",
+          "start_time": 44.639,
+          "end_time": 44.86
+        },
+        {
+          "text": " ",
+          "start_time": 44.86,
+          "end_time": 44.939
+        },
+        {
+          "text": "some",
+          "start_time": 44.939,
+          "end_time": 45.159
+        },
+        {
+          "text": " ",
+          "start_time": 45.159,
+          "end_time": 45.219
+        },
+        {
+          "text": "marshmallows.",
+          "start_time": 45.219,
+          "end_time": 46.119
+        },
+        {
+          "text": " ",
+          "start_time": 46.119,
+          "end_time": 46.119
+        }
+      ]
+    },
+    {
+      "text": "Are you going to eat that sandwich? ",
+      "start_time": 47.139,
+      "end_time": 48.819,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Are",
+          "start_time": 47.139,
+          "end_time": 47.259
+        },
+        {
+          "text": " ",
+          "start_time": 47.259,
+          "end_time": 47.319
+        },
+        {
+          "text": "you",
+          "start_time": 47.319,
+          "end_time": 47.439
+        },
+        {
+          "text": " ",
+          "start_time": 47.439,
+          "end_time": 47.5
+        },
+        {
+          "text": "going",
+          "start_time": 47.5,
+          "end_time": 47.72
+        },
+        {
+          "text": " ",
+          "start_time": 47.72,
+          "end_time": 47.739
+        },
+        {
+          "text": "to",
+          "start_time": 47.739,
+          "end_time": 47.819
+        },
+        {
+          "text": " ",
+          "start_time": 47.819,
+          "end_time": 47.899
+        },
+        {
+          "text": "eat",
+          "start_time": 47.899,
+          "end_time": 48.059
+        },
+        {
+          "text": " ",
+          "start_time": 48.059,
+          "end_time": 48.099
+        },
+        {
+          "text": "that",
+          "start_time": 48.099,
+          "end_time": 48.259
+        },
+        {
+          "text": " ",
+          "start_time": 48.259,
+          "end_time": 48.34
+        },
+        {
+          "text": "sandwich?",
+          "start_time": 48.34,
+          "end_time": 48.819
+        },
+        {
+          "text": " ",
+          "start_time": 48.819,
+          "end_time": 48.819
+        }
+      ]
+    },
+    {
+      "text": "You bet. This is delicious. Have some. ",
+      "start_time": 50.0,
+      "end_time": 53.219,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "You",
+          "start_time": 50.0,
+          "end_time": 50.119
+        },
+        {
+          "text": " ",
+          "start_time": 50.119,
+          "end_time": 50.219
+        },
+        {
+          "text": "bet.",
+          "start_time": 50.219,
+          "end_time": 50.7
+        },
+        {
+          "text": " ",
+          "start_time": 50.7,
+          "end_time": 50.739
+        },
+        {
+          "text": "This",
+          "start_time": 50.739,
+          "end_time": 50.939
+        },
+        {
+          "text": " ",
+          "start_time": 50.939,
+          "end_time": 51.059
+        },
+        {
+          "text": "is",
+          "start_time": 51.059,
+          "end_time": 51.239
+        },
+        {
+          "text": " ",
+          "start_time": 51.239,
+          "end_time": 51.319
+        },
+        {
+          "text": "delicious.",
+          "start_time": 51.319,
+          "end_time": 52.279
+        },
+        {
+          "text": " ",
+          "start_time": 52.279,
+          "end_time": 52.68
+        },
+        {
+          "text": "Have",
+          "start_time": 52.68,
+          "end_time": 52.939
+        },
+        {
+          "text": " ",
+          "start_time": 52.939,
+          "end_time": 53.039
+        },
+        {
+          "text": "some.",
+          "start_time": 53.039,
+          "end_time": 53.219
+        },
+        {
+          "text": " ",
+          "start_time": 53.219,
+          "end_time": 53.219
+        }
+      ]
+    },
+    {
+      "text": "No, thank you. My curry is yummy",
+      "start_time": 54.259,
+      "end_time": 56.079,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "No,",
+          "start_time": 54.259,
+          "end_time": 54.36
+        },
+        {
+          "text": " ",
+          "start_time": 54.36,
+          "end_time": 54.439
+        },
+        {
+          "text": "thank",
+          "start_time": 54.439,
+          "end_time": 54.639
+        },
+        {
+          "text": " ",
+          "start_time": 54.639,
+          "end_time": 54.68
+        },
+        {
+          "text": "you.",
+          "start_time": 54.68,
+          "end_time": 55.019
+        },
+        {
+          "text": " ",
+          "start_time": 55.019,
+          "end_time": 55.079
+        },
+        {
+          "text": "My",
+          "start_time": 55.079,
+          "end_time": 55.18
+        },
+        {
+          "text": " ",
+          "start_time": 55.18,
+          "end_time": 55.299
+        },
+        {
+          "text": "curry",
+          "start_time": 55.299,
+          "end_time": 55.559
+        },
+        {
+          "text": " ",
+          "start_time": 55.559,
+          "end_time": 55.619
+        },
+        {
+          "text": "is",
+          "start_time": 55.619,
+          "end_time": 55.739
+        },
+        {
+          "text": " ",
+          "start_time": 55.739,
+          "end_time": 55.819
+        },
+        {
+          "text": "yummy",
+          "start_time": 55.819,
+          "end_time": 56.079
+        }
+      ]
+    }
+  ]
+}

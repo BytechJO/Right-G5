@@ -39,7 +39,7 @@ const Page8_Q1 = () => {
           <h5 className="header-title-page8">
             <span
               className="ex-A"
-              style={{ marginRight: "10px", marginBottom: 50 }}
+              style={{ marginRight: "10px", marginBottom: 75 }}
             >
               A
             </span>

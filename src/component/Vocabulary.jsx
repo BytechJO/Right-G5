@@ -43,7 +43,7 @@ const Vocabulary = ({
   );
 
   return (
-    <div className="relative bg-white/70 backdrop-blur-sm border-2 border-[#6D2980] rounded-2xl shadow-lg p-6 pt-8 w-full max-w-[60%] mt-4">
+    <div className="relative bg-white/70 backdrop-blur-sm border-2 border-[#6D2980] rounded-2xl shadow-lg p-6 pt-8 w-full max-w-[60%] mt-8">
       {/* Header */}
       <div className="absolute top-0 left-0 bg-[#6D2980] text-white font-bold px-4 py-1 rounded-tl-2xl">
         VOCABULARY

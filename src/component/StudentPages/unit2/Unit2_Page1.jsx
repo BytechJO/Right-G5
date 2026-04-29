@@ -342,7 +342,7 @@ const Unit2_Page1 = ({ openPopup }) => {
                   items={data}
                   sound={longAudio}
                   captions={captionsExample}
-                  stopAtSecond={5.7}
+                  stopAtSecond={5.2}
                   captionTimings={captionTimings}
                   wordTimings={Voc}
                   openPopup={openPopup}

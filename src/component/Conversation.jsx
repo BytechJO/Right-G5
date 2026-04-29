@@ -138,8 +138,8 @@ const Conversation = ({
         style={{ overflow: "visible" }}
       >
         <svg
-          width="22"
-          height="22"
+          width="30"
+          height="30"
           viewBox="0 0 90 90"
           onClick={() => setShowVideo(true)}
           style={{ overflow: "visible" }}

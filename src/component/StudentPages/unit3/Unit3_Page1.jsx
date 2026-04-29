@@ -1,292 +1,302 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 22.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22.png";
 import "./Unit3_Page1.css";
-import Unit3_Page1_Read from "./Unit3_Pag1_Read";
-import Unit3_Page1_Vocab from "./Unit3_Page1_Vocab";
-import Unit3_Page1_find from "./Unit3_Page1_find";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U3/PG 22/pg22-conversation.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import main from "../../../assets/audio/ClassBook/Unit 3/unit-3-main.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/Unit 3/P 22/sound14.mp3";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U3/PG 22/vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U2/PG 10/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U2/PG 10/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U2/PG 10/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U2/PG 10/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U2/PG 10/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U2/PG 10/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U2/PG 10/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U2/PG 10/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U2/PG 10/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U2/PG 10/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U2/PG 10/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U2/PG 10/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U2/PG 10/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U2/PG 10/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U2/PG 10/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U2/PG 10/sound16.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 2.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 22.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 4.svg";
+import wordJson from "../../../assets/json/pg22-conversation_eng.json";
+import video from "../../../assets/videos/grade 5 unit 2 page 10.mp4";
 
 const Unit3_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Jack",
+          text: "Hi, Sarah! This curry tastes great! Try some!",
+        },
+        {
+          speaker: "Sarah",
+          text: "Thanks, Jack, but no way! Curry tastes funny. Can I make a sandwich?",
+        },
+        {
+          speaker: "Jack",
+          text: "Sure! Help yourself from the fridge and cupboards.",
+        },
+      ],
+    },
+    {
+      number: 2,
+      image: imgConversation2,
+
+      dialogues: [
+        {
+          speaker: "Sarah",
+          text: "You have rye bread. It is very tasty.",
+        },
+        {
+          speaker: "Jack",
+          text: "Rye bread is my favorite.",
+        },
+        {
+          speaker: "Sarah",
+          text: "Oh, here is a can of sardines. They are small salty fish. I love them!",
+        },
+      ],
+    },
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Jack",
+          text: "Really! That doesn’t sound good to me.",
+        },
+        {
+          speaker: "Sarah",
+          text: "Do you have any peanut butter?",
+        },
+        {
+          speaker: "Jack",
+          text: "Yes, there’s some peanut butter in the cupboard.",
+        },
+      ],
+    },
+    {
+      number: 4,
+      image: imgConversation4,
+
+      dialogues: [
+        {
+          speaker: "Sarah",
+          text: "Now, I’ll just top off my sandwich with some marshmallows.",
+        },
+        {
+          speaker: "Jack",
+          text: "Are you going to eat that sandwich?",
+        },
+        {
+          speaker: "Sarah",
+          text: "You bet! This is delicious. Have some.",
+        },
+        {
+          speaker: "Jack",
+          text: "No, thank you. My curry is yummy!",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
     {
-      start: 0.43,
-      end: 5.01,
-      text: "Page 22, Unit 3. Lala goes shopping.",
+      start: 0.219,
+      end: 5.939,
+      text: "Page 22, conversation. Listen and read, then say",
     },
-    { start: 5.02, end: 6.04, text: " Vocabulary." },
+    {
+      start: 5.94,
+      end: 9.46,
+      text: "Hi, Sarah. This curry tastes great. Try some.",
+    },
+    {
+      start: 10.479,
+      end: 15.819,
+      text: "Thanks, Jack, but no way. Curry tastes funny. Can I make a sandwich?",
+    },
+    {
+      start: 16.94,
+      end: 19.499,
+      text: "Sure. Help yourself from the fridge and cupboards.",
+    },
+    {
+      start: 20.559,
+      end: 23.279,
+      text: "You have rye bread. It is very tasty.",
+    },
+    {
+      start: 24.34,
+      end: 25.819,
+      text: "Rye bread is my favorite.",
+    },
+    {
+      start: 26.859,
+      end: 32.52,
+      text: "Oh, here's a can of sardines. They are small, salty fish. I love them.",
+    },
+    {
+      start: 33.68,
+      end: 36.879,
+      text: "Really? That doesn't sound good to me.",
+    },
+    {
+      start: 36.88,
+      end: 38.419,
+      text: "Do you have any peanut butter?",
+    },
+    {
+      start: 39.479,
+      end: 42.239,
+      text: "Yes, there's some peanut butter in the cupboard.",
+    },
+    {
+      start: 42.239,
+      end: 46.119,
+      text: "Now I'll just top off my sandwich with some marshmallows.",
+    },
+    {
+      start: 47.139,
+      end: 48.819,
+      text: "Are you going to eat that sandwich?",
+    },
+    {
+      start: 50.0,
+      end: 53.219,
+      text: "You bet. This is delicious. Have some.",
+    },
+    {
+      start: 54.259,
+      end: 56.079,
+      text: "No, thank you. My curry is yummy.",
+    },
+  ];
+  const captionTimings = [
+    [captionsExample[1], captionsExample[2], captionsExample[3]],
+    [captionsExample[4], captionsExample[5], captionsExample[6]],
+    [captionsExample[7], captionsExample[8], captionsExample[9]],
+    [
+      captionsExample[10],
+      captionsExample[11],
+      captionsExample[12],
+      captionsExample[13],
+    ],
+  ];
+  const filteredSegments = wordJson.segments.slice(1);
 
-    { start: 7.09, end: 9.57, text: "1. Grocery store." },
-    { start: 9.57, end: 11.81, text: "2. Bag." },
-    { start: 11.81, end: 14.37, text: "3. Grapes." },
-    { start: 14.38, end: 17.07, text: "4. Carrots." },
-    { start: 17.07, end: 19.53, text: "5. Apples." },
-    { start: 19.53, end: 21.27, text: "6. Bananas." },
-    { start: 22.3, end: 24.65, text: "7. Basket." },
-    { start: 24.66, end: 27.47, text: "8. Eggplants." },
-    { start: 27.48, end: 29.63, text: "9. Carton of milk." },
-    { start: 30.7, end: 34.15, text: "10. Shelf, shelves." },
-    { start: 34.16, end: 36.54, text: "11. Soap." },
-    { start: 36.54, end: 39.2, text: "12. Toothpaste." },
-    { start: 39.2, end: 42.03, text: "13. Shopping cart." },
-    { start: 42.04, end: 44.95, text: "14. Can, cans." },
-    { start: 46.23, end: 49.0, text: "Page 22. Listen and read along." },
-
-    {
-      start: 49.01,
-      end: 59.52,
-      text: "C-H, ch. T-C-H, ch. S-H, sh. Chicken, kitchen, fish.",
-    },
-    {
-      start: 60,
-      end: 76.78,
-      text: "Unit 3, Page 23, Reading. Listen and read along. Picky shopper. It is a nice, sunny day. Lala decides to go shopping. He goes to the store next to his home. He is thinking about what he will buy.",
-    },
-    {
-      start: 76.78,
-      end: 79.84,
-      text: "Good morning. How can I help you, Lala?",
-    },
-    {
-      start: 79.84,
-      end: 87.04,
-      text: "Good morning to you. I'm looking for some boots. Do you have any orange boots, please?",
-    },
-    {
-      start: 87.04,
-      end: 92.66,
-      text: "No, I'm sorry, I don't have any orange boots, but I have some pink ones.",
-    },
-    {
-      start: 92.66,
-      end: 98.96,
-      text: "No, that won't work. I don't like pink. What else do you have? Do you have any purple gloves?",
-    },
-    {
-      start: 100.04,
-      end: 108.84,
-      text: "Yes, I do have some purple gloves. Look, I also have some blue and green gloves, too. The blue gloves would match your shirt.",
-    },
-    {
-      start: 108.84,
-      end: 113.52,
-      text: "Wow, that's great, but I'll take some red gloves, please.",
-    },
-    {
-      start: 113.52,
-      end: 117.58,
-      text: "There are no red gloves. You are a picky shopper, aren't you?",
-    },
-    {
-      start: 117.07,
-      end: 122.8,
-      text: "Page 23. Listen, read, and repeat.",
-    },
-    { start: 122.8, end: 125.52, text: "Can we go shopping on Saturday?" },
-    { start: 125.52, end: 127.32, text: "Yes, we can." },
-    {
-      start: 127.32,
-      end: 130.62,
-      text: "Page 23. Listen and read along.",
-    },
-    { start: 130.98, end: 140.6, text: "C-H, ch. T-C-H, ch. S-H, sh. Peach, watch, shell." },
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+    ],
+    [
+      filteredSegments[3]?.words || [],
+      filteredSegments[4]?.words || [],
+      filteredSegments[5]?.words || [],
+    ],
+    [
+      filteredSegments[6]?.words || [],
+      filteredSegments[7]?.words || [],
+      filteredSegments[8]?.words || [],
+    ],
+    [
+      filteredSegments[9]?.words || [],
+      filteredSegments[10]?.words || [],
+      filteredSegments[11]?.words || [],
+      filteredSegments[12]?.words || [],
+    ],
   ];
 
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 65.5, y1: 12.15, sound: 1, isPrimary: true },
-    // // الصوت الأول – منطقة إضافية
-    { x1: 60, y1: 11.5, x2: 83, y2: 18, sound: 1, isPrimary: false },
-    //
-
-    // // الصوت الثاني – الأساسية
-    { x1: 83.3, y1: 27, sound: 2, isPrimary: true },
-    // // الصوت الثاني – الإضافية
-    { x1: 79, y1: 26, x2: 88, y2: 35, sound: 2, isPrimary: false },
-    //
-
-    // // الصوت الثالث – الأساسية
-    { x1: 43, y1: 28.7, sound: 3, isPrimary: true },
-    // // الصوت الثالث – الإضافية
-    { x1: 42, y1: 28, x2: 50, y2: 35, sound: 3, isPrimary: false },
-    //
-
-    // // الصوت الرابع – الأساسية
-    { x1: 37.2, y1: 21.4, sound: 4, isPrimary: true },
-    // // الصوت الرابع – الإضافية
-    { x1: 30, y1: 20, x2: 41, y2: 27, sound: 4, isPrimary: false },
-    //
-
-    // // الصوت الخامس – الأساسية
-    { x1: 28.5, y1: 33.5, sound: 5, isPrimary: true },
-    // // الصوت الخامس – الإضافية
-    { x1: 26, y1: 29, x2: 40, y2: 35.7, sound: 5, isPrimary: false },
-    //
-
-    // // الصوت السادس – الأساسية
-    { x1: 43.3, y1: 19, sound: 6, isPrimary: true },
-    // // الصوت السادس – الإضافية
-    { x1: 42, y1: 19, x2: 52.5, y2: 27, sound: 6, isPrimary: false },
-
-    // الصوت السابع – الأساسية
-    { x1: 49, y1: 36.5, sound: 7, isPrimary: true },
-    // الصوت السابع – الإضافية
-    { x1: 47, y1: 34, x2: 55.5, y2: 40, sound: 7, isPrimary: false },
-    //
-    // الصوت الثامن – الأساسية
-    { x1: 68, y1: 19.2, sound: 8, isPrimary: true },
-    // الصوت الثامن – الإضافية
-    { x1: 67, y1: 20, x2: 79, y2: 27, sound: 8, isPrimary: false },
-    //
-
-    // الصوت التاسع – الأساسية
-    { x1: 64, y1: 38.9, sound: 9, isPrimary: true },
-    // الصوت التاسع – الإضافية
-    { x1: 59, y1: 34, x2: 92, y2: 42, sound: 9, isPrimary: false },
-    //
-
-    // الصوت العاشر – الأساسية
-    { x1: 5, y1: 26.5, sound: 10, isPrimary: true },
-    // الصوت العاشر – الإضافية
-    { x1: 0, y1: 14, x2: 19, y2: 30, sound: 10, isPrimary: false },
-    //
-
-    // الصوت الحادي عشر – الأساسية
-    { x1: 91.4, y1: 63, sound: 11, isPrimary: true },
-    // الصوت الحادي عشر – الإضافية
-    { x1: 80, y1: 59.5, x2: 99, y2: 67, sound: 11, isPrimary: false },
-    //
-
-    // الصوت الثاني عشر – الأساسية
-    { x1: 62.5, y1: 44.8, sound: 12, isPrimary: true },
-    // الصوت الثاني عشر – الإضافية
-    { x1: 62.5, y1: 46, x2: 82, y2: 57, sound: 12, isPrimary: false },
-    //
-
-    // الصوت الثالث عشر – الأساسية
-    { x1: 67.9, y1: 68.8, sound: 13, isPrimary: true },
-    // الصوت الثالث عشر – الإضافية
-    { x1: 60, y1: 66, x2: 88, y2: 81, sound: 13, isPrimary: false },
-    //
-
-    // الصوت الرابع عشر – الأساسية
-    { x1: 83.9, y1: 44, sound: 14, isPrimary: true },
-    // الصوت الرابع عشر – الإضافية
-    { x1: 83, y1: 44, x2: 99, y2: 57, sound: 14, isPrimary: false },
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+    sound16,
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-    13: sound13,
-    14: sound14,
-  };
+  const captionVoc = [
+    {
+      start: 0.099,
+      end: 7.58,
+      text: "Page 10, Unit 2, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
+    },
 
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+    { start: 8.679, end: 11.019, text: "1. carnival." },
+    { start: 11.019, end: 13.579, text: "2. trims." },
+    { start: 13.579, end: 16.319, text: "3. crazy." },
+    { start: 16.319, end: 19.059, text: "4. twisty." },
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
+    { start: 19.059, end: 21.619, text: "5. couple." },
+    { start: 21.619, end: 24.439, text: "6. merry-go-round." },
+    { start: 24.439, end: 27.099, text: "7. still." },
+    { start: 27.099, end: 29.639, text: "8. bag." },
+
+    { start: 29.639, end: 32.599, text: "9. a few." },
+    { start: 32.599, end: 34.779, text: "10. giraffe." },
+    { start: 34.779, end: 37.879, text: "11. not so fast." },
+
+    { start: 37.879, end: 40.779, text: "12. let's see." },
+    { start: 40.779, end: 44.159, text: "13. first thing." },
+    { start: 44.159, end: 47.419, text: "14. stays behind." },
+
+    { start: 47.419, end: 51.18, text: "15. keep my feet on the ground." },
+    { start: 51.18, end: 53.419, text: "16. works out." },
+  ];
+  const wordTimingsVoc = [
+    { start: 8.679, end: 11.019 },
+    { start: 11.019, end: 13.579 },
+    { start: 13.579, end: 16.319 },
+    { start: 16.319, end: 19.059 },
+
+    { start: 19.059, end: 21.619 },
+    { start: 21.619, end: 24.439 },
+    { start: 24.439, end: 27.099 },
+    { start: 27.099, end: 29.639 },
+
+    { start: 29.639, end: 32.599 },
+    { start: 32.599, end: 34.779 },
+    { start: 34.779, end: 37.879 },
+
+    { start: 37.879, end: 40.779 },
+    { start: 40.779, end: 44.159 },
+    { start: 44.159, end: 47.419 },
+
+    { start: 47.419, end: 51.18 },
+    { start: 51.18, end: 53.419 },
+  ];
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit3-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -295,7 +305,7 @@ const Unit3_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -303,7 +313,17 @@ const Unit3_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={main} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={6}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                  video={video}
+                />
               </div>,
             )
           }
@@ -314,14 +334,14 @@ const Unit3_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit3-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -331,25 +351,58 @@ const Unit3_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit3_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={8}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "carnival",
+                    "trims",
+                    "crazy",
+                    "twisty",
+                    "couple",
+                    "merry-go-round",
+                    "still",
+                    "bag",
+                    "(a) few",
+                    "giraffe",
+                    "not so fast",
+                    "let's see",
+                    "first thing",
+                    "stays behind",
+                    "keep my feet on the ground",
+                    "works out",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit3-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -359,9 +412,9 @@ const Unit3_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit3_Page1_Vocab />
-              </>,
+              <CriticalThinking
+                title={"Who is going to take pictures at the carnival?"}
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -371,36 +424,9 @@ const Unit3_Page1 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit3-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit3_Page1_Read />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>

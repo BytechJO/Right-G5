@@ -124,7 +124,7 @@ const Review1_Page2_Q2 = () => {
   return (
     <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-15">
+        <h5 className="header-title-page8 mb-25">
           <span className="mr-2">E</span>
           Write the correct word <span className="text-[#31B7F5]">
             much
@@ -141,7 +141,7 @@ const Review1_Page2_Q2 = () => {
               lineHeight: "2",
               display: "flex",
               flexDirection: "column",
-              gap: "50px", // 👈 هذا الجاب
+              gap: "60px", // 👈 هذا الجاب
             }}
           >
             <div>

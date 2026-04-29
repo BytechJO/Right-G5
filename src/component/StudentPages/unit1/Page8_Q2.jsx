@@ -153,12 +153,12 @@ const Page8_Q2 = () => {
   return (
     <div className="p-[30px] flex flex-col items-center">
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-18">
+        <h5 className="header-title-page8 mb-27">
           <span className="ex-A mr-2.5">B</span>
           Write the missing letters to complete the expression.
         </h5>
 
-        <div className="space-y-7 text-[22px]">
+        <div className="space-y-10 text-[22px]">
           {/* 1 */}
           <div className="flex">
             <b className="w-10">1</b>

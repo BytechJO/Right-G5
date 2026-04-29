@@ -131,7 +131,7 @@ const Page_Read_Write = () => {
     >
       <div className="div-forall">
         <h5 className="header-title-page8">
-          <span className="mr-3 mb-10">A</span>
+          <span className="mr-3 mb-20">A</span>
           Read and write the correct word.
         </h5>
 

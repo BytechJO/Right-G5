@@ -22,7 +22,7 @@ const WritingC = () => {
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="w-full h-[120px] border border-gray-300 p-2 outline-none"
+        className="w-full h-[120px] border border-gray-300 p-2 outline-none mt-10"
         placeholder="Write your paragraph here..."
       />
 
