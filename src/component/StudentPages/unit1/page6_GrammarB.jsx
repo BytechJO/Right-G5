@@ -92,7 +92,7 @@ const GrammarB = () => {
           updated[i] = e.target.value;
           setAnswers(updated);
         }}
-        className={`border-b outline-none w-[110px] text-center text-[#6D2980] font-semibold pr-6
+        className={`border-b outline-none w-[210px] text-center text-[#6D2980] font-semibold pr-6
           ${errors[i] ? "border-red-500" : "border-black"}
         `}
       />
@@ -129,13 +129,13 @@ const GrammarB = () => {
   return (
     <div>
       {/* Title */}
-      <h5 className="header-title-page8-read mb-7">
+      <h5 className="header-title-page8-read mb-12">
         <span className="ex-A-read mr-2">B</span>
         Read and complete the questions.
       </h5>
 
       {/* Questions */}
-      <div className="grid grid-cols-2 gap-x-20 gap-y-7 text-[15px] max-w-[700px]">
+      <div className="grid grid-cols-2 gap-x-20 gap-y-12 text-[15px] ">
         {questions.map((q, i) => (
           <div key={i}>
             <span className="font-bold mr-1">{i + 1}</span>

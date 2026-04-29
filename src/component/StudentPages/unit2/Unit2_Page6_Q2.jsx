@@ -100,7 +100,7 @@ const Unit2_Page6_Q2 = () => {
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         disabled={result[i] === true}
-        className={`w-full border-b-2 outline-none text-[#6D2980] font-bold
+        className={`w-full border-b-1 outline-none text-[#6D2980] font-bold
           ${result[i] === false ? "border-red-500" : "border-black"}
         `}
       />

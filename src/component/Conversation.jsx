@@ -119,7 +119,7 @@ const Conversation = ({
   return (
     <div className="w-[60%] mx-auto">
       {/* العنوان */}
-      <div className="flex items-center gap-4 mb-8 mt-3">
+      <div className="flex items-center gap-4 mb-12 mt-3">
         <h2
           className="text-xl font-bold px-3 py-1"
           style={{

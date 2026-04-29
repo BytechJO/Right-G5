@@ -1,215 +1,196 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import WrongMark from "../../WrongMark";
-
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 17/Ex D 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 17/Ex D 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 17/Ex D 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 2 Summer Vacation Folder/Pahe 17/Ex D 4.svg";
-
-import blue from "../../../assets/audio/ClassBook/Unit 2/P 17/unit2-pg17-EXD.mp3";
-
-import Button from "../../Button";
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 17/SVG/Asset 21.svg";
 const Review1_Page2_Q2 = () => {
-  const items = [
-    { img: img1, correct: "no" },
-    { img: img2, correct: "no" },
-    { img: img3, correct: "yes" },
-    { img: img4, correct: "yes" },
-  ];
-
-  const [selected, setSelected] = useState(Array(items.length).fill(""));
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
-  const captions = [
-    {
-      start: 0.419,
-      end: 19.079,
-      text: "Page 17, review one, exercise D. Does it have a long vowel sound? Listen and write check or X. One, sit. Two, desk. Three, dates. Four, green.",
-    },
-  ];
-  const choose = (i, value) => {
-    if (locked) return;
 
-    const updated = [...selected];
-    updated[i] = value;
-    setSelected(updated);
+  const correct = ["many", "much", "many", "much"];
+
+  const normalize = (t) => t.toLowerCase().replace(/[.?]/g, "").trim();
+
+  const handleChange = (i, val) => {
+    if (result[i] === true) return;
+
+    const updated = [...answers];
+    updated[i] = val;
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
 
-  const checkAnswers = () => {
+  // ✅ CHECK
+  const handleCheck = () => {
     if (locked) return;
 
-    if (selected.includes("")) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    items.forEach((item, i) => {
-      if (selected[i] === item.correct) score++;
+    const res = answers.map((a, i) => {
+      const ok = normalize(a) === correct[i];
+      if (ok) correctCount++;
+      return ok;
     });
 
-    const total = items.length;
+    setResult(res);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = correct.length;
 
-    const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-        </span>
-      </div>
-    `;
+    const msg = `Score: ${correctCount} / ${total}`;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
 
+  // 👀 SHOW
+  const handleShow = () => {
+    setAnswers(correct);
+    setResult([]);
     setLocked(true);
   };
 
-  const showAnswers = () => {
-    setSelected(items.map((i) => i.correct));
-    setLocked(true);
-  };
-
-  const reset = () => {
-    setSelected(Array(items.length).fill(""));
+  // 🔄 RESET
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+    setResult([]);
     setLocked(false);
   };
 
+  // 🎯 input
+  const input = (i, width = "250px") => (
+    <span style={{ position: "relative", margin: "0 6px" }}>
+      <input
+        value={answers[i]}
+        onChange={(e) => handleChange(i, e.target.value)}
+        disabled={result[i] === true}
+        style={{
+          borderBottom:
+            result[i] === false ? "1px solid red" : "1px solid black",
+          outline: "none",
+          textAlign: "center",
+          width: width,
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "#6D2980",
+          background: "transparent",
+        }}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-10px",
+            right: "-10px",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
       <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span style={{ marginRight: "20px" }}>D</span>
-          Does it have a{" "}
-          <span style={{ color: "#2e3192" }}>long vowel sound</span>? Listen and
-          write<span style={{ color: "#D52328" }}> ✓ </span>or
-          <span style={{ color: "#D52328" }}> ✗</span>
+        <h5 className="header-title-page8 mb-15">
+          <span className="mr-2">D</span>
+          Write the correct word <span className="text-[#31B7F5]">
+            much
+          </span> or <span className="text-[#31B7F5]">many</span>.
         </h5>
-        <QuestionAudioPlayer src={blue} captions={captions} stopAtSecond={11} />
 
-        {/* GRID */}
-        <div className="grid grid-cols-4 gap-8 mt-10 justify-items-center">
-          {items.map((item, i) => (
-            <div key={i} className="relative flex flex-col items-center">
-              {/* الرقم */}
-              <span className="absolute -top-2 -left-2 text-lg font-bold">
-                {i + 1}
-              </span>
-
-              {/* الصورة */}
-              <img
-                src={item.img}
-                style={{
-                  width: "15vw",
-                  height: "15vh",
-                  objectFit: "contain",
-                }}
-              />
-
-              <div className="flex gap-3 mt-3 items-center">
-                <div
-                  className="flex items-center gap-1"
-                  style={{ position: "relative" }}
-                >
-                  <button
-                    onClick={() => choose(i, "yes")}
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "18px",
-                      cursor: "pointer",
-
-                      background: selected[i] === "yes" ? "#1C398E" : "#fff", // 🔵 دايماً
-                      color: selected[i] === "yes" ? "#fff" : "#000",
-
-                      border: "2px solid #ccc",
-                    }}
-                  >
-                    ✓
-                  </button>
-
-                  {locked &&
-                    selected[i] === "yes" &&
-                    item.correct !== "yes" && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: "-35px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          zIndex: 10,
-                        }}
-                      >
-                        <WrongMark />
-                      </div>
-                    )}
-                </div>
-
-                {/* NO */}
-                <div
-                  className="flex items-center gap-1"
-                  style={{ position: "relative" }}
-                >
-                  <button
-                    onClick={() => choose(i, "no")}
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "18px",
-                      cursor: "pointer",
-
-                      background: selected[i] === "no" ? "#1C398E" : "#fff",
-                      color: selected[i] === "no" ? "#fff" : "#000",
-
-                      border: "2px solid #ccc",
-                    }}
-                  >
-                    ✗
-                  </button>
-                  {locked && selected[i] === "no" && item.correct !== "no" && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        left: "35px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        zIndex: 10,
-                      }}
-                    >
-                      <WrongMark />
-                    </div>
-                  )}
-                </div>
-              </div>
+        {/* المحتوى */}
+        <div style={{ display: "flex", gap: "30px" }}>
+          {/* LEFT QUESTIONS */}
+          <div
+            style={{
+              flex: 1,
+              fontSize: "18px",
+              lineHeight: "2",
+              display: "flex",
+              flexDirection: "column",
+              gap: "50px", // 👈 هذا الجاب
+            }}
+          >
+            <div>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>1</span>
+              How {input(0)} kilometers can you run?
             </div>
-          ))}
-        </div>
 
-        {/* buttons */}
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+            <div>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>2</span>
+              How {input(1)} syrup can I pour on my pancakes?
+            </div>
+
+            <div>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>3</span>
+              How {input(2)} pancakes do you eat?
+            </div>
+
+            <div>
+              <span style={{ fontWeight: "bold", marginRight: "10px" }}>4</span>
+              How {input(3)} water shall we bring?
+            </div>
+          </div>
+
+          {/* RIGHT IMAGE */}
+          <div>
+            <img
+              src={img1}
+              style={{
+                width: "250px",
+                height: "auto",
+                objectFit: "cover",
+                padding: "4px",
+              }}
+            />
+          </div>
+        </div>
+        <div className="action-buttons-container">
+          <button className="try-again-button" onClick={handleReset}>
+            Start Again ↻
+          </button>
+
+          <button onClick={handleShow} className="show-answer-btn">
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={handleCheck}>
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );

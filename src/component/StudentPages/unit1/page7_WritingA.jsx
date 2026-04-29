@@ -142,7 +142,7 @@ const WritingA = () => {
   return (
     <div>
       {/* Title */}
-      <h5 className="header-title-page8-read mb-6">
+      <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">A</span>
         Use the information from the article to write a short answer for each
         question.

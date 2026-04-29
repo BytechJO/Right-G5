@@ -85,7 +85,7 @@ const Page_Read_Write = () => {
             return copy;
           });
         }}
-        className={`border-b-2 outline-none text-center text-[#6D2980] font-semibold bg-transparent
+        className={`border-b-1 outline-none text-center text-[#6D2980] font-semibold bg-transparent
         ${result[i] === false ? "border-red-500" : "border-black"}
         ${width}`}
       />

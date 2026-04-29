@@ -92,7 +92,7 @@ const Review1_Page1_Q2 = () => {
         value={answers[i]}
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
-        className={`border-b-2 outline-none text-center text-[#6D2980] font-bold bg-transparent ${width}
+        className={`border-b-1 outline-none text-center text-[#6D2980] font-bold bg-transparent ${width}
           ${result[i] === false ? "border-red-500" : "border-black"}
         `}
       />
@@ -128,7 +128,7 @@ const Review1_Page1_Q2 = () => {
     <div className="p-8 flex flex-col items-center">
       <div className="div-forall">
         <h5 className="header-title-page8 mb-30">
-          <span className="ex-A mr-8">B</span>
+          <span className=" mr-2">B</span>
           Unscramble and write the expression.
         </h5>
 

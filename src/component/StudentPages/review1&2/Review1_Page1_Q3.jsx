@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 8/SVG/Asset 5.svg";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16/SVG/Asset 26.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16/SVG/Asset 14.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16/SVG/Asset 27.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16/SVG/Asset 16.svg";
+import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 16/SVG/Asset 29.svg";
 
 const Review1_Page1_Q3 = () => {
   const [selectedImg, setSelectedImg] = useState(null);
@@ -27,18 +27,18 @@ const Review1_Page1_Q3 = () => {
   ];
 
   const sentences = [
-    { id: 0, text: "pancakes" },
-    { id: 1, text: "mirror" },
-    { id: 2, text: "face" },
-    { id: 3, text: "notebook" },
-    { id: 4, text: "pillow" },
+    { id: 0, text: "How long?" },
+    { id: 1, text: "How many?" },
+    { id: 2, text: "How deep?" },
+    { id: 3, text: "How tall?" },
+    { id: 4, text: "How tiny?" },
   ];
 
   const correct = {
-    0: 4,
-    1: 1,
-    2: 0,
-    3: 3,
+    0: 0,
+    1: 3,
+    2: 4,
+    3: 1,
     4: 2,
   };
 
@@ -157,16 +157,9 @@ const Review1_Page1_Q3 = () => {
     >
       <div
         className="div-forall"
-        style={{
-          width: "100%",
-          maxWidth: "900px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-        }}
       >
-        <h5 className="header-title-page8  mb-12">
-          <span className="ex-A mr-2.5">C</span>
+        <h5 className="header-title-page8  mb-6">
+          <span className=" mr-3">C</span>
           Look, read, and match.{" "}
         </h5>
 
@@ -177,13 +170,13 @@ const Review1_Page1_Q3 = () => {
               <div
                 key={i}
                 onClick={() => selectImage(i)}
-                className="flex flex-col items-center gap-2 cursor-pointer transition"
+                className="relative flex flex-col items-center cursor-pointer transition"
               >
                 <img
                   src={img.img}
                   style={{
                     width: "200px",
-                    height: "100px",
+                    height: "200px",
                     objectFit: "contain",
                     border:
                       selectedImg === i
@@ -197,11 +190,16 @@ const Review1_Page1_Q3 = () => {
                 />
 
                 <div
-                  ref={(el) => (imageRefs.current[i] = el)} // 🔥 الريف هون على الدوت
-                  className="w-3 h-3 rounded-full mt-2 transition"
+                  ref={(el) => (imageRefs.current[i] = el)}
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition z-10"
                   style={{
-                    backgroundColor: selectedImg === i ? "#00AEEF" : "#00AEEF",
-                    transform: selectedImg === i ? "scale(1.4)" : "scale(1)",
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "#00AEEF",
+                    transform:
+                      selectedImg === i
+                        ? "translate(-50%, -50%) scale(1.4)"
+                        : "translate(-50%, -50%)",
                   }}
                 ></div>
               </div>
@@ -209,7 +207,7 @@ const Review1_Page1_Q3 = () => {
           </div>
 
           {/* 🔥 الجمل تحت */}
-          <div className="grid grid-cols-5 w-full">
+          <div className="grid grid-cols-5 w-full mb-15">
             {sentences.map((sent, i) => (
               <div
                 key={i}

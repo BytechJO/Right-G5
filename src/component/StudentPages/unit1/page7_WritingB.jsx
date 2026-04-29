@@ -34,7 +34,7 @@ const WritingB = () => {
   return (
     <div>
       {/* Title */}
-      <h5 className="header-title-page8-read mb-7">
+      <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">B</span>
         Choose a topic that interests you. Answer the questions below about your
         topic.

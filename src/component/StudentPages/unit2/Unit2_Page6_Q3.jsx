@@ -220,7 +220,7 @@ const Unit2_Page6_Q3 = () => {
                 value={answers[i]}
                 onChange={(e) => handleChange(i, e.target.value)}
                 disabled={result[i]?.answer === true}
-                className={`border-b-2 w-[150px] outline-none text-[#6D2980] font-bold
+                className={`border-b-1 w-[150px] outline-none text-[#6D2980] font-bold
                   ${result[i]?.answer === false ? "border-red-500" : "border-black"}
                 `}
               />

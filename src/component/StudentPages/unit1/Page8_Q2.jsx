@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Button from "../../Button";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { useRef } from "react";
 
 const Page8_Q2 = () => {
-  const [answers, setAnswers] = useState(Array(30).fill(""));
+  const inputsRef = useRef([]);
+  const [answers, setAnswers] = useState(Array(32).fill(""));
   const [locked, setLocked] = useState(false);
   const correct = [
     "u",
@@ -51,10 +53,18 @@ const Page8_Q2 = () => {
   const [result, setResult] = useState([]);
   const handleChange = (i, value) => {
     const updated = [...answers];
-    updated[i] = value.slice(-1);
-    setAnswers(updated);
-  };
 
+    // ✨ خذ آخر حرف فقط (overwrite كامل)
+    const lastChar = value.slice(-1);
+
+    updated[i] = lastChar;
+    setAnswers(updated);
+
+    // ➡️ روح للي بعده
+    if (lastChar && i < answers.length - 1) {
+      inputsRef.current[i + 1]?.focus();
+    }
+  };
   const checkAnswers = () => {
     if (locked) return;
 
@@ -103,6 +113,7 @@ const Page8_Q2 = () => {
   const input = (i) => (
     <span className="relative mx-1">
       <input
+        ref={(el) => (inputsRef.current[i] = el)}
         disabled={result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
@@ -112,7 +123,7 @@ const Page8_Q2 = () => {
   `}
       />
 
-      {result[i] === false  && (
+      {result[i] === false && (
         <div
           style={{
             position: "absolute",

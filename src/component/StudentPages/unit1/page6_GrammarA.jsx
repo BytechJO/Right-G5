@@ -19,7 +19,7 @@ const GrammarA = () => {
           <img
             src={img}
             alt=""
-            style={{ width: "40px", height: "40px", marginTop: 1 }}
+            style={{ width: "40px", height: "40px", marginTop: -6 }}
           />
 
           <div >
@@ -49,7 +49,7 @@ const GrammarA = () => {
           <img
             src={img}
             alt=""
-            style={{ width: "40px", height: "40px", marginTop: 1 }}
+            style={{ width: "40px", height: "40px", marginTop: -6 }}
           />
 
           <div>

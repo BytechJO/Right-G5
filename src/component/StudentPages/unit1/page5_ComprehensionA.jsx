@@ -151,6 +151,7 @@ const ComprehensionA = () => {
                         <input
                           disabled={locked || errors[i]?.[field] === false}
                           value={answers[i][field] || ""}
+                          placeholder="Type here..."
                           onChange={(e) =>
                             handleChange(i, field, e.target.value)
                           }

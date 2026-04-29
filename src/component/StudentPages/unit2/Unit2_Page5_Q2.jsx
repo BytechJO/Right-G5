@@ -123,7 +123,7 @@ const Unit2_Page5_Q2 = () => {
   };
   const getDropClass = (i) =>
     `relative inline-block min-w-[90px] mx-1 text-center text-[#6D2980]
-   border-b-2
+   border-b-1
    ${result[i] === false ? "border-red-500" : "border-black"}
    ${answers[i] ? "cursor-pointer hover:bg-purple-100" : ""}
   `;
