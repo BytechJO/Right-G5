@@ -6,22 +6,22 @@ import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 import Conversation from "../../Conversation";
 import Vocabulary from "../../Vocabulary";
 import VocabularAudio from "../../../assets/audio/ClassBook/U3/PG 22/vocab.mp3";
-import sound1 from "../../../assets/audio/ClassBook/U2/PG 10/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/U2/PG 10/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/U2/PG 10/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/U2/PG 10/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/U2/PG 10/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/U2/PG 10/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/U2/PG 10/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/U2/PG 10/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/U2/PG 10/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/U2/PG 10/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/U2/PG 10/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/U2/PG 10/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/U2/PG 10/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/U2/PG 10/sound14.mp3";
-import sound15 from "../../../assets/audio/ClassBook/U2/PG 10/sound15.mp3";
-import sound16 from "../../../assets/audio/ClassBook/U2/PG 10/sound16.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U3/PG 22/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U3/PG 22/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U3/PG 22/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U3/PG 22/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U3/PG 22/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U3/PG 22/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U3/PG 22/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U3/PG 22/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U3/PG 22/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U3/PG 22/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U3/PG 22/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U3/PG 22/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U3/PG 22/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U3/PG 22/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U3/PG 22/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U3/PG 22/sound16.mp3";
 import CriticalThinking from "../../CriticalThinking";
 import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 1.svg";
 import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 2.svg";
@@ -242,53 +242,56 @@ const Unit3_Page1 = ({ openPopup }) => {
   ];
   const captionVoc = [
     {
-      start: 0.099,
-      end: 7.58,
-      text: "Page 10, Unit 2, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
+      start: 0.14,
+      end: 8.079,
+      text: "Page 22, Unit 3, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
     },
 
-    { start: 8.679, end: 11.019, text: "1. carnival." },
-    { start: 11.019, end: 13.579, text: "2. trims." },
-    { start: 13.579, end: 16.319, text: "3. crazy." },
-    { start: 16.319, end: 19.059, text: "4. twisty." },
+    { start: 9.099, end: 10.599, text: "1. curry." },
+    { start: 11.479, end: 13.199, text: "2. fridge." },
+    { start: 14.079, end: 15.979, text: "3. cupboards." },
+    { start: 16.879, end: 19.239, text: "4. rye bread." },
 
-    { start: 19.059, end: 21.619, text: "5. couple." },
-    { start: 21.619, end: 24.439, text: "6. merry-go-round." },
-    { start: 24.439, end: 27.099, text: "7. still." },
-    { start: 27.099, end: 29.639, text: "8. bag." },
+    { start: 20.219, end: 22.079, text: "5. tasty." },
+    { start: 23.079, end: 25.079, text: "6. sardines." },
+    { start: 26.0, end: 27.819, text: "7. salty." },
+    { start: 28.68, end: 30.639, text: "8. peanut butter." },
 
-    { start: 29.639, end: 32.599, text: "9. a few." },
-    { start: 32.599, end: 34.779, text: "10. giraffe." },
-    { start: 34.779, end: 37.879, text: "11. not so fast." },
+    { start: 31.5, end: 33.579, text: "9. marshmallows." },
+    { start: 34.34, end: 36.059, text: "10. yummy." },
+    { start: 37.059, end: 39.18, text: "11. try some." },
 
-    { start: 37.879, end: 40.779, text: "12. let's see." },
-    { start: 40.779, end: 44.159, text: "13. first thing." },
-    { start: 44.159, end: 47.419, text: "14. stays behind." },
+    { start: 40.2, end: 42.18, text: "12. no way." },
+    { start: 43.139, end: 45.539, text: "13. tastes funny." },
+    { start: 46.539, end: 48.599, text: "14. help yourself." },
+    { start: 49.52, end: 51.399, text: "15. really?" },
 
-    { start: 47.419, end: 51.18, text: "15. keep my feet on the ground." },
-    { start: 51.18, end: 53.419, text: "16. works out." },
+    { start: 52.459, end: 55.379, text: "16. that doesn't sound good." },
+
+    { start: 56.419, end: 58.36, text: "17. top off." },
   ];
   const wordTimingsVoc = [
-    { start: 8.679, end: 11.019 },
-    { start: 11.019, end: 13.579 },
-    { start: 13.579, end: 16.319 },
-    { start: 16.319, end: 19.059 },
+    { start: 9.099, end: 10.599 }, // curry
+    { start: 11.479, end: 13.199 }, // fridge
+    { start: 14.079, end: 15.979 }, // cupboards
+    { start: 16.879, end: 19.239 }, // rye bread
 
-    { start: 19.059, end: 21.619 },
-    { start: 21.619, end: 24.439 },
-    { start: 24.439, end: 27.099 },
-    { start: 27.099, end: 29.639 },
+    { start: 20.219, end: 22.079 }, // tasty
+    { start: 23.079, end: 25.079 }, // sardines
+    { start: 26.0, end: 27.819 }, // salty
+    { start: 28.68, end: 30.639 }, // peanut butter
 
-    { start: 29.639, end: 32.599 },
-    { start: 32.599, end: 34.779 },
-    { start: 34.779, end: 37.879 },
+    { start: 31.5, end: 33.579 }, // marshmallows
+    { start: 34.34, end: 36.059 }, // yummy
+    { start: 37.059, end: 39.18 }, // try some
 
-    { start: 37.879, end: 40.779 },
-    { start: 40.779, end: 44.159 },
-    { start: 44.159, end: 47.419 },
+    { start: 40.2, end: 42.18 }, // no way
+    { start: 43.139, end: 45.539 }, // tastes funny
+    { start: 46.539, end: 48.599 }, // help yourself
+    { start: 49.52, end: 51.399 }, // really
 
-    { start: 47.419, end: 51.18 },
-    { start: 51.18, end: 53.419 },
+    { start: 52.459, end: 55.379 }, // that doesn't sound good
+    { start: 56.419, end: 58.36 }, // top off
   ];
   return (
     <div
@@ -367,22 +370,23 @@ const Unit3_Page1 = ({ openPopup }) => {
                   sounds={sounds}
                   wordTimings={wordTimingsVoc}
                   words={[
-                    "carnival",
-                    "trims",
-                    "crazy",
-                    "twisty",
-                    "couple",
-                    "merry-go-round",
-                    "still",
-                    "bag",
-                    "(a) few",
-                    "giraffe",
-                    "not so fast",
-                    "let's see",
-                    "first thing",
-                    "stays behind",
-                    "keep my feet on the ground",
-                    "works out",
+                    "curry",
+                    "fridge",
+                    "cupboards",
+                    "rye bread",
+                    "tasty",
+                    "sardines",
+                    "salty",
+                    "peanut butter",
+                    "marshmallows",
+                    "yummy",
+                    "try some",
+                    "no way",
+                    "tastes funny",
+                    "help yourself",
+                    "really",
+                    "that doesn't sound good",
+                    "top off",
                   ]}
                 />
               </div>,

@@ -126,7 +126,7 @@ const ComprehensionA = () => {
         Finish the chart.
       </h5>
 
-      <table className="w-full border-2 border-[#6D2980] text-[14px] text-center border-collapse mt-15">
+      <table className="w-full border-2 border-[#6D2980] text-[14px] text-center border-collapse mt-10">
         <thead>
           <tr className="bg-purple-100">
             <th className="border p-2">Record</th>
