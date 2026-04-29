@@ -140,8 +140,15 @@ const WritingA = () => {
     </div>
   );
   return (
-    <div>
-      {/* Title */}
+   <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div className="div-forall">
       <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">A</span>
         Use the information from the article to write a short answer for each
@@ -149,7 +156,7 @@ const WritingA = () => {
       </h5>
 
       {/* Inputs */}
-      <div className="space-y-4 ]">
+      <div className="space-y-4">
         {/* Who */}
         <div className="flex items-center gap-2">
           <span className=" w-[70px]">Who?</span>
@@ -238,6 +245,7 @@ const WritingA = () => {
           </span>
         </div>
       </div>
+    </div>
     </div>
   );
 };
