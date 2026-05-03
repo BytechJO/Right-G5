@@ -1,255 +1,237 @@
 import React, { useState } from "react";
-import "./Unit3_Page6_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 27/Ex D 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 27/Ex D 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 27/Ex D 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 27/Ex D 4.svg";
+const Unit3_Page6_Q1 = () => {
+  // ✅ الأزواج الصحيحة
+  const correctPairs = [
+    ["no", "way"],
+    ["tastes", "funny"],
+    ["try", "some"],
+    ["help", "yourself"],
+    ["top", "off"],
+  ];
 
-const questions = [
-  {
-    id: 1,
-    text: "Do they have any vegetables?",
-    image: img1,
-    options: ["Yes, they do have some.", "No, they don’t have any."],
-    correct: "No, they don’t have any.",
-  },
-  {
-    id: 2,
-    text: "Does she have any hats?",
-    image: img2,
-    options: ["Yes, she has some.", "No, she doesn’t have any."],
-    correct: "Yes, she has some.",
-  },
-  {
-    id: 3,
-    text: "Do they have any hot drinks?",
-    image: img3,
-    options: ["Yes, they do have some.", "No, they don’t have any."],
-    correct: "No, they don’t have any.",
-  },
-  {
-    id: 4,
-    text: "Does she have any ice cream?",
-    image: img4,
-    options: ["Yes, she has some.", "No, she doesn’t have any."],
-    correct: "No, she doesn’t have any.",
-  },
-];
+  const [answers, setAnswers] = useState(
+    Array(5)
+      .fill(0)
+      .map(() => ["", ""]),
+  );
+  const [result, setResult] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-export default function CircleQuestions() {
-  const [answers, setAnswers] = useState({});
-  const [wrongAnswers, setWrongAnswers] = useState({});
-  const [showResult, setShowResult] = useState(false);
-
-  const handleSelect = (qId, option) => {
-    if (showResult) return;
-    setAnswers({ ...answers, [qId]: option });
-  };
+  const normalize = (s) => s.toLowerCase().trim();
 
   // ✅ CHECK
-  const checkAnswers = () => {
-    if (showResult) return;
+  const handleCheck = () => {
+    if (locked) return;
 
-    if (Object.keys(answers).length !== questions.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please answer all questions before checking.",
-      );
+    if (answers.some((pair) => !pair[0] || !pair[1])) {
+      ValidationAlert.info("Complete all answers.");
       return;
     }
 
     let correctCount = 0;
-    const wrong = {};
 
-    questions.forEach((q) => {
-      if (answers[q.id] === q.correct) {
-        correctCount++;
-        wrong[q.id] = false;
-      } else {
-        wrong[q.id] = true;
-      }
+    const userPairs = answers.map((pair) => pair.map(normalize).join(" "));
+
+    const correctFormatted = correctPairs.map((pair) =>
+      pair.map(normalize).join(" "),
+    );
+
+    const res = userPairs.map((pair) => {
+      const ok = correctFormatted.includes(pair);
+      if (ok) correctCount++;
+      return ok;
     });
 
-    setWrongAnswers(wrong);
-    setShowResult(true);
+    setResult(res);
 
-    const total = questions.length;
+    const total = correctPairs.length;
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const scoreMessage = `
+    const msg = `
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold;">
+        <span style="color:${color}; font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  // ✅ SHOW ANSWERS
-  const showAnswers = () => {
-    const correct = {};
-    questions.forEach((q) => {
-      correct[q.id] = q.correct;
-    });
-
-    setAnswers(correct);
-    setWrongAnswers({});
-    setShowResult(true);
+  // 👀 SHOW
+  const handleShow = () => {
+    setAnswers(correctPairs);
+    setResult([]);
+    setLocked(true);
   };
 
-  // ✅ RESET
-  const reset = () => {
-    setAnswers({});
-    setWrongAnswers({});
-    setShowResult(false);
+  // 🔄 RESET
+  const handleReset = () => {
+    setAnswers(
+      Array(5)
+        .fill(0)
+        .map(() => ["", ""]),
+    );
+    setResult([]);
+    setLocked(false);
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-        paddingBottom: "120px",
-      }}
-    >
-      <div className="div-forall">
-        <h5 className="header-title-page8 pb-2.5">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
-            D
-          </span>
-          Read and circle.
-        </h5>
+  // 🎯 input
+  const input = (row, col) => (
+    <span className="relative inline-block mx-2">
+      <input
+        value={answers[row][col]}
+        disabled={locked}
+        onFocus={(e) => e.target.select()}
+        onChange={(e) => {
+          if (result[row] === true) return;
 
-        {/* QUESTIONS */}
-        <div
+          const updated = [...answers];
+          updated[row][col] = e.target.value;
+          setAnswers(updated);
+
+          setResult((prev) => {
+            const copy = [...prev];
+            copy[row] = undefined;
+            return copy;
+          });
+        }}
+        className={`border-b outline-none text-center text-[#6D2980] font-bold bg-transparent w-[120px]
+        ${result[row] === false ? "border-red-500" : "border-black"}`}
+      />
+
+      {result[row] === false && (
+        <span
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr", // 🔥 عمودين
-            gap: "40px 60px",
-            width: "100%",
-            maxWidth: "900px",
+            position: "absolute",
+            top: "-10px",
+            right: "-10px",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
+            zIndex: 3,
           }}
         >
-          {questions.map((q) => (
-            <div
-              key={q.id}
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-            >
-              {/* QUESTION */}
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <span style={{ fontWeight: "bold", color: "#2c5287" }}>
-                  {q.id}
-                </span>
-                <span>{q.text}</span>
-              </div>
+          ✕
+        </span>
+      )}
+    </span>
+  );
 
-              {/* IMAGE */}
-              <div
-                style={{
-                  width: "100%",
-                  maxWidth: "400px",
-                  aspectRatio: "16 / 9",
-                  border: "3px solid orange",
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                }}
-              >
-                <img
-                  src={q.image}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center top",
-                    transform: "scale(1.1)", // 🔥 الحل
-                  }}
-                />
-              </div>
-              {/* OPTIONS */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                {q.options.map((opt, i) => {
-                  const isSelected = answers[q.id] === opt;
-                  const isCorrect = opt === q.correct;
+  return (
+    <div className="flex flex-col items-center p-8">
+      <div className="div-forall">
+        <h5 className="header-title-page8 mb-10">
+          <span className="ex-A mr-2.5">D</span>
+          Put the words together to make expressions or sentences.
+        </h5>
 
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => handleSelect(q.id, opt)}
-                      style={{
-                        cursor: "pointer",
-                        padding: "8px 16px",
-                        borderRadius: "25px",
-                        border: "2px solid",
-                        width: "fit-content",
-                        fontSize: "16px",
+        {/* WORD BANK */}
+        <div className="bg-[#D4C7DC] rounded-xl flex justify-between text-[18px] p-6 mb-15 w-[500px] mx-auto">
+          {/* العمود الأول */}
+          <div className="flex flex-col gap-6">
+            <div>no</div>
+            <div>try</div>
+          </div>
 
-                        borderColor: isSelected
-                          ? showResult
-                            ? isCorrect
-                              ? "#1C398E"
-                              : "red"
-                            : "#1C398E"
-                          : "#ccc",
+          {/* العمود الثاني */}
+          <div className="flex flex-col gap-6">
+            <div>way</div>
+            <div>yourself</div>
+          </div>
 
-                        color: isSelected ? "#1C398E" : "black",
+          {/* العمود الثالث */}
+          <div className="flex flex-col gap-6">
+            <div>tastes</div>
+            <div>help</div>
+          </div>
 
-                        background: "#fff",
-                      }}
-                    >
-                      {opt}
+          {/* العمود الرابع */}
+          <div className="flex flex-col gap-6">
+            <div>some</div>
+            <div>top</div>
+          </div>
 
-                      {/* ❌ WRONG */}
-                      {showResult && isSelected && !isCorrect && (
-                        <span
-                          style={{
-                            marginLeft: "6px",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "18px",
-                            height: "18px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            fontSize: "12px",
-                          }}
-                        >
-                          ✕
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+          {/* العمود الخامس */}
+          <div className="flex flex-col gap-6">
+            <div>funny</div>
+            <div>off</div>
+          </div>
         </div>
 
+        {/* QUESTIONS */}
+        <div className="space-y-15 text-[18px]">
+          {/* الصف الأول */}
+          <div className="flex justify-between">
+            <div>
+              <span className="font-bold mr-3">1</span>
+              {input(0, 0)} {input(0, 1)}
+            </div>
+
+            <div>
+              <span className="font-bold mr-3">2</span>
+              {input(1, 0)} {input(1, 1)}
+            </div>
+          </div>
+
+          {/* الصف الثاني */}
+          <div className="flex justify-between">
+            <div>
+              <span className="font-bold mr-3">3</span>
+              {input(2, 0)} {input(2, 1)}
+            </div>
+
+            <div>
+              <span className="font-bold mr-3">4</span>
+              {input(3, 0)} {input(3, 1)}
+            </div>
+          </div>
+
+          {/* الصف الثالث */}
+          <div>
+            <span className="font-bold mr-3">5</span>
+            {input(4, 0)} {input(4, 1)}
+          </div>
+        </div>
         {/* BUTTONS */}
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+        <div className="action-buttons-container mt-6">
+          <button className="try-again-button" onClick={handleReset}>
+            Start Again ↻
+          </button>
+
+          <button onClick={handleShow} className="show-answer-btn">
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={handleCheck}>
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Unit3_Page6_Q1;

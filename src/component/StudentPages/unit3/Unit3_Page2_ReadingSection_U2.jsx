@@ -1,38 +1,44 @@
-import ReadingSection from "../../ReadingSection";
+import ReadingSection from "./ReadingSection";
 import ComprehensionA from "./Unit3_Page2_ComprehensionA";
 import ComprehensionB from "./Unit3_Page2_ComprehensionB";
 
-import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 11/SVG/Asset 1.svg";
-import readingAudio from "../../../assets/audio/ClassBook/U2/PG 11/reading_U2.mp3";
+import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 23/SVG/Asset 23.svg";
+import readingAudio from "../../../assets/audio/ClassBook/U3/PG 23/pg23-reading.mp3";
 
 const ReadingSection_U2 = () => {
   const paragraphs = [
-    "Twins are babies who are born at the same time from the same mom. Most of us know about twins who look the same and sometimes dress the same. Also, there are unusual sets of twins that are born very so often.",
+    "What do you want to be when you get older? What jobs interest you? What are people like who do these jobs? Have you ever thought of being a news commentator or analyst?",
 
-    "For example, there are twins who look alike, but it's the opposite sides of their bodies that are alike. They are called mirror-image twins. For example, one has a birthmark on the right arm, and the other twin will have the same birthmark on the left arm.",
+    "Linda Robinson is a news commentator for a news station in the United States of America. A news station reports the news that many different people might be interested in. She is also a senior news analyst on TV. Her job is to tell people how the news might affect the world.",
 
-    "Another type of twin is dwarf twins. A dwarf is a person who does not grow at a usual rate, so their body is sized differently than other people's. Sometimes one twin has a disability and the other doesn't. In one case, twins were born and both were dwarfs, but this doesn't happen very often.",
-
-    "Sometimes, twins are joined together at one part of their body. They are called conjoined twins, and they can often be separated. If they are twins who share the same heart or another important part of the body, they must stay together. Conjoined twins are not born very often, either.",
-
-    'All twins usually grow up being very close. They might like the same things, choose similar jobs, or dress alike. Being a twin must be a "one-of-a-kind" experience!',
+    "Linda is known for her thoughtful comments on the news. She is also a good speaker. She is an author, and she is also famous for some of her books. She is married to a professor at a famous university, and they have two children. Linda and her husband have written a book together. Linda is a busy person who always tries to do her best. Many people like watching Linda on the news. Have you ever thought of being on TV or the radio?",
   ];
 
   const captions = [
     {
-      start: 0.439,
-      end: 8.38,
-      text: "Page eleven reading. Have you ever seen two people who look exactly alike? Do you have a brother or sister who looks exactly like you?",
+      start: 0.179,
+      end: 6.22,
+      text: "Page 23, reading. Is there something you would like to be when you get older? Why do you want to be this?",
     },
     {
-      start: 9.04,
-      end: 49.419,
-      text: "Unusual sets of twins. Twins are babies who are born at the same time from the same mom. Most of us know about twins who look the same and sometimes dress the same. Also, there are unusual sets of twins that are born very so often. For example, there are twins who look alike, but it's the opposite sides of their bodies that are alike. They are called mirror-image twins. For example, one has a birthmark on the right arm, and the other twin will have the same birthmark on the left arm. Another type of twin is dwarf twins. A dwarf is a person who does not grow at a usual rate, so their body is sized differently than other people's.",
+      start: 6.76,
+      end: 8.22,
+      text: " Let me introduce you.",
     },
     {
-      start: 50.579,
-      end: 89.18,
-      text: " Sometimes one twin has a disability and the other doesn't. In one case, twins were born and both were dwarfs, but this doesn't happen very often. Sometimes, twins are joined together at one part of their body. They are called conjoined twins, and they can often be separated. If they are twins who share the same heart or another important part of the body, they must stay together. Conjoined twins are not born very often, either.All twins usually grow up being very close. They might like the same things, choose similar jobs, or dress alike. Being a twin must be a one-of-a-kind experience!",
+      start: 9.02,
+      end: 18.859,
+      text: "What do you want to be when you get older? What jobs interest you? What are people like who do these jobs? Have you ever thought of being a news commentator or analyst?",
+    },
+    {
+      start: 19.939,
+      end: 50.959,
+      text: "Linda Robinson is a news commentator for a news station in the United States of America. A news station reports the news that many different people might be interested in. She is also a senior news analyst on TV. Her job is to tell people how the news might affect the world. Linda is known for her thoughtful comments on the news. She is also a good speaker. She is an author, and she is also famous for some of her books. She is married to a professor at a famous university, and they have two children.",
+    },
+    {
+      start: 52.059,
+      end: 63.879,
+      text: "Linda and her husband have written a book together. Linda is a busy person who always tries to do her best. Many people like watching Linda on the news. Have you ever thought of being on TV or the radio?",
     },
   ];
 
@@ -41,17 +47,18 @@ const ReadingSection_U2 = () => {
       <ReadingSection
         mainTitle={
           <>
-            Have you ever seen two people who look exactly alike? <br />
-            Do you have a brother or sister who looks exactly like you?
+            Is there something you would like to be when you get
+            <br />
+            older? Why do you want to be this?
           </>
         }
-        title="Unusual Sets of Twins"
+        title="Let Me Introduce You!"
         image={imgReading}
         paragraphs={paragraphs}
-        question="Think of two other things that would be unusual about being a twin."
+        question="What do you think she is like? What would you like to ask Linda Robinson?"
         sound={readingAudio}
         captions={captions}
-        stopAtSecond={8.5}
+        stopAtSecond={6.5}
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

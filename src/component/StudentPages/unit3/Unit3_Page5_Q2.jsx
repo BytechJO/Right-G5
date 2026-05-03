@@ -1,321 +1,327 @@
 import React, { useState } from "react";
-import "./Unit3_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import WrongMark from "../../WrongMark";
-
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 3 Lala Goes Shopping Folder/Page 26/Ex B 6.svg";
-
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Button from "../../Button";
 
-const data = [
-  {
-    img: img1,
-    before: "There are",
-    after: "bananas in the fridge.",
-    answer: "a few",
-  },
-  {
-    img: img2,
-    before: "There’s",
-    after: "orange juice.",
-    answer: "a little",
-  },
-  {
-    img: img3,
-    before: "There is",
-    after: "water in the glass.",
-    answer: "a little",
-  },
-  {
-    img: img4,
-    before: "There is",
-    after: "chocolate cake.",
-    answer: "a little",
-  },
-  {
-    img: img5,
-    before: "There’s",
-    after: "sugar.",
-    answer: "a little",
-  },
-  {
-    img: img6,
-    before: "There are",
-    after: "apples in the bowl.",
-    answer: "a few",
-  },
-];
-
-const options = [
-  { id: "o1", value: "a little" },
-  { id: "o2", value: "a few" },
-];
-
-export default function Unit3_Page5_Q2() {
-  const [inputs, setInputs] = useState(Array(data.length).fill(""));
-  const [wrongInputs, setWrongInputs] = useState(
-    Array(data.length).fill(false),
+const Unit3_Page5_Q2 = () => {
+  const [result, setResult] = useState({});
+  const [locked, setLocked] = useState(false);
+  const inputsRef = React.useRef({});
+  const [direction, setDirection] = useState("across");
+  const [grid, setGrid] = useState(
+    Array(10)
+      .fill("")
+      .map(() => Array(12).fill("")),
   );
-  const [showAnswer, setShowAnswer] = useState(false);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || showAnswer) return;
+  const words = [
+    { key: "d1", word: "cupboards", row: 0, col: 3, dir: "down" },
+    { key: "a2", word: "yummy", row: 1, col: 2, dir: "across" },
+    { key: "a3", word: "fridge", row: 5, col: 5, dir: "across" },
+    { key: "d4", word: "rye", row: 5, col: 6, dir: "down" },
+    { key: "a5", word: "sardines", row: 7, col: 0, dir: "across" },
+  ];
+  const normalize = (str) => str.toLowerCase().trim();
 
-    const value = options.find((o) => o.id === result.draggableId)?.value;
+  // ✅ change
+  const handleChange = (row, col, value) => {
+    if (locked) return;
 
-    const index = Number(result.destination.droppableId);
+    const newGrid = grid.map((r) => [...r]);
+    newGrid[row][col] = value;
+    setGrid(newGrid);
 
-    setInputs((prev) => {
-      const copy = [...prev];
-      copy[index] = value;
-      return copy;
-    });
+    if (value) {
+      let next = null;
 
-    setWrongInputs(Array(data.length).fill(false));
+      if (direction === "across") {
+        next = inputsRef.current[`${row}-${col + 1}`];
+      }
+
+      if (direction === "down") {
+        next = inputsRef.current[`${row + 1}-${col}`];
+      }
+
+      if (next) next.focus();
+    }
   };
 
-  const checkAnswers = () => {
-    if (showAnswer) return;
+  // ✅ check active cell
+  const isCellActive = (row, col) => {
+    return words.some((w) => {
+      for (let i = 0; i < w.word.length; i++) {
+        const r = w.dir === "down" ? w.row + i : w.row;
+        const c = w.dir === "across" ? w.col + i : w.col;
+        if (r === row && c === col) return true;
+      }
+      return false;
+    });
+  };
 
-    if (inputs.some((i) => i === "")) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please fill in all the answers before checking.",
-      );
-      return;
+  // ✅ check answers
+  const checkAnswers = () => {
+    if (locked) return;
+
+    // تحقق تعبئة
+    for (let w of words) {
+      for (let i = 0; i < w.word.length; i++) {
+        const r = w.dir === "down" ? w.row + i : w.row;
+        const c = w.dir === "across" ? w.col + i : w.col;
+
+        if (!grid[r][c]) {
+          ValidationAlert.info("Please complete all fields.");
+          return;
+        }
+      }
     }
 
-    let correct = 0;
-    const wrong = [];
+    let correctCount = 0;
+    let newResult = {};
 
-    data.forEach((item, i) => {
-      if (inputs[i] === item.answer) {
-        correct++;
-        wrong[i] = false;
-      } else {
-        wrong[i] = true;
+    words.forEach((w) => {
+      let user = "";
+
+      for (let i = 0; i < w.word.length; i++) {
+        const r = w.dir === "down" ? w.row + i : w.row;
+        const c = w.dir === "across" ? w.col + i : w.col;
+        user += grid[r][c];
+      }
+
+      const ok = normalize(user) === normalize(w.word);
+
+      if (ok) correctCount++;
+
+      newResult[w.key] = ok;
+    });
+
+    setResult(newResult);
+
+    const total = words.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // ✅ show answers
+  const showAnswers = () => {
+    const newGrid = grid.map((r) => [...r]);
+
+    words.forEach((w) => {
+      for (let i = 0; i < w.word.length; i++) {
+        const r = w.dir === "down" ? w.row + i : w.row;
+        const c = w.dir === "across" ? w.col + i : w.col;
+
+        newGrid[r][c] = w.word[i];
       }
     });
 
-    setWrongInputs(wrong);
-    setShowAnswer(true);
-
-    const total = data.length;
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    const scoreMessage = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold;">
-        Score: ${correct} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (correct === total) ValidationAlert.success(scoreMessage);
-    else if (correct === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    setGrid(newGrid);
+    setLocked(true);
   };
 
-  const handleShowAnswer = () => {
-    setInputs(data.map((d) => d.answer));
-    setWrongInputs(Array(data.length).fill(false));
-    setShowAnswer(true);
+  const reset = () => {
+    setGrid(
+      Array(10)
+        .fill("")
+        .map(() => Array(12).fill("")),
+    );
+    setResult({});
+    setLocked(false);
   };
 
-  const handleReset = () => {
-    setInputs(Array(data.length).fill(""));
-    setWrongInputs(Array(data.length).fill(false));
-    setShowAnswer(false);
+  // ✅ numbers
+  const getNumber = (row, col) => {
+    if (row === 0 && col === 3) return 1;
+    if (row === 1 && col === 2) return 2;
+    if (row === 5 && col === 5) return 3;
+    if (row === 5 && col === 6) return 4;
+    if (row === 7 && col === 0) return 5;
+    return null;
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="unscramble-container">
-            <h5 className="header-title-page8 pb-2.5">
-              <span className="ex-A" style={{ marginRight: "10px" }}>
-                B
-              </span>
-             Look, read, and write.
-            </h5>
+    <div className="flex flex-col items-center p-8">
+      <div className="div-forall">
+        <h5 className="header-title-page8 mb-20">
+          <span className="ex-A mr-2.5">B</span>
+          Use the clues to complete the puzzle.
+        </h5>
 
-            {/* OPTIONS */}
-            <Droppable droppableId="options" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    display: "flex",
-                    gap: "15px",
-                    margin: "20px 0",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  {options.map((opt, i) => (
-                    <Draggable
-                      key={opt.id}
-                      draggableId={opt.id}
-                      index={i}
-                      isDragDisabled={showAnswer}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "8px 16px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "20px",
-                            background: "#eee",
-                            fontWeight: "bold",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {opt.value}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+        <div className="flex gap-16">
+          {/* GRID */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(12, 40px)",
+              gridTemplateRows: "repeat(10, 40px)",
+              gap: "1px",
+            }}
+          >
+            {grid.map((rowArr, row) =>
+              rowArr.map((_, col) => {
+                const active = isCellActive(row, col);
+                const number = getNumber(row, col);
 
-            {/* QUESTIONS */}
-            <div
-              style={{
-                width: "100%",
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr", // 🔥 عمودين
-                gap: "30px 60px",
-              }}
-            >
-              {data.map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "15px",
-                  }}
-                >
-                  <span style={{ fontWeight: "bold" }}>{index + 1}</span>
-                  <div style={{ position: "relative" }}>
-                    <img
-                      src={item.img}
-                      style={{ width: "90px", height: "90px" }}
-                    />
-                    {wrongInputs[index] && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "6px",
-                          right: "-6px",
-                          width: "22px",
-                          height: "22px",
-                          background: "#ef4444",
-                          color: "white",
-                          borderRadius: "50%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                        }}
-                      >
-                        ✕
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 🔥 الجمل */}
+                return (
                   <div
+                    key={`${row}-${col}`}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      flexWrap: "wrap", // 🔥 يخليها ذكية
+                      width: "40px",
+                      height: "40px",
+                      border: active ? "2px solid #713083" : "none",
+                      position: "relative",
                     }}
                   >
-                    {/* السطر الأول (فيه drag) */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <span>{item.before}</span>
+                    {number && (
+                      <>
+                        {(() => {
+                          const wordObj = words.find(
+                            (w) => w.row === row && w.col === col,
+                          );
 
-                      <Droppable droppableId={String(index)}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            style={{
-                              minWidth: "100px",
-                              borderBottom: `3px solid ${
-                                wrongInputs[index] ? "red" : "#000"
-                              }`,
-                              textAlign: "center",
-                              color: inputs[index] ? "#1C398E" : "#000",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {inputs[index]}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
+                          if (!wordObj || result[wordObj.key] !== false)
+                            return null;
 
-                    {/* السطر الثاني */}
-                    <span>{item.after}</span>
+                          const isAcross = wordObj.dir === "across";
+                          const isDown = wordObj.dir === "down";
+
+                          return (
+                            <span
+                              style={{
+                                position: "absolute",
+
+                                // 📍 المكان حسب الاتجاه
+                                top: isDown ? "-25px" : "50%",
+                                left: isAcross ? "-25px" : "50%",
+
+                                transform: isAcross
+                                  ? "translateY(-50%)"
+                                  : "translateX(-50%)",
+
+                                width: "18px",
+                                height: "18px",
+                                background: "#ef4444",
+                                color: "white",
+                                borderRadius: "50%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                border: "2px solid white",
+                                boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                                zIndex: 5,
+                              }}
+                            >
+                              ✕
+                            </span>
+                          );
+                        })()}
+
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "0px",
+                            left: "2px",
+                            fontSize: "12px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {number}
+                        </span>
+                      </>
+                    )}
+
+                    {active && (
+                      <input
+                        ref={(el) => (inputsRef.current[`${row}-${col}`] = el)}
+                        onClick={() => {
+                          if (inputsRef.current[`${row}-${col + 1}`]) {
+                            setDirection("across");
+                          } else {
+                            setDirection("down");
+                          }
+                        }}
+                        onFocus={(e) => e.target.select()} // 🔥 المهم
+                        value={grid[row][col]}
+                        maxLength={1}
+                        disabled={
+                          locked ||
+                          words.some((w) => {
+                            if (result[w.key] !== true) return false;
+
+                            for (let i = 0; i < w.word.length; i++) {
+                              const r = w.dir === "down" ? w.row + i : w.row;
+                              const c = w.dir === "across" ? w.col + i : w.col;
+
+                              if (r === row && c === col) return true;
+                            }
+
+                            return false;
+                          })
+                        }
+                        onChange={(e) =>
+                          handleChange(row, col, e.target.value.toLowerCase())
+                        }
+                        className="w-full h-full text-center font-bold text-[#6D2980]"
+                      />
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              }),
+            )}
+          </div>
+
+          {/* CLUES */}
+          <div style={{ width: "300px" }}>
+            <div className="p-4 bg-[#D4C7DC] rounded-xl mb-10">
+              <h4 className="font-bold mb-2 text-[#713083]">Down</h4>
+              <p>
+                <b>1</b> kitchen closets
+              </p>
+              <p>
+                <b>4</b> bread made with caraway seed
+              </p>
             </div>
 
-            {/* BUTTONS */}
-            <Button
-              handleShowAnswer={handleShowAnswer}
-              handleStartAgain={handleReset}
-              checkAnswers={checkAnswers}
-            />
+            <div className="p-4 bg-[#D4C7DC] rounded-xl">
+              <h4 className="font-bold mb-2 text-[#713083]">Across</h4>
+              <p>
+                <b>2</b> said about something that is tasty
+              </p>
+              <p>
+                <b>3</b> a short way to say refrigerator
+              </p>
+              <p>
+                <b>5</b> small salty fish
+              </p>
+            </div>
           </div>
         </div>
+
+        <Button
+          handleShowAnswer={showAnswers}
+          handleStartAgain={reset}
+          checkAnswers={checkAnswers}
+        />
       </div>
-    </DragDropContext>
+    </div>
   );
-}
+};
+
+export default Unit3_Page5_Q2;

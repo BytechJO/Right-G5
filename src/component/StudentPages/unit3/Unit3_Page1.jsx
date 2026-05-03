@@ -22,6 +22,7 @@ import sound13 from "../../../assets/audio/ClassBook/U3/PG 22/sound13.mp3";
 import sound14 from "../../../assets/audio/ClassBook/U3/PG 22/sound14.mp3";
 import sound15 from "../../../assets/audio/ClassBook/U3/PG 22/sound15.mp3";
 import sound16 from "../../../assets/audio/ClassBook/U3/PG 22/sound16.mp3";
+import sound17 from "../../../assets/audio/ClassBook/U3/PG 22/sound17.mp3";
 import CriticalThinking from "../../CriticalThinking";
 import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 1.svg";
 import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 22/SVG/Asset 2.svg";
@@ -239,6 +240,7 @@ const Unit3_Page1 = ({ openPopup }) => {
     sound14,
     sound15,
     sound16,
+    sound17,
   ];
   const captionVoc = [
     {
@@ -417,7 +419,9 @@ const Unit3_Page1 = ({ openPopup }) => {
             openPopup(
               "html",
               <CriticalThinking
-                title={"Who is going to take pictures at the carnival?"}
+                title={
+                  "Why do you think Sarah asks to make the sandwich herself?"
+                }
               />,
             )
           }

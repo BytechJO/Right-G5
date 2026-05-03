@@ -1,170 +1,160 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 
-const Unit2_Page2_ComprehensionA = () => {
-  const [answers, setAnswers] = useState(["", "", ""]);
-  const [result, setResult] = useState([]);
+const Unit3_Page2_ComprehensionA = () => {
+  const options = [
+    "a wife and mother",
+    "a chef",
+    "married",
+    "a well-known writer",
+    "busy",
+    "lazy",
+    "a dolphin trainer",
+    "a famous news commentator and analyst",
+  ];
+
+  const correct = [
+    "a wife and mother",
+    "married",
+    "a well-known writer",
+    "busy",
+    "a famous news commentator and analyst",
+  ];
+
+  const [selected, setSelected] = useState([]);
+  const [result, setResult] = useState({});
   const [locked, setLocked] = useState(false);
 
-  const correctAnswers = [
-    "at the same time to the same mom",
-    "mirror image twins",
-    "Siamese twins",
-  ];
+  // 🎯 select
+  const toggle = (opt) => {
+    if (locked) return;
 
-  const questions = [
-    "Twins are people who are born",
-    "Twins that are exactly the same on the opposite sides of their bodies are",
-    "Twins that are joined together are",
-  ];
+    setSelected((prev) =>
+      prev.includes(opt) ? prev.filter((o) => o !== opt) : [...prev, opt],
+    );
 
-  const handleChange = (i, value) => {
-    const updated = [...answers];
-    updated[i] = value;
-    setAnswers(updated);
-
-    // 🔥 امسح الخطأ أول ما يعدل
-    setResult((prev) => {
-      const copy = [...prev];
-      copy[i] = undefined;
-      return copy;
-    });
+    setResult({});
   };
-  const normalize = (str) =>
-    str.toLowerCase().replace(/\.$/, "").replace(/\s+/g, " ").trim();
+
+  // ✅ check
   const handleCheck = () => {
     if (locked) return;
 
-    if (answers.some((a) => !a || !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+    if (selected.length === 0) {
+      ValidationAlert.info("Select at least one answer.");
       return;
     }
 
-    let correctCount = 0;
+    let score = 0;
+    let res = {};
 
-    const res = answers.map((a, i) => {
-      const ok = normalize(a) === normalize(correctAnswers[i]);
-      if (ok) correctCount++;
-      return ok;
+    options.forEach((opt) => {
+      const isCorrect = correct.includes(opt);
+      const isSelected = selected.includes(opt);
+
+      if (isCorrect && isSelected) {
+        score++;
+        res[opt] = true;
+      } else if (!isCorrect && isSelected) {
+        res[opt] = false;
+      }
     });
 
     setResult(res);
 
-    const total = correctAnswers.length;
+    const msg = `Score: ${score} / ${correct.length}`;
 
-    const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (correctCount === total) {
-      setLocked(true); // 🔒 يقفل فقط إذا كله صح
+    if (score === correct.length) {
+      setLocked(true);
       ValidationAlert.success(msg);
-    } else if (correctCount === 0) {
+    } else if (score === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
   };
+
+  // 👀 show
   const handleShow = () => {
-    setAnswers(correctAnswers);
-    setResult([]);
+    setSelected(correct);
+    setResult({});
     setLocked(true);
   };
+
+  // 🔄 reset
   const handleReset = () => {
-    setAnswers(["", "", ""]);
-    setResult([]);
+    setSelected([]);
+    setResult({});
     setLocked(false);
   };
+
   return (
-    <div className="mb-15 mx-auto w-full">
-      {/* العنوان */}
-      <div className="flex items-center gap-3 mb-7">
-        <h5 className="header-title-page8-read pb-2.5">
-          <span className="ex-A-read mr-2">A</span>
-          Finish the sentence with a fact from the story.
-        </h5>
-      </div>
+    <div>
+      {/* HEADER */}
+      <h5 className="header-title-page8-read  mb-5">
+        <span className="ex-A-read" style={{ marginRight: "10px" }}>
+          A
+        </span>
+        Circle the phrases that are true.
+      </h5>
 
-      {/* الأسئلة */}
-      <div className="space-y-6">
-        {questions.map((q, i) => {
-          const isCorrect =
-            result && result[i] === true
-              ? "border-black"
-              : result && result[i] === false
-                ? "border-red-500"
-                : "";
+      <p className="mb-4 text-[18px] mt-10">Linda Robinson is ...</p>
+
+      {/* BOX */}
+      <div className="bg-[#D4C7DC] p-6 rounded-2xl grid grid-cols-3 gap-4 text-[18px] ">
+        {options.map((opt, i) => {
+          const isSelected = selected.includes(opt);
+
           return (
-            <div key={i} className="relative flex items-start gap-3">
-              {/* الرقم */}
-              <span className="font-bold">{i + 1}</span>
+            <div
+              key={i}
+              onClick={() => toggle(opt)}
+              className="cursor-pointer relative"
+              style={{
+                padding: "6px 10px",
+                borderRadius: "20px",
+                border:
+                  result[opt] === false
+                    ? "2px solid red" // ❌ إذا غلط
+                    : isSelected
+                      ? "2px solid #00AEEF" // 🔵 إذا مختار
+                      : "2px solid transparent", // ⚪ غير مختار
+              }}
+            >
+              {opt}
 
-              {/* الجملة */}
-              {i === 1 ? (
-                // 🔥 السؤال الثاني (الخط تحت)
-                <div className="flex-1 relative">
-                  <span>{q}</span>
-
-                  <input
-                    disabled={locked || result[i] === true}
-                    value={answers[i]}
-                    onChange={(e) => handleChange(i, e.target.value)}
-                    className={`outline-none border-b-2 ${isCorrect} w-full mt-1 text-[#6D2980] font-bold`}
-                  />
-                </div>
-              ) : (
-                // 🔥 الأول والثالث (الخط جنب)
-                <div className="flex-1 flex items-center gap-2 relative">
-                  <span className="whitespace-nowrap">{q}</span>
-
-                  <input
-                    disabled={locked || result[i] === true}
-                    value={answers[i]}
-                    onChange={(e) => handleChange(i, e.target.value)}
-                    className={`outline-none border-b-2 ${isCorrect} w-full mt-1 text-[#6D2980] font-bold`}
-                  />
-                </div>
-              )}
-
-              {/* ❌ علامة الخطأ */}
-              {result[i] === false && (
-                <div
+              {/* ❌ */}
+              {result[opt] === false && (
+                <span
                   style={{
                     position: "absolute",
-                    top: "0px",
-                    left: "100%",
+                    top: "-8px",
+                    right: "-8px",
                     transform: "translateY(-50%)",
-                    width: "22px",
-                    height: "22px",
+                    width: "20px",
+                    height: "20px",
                     background: "#ef4444",
                     color: "white",
                     borderRadius: "50%",
-                    fontSize: "12px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    fontSize: "12px",
                     fontWeight: "bold",
                     border: "2px solid white",
-                    boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                     pointerEvents: "none",
+                    zIndex: 3,
                   }}
                 >
                   ✕
-                </div>
+                </span>
               )}
             </div>
           );
         })}
       </div>
-      {/* Buttons */}
       <div className="flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
@@ -215,4 +205,4 @@ const Unit2_Page2_ComprehensionA = () => {
   );
 };
 
-export default Unit2_Page2_ComprehensionA;
+export default Unit3_Page2_ComprehensionA;

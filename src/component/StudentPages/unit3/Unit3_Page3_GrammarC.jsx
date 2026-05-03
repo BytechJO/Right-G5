@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 12.svg"; // غيرها
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 
-const Unit3_Page2_ComprehensionB = () => {
+const GrammarC = () => {
   const [answers, setAnswers] = useState(["", "", "", ""]);
-  const [locked, setLocked] = useState(false);
   const [result, setResult] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-  const rightRefs = React.useRef([]);
-  const textRefs = React.useRef([]); // 🔥 جديد
+  const correct = ["tastes", "feel", "taste", "sounds"];
 
-  const correct = ["d", "c", "b", "a"];
-  const rightItems = ["a", "b", "c", "d"];
+  const normalize = (t) => t.toLowerCase().trim();
 
   const handleChange = (i, val) => {
+    if (result[i] === true) return;
+
     const updated = [...answers];
-    updated[i] = val.toLowerCase();
+    updated[i] = val;
     setAnswers(updated);
 
     setResult((prev) => {
@@ -25,21 +26,28 @@ const Unit3_Page2_ComprehensionB = () => {
     });
   };
 
-  const input = (i) => (
-    <span className="relative mx-2">
+  const input = (i, width = "180px") => (
+    <span
+      style={{
+        position: "relative",
+      }}
+    >
       <input
-        disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
-        maxLength={1}
-        className={`w-10 border-b outline-none text-center font-bold uppercase
-        ${
-          result[i] === false
-            ? "border-red-500 text-[#6D2980]"
-            : "border-black text-[#6D2980]"
-        }`}
+        disabled={result[i] === true}
+        style={{
+          width,
+          borderBottom:
+            result[i] === false ? "1px solid red" : "1px solid black",
+          outline: "none",
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "#6D2980",
+          background: "transparent",
+          margin: "0 6px",
+        }}
       />
-
       {result[i] === false && (
         <span
           style={{
@@ -69,151 +77,94 @@ const Unit3_Page2_ComprehensionB = () => {
     </span>
   );
 
-  // ====================
-  // SVG LINES
-  // ====================
-  const renderLines = () => {
-    return answers.map((ans, i) => {
-      if (!ans) return null;
-
-      const rightIndex = rightItems.indexOf(ans);
-      if (rightIndex === -1) return null;
-
-      const textEl = textRefs.current[i];
-      const rightEl = rightRefs.current[rightIndex];
-
-      if (!textEl || !rightEl) return null;
-
-      const textRect = textEl.getBoundingClientRect();
-      const rightRect = rightEl.getBoundingClientRect();
-      const parentRect =
-        textEl.parentElement.parentElement.getBoundingClientRect();
-
-      // 🔥 من بداية الكلمة
-      const x1 = textRect.right - parentRect.left;
-      const y1 = textRect.top + textRect.height / 2 - parentRect.top;
-
-      const x2 = rightRect.left - parentRect.left;
-      const y2 = rightRect.top + rightRect.height / 2 - parentRect.top;
-
-      return (
-        <line
-          key={i}
-          x1={x1}
-          y1={y1}
-          x2={x2}
-          y2={y2}
-          stroke="#6d2980"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-      );
-    });
-  };
-
-  // ====================
-  // CHECK
-  // ====================
+  // ✅ CHECK
   const checkAnswers = () => {
     if (locked) return;
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      ValidationAlert.info("Complete all answers.");
       return;
     }
 
-    let correctCount = 0;
+    let score = 0;
 
     const res = answers.map((a, i) => {
-      const ok = a === correct[i];
-      if (ok) correctCount++;
+      const ok = normalize(a) === correct[i];
+      if (ok) score++;
       return ok;
     });
 
     setResult(res);
-    const msg = `Score: ${correctCount} / ${correct.length}`;
 
-    if (correctCount === correct.length) {
+    const msg = `Score: ${score} / 4`;
+
+    if (score === 4) {
       setLocked(true);
       ValidationAlert.success(msg);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
   };
 
+  // 👀 SHOW
   const showAnswers = () => {
     setAnswers(correct);
+    setResult([]);
     setLocked(true);
   };
 
+  // 🔄 RESET
   const reset = () => {
     setAnswers(["", "", "", ""]);
-    setLocked(false);
     setResult([]);
+    setLocked(false);
   };
 
   return (
     <div>
       <h5 className="header-title-page8-read mb-5">
-        <span className="ex-A-read mr-2">B</span>
-        What do these people do? Match each person to their job.
+        <span className="ex-A-read mr-2">C</span>
+        Read and write a form of <span className="text-[#00AEEF]">sound</span>,
+        <span className="text-[#00AEEF]">feel</span>, or
+        <span className="text-[#00AEEF]">taste</span>.
       </h5>
 
-      <div className="relative grid grid-cols-2 gap-25 text-[18px] mt-10 min-h-[280px]">
-        <svg className="absolute inset-0 w-full h-full pointer-events-none">
-          {renderLines()}
-        </svg>
-
-        {/* LEFT */}
-        <div className="space-y-10">
+      <div className="flex justify-between items-start">
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-8 text-[18px] flex-1 mt-8">
           <div>
-            {input(0)}
-            <span className="font-bold mr-4">1</span>
-            <span ref={(el) => (textRefs.current[0] = el)}>professor</span>
+            <span className="font-bold mr-3">1</span>
+            The spaghetti {input(0)} spicy.
           </div>
 
           <div>
-            {input(1)}
-            <span className="font-bold mr-4">2</span>
-            <span ref={(el) => (textRefs.current[1] = el)}>author</span>
+            <span className="font-bold mr-3">2</span>
+            Does the elephant {input(1)} rough?
           </div>
 
           <div>
-            {input(2)}
-            <span className="font-bold mr-4">3</span>
-            <span ref={(el) => (textRefs.current[2] = el)}>speaker</span>
+            <span className="font-bold mr-3">3</span>
+            The cherries {input(2)} sweet and delicious.
           </div>
 
           <div>
-            {input(3)}
-            <span className="font-bold mr-4">4</span>
-            <span ref={(el) => (textRefs.current[3] = el)}>news analyst</span>
+            <span className="font-bold mr-3">4</span>
+            The recording {input(3)} too loud.
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="space-y-10">
-          <div ref={(el) => (rightRefs.current[0] = el)}>
-            <span className="font-bold mr-4">a</span> tells about how the news
-            might affect the world
-          </div>
-
-          <div ref={(el) => (rightRefs.current[1] = el)}>
-            <span className="font-bold mr-4">b</span> gives speeches
-          </div>
-
-          <div ref={(el) => (rightRefs.current[2] = el)}>
-            <span className="font-bold mr-4">c</span> writes books
-          </div>
-
-          <div ref={(el) => (rightRefs.current[3] = el)}>
-            <span className="font-bold mr-4">d</span> teaches at a university
-          </div>
-        </div>
+        {/* IMAGE */}
+        <img
+          src={img1}
+          style={{
+            width: "240px",
+            height: "140px",
+            objectFit: "contain",
+            marginLeft: "20px",
+          }}
+        />
       </div>
-      <div className="flex justify-center gap-6 mt-2">
+      <div className="flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
           <div
@@ -263,4 +214,4 @@ const Unit3_Page2_ComprehensionB = () => {
   );
 };
 
-export default Unit3_Page2_ComprehensionB;
+export default GrammarC;
