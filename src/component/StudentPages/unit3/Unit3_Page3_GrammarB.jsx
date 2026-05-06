@@ -3,9 +3,9 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 7.svg";
 import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 8.svg";
-import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 9.svg";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 24.svg";
 import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 10.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 11.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 25.svg";
 import img6 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 11.svg";
 
 const GrammarB = () => {
@@ -147,7 +147,7 @@ const GrammarB = () => {
         value={answers[q].inputs[i]}
         disabled={locked || result[q]?.inputs[i] === true}
         onChange={(e) => handleInput(q, i, e.target.value)}
-        className={`w-[80px] border-b text-center font-bold text-[#6D2980]  ${
+        className={`w-20 border-b text-center font-bold text-[#6D2980]  ${
           result[i] === false
             ? "border-red-500 text-[#6D2980]"
             : "border-black text-[#6D2980]"
