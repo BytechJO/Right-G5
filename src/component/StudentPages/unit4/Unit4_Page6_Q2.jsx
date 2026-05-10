@@ -1,458 +1,270 @@
 import React, { useState } from "react";
-import Button from "../../Button";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-const SentenceBuilder = ({
-  id,
-  scrambled,
-  correct,
-  onUpdate,
-  showResult,
-  forceAnswer,
-  index,
-  weatherAnswer,
-}) => {
-  const [availableWords, setAvailableWords] = useState(
-    scrambled
-      .split(" ")
-      .map((word, index) => ({ id: `${id}-word-${index}`, text: word })),
-  );
 
-  const [chosenWords, setChosenWords] = useState([]);
-
-  React.useEffect(() => {
-    if (forceAnswer) {
-      const words = correct
-        .replace(/[.,!?]/g, "")
-        .split(" ")
-        .map((word, index) => ({
-          id: `${id}-word-${index}`,
-          text: word,
-        }));
-      setChosenWords(words);
-      setAvailableWords([]);
-    }
-  }, [forceAnswer, correct, id]);
-
-  const handleWordClick = (wordToAdd) => {
-    const newChosenWords = [...chosenWords, wordToAdd];
-    setChosenWords(newChosenWords);
-
-    setAvailableWords(availableWords.filter((w) => w.id !== wordToAdd.id));
-    onUpdate(newChosenWords.map((w) => w.text).join(" "));
-  };
-
-  const handleRemoveWord = (wordToRemove) => {
-    const newChosenWords = chosenWords.filter((w) => w.id !== wordToRemove.id);
-    setChosenWords(newChosenWords);
-
-    setAvailableWords((prev) =>
-      [...prev, wordToRemove].sort((a, b) => a.id.localeCompare(b.id)),
-    );
-
-    onUpdate(newChosenWords.map((w) => w.text).join(" "));
-  };
-
-  const getBoxClassName = () => {
-    if (!showResult) {
-      return "border-gray-300 bg-white";
-    }
-
-    const userAnswer = chosenWords
-      .map((w) => w.text)
-      .join(" ")
-      .replace(/[.,!?]/g, "")
-      .trim()
-      .toLowerCase();
-
-    const correctAnswer = correct
-      .replace(/[.,!?]/g, "")
-      .trim()
-      .toLowerCase();
-
-    if (userAnswer.length === 0) {
-      return "border-gray-300 bg-white";
-    }
-
-    return userAnswer === correctAnswer
-      ? "border-gray-300 bg-white"
-      : "border-gray-300 bg-white";
-  };
-
-  const isIncorrectAnswer = () => {
-    if (!showResult) return false;
-
-    const userAnswer = chosenWords
-      .map((w) => w.text)
-      .join(" ")
-      .replace(/[.,!?]/g, "")
-      .trim()
-      .toLowerCase();
-
-    const correctAnswer = correct
-      .replace(/[.,!?]/g, "")
-      .trim()
-      .toLowerCase();
-
-    if (!userAnswer) return false;
-
-    return userAnswer !== correctAnswer;
-  };
-  const correctWords = correct.split(" ");
-  const userSentence = chosenWords
-    .map((w) => w.text)
-    .join(" ")
-    .replace(/[.,!?]/g, "")
-    .trim()
-    .toLowerCase();
-
-  const correctSentence = correct
-    .replace(/[.,!?]/g, "")
-    .trim()
-    .toLowerCase();
-
-  const sentenceCorrect = userSentence === correctSentence;
-
-  const correctWeatherWord = correct.split(" ").slice(-1)[0]; // مش مهم فعلياً
-
-  const weatherCorrect = weatherAnswer
-    ? weatherAnswer.toLowerCase() ===
-      (index === 0
-        ? "cold"
-        : index === 1
-          ? "hot"
-          : index === 2
-            ? "cool"
-            : "warm")
-    : false;
-  return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2 p-3 bg-gray-100 rounded-lg min-h-[50px] items-center">
-        {availableWords.length > 0 ? (
-          availableWords.map((word) => (
-            <button
-              key={word.id}
-              onClick={() => handleWordClick(word)}
-              className="px-3 py-1 bg-white border border-gray-400 rounded-md shadow-sm hover:bg-blue-100 hover:border-blue-500 transition-all text-gray-800 font-medium"
-            >
-              {word.text}
-            </button>
-          ))
-        ) : (
-          <p className="text-gray-400 text-sm"></p>
-        )}
-      </div>
-
-      <div className="relative">
-        <div
-          className={`flex flex-wrap gap-2 p-3 border-2 rounded-lg min-h-[60px] transition-colors duration-300 items-center ${getBoxClassName()}`}
-        >
-          {/* 🔥 منطقة الجملة (تتمدد) */}
-          {correctWords.map((word, i) => {
-            const chosen = chosenWords[i];
-
-            return (
-              <span key={i}>
-                {chosen ? (
-                  <button
-                    onClick={() => handleRemoveWord(chosen)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded-md"
-                  >
-                    {chosen.text}
-                  </button>
-                ) : (
-                  <span
-                    className="px-3 py-1 inline-block min-w-[40px]"
-                    style={{ borderBottom: "2px solid #999" }}
-                  ></span>
-                )}
-              </span>
-            );
-          })}
-
-          {/* 🔥 النهاية دايماً على اليمين */}
-          <span className="text-lg font-bold">?</span>
-
-          <span className="ml-2 font-semibold">It’s</span>
-
-          <Droppable droppableId={`weather-${index}`}>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  minWidth: "80px",
-                  borderBottom: `2px solid ${
-                    showResult && weatherAnswer && !weatherCorrect
-                      ? "red"
-                      : "black"
-                  }`,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#1C398E",
-                }}
-              >
-                {weatherAnswer}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-
-        {isIncorrectAnswer() && (
-          <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-500 flex items-center justify-center shadow-md z-10 border-2 border-white">
-            <span className="text-white text-sm font-bold leading-none">✕</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 const Unit4_Page6_Q2 = () => {
-  const exerciseSentences = [
-    {
-      id: "s1",
-      scrambled: "weather what’s winter in like the",
-      correct: "What’s the weather like in winter",
-      weather: "cold",
-    },
-    {
-      id: "s2",
-      scrambled: "like summer the what’s in weather",
-      correct: "What’s the weather like in summer",
-      weather: "hot",
-    },
-    {
-      id: "s3",
-      scrambled: "the in weather like what’s autumn",
-      correct: "What’s the weather like in autumn",
-      weather: "cool",
-    },
-    {
-      id: "s4",
-      scrambled: "in what’s spring weather the like",
-      correct: "What’s the weather like in spring",
-      weather: "warm",
-    },
+  const [correctWordsLocked, setCorrectWordsLocked] = useState([]);
+  const paragraph = [
+    "Max likes to do different activities on the weekends.",
+    "Max usually skateboards at the skate park near his house.",
+    "His friend Nick sometimes skateboards with him.",
+    "Max’s neighbor occasionally plays a chess game with him.",
+    "They rarely sit outside when they play chess.",
+    "Instead, they often play chess in each other’s houses.",
+    "Every once in a while, Max likes to watch a movie at the theater.",
+    "However, he often rents movies to watch at home.",
+    "During the summer, Max always reads a lot of books.",
+    "Sometimes, it is just too hot to do anything outside.",
+    "Max is never bored on his weekends because he regularly finds things to do.",
   ];
-  const weatherBank = ["cool", "hot", "cold", "warm"];
-  const [weatherAnswers, setWeatherAnswers] = useState(
-    Array(exerciseSentences.length).fill(""),
-  );
 
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const correctWords = [
+    "usually",
+    "sometimes",
+    "occasionally",
+    "rarely",
+    "often",
+    "often",
+    "always",
+    "Sometimes",
+    "never",
+    "regularly",
+  ];
 
-    // إذا السحب من الطقس
-    if (draggableId.startsWith("weather-")) {
-      const value = draggableId.replace("weather-", "");
-      const index = Number(destination.droppableId.replace("weather-", ""));
+  const [selectedWords, setSelectedWords] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-      const updated = [...weatherAnswers];
-      updated[index] = value;
-      setWeatherAnswers(updated);
+  // toggle
+  const toggleWord = (id) => {
+    if (locked) return;
+
+    // ✅ لا تعدل الصح المثبت
+    if (correctWordsLocked.includes(id)) return;
+
+    if (selectedWords.includes(id)) {
+      setSelectedWords(selectedWords.filter((w) => w !== id));
+    } else {
+      setSelectedWords([...selectedWords, id]);
     }
+
+    setWrongWords(wrongWords.filter((w) => w !== id));
   };
 
-  const [userAnswers, setUserAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(null);
-  const [resetKey, setResetKey] = useState(0);
-  const [showAnswers, setShowAnswers] = useState(false);
+  // check
+  const handleCheck = () => {
+    if (locked) return;
 
-  const handleAnswerUpdate = (id, answer) => {
-    setUserAnswers((prev) => ({ ...prev, [id]: answer }));
-    if (showResults) {
-      setShowResults(false);
-      setScore(null);
-    }
-  };
-
-  const checkAnswers = () => {
-    if (showResults || showAnswers) return;
-    const hasEmptySentence = exerciseSentences.some((sentence, i) => {
-      const userSentence = userAnswers[sentence.id];
-      const userWeather = weatherAnswers[i];
-
-      return !userSentence || userSentence.trim() === "" || !userWeather;
-    });
-
-    if (hasEmptySentence) {
-      ValidationAlert.info();
+    if (selectedWords.length === 0) {
+      ValidationAlert.info("Select the adverbs.");
       return;
     }
 
-    setShowResults(true);
-
     let score = 0;
-    exerciseSentences.forEach((sentence, i) => {
-      const userWords = userAnswers[sentence.id]
-        .replace(/[.,!?]/g, "")
-        .trim()
-        .toLowerCase()
-        .split(/\s+/);
 
-      const correctWords = sentence.correct
-        .replace(/[.,!?]/g, "")
-        .trim()
-        .toLowerCase()
-        .split(/\s+/);
+    const wrong = [];
+    const correctLockedNow = [];
 
-      const correctSentence =
-        userWords.length === correctWords.length &&
-        userWords.every((word, idx) => word === correctWords[idx]);
+    selectedWords.forEach((id) => {
+      const [lineIndex, wordIndex] = id.split("-");
 
-      const correctWeather =
-        weatherAnswers[i]?.toLowerCase() === sentence.weather.toLowerCase();
+      const word = paragraph[lineIndex]
+        .split(" ")
+        // eslint-disable-next-line no-unexpected-multiline
+        [wordIndex].replace(/[.,]/g, "");
 
-      if (correctSentence) score++; // +1 للجملة
-      if (correctWeather) score++; // +1 للطقس
+      const correct = correctWords.some(
+        (w) => w.toLowerCase() === word.toLowerCase(),
+      );
+
+      if (correct) {
+        score++;
+        correctLockedNow.push(id);
+      } else {
+        wrong.push(id);
+      }
     });
 
-    setScore({ correct: score, total: exerciseSentences.length * 2 });
+    setWrongWords(wrong);
 
-    const total = exerciseSentences.length * 2;
+    // ✅ ثبت الصح فقط
+    setCorrectWordsLocked((prev) => [
+      ...new Set([...prev, ...correctLockedNow]),
+    ]);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score}/${total}`);
+    const total = correctWords.length;
+
+    const allCorrect = correctLockedNow.length === total;
+
+    const msg = `Score: ${score} / ${total}`;
+
+    if (allCorrect) {
+      setLocked(true);
+      ValidationAlert.success(msg);
     } else if (score === 0) {
-      ValidationAlert.error(`Score: ${score}/${total}`);
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.warning(`Score: ${score}/${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleStartAgain = () => {
-    setUserAnswers({});
-    setWeatherAnswers(Array(exerciseSentences.length).fill("")); // 🔥 مهم
+  // show
+  const handleShow = () => {
+    const allCorrectIds = [];
 
-    setShowResults(false);
-    setScore(null);
-    setShowAnswers(false);
+    paragraph.forEach((line, lineIndex) => {
+      line.split(" ").forEach((word, wordIndex) => {
+        const cleanWord = word.replace(/[.,]/g, "");
 
-    setResetKey((prevKey) => prevKey + 1);
-  };
-  const handleShowAnswer = () => {
-    setShowAnswers(true);
+        const correct = correctWords.some(
+          (w) => w.toLowerCase() === cleanWord.toLowerCase(),
+        );
 
-    const allAnswers = {};
-    const allWeather = [];
-
-    exerciseSentences.forEach((sentence) => {
-      allAnswers[sentence.id] = sentence.correct;
-      allWeather.push(sentence.weather);
+        if (correct) {
+          allCorrectIds.push(`${lineIndex}-${wordIndex}`);
+        }
+      });
     });
 
-    setUserAnswers(allAnswers);
-    setWeatherAnswers(allWeather); // 🔥 مهم جداً
-
-    setShowResults(true);
-    setScore({
-      correct: exerciseSentences.length,
-      total: exerciseSentences.length,
-    });
+    setSelectedWords(allCorrectIds);
+    setWrongWords([]);
+    setCorrectWordsLocked(allCorrectIds);
+    setLocked(true);
   };
-  const usedWeather = weatherAnswers;
+
+  // reset
+  const handleReset = () => {
+    setSelectedWords([]);
+    setWrongWords([]);
+    setLocked(false);
+    setCorrectWordsLocked([]);
+  };
+
+  // render word
+  const renderWord = (word, id) => {
+    const selected = selectedWords.includes(id);
+
+    const wrong = wrongWords.includes(id);
+
+    return (
+      <span
+        key={id}
+        onClick={() => toggleWord(id)}
+        style={{
+          position: "relative",
+          display: "inline-block",
+          margin: "0 2px",
+        }}
+      >
+        <span
+          style={{
+            cursor: locked ? "default" : "pointer",
+
+            border: selected
+              ? wrong
+                ? "2px solid red"
+                : "2px solid #6D2980"
+              : "2px solid transparent",
+
+            borderRadius: "999px",
+
+            padding: "2px 6px",
+
+            transition: "0.2s",
+
+            userSelect: "none",
+
+            display: "inline-block",
+          }}
+        >
+          {word}
+        </span>
+
+        {/* ❌ */}
+        {wrong && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-10px",
+              right: "-10px",
+              width: "18px",
+              height: "18px",
+              background: "#ef4444",
+              color: "white",
+              borderRadius: "50%",
+              fontSize: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              border: "2px solid white",
+              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            }}
+          >
+            ✕
+          </span>
+        )}
+      </span>
+    );
+  };
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="main-container-component">
-        <div className="div-forall">
-          <h5 className="header-title-page8" style={{ marginBottom: "10px" }}>
-            <span className="ex-A mr-3">E</span>Look, unscramble, and answer. Use the
-            words below.
-          </h5>
-          <Droppable droppableId="weather-bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginTop: "20px",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
-                {weatherBank.map((word, index) => (
-                  <Draggable
-                    key={word}
-                    draggableId={`weather-${word}`}
-                    index={index}
-                  >
-                    {(provided) => {
-                      const isUsed = usedWeather.includes(word);
+    <div
+      style={{
+        padding: "30px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div className="div-forall">
+        {/* HEADER */}
+        <h5 className="header-title-page8 mb-5">
+          <span className="ex-A mr-2">E</span>
+          Read and circle the adverbs of frequency.
+        </h5>
 
-                      return (
-                        <span
-                          ref={provided.innerRef}
-                          {...(!isUsed ? provided.draggableProps : {})}
-                          {...(!isUsed ? provided.dragHandleProps : {})}
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: isUsed ? "#eee" : "white",
-                            fontWeight: "bold",
-                            cursor: isUsed ? "not-allowed" : "grab",
-                            opacity: isUsed ? 0.5 : 1,
-                            fontSize: "16px",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {word}
-                        </span>
-                      );
-                    }}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div className="space-y-8">
-            {exerciseSentences.map((sentence, index) => (
-              <div
-                key={sentence.id}
-                className="flex items-start gap-4 p-4 rounded-xl transition-all hover:bg-gray-50"
-              >
-                <span className="font-bold text-blue-600 text-xl pt-2">
-                  {index + 1}.
-                </span>
-                <div className="flex-1">
-                  <SentenceBuilder
-                    key={`${sentence.id}-${resetKey}`}
-                    id={sentence.id}
-                    scrambled={sentence.scrambled}
-                    correct={sentence.correct}
-                    onUpdate={(answer) =>
-                      handleAnswerUpdate(sentence.id, answer)
-                    }
-                    showResult={showResults}
-                    forceAnswer={showAnswers}
-                    index={index}
-                    weatherAnswer={weatherAnswers[index]}
-                  />
-                </div>
-              </div>
+        {/* PARAGRAPH */}
+        <div
+          style={{
+            marginTop: "35px",
+            padding: "0 20px",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "20px",
+              lineHeight: "2.15",
+              color: "#111",
+              textAlign: "left",
+              maxWidth: "980px",
+              margin: "0 auto",
+              wordSpacing: "1px",
+            }}
+          >
+            {paragraph.map((line, i) => (
+              <React.Fragment key={i}>
+                {line
+                  .split(" ")
+                  .map((word, index) => renderWord(word, `${i}-${index}`))}{" "}
+              </React.Fragment>
             ))}
-          </div>
+          </p>
+        </div>
+        {/* BUTTONS */}
+        <div className="action-buttons-container">
+          <button className="try-again-button" onClick={handleReset}>
+            Start Again ↻
+          </button>
 
-          <div className="mt-20">
-            <Button
-              handleShowAnswer={handleShowAnswer}
-              handleStartAgain={handleStartAgain}
-              checkAnswers={checkAnswers}
-            />
-          </div>
+          <button className="show-answer-btn" onClick={handleShow}>
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={handleCheck}>
+            Check Answer ✓
+          </button>
         </div>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 

@@ -1,278 +1,539 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import image from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32/Ex A 1.svg";
-import Button from "../../Button";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import grammer_u1 from "../../../assets/audio/ClassBook/U4/PG 32/cd20pg32.mp3";
 
 const Unit4_Page5_Q1 = () => {
-  const [selected, setSelected] = useState([]);
-  const [locked, setLocked] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [wrongWords, setWrongWords] = useState([]);
-  // ✅ الكلمات + أماكنها (بالنسب)
-  const words = [
-    { id: "they", top: "23.32%", left: "32.21%", correct: true },
-    { id: "that", top: "49.82%", left: "14.31%", correct: true },
-    { id: "this", top: "48.10%", left: "43%", correct: true },
-    { id: "mother", top: "30.25%", left: "59.5%", correct: true },
-    { id: "brother", top: "65.43%", left: "79.94%", correct: true },
-    { id: "father", top: "93.68%", left: "23.92%", correct: true },
-    { id: "birthday", top: "73%", left: "60%", correct: true },
-
-    // ❌ غلط
-    { id: "bath", top: "10.53%", left: "79.13%", correct: false },
-    { id: "thirsty", top: "73.42%", left: "16.03%", correct: false },
-    { id: "thick", top: "73%", left: "38%", correct: false },
-    { id: "thin", top: "92.48%", left: "45.68%", correct: false },
+  const captions = [
+    {
+      start: 0.219,
+      end: 20.06,
+      text: "Page 32, write activities exercise A. Listen and write check or X. For X, write the correct word. We'll check out the boots, but we don't really need to buy them. Joan can play at the jeans all day. The clothes store has many books to choose from. Let's head over to the restaurant for dinner.",
+    },
+  ];
+  const questions = [
+    {
+      text: "We’ll check out the boots, but we don’t really need to buy them.",
+      answer: "✓",
+      correction: "",
+    },
+    {
+      text: "Joan can play at the jeans all day.",
+      answer: "✕",
+      correction: "arcade",
+    },
+    {
+      text: "The clothes store has many books to choose from.",
+      answer: "✕",
+      correction: "bookstore",
+    },
+    {
+      text: "They are going to the electronics store to find a radio.",
+      answer: "✓",
+      correction: "",
+    },
+    {
+      text: "Let’s head over to the restaurant for dinner.",
+      answer: "✓",
+      correction: "",
+    },
   ];
 
-  const handleClick = (word) => {
+  const [answers, setAnswers] = useState(
+    questions.map(() => ({
+      symbol: "",
+      correction: "",
+    })),
+  );
+
+  const [errors, setErrors] = useState(
+    questions.map(() => ({
+      symbol: false,
+      correction: false,
+    })),
+  );
+
+  const [correctLocked, setCorrectLocked] = useState(
+    questions.map(() => ({
+      symbol: false,
+      correction: false,
+    })),
+  );
+
+  const [locked, setLocked] = useState(false);
+
+  // normalize
+  const normalize = (text) => {
+    return text.trim().toLowerCase().replace(/\s+/g, " ");
+  };
+
+  // update field
+  const updateField = (index, field, value) => {
+    if (correctLocked[index][field]) return;
+
+    const updated = [...answers];
+    updated[index][field] = value;
+
+    // اذا حط ✓ فضّي التصحيح
+    if (field === "symbol" && value === "✓") {
+      updated[index].correction = "";
+    }
+
+    setAnswers(updated);
+
+    // شيل الخطأ مباشرة
+    const updatedErrors = [...errors];
+    updatedErrors[index][field] = false;
+
+    if (field === "symbol" && value === "✓") {
+      updatedErrors[index].correction = false;
+    }
+
+    setErrors(updatedErrors);
+  };
+
+  // check
+  const handleCheck = () => {
     if (locked) return;
 
-    const exists = selected.find((w) => w.id === word.id);
+    const isEmpty = answers.some((a) => {
+      // لازم يختار ✓ أو ✕
+      if (!a.symbol) return true;
 
-    if (exists) {
-      setSelected(selected.filter((w) => w.id !== word.id));
-    } else {
-      setSelected([...selected, word]);
-    }
-  };
-
-  const handleCheck = () => {
-    if (locked || showAnswer) return;
-    if (locked || showAnswer) return;
-
-    const totalCorrect = words.filter((w) => w.correct).length;
-
-    // ❌ ما اختار ولا شي
-    if (selected.length === 0) {
-      return ValidationAlert.info();
-    }
-
-    let correctCount = 0;
-    let wrong = [];
-
-    selected.forEach((w) => {
-      if (w.correct) {
-        correctCount++;
-      } else {
-        wrong.push(w.id);
+      // فقط إذا الجواب ✕ لازم يكتب التصحيح
+      if (normalize(a.symbol) === "✕" && normalize(a.correction) === "") {
+        return true;
       }
+
+      return false;
     });
 
-    setWrongWords(wrong);
-    setLocked(true);
+    if (isEmpty) {
+      ValidationAlert.info("Complete all fields.");
+      return;
+    }
 
-    const color =
-      correctCount === totalCorrect
-        ? "green"
-        : correctCount === 0
-          ? "red"
-          : "orange";
+    let score = 0;
 
-    ValidationAlert[
-      correctCount === totalCorrect
-        ? "success"
-        : correctCount === 0
-          ? "error"
-          : "warning"
-    ](`<b style="color:${color}">Score: ${correctCount} / ${totalCorrect}</b>`);
+    const newErrors = answers.map((ans, i) => {
+      const symbolCorrect =
+        normalize(ans.symbol) === normalize(questions[i].answer);
+
+      const correctionCorrect =
+        normalize(ans.correction) === normalize(questions[i].correction);
+
+      const isCheck = questions[i].answer === "✓";
+
+      // ✅ سؤال صح
+      if (isCheck) {
+        const questionCorrect =
+          symbolCorrect && normalize(ans.correction) === "";
+
+        if (questionCorrect) score++;
+
+        return {
+          symbol: !symbolCorrect,
+          correction: normalize(ans.correction) !== "",
+        };
+      }
+
+      // ❌ سؤال غلط
+      const questionCorrect = symbolCorrect && correctionCorrect;
+
+      if (questionCorrect) score++;
+
+      return {
+        symbol: !symbolCorrect,
+        correction: !correctionCorrect,
+      };
+    });
+
+    // lock الصح فقط
+    const updatedLocked = answers.map((ans, i) => {
+      const symbolCorrect =
+        normalize(ans.symbol) === normalize(questions[i].answer);
+
+      const correctionCorrect =
+        normalize(ans.correction) === normalize(questions[i].correction);
+
+      const isCheck = questions[i].answer === "✓";
+
+      return {
+        symbol: symbolCorrect,
+
+        correction: isCheck
+          ? symbolCorrect && normalize(ans.correction) === ""
+          : correctionCorrect,
+      };
+    });
+
+    setErrors(newErrors);
+    setCorrectLocked(updatedLocked);
+
+    const total = questions.length;
+
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${score} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (score === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (score === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // show answers
+  const handleShow = () => {
+    setAnswers(
+      questions.map((q) => ({
+        symbol: q.answer,
+        correction: q.correction,
+      })),
+    );
+
+    setErrors(
+      questions.map(() => ({
+        symbol: false,
+        correction: false,
+      })),
+    );
+
+    setCorrectLocked(
+      questions.map(() => ({
+        symbol: true,
+        correction: true,
+      })),
+    );
 
     setLocked(true);
   };
 
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    setLocked(true);
-    setSelected(words.filter((w) => w.correct));
-  };
-
+  // reset
   const handleReset = () => {
-    setSelected([]);
-    setWrongWords([]);
+    setAnswers(
+      questions.map(() => ({
+        symbol: "",
+        correction: "",
+      })),
+    );
+
+    setErrors(
+      questions.map(() => ({
+        symbol: false,
+        correction: false,
+      })),
+    );
+
+    setCorrectLocked(
+      questions.map(() => ({
+        symbol: false,
+        correction: false,
+      })),
+    );
+
     setLocked(false);
-    setShowAnswer(false);
   };
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
         padding: "30px",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="unscramble-container">
-          <h5 className="header-title-page8 pb-2.5">
-            <span className="ex-A" style={{ marginRight: "10px" }}>
-              A
-            </span>
-            Follow the words with the
-            <span style={{ color: "#2e3192" }}>voiced th</span>sound.
-          </h5>
-
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: "1000px", // ⭐ تحكم بالحجم العام
-              margin: "0 auto",
-            }}
-          >
-            {/* الصورة */}
-            <img
-              src={image}
-              alt="interactive"
-              style={{
-                width: "100%",
-                height: "auto",
-                display: "block",
-              }}
-            />
-            {/* START */}
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span className="ex-A" style={{ marginRight: "10px" }}>
+            A
+          </span>
+          Listen and write <span className="text-[#D1232A]">✓</span> or{" "}
+          <span className="text-[#D1232A]">✕</span>. For{" "}
+          <span className="text-[#D1232A]">✕</span>, write the correct word.
+        </h5>
+        <QuestionAudioPlayer
+          src={grammer_u1}
+          captions={captions}
+          stopAtSecond={8.88}
+        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+            marginBottom: "70px",
+          }}
+        >
+          {questions.map((q, i) => (
             <div
+              key={i}
               style={{
-                position: "absolute",
-                top: "10.53%",
-                left: "10.18%",
-                transform: "translate(-50%, -50%) rotate(-15deg)",
-                fontSize: "clamp(20px, 1vw, 16px)",
-                fontWeight: "bold",
-                pointerEvents: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: "14px",
+                fontSize: "18px",
               }}
             >
-              Start
-            </div>
+              {/* NUMBER */}
+              <span style={{ fontWeight: "bold", width: "20px" }}>{i + 1}</span>
 
-            {/* FINISH */}
-            <div
-              style={{
-                position: "absolute",
-                top: "82.75%",
-                left: "88.65%",
-                transform: "translate(-50%, -50%) rotate(-15deg)",
-                fontSize: "clamp(20px, 1vw, 16px)",
-                fontWeight: "bold",
-                pointerEvents: "none",
-              }}
-            >
-              Finish
-            </div>
-            {/* ✅ الدوائر */}
-            {selected.map((word, i) => {
-              const isWrong = wrongWords.includes(word.id);
-
-              return (
-                <div
-                  key={i}
-                  style={{
-                    position: "absolute",
-                    top: word.top,
-                    left: word.left,
-                    width: "10%",
-                    height: "16%",
-                    border: `0.2vw solid ${isWrong ? "red" : "#1C398E"}`, // 🔥 التغيير
-                    borderRadius: "50%",
-                    transform: "translate(-50%, -50%)",
-                    pointerEvents: "none",
-                    zIndex: 5,
-                  }}
-                >
-                  {/* ❌ X */}
-                  {isWrong && (
-                    <div
+              {/* TEXT */}
+              <div style={{ flex: 1 }}>
+                {i === 0 && (
+                  <>
+                    We’ll{" "}
+                    <span
                       style={{
-                        position: "absolute",
-                        top: "-6px",
-                        right: "-6px",
-                        width: "20px",
-                        height: "20px",
-                        background: "#ef4444",
-                        color: "white",
-                        borderRadius: "50%",
-                        fontSize: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        border: "2px solid white",
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                        pointerEvents: "none",
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
                       }}
                     >
-                      ✕
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                      check out
+                    </span>{" "}
+                    the boots, but we don’t really need to buy them.
+                  </>
+                )}
 
-            {/* ✅ مناطق الضغط */}
-            {words.map((word, i) => {
-              return (
-                <div
-                  key={i}
-                  onClick={() => handleClick(word)}
-                  style={{
-                    position: "absolute",
-                    top: word.top,
-                    left: word.left,
-                    transform: "translate(-50%, -50%)",
-                    fontSize: "clamp(10px, 1vw, 16px)",
-                    padding: "0.2vw 0.6vw",
-                    borderRadius: "0.5vw",
-                    whiteSpace: "nowrap",
-                    cursor: "pointer",
+                {i === 1 && (
+                  <>
+                    Joan can play at the{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                    >
+                      jeans
+                    </span>{" "}
+                    all day.
+                  </>
+                )}
 
-                    // 🔥 هذا المهم
-                    border: "0.2vw solid orange",
-                  }}
-                >
-                  {word.id}
-                </div>
-              );
-            })}
+                {i === 2 && (
+                  <>
+                    The{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                    >
+                      clothes store
+                    </span>{" "}
+                    has many books to choose from.
+                  </>
+                )}
 
-            {/* ✅ الكلمات */}
-            {words.map((word, i) => (
+                {i === 3 && (
+                  <>
+                    They are going to the{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                    >
+                      electronics
+                    </span>{" "}
+                    store to find a radio.
+                  </>
+                )}
+
+                {i === 4 && (
+                  <>
+                    Let’s{" "}
+                    <span
+                      style={{
+                        textDecoration: "underline",
+                        textUnderlineOffset: "3px",
+                      }}
+                    >
+                      head over
+                    </span>{" "}
+                    to the restaurant for dinner.
+                  </>
+                )}
+              </div>
+              {/* SYMBOL CHOICES */}
               <div
-                key={i}
                 style={{
-                  position: "absolute",
-                  top: word.top,
-                  left: word.left,
-                  transform: "translate(-50%, -50%)",
-                  fontSize: "clamp(10px, 1vw, 16px)", // ⭐ responsive ذكي
-                  background: "white",
-                  padding: "0.2vw 0.6vw",
-                  borderRadius: "0.5vw",
-                  whiteSpace: "nowrap",
-                  pointerEvents: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  position: "relative",
                 }}
               >
-                {word.id}
+                {/* ✓ BUTTON */}
+                <div
+                  onClick={() => {
+                    if (!locked && !correctLocked[i]?.symbol) {
+                      updateField(
+                        i,
+                        "symbol",
+                        answers[i].symbol === "✓" ? "" : "✓",
+                      );
+                    }
+                  }}
+                  style={{
+                    width: "45px",
+                    height: "45px",
+                    borderRadius: "50%",
+                    border: "2px solid #7b1fa2",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor:
+                      locked || correctLocked[i]?.symbol
+                        ? "default"
+                        : "pointer",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#6D2980",
+                    userSelect: "none",
+                  }}
+                >
+                  {answers[i].symbol === "✓" ? "✓" : ""}
+                </div>
+
+                {/* ✕ BUTTON */}
+                <div
+                  onClick={() => {
+                    if (!locked && !correctLocked[i]?.symbol) {
+                      updateField(
+                        i,
+                        "symbol",
+                        answers[i].symbol === "✕" ? "" : "✕",
+                      );
+                    }
+                  }}
+                  style={{
+                    width: "45px",
+                    height: "45px",
+                    borderRadius: "50%",
+                    border: "2px solid #7b1fa2",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor:
+                      locked || correctLocked[i]?.symbol
+                        ? "default"
+                        : "pointer",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#6D2980",
+                    userSelect: "none",
+                  }}
+                >
+                  {answers[i].symbol === "✕" ? "✕" : ""}
+                </div>
+
+                {/* ERROR */}
+                {errors[i]?.symbol && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-10px",
+                      right: "-10px",
+                      transform: "translateY(-50%)",
+                      width: "22px",
+                      height: "22px",
+                      background: "#ef4444",
+                      color: "white",
+                      borderRadius: "50%",
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
               </div>
-            ))}
-          </div>
+              {/* CORRECTION */}
+              <div style={{ position: "relative" }}>
+                <input
+                  type="text"
+                  value={answers[i].correction}
+                  disabled={
+                    locked ||
+                    correctLocked[i]?.correction ||
+                    normalize(answers[i].symbol) === "✓"
+                  }
+                  onChange={(e) => updateField(i, "correction", e.target.value)}
+                  style={{
+                    width: "240px",
+                    border: "none",
+                    borderBottom: errors[i]?.correction
+                      ? "1px solid red"
+                      : "1px solid black",
+                    outline: "none",
+                    fontSize: "20px",
+                    textAlign: "center",
+                    color: "#6D2980",
+                    background: "transparent",
+                    fontWeight: 600,
+                  }}
+                />
+
+                {/* ❌ */}
+                {errors[i]?.correction && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-10px",
+                      right: "-20px",
+                      transform: "translateY(-50%)",
+                      width: "22px",
+                      height: "22px",
+                      background: "#ef4444",
+                      color: "white",
+                      borderRadius: "50%",
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* BUTTONS */}
+        <div className="action-buttons-container">
+          <button className="try-again-button" onClick={handleReset}>
+            Start Again ↻
+          </button>
+
+          <button className="show-answer-btn" onClick={handleShow}>
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={handleCheck}>
+            Check Answer ✓
+          </button>
         </div>
       </div>
-
-      {/* ⭐ BUTTONS */}
-      <Button
-        handleShowAnswer={handleShowAnswer}
-        handleStartAgain={handleReset}
-        checkAnswers={handleCheck}
-      />
     </div>
   );
 };

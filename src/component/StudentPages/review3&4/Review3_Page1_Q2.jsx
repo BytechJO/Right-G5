@@ -1,309 +1,296 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review3_Page1_Q2.css";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 34/Ex B 1.svg";
 
 const Review3_Page1_Q2 = () => {
-  const items = [
-    { text: "Do they have any milkshakes?", answer: "Yes, they have some." },
-    { text: "Does she have any potatoes?", answer: "No, she hasn’t any" },
-    { text: "Does he have any salad?", answer: "No, he hasn’t any." },
-    { text: "Does she have any fruit?", answer: "Yes, she has some." },
+  const questions = [
+    {
+      left: "Some try!",
+      right: "Try some!",
+      correct: "right",
+    },
+    {
+      left: "Way no!",
+      right: "No way!",
+      correct: "right",
+    },
+    {
+      left: "tastes funny",
+      right: "funny tastes",
+      correct: "left",
+    },
+    {
+      left: "Good that doesn’t sound.",
+      right: "That doesn’t sound good.",
+      correct: "right",
+    },
+    {
+      left: "Help yourself.",
+      right: "Yourself help.",
+      correct: "left",
+    },
   ];
 
-  const wordBank = [
-    "Yes, they have some.",
-    "No, she hasn’t any",
-    "No, he hasn’t any.",
-    "Yes, she has some.",
-  ];
+  const [answers, setAnswers] = useState(questions.map(() => ""));
 
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [wrongMarks, setWrongMarks] = useState([]);
+  const [errors, setErrors] = useState(questions.map(() => false));
 
-  // =========================
-  // DRAG END (🔥 FIXED)
-  // =========================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const [correctLocked, setCorrectLocked] = useState(
+    questions.map(() => false),
+  );
 
-    const value = draggableId.replace("season-", "");
-    const index = Number(destination.droppableId);
+  const [locked, setLocked] = useState(false);
+
+  // select
+  const handleSelect = (index, side) => {
+    if (locked || correctLocked[index]) return;
 
     const updated = [...answers];
-    updated[index] = value;
+
+    updated[index] = side;
+
     setAnswers(updated);
+
+    const updatedErrors = [...errors];
+
+    updatedErrors[index] = false;
+
+    setErrors(updatedErrors);
   };
 
-  // =========================
-  // SHOW ANSWERS (🔥 FIXED)
-  // =========================
-  const showAnswers = () => {
-    setAnswers(items.map((item) => item.answer));
-    setShowCorrect(true);
-    setWrongMarks([]);
-  };
+  // check
+  const handleCheck = () => {
+    if (locked) return;
 
-  // =========================
-  // RESET
-  // =========================
-  const resetAll = () => {
-    setAnswers(items.map(() => ""));
-    setShowCorrect(false);
-    setWrongMarks([]);
-  };
+    const isEmpty = answers.some((a) => a === "");
 
-  // =========================
-  // CHECK ANSWERS (🔥 FIXED)
-  // =========================
-  const checkAnswers = () => {
-    if (showCorrect) return;
-
-    // ❌ إذا في فراغ
-    if (answers.includes("")) {
-      ValidationAlert.info();
+    if (isEmpty) {
+      ValidationAlert.info("Complete all fields.");
       return;
     }
 
     let score = 0;
-    let total = items.length;
-    let wrong = [];
 
-    items.forEach((item, i) => {
-      if (answers[i]?.trim().toLowerCase() === item.answer.toLowerCase()) {
-        score++;
-      } else {
-        wrong.push({ qIndex: i });
-      }
+    const newErrors = answers.map((a, i) => {
+      const correct = a === questions[i].correct;
+
+      if (correct) score++;
+
+      return !correct;
     });
 
-    setWrongMarks(wrong);
-    setShowCorrect(true);
+    const updatedLocked = answers.map((a, i) => a === questions[i].correct);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    setErrors(newErrors);
 
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+    setCorrectLocked(updatedLocked);
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    const total = questions.length;
+
+    const msg = `Score: ${score} / ${total}`;
+
+    if (score === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (score === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
-  const usedWords = answers.filter(Boolean);
 
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
+  // show
+  const handleShow = () => {
+    setAnswers(questions.map((q) => q.correct));
+
+    setErrors(questions.map(() => false));
+
+    setCorrectLocked(questions.map(() => true));
+
+    setLocked(true);
+  };
+
+  // reset
+  const handleReset = () => {
+    setAnswers(questions.map(() => ""));
+
+    setErrors(questions.map(() => false));
+
+    setCorrectLocked(questions.map(() => false));
+
+    setLocked(false);
+  };
+
+  // option
+  const renderOption = (
+    text,
+    side,
+    selected,
+    oppositeSelected,
+    questionIndex,
+  ) => {
+    return (
+      <span
+        onClick={() => handleSelect(questionIndex, side)}
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
+          position: "relative",
+
+          cursor:
+            locked || correctLocked[questionIndex] ? "default" : "pointer",
+
+          userSelect: "none",
+
+          padding: "2px 6px",
+
+          border: selected ? "2px solid #6D2980" : "2px solid transparent",
+
+          borderRadius: "999px",
+
+          transition: "0.2s",
         }}
       >
-        <div
-          className="div-forall"
-          style={{ width: "60%", marginBottom: "40px" }}
-        >
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>B</span>Read, look, and
-            answer. Use the sentences below
-          </h5>
-          {/* WORD BANK */}
-          <Droppable droppableId="bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginTop: "20px",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
-                {wordBank.map((word, index) => {
-                  const isUsed = usedWords.includes(word);
+        {text}
 
-                  return (
-                    <Draggable
-                      key={word}
-                      draggableId={`season-${word}`}
-                      index={index}
-                      isDragDisabled={isUsed}
-                    >
-                      {(provided) => (
-                        <span
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="season-chip"
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: isUsed ? "not-allowed" : "grab",
-                            fontSize: "16px",
-                            opacity: isUsed ? 0.4 : 1,
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {word}
-                        </span>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          {/* CONTENT */}
-
-          <div
+        {/* X */}
+        {oppositeSelected && (
+          <span
             style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "30px",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              color: "#FF0000",
+              fontSize: "28px",
+              fontWeight: "bold",
+              lineHeight: 1,
+              pointerEvents: "none",
             }}
           >
-            {/* 🟠 IMAGE LEFT */}
+            ✗
+          </span>
+        )}
+      </span>
+    );
+  };
+
+  return (
+    <div
+      style={{
+        padding: "30px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div className="div-forall">
+        {/* HEADER */}
+        <h5 className="header-title-page8 mb-36">
+          <span className="mr-2">B</span>
+          Read and circle the correct expression. Cross out (<span className="text-[#FF0000]">✗</span>) the wrong one.
+        </h5>
+
+        {/* QUESTIONS */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            columnGap: "16px",
+            rowGap: "40px",
+            marginTop: "30px",
+          }}
+        >
+          {questions.map((q, i) => (
             <div
+              key={i}
               style={{
-                width: "300px",
-                height: "300px",
-                overflow: "hidden",
-                border: "2px solid orange",
-                borderRadius: 5,
+                background: "#ddd7df",
+
+                borderRadius: "12px",
+
+                padding: "14px 18px",
+
+                minWidth: i === 3 ? "500px" : "250px",
+
+                display: "flex",
+
+                alignItems: "center",
+
+                gap: "16px",
+
+                fontSize: "18px",
+
+                position: "relative",
               }}
             >
-              <img
-                src={img1}
-                alt="exercise"
+              {/* NUMBER */}
+              <span
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "50% 85%",
-                  transform: "scale(1.1)",
+                  fontWeight: "bold",
                 }}
-              />
-            </div>
+              >
+                {i + 1}
+              </span>
 
-            {/* 🔵 QUESTIONS RIGHT */}
-            <div className="space-y-6">
-              {items.map((item, i) => (
-                <div
-                  key={i}
+              {/* LEFT */}
+              {renderOption(
+                q.left,
+                "left",
+                answers[i] === "left",
+                answers[i] === "right",
+                i,
+              )}
+
+              {/* RIGHT */}
+              {renderOption(
+                q.right,
+                "right",
+                answers[i] === "right",
+                answers[i] === "left",
+                i,
+              )}
+
+              {/* ❌ ERROR */}
+              {errors[i] && (
+                <span
                   style={{
+                    position: "absolute",
+                    top: "-10px",
+                    right: "-10px",
+                    width: "22px",
+                    height: "22px",
+                    background: "#ef4444",
+                    color: "white",
+                    borderRadius: "50%",
                     display: "flex",
-                    flexDirection: "column", // 🔥 أهم تغيير
-                    alignItems: "flex-start",
-                    marginBottom: "15px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
                   }}
                 >
-                  {/* TEXT */}
-                  <span
-                    className="text-base"
-                    style={{
-                      fontSize: "20px",
-                    }}
-                  >
-                    {i + 1}. {item.text}
-                  </span>
-
-                  <Droppable droppableId={`${i}`}>
-                    {(provided) => {
-                      const isWrong = wrongMarks.some((w) => w.qIndex === i);
-
-                      return (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          style={{
-                            position: "relative",
-                            minWidth: "250px",
-                            width: "100%",
-                            maxWidth: "400px",
-                            fontWeight: "bold",
-                            color: answers[i] ? "#1C398E" : "black",
-
-                            borderBottom: `3px solid ${
-                              isWrong ? "red" : "black"
-                            }`,
-
-                            marginTop: "20px",
-                            paddingBottom: "6px",
-                          }}
-                        >
-                          {answers[i]}
-                          {provided.placeholder}
-
-                          {showCorrect && isWrong && (
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "50%",
-                                right: "-28px",
-                                transform: "translateY(-50%)",
-                                width: "22px",
-                                height: "22px",
-                                background: "#ef4444",
-                                color: "white",
-                                borderRadius: "50%",
-                                fontSize: "12px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: "bold",
-                                border: "2px solid white",
-                                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                                pointerEvents: "none",
-                              }}
-                            >
-                              ✕
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }}
-                  </Droppable>
-                </div>
-              ))}
+                  ✕
+                </span>
+              )}
             </div>
-          </div>
+          ))}
         </div>
 
         {/* BUTTONS */}
         <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
+          <button className="try-again-button" onClick={handleReset}>
             Start Again ↻
           </button>
-          <button onClick={showAnswers} className="show-answer-btn">
+
+          <button className="show-answer-btn" onClick={handleShow}>
             Show Answer
           </button>
-          <button onClick={checkAnswers} className="check-button2">
+
+          <button className="check-button2" onClick={handleCheck}>
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 

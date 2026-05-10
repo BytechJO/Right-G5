@@ -1,257 +1,328 @@
-import React, { useState } from "react";
-import "./Unit4_Page5_Q2.css";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32/Ex B 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32/Ex B 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32/Ex B 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32/Ex B 4.svg";
-import Button from "../../Button";
-const questions = [
-  {
-    id: 1,
-    image: img1,
-    options: ["His", "Our"],
-    correct: "His",
-    word: "cap",
-    rest: "flies away.",
-  },
-  {
-    id: 2,
-    image: img2,
-    options: ["Their", "Her"],
-    correct: "Their",
-    word: "pets",
-    rest: "have fun.",
-  },
-  {
-    id: 3,
-    image: img3,
-    options: ["His", "Her"],
-    correct: "Her",
-    word: "pet",
-    rest: "wins the race.",
-  },
-  {
-    id: 4,
-    image: img4,
-    options: ["Our", "His"],
-    correct: "Our",
-    word: "feet",
-    rest: "hurt.",
-  },
-];
+
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32/SVG/Asset 12.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32/SVG/Asset 13.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32/SVG/Asset 14.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32/SVG/Asset 15.svg";
+import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32/SVG/Asset 16.svg";
+
 const Unit4_Page5_Q2 = () => {
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [matches, setMatches] = useState({});
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
-  const [answers, setAnswers] = useState({});
-  const [wrong, setWrong] = useState({});
-  const handleSelect = (qIndex, option) => {
-    if (locked) return;
+  const [selectedSentence, setSelectedSentence] = useState(null);
 
-    setAnswers({
-      ...answers,
-      [qIndex]: option,
-    });
+  const imageRefs = useRef([]);
+  const sentenceRefs = useRef([]);
+  const containerRef = useRef(null);
+
+  const images = [
+    { id: 0, img: img1 },
+    { id: 1, img: img2 },
+    { id: 2, img: img3 },
+    { id: 3, img: img4 },
+    { id: 4, img: img5 },
+  ];
+
+  const sentences = [
+    { id: 0, text: "boots" },
+    { id: 1, text: "grocery store" },
+    { id: 2, text: "arcade" },
+    { id: 3, text: "jeans" },
+    { id: 4, text: "food court" },
+  ];
+
+  const correct = {
+    0: 3,
+    1: 0,
+    2: 4,
+    3: 1,
+    4: 2,
   };
-  // ===============================
-  // 🔵 4) فحص الإجابات
-  // ===============================
-  const checkAnswers = () => {
-    if (locked || showResult) return;
 
-    if (Object.keys(answers).length !== questions.length) {
-      return ValidationAlert.info("Oops!", "Please answer all questions.");
+  const selectImage = (id) => {
+    if (matches[id] === correct[id]) return;
+
+    // إذا اختار جملة → اربط
+    if (selectedSentence !== null) {
+      setMatches((prev) => {
+        const updated = { ...prev };
+
+        Object.keys(updated).forEach((imgKey) => {
+          if (updated[imgKey] === selectedSentence) {
+            delete updated[imgKey];
+          }
+        });
+
+        updated[id] = selectedSentence;
+        return updated;
+      });
+
+      setSelectedSentence(null);
+      return;
     }
 
-    let correct = 0;
-    const wrongMap = {};
+    // السلوك القديم (اختيار صورة)
+    setSelectedImg(id);
+    setShowResult(false);
+  };
 
-    questions.forEach((q, qIndex) => {
-      if (answers[qIndex] === q.correct) {
-        correct++;
-      } else {
-        wrongMap[qIndex] = true;
-      }
+  const selectSentence = (id) => {
+    if (
+      Object.entries(matches).some(
+        ([imgId, sentId]) => sentId === id && correct[imgId] === sentId,
+      )
+    )
+      return;
+
+    if (selectedImg !== null) {
+      setMatches((prev) => {
+        const updated = { ...prev };
+
+        Object.keys(updated).forEach((imgKey) => {
+          if (updated[imgKey] === id) {
+            delete updated[imgKey];
+          }
+        });
+
+        updated[selectedImg] = id;
+        return updated;
+      });
+
+      setSelectedImg(null);
+
+      return;
+    }
+    setSelectedSentence(id);
+    setShowResult(false);
+  };
+  const checkAnswers = () => {
+    if (locked) return;
+
+    if (Object.keys(matches).length !== images.length) {
+      ValidationAlert.info("Please match all.");
+      return;
+    }
+
+    let correctCount = 0;
+
+    Object.entries(matches).forEach(([imgId, sentId]) => {
+      if (correct[imgId] === sentId) correctCount++;
     });
 
-    setWrong(wrongMap);
+    const total = images.length;
+
+    const message = `
+        Score: ${correctCount} / ${total}
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(message);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(message);
+    } else {
+      ValidationAlert.warning(message);
+    }
+
     setShowResult(true);
-    setLocked(true);
-
-    const total = questions.length;
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    ValidationAlert[
-      correct === total ? "success" : correct === 0 ? "error" : "warning"
-    ](`<b style="color:${color}">Score: ${correct} / ${total}</b>`);
   };
+
   const showAnswers = () => {
-    const filled = {};
-    questions.forEach((q, i) => {
-      filled[i] = q.correct;
-    });
-
-    setAnswers(filled);
-    setShowResult(true);
+    setMatches(correct);
     setLocked(true);
+    setShowResult(true);
   };
+
   const reset = () => {
-    setAnswers({});
-    setWrong({});
+    setSelectedSentence(null);
+    setSelectedImg(null);
+    setMatches({});
     setShowResult(false);
     setLocked(false);
   };
 
-  // ===============================
-  // 🔵 JSX
-  // ===============================
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
         padding: "30px",
+        position: "relative",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          justifyContent: "flex-start",
-        }}
-      >
-        <h5 className="header-title-page8 pb-2.5">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
-            B
-          </span>
-          Look, read, and choose
+      <div className="div-forall">
+        <h5 className="header-title-page8  mb-6">
+          <span className="ex-A mr-3">B</span>
+          Read, look, and match.
         </h5>
-        <div className="grid grid-cols-2 gap-10 max-w-[1000px] w-full">
-          {questions.map((q, qIndex) => (
-            <div key={q.id} className="flex items-center gap-4">
-              <span style={{ fontWeight: "bold" }}>{q.id}</span>
-              {/* الصورة */}
-              <img
-                src={q.image}
-                style={{
-                  width: "120px",
-                  height: "auto",
-                }}
-              />
 
-              {/* الخيارات فوق بعض */}
-              <div className="flex flex-col gap-2">
-                {q.options.map((opt, i) => {
-                  const isSelected = answers[qIndex] === opt;
-                  const isWrong = wrong[qIndex];
+        <div className="w-full flex flex-col items-center gap-50">
+          {/* 🔥 الصور فوق */}
+          <div className="grid grid-cols-5 w-full">
+            {images.map((img, i) => (
+              <div
+                key={i}
+                onClick={() => selectImage(i)}
+                className="relative flex flex-col items-center cursor-pointer transition"
+              >
+                <img
+                  src={img.img}
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "contain",
+                    border:
+                      selectedImg === i
+                        ? "3px solid #6d2980"
+                        : "3px solid transparent",
+                    borderRadius: "12px",
+                    padding: "4px",
+                    backgroundColor:
+                      selectedImg === i ? "#6d2980" : "transparent",
+                  }}
+                />
 
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => handleSelect(qIndex, opt)}
-                      style={{
-                        position: "relative",
-                        cursor: "pointer",
-                        padding: "2px 6px",
-                        width: "fit-content",
-                      }}
-                    >
-                      {/* النص */}
+                <div
+                  ref={(el) => (imageRefs.current[i] = el)}
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition z-10"
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "#00AEEF",
+                    transform:
+                      selectedImg === i
+                        ? "translate(-50%, -50%) scale(1.4)"
+                        : "translate(-50%, -50%)",
+                  }}
+                ></div>
+              </div>
+            ))}
+          </div>
+
+          {/* 🔥 الجمل تحت */}
+          <div className="grid grid-cols-5 w-full mb-15">
+            {sentences.map((sent, i) => (
+              <div
+                key={i}
+                onClick={() => selectSentence(i)}
+                className="relative flex flex-col items-center cursor-pointer "
+              >
+                {/* 🔥 الدوت */}
+                <div
+                  ref={(el) => (sentenceRefs.current[i] = el)} // 🔥 هون كمان
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full z-10 transition"
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "#00AEEF",
+                    transform:
+                      selectedSentence === i ? "scale(1.4)" : "scale(1)",
+                    boxShadow:
+                      selectedSentence === i
+                        ? "0 0 0 4px rgba(249,115,22,0.2)"
+                        : "none",
+                  }}
+                ></div>
+
+                {/* 🔥 البوكس */}
+                <div
+                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]"
+                  style={{
+                    border:
+                      selectedSentence === i
+                        ? "2px solid #f97316"
+                        : "2px solid transparent",
+                  }}
+                >
+                  <span className="font-bold mr-3">{i + 1}</span>
+                  {sent.text}
+                  {showResult &&
+                    Object.entries(matches).some(
+                      ([imgId, sentId]) =>
+                        sentId == i && correct[imgId] !== sentId,
+                    ) && (
                       <span
                         style={{
-                          color: "black",
-                          fontSize: "14px",
+                          position: "absolute",
+                          top: "-10px",
+                          right: "-10px",
+                          transform: "translateY(-50%)",
+                          width: "20px",
+                          height: "20px",
+                          background: "#ef4444",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                          pointerEvents: "none",
+                          zIndex: 3,
                         }}
                       >
-                        {opt}
+                        ✕
                       </span>
-
-                      {/* ✅ الدائرة */}
-                      {isSelected && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            width: "50px",
-                            height: "50px",
-                            border: `2px solid ${isWrong ? "red" : "#1C398E"}`,
-                            borderRadius: "50%",
-                            transform: "translate(-50%, -50%)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          {/* ❌ X */}
-                          {showResult && isWrong && (
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "-6px",
-                                right: "-6px",
-                                width: "20px",
-                                height: "20px",
-                                background: "#ef4444",
-                                color: "white",
-                                borderRadius: "50%",
-                                fontSize: "12px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: "bold",
-                                border: "2px solid white",
-                                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                                pointerEvents: "none",
-                              }}
-                            >
-                              ✕
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                    )}
+                </div>
               </div>
-
-              {/* الخط الأول */}
-              <div
-                style={{
-                  width: "1px", // ⭐ أهم تعديل
-                  height: "1.5em", // ⭐ مرتبط بالنص
-                  background: "#444",
-                  alignSelf: "center",
-                }}
-              />
-
-              {/* الكلمة */}
-              <span className="text-[16px]">{q.word}</span>
-
-              {/* الخط الثاني */}
-              <div
-                style={{
-                  width: "1px", // ⭐ أهم تعديل
-                  height: "1.5em", // ⭐ مرتبط بالنص
-                  background: "#444",
-                  alignSelf: "center",
-                }}
-              />
-
-              {/* باقي الجملة */}
-              <span className="text-[16px]">{q.rest}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-      <Button
-        handleShowAnswer={showAnswers}
-        handleStartAgain={reset}
-        checkAnswers={checkAnswers}
-      />
+
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        {Object.entries(matches).map(([imgId, sentId], i) => {
+          const imgDot = imageRefs.current[imgId];
+          const sentDot = sentenceRefs.current[sentId];
+
+          if (!imgDot || !sentDot || !containerRef.current) return null;
+
+          const imgRect = imgDot.getBoundingClientRect();
+          const sentRect = sentDot.getBoundingClientRect();
+          const containerRect = containerRef.current.getBoundingClientRect();
+
+          const x1 = sentRect.left + sentRect.width / 2 - containerRect.left;
+          const y1 = sentRect.top + sentRect.height / 2 - containerRect.top;
+
+          const x2 = imgRect.left + imgRect.width / 2 - containerRect.left;
+          const y2 = imgRect.top + imgRect.height / 2 - containerRect.top;
+          return (
+            <g key={i}>
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="#6d2980"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={reset}>
+          Start Again ↻
+        </button>
+
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
 };

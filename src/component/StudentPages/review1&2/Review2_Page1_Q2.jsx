@@ -120,8 +120,8 @@ const Review2_Page1_Q2 = () => {
             style={{
               display: "flex",
               alignItems: "flex-start",
-              gap: "12px",
-              marginBottom: "30px",
+              gap: "16px",
+              marginBottom: "50px",
               position: "relative", // 👈 مهم
               paddingLeft: "40px", // 👈 مساحة للرقم
             }}

@@ -25,10 +25,10 @@ import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms Ho
 import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 40-41/1-02.svg";
 import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 40-41/1-03.svg";
 import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 40-41/1-04.svg";
-import sound1_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.1_Adult Lady.mp3";
-import sound2_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.2_Adult Lady.mp3";
-import sound3_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.3_Adult Lady.mp3";
-import sound4_letter from "../../../assets/audio/ClassBook/Unit 2/P 10/Pg10_1.4_Adult Lady.mp3";
+import sound1_letter from "../../../assets/audio/ClassBook/Unit 5/P 40/unit5-pg40-allunit.mp3";
+import sound2_letter from "../../../assets/audio/ClassBook/Unit 5/P 40/unit5-pg40-allunit.mp3";
+import sound3_letter from "../../../assets/audio/ClassBook/Unit 5/P 40/unit5-pg40-allunit.mp3";
+import sound4_letter from "../../../assets/audio/ClassBook/Unit 5/P 40/unit5-pg40-allunit.mp3";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import listenAudio from "../../../assets/audio/ClassBook/Unit 5/P 40/unit5-pg40-listen.mp3";
 const Unit2_Page1 = ({ openPopup }) => {

@@ -1,279 +1,380 @@
 import React, { useState } from "react";
-
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import "./Review3_Page2_Q2.css";
-import Button from "../../Button";
 
 const Review3_Page2_Q2 = () => {
-  const questions = [
-    {
-      lines: [
-        "I end with ch.",
-        "I rhyme with crunch.",
-        "I am an afternoon meal.",
-        "What am I?",
-      ],
-    },
-    {
-      lines: [
-        "I end with sh.",
-        "I am an animal.",
-        "I am a super swimmer.",
-        "What am I?",
-      ],
-    },
+  // ✅ IDs للكلمات الصح
+  const correctAnswers = [
+    "1-2", // short
+    "2-2", // sad
+    "3-3", // shiny
+    "4-2", // unhappy
+    "5-3", // helpful
+    "6-2", // slim
+    "6-4", // tall
+    "7-3", // large
+    "8-3", // dark
+    "9-2", // angry
   ];
-  const [answers, setAnswers] = useState(Array(questions.length).fill(""));
-  const [wrongInput, setWrongInputs] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false);
 
-  const correctAnswers = ["lunch", "fish"];
-  // 🧲 Drag logic
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+  const [selectedWords, setSelectedWords] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]);
+  const [correctWordsLocked, setCorrectWordsLocked] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const newIndex = Number(destination.droppableId.split("-")[1]);
-      const word = draggableId.replace("word-", "");
+  // =========================
+  // TOGGLE
+  // =========================
+  const toggleWord = (id) => {
+    if (locked) return;
 
-      const updated = [...answers];
+    // يمنع تعديل الصح
+    if (correctWordsLocked.includes(id)) return;
 
-      // 🔍 نشوف إذا الكلمة موجودة بخانة ثانية
-      const oldIndex = updated.findIndex((ans) => ans === word);
-
-      // إذا كانت موجودة → نفرغ مكانها القديم
-      if (oldIndex !== -1) {
-        updated[oldIndex] = "";
-      }
-
-      // 🔁 نحطها بالمكان الجديد
-      updated[newIndex] = word;
-
-      setAnswers(updated);
-      setWrongInputs([]);
+    if (selectedWords.includes(id)) {
+      setSelectedWords(selectedWords.filter((w) => w !== id));
+    } else {
+      setSelectedWords([...selectedWords, id]);
     }
+
+    // يخفي X
+    setWrongWords(wrongWords.filter((w) => w !== id));
   };
 
-  const checkAnswers = () => {
-    if (showAnswer) return;
-
-    if (answers.some((ans) => ans === "")) {
-      ValidationAlert.info("Please fill in all the blanks before checking!");
+  // =========================
+  // CHECK
+  // =========================
+  const handleCheck = () => {
+     if (locked) return;
+    if (selectedWords.length === 0) {
+      ValidationAlert.info("Please select the adjectives.");
       return;
     }
 
-    let score = 0;
-    let wrong = [];
+    const wrong = [];
 
-    answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        score++;
+    // ✅ الصح الجديد فقط
+    const newCorrect = [];
+
+    selectedWords.forEach((id) => {
+      const correct = correctAnswers.includes(id);
+
+      if (correct) {
+        newCorrect.push(id);
       } else {
-        wrong.push(i); // 🔥 أهم تعديل
+        wrong.push(id);
       }
     });
 
-    setWrongInputs(wrong);
-    setShowAnswer(true);
+    setWrongWords(wrong);
+
+    // ✅ جمع الصح القديم + الجديد
+    const updatedCorrect = [...new Set([...correctWordsLocked, ...newCorrect])];
+
+    setCorrectWordsLocked(updatedCorrect);
+
     const total = correctAnswers.length;
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const allCorrect = updatedCorrect.length === total && wrong.length === 0;
 
-    ValidationAlert[
-      score === total ? "success" : score === 0 ? "error" : "warning"
-    ](`
+    const color = allCorrect
+      ? "green"
+      : updatedCorrect.length === 0
+        ? "red"
+        : "orange";
+
+    const msg = `
     <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold;">
-        Score: ${score} / ${total}
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${updatedCorrect.length} / ${total}
       </span>
     </div>
-  `);
+  `;
+
+    if (allCorrect) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (updatedCorrect.length === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const reset = () => {
-    setAnswers(Array(questions.length).fill(""));
-    setWrongInputs([]);
-    setShowAnswer(false);
+  // =========================
+  // SHOW
+  // =========================
+  const handleShow = () => {
+    setSelectedWords(correctAnswers);
+    setCorrectWordsLocked(correctAnswers);
+    setWrongWords([]);
+    setLocked(true);
   };
 
-  const showAnswerFun = () => {
-    setAnswers(correctAnswers);
-    setWrongInputs([]);
-    setShowAnswer(true);
+  // =========================
+  // RESET
+  // =========================
+  const handleReset = () => {
+    setSelectedWords([]);
+    setWrongWords([]);
+    setCorrectWordsLocked([]);
+    setLocked(false);
   };
-  const usedWords = answers.filter(Boolean);
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
+
+  // =========================
+  // RENDER WORD
+  // =========================
+  const renderWord = (word, id) => {
+    const selected = selectedWords.includes(id);
+
+    const wrong = wrongWords.includes(id);
+
+    return (
+      <span
+        key={id}
+        onClick={() => toggleWord(id)}
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
+          position: "relative",
+          display: "inline-block",
+          margin: "0 0.5px",
         }}
       >
-        <div
-          className="div-forall"
+        <span
           style={{
-            width: "60%",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
+            cursor: locked ? "default" : "pointer",
+
+            border: selected
+              ? wrong
+                ? "2px solid red"
+                : "2px solid #6D2980"
+              : "2px solid transparent",
+
+            borderRadius: "999px",
+
+            padding: "2px 2px",
+
+            transition: "0.2s",
+
+            userSelect: "none",
+
+            display: "inline-block",
           }}
         >
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>D</span> Answer each riddle
-            with a <span style={{ color: "#2e3192" }}>ch</span>or{" "}
-            <span style={{ color: "#2e3192" }}>sh</span> word.
-          </h5>
+          {word}
+        </span>
 
-          {/* 🔤 الكلمات (فوق – نفس الكتاب) */}
-          <Droppable droppableId="words" direction="horizontal" isDropDisabled>
-            {(provided) => (
-              <div
-                // className="word-bank-unit2-p8-q2"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  // margin: "10px 0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {["lunch", "bench", "sandwich", "fish", "dish", "brush"].map(
-                  (word, index) => {
-                    const isUsed = usedWords.includes(word);
+        {/* ❌ */}
+        {wrong && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-10px",
+              right: "-10px",
+              width: "18px",
+              height: "18px",
+              background: "#ef4444",
+              color: "white",
+              borderRadius: "50%",
+              fontSize: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              border: "2px solid white",
+              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            }}
+          >
+            ✕
+          </span>
+        )}
+      </span>
+    );
+  };
 
-                    return (
-                      <Draggable
-                        key={word}
-                        draggableId={`word-${word}`}
-                        index={index}
-                        isDragDisabled={isUsed} // 🔥 تعطيل
-                      >
-                        {(provided) => (
-                          <span
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`word-item-unit2-p8-q2 ${
-                              isUsed ? "used" : ""
-                            }`}
-                            style={{
-                              padding: "7px 14px",
-                              border: "2px solid #2c5287",
-                              borderRadius: "8px",
-                              background: "white",
-                              fontWeight: "bold",
-                              cursor: isUsed ? "not-allowed" : "grab", // 🔥 cursor
-                              opacity: isUsed ? 0.4 : 1, // 🔥 opacity
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {word}
-                          </span>
-                        )}
-                      </Draggable>
-                    );
-                  },
-                )}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div className="grid grid-cols-2 gap-4 justify-items-center">
-            {questions.map((q, index) => (
-              <div key={index} className="flex flex-col gap-2">
-                {/* أول سطر + الرقم */}
-                <div className="flex items-start gap-2">
-                  <span className="font-bold text-lg w-6 text-right">
-                    {index + 1}.
-                  </span>
-                  <span>{q.lines[0]}</span>
-                </div>
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div className="div-forall">
+        <h5 className="header-title-page8 mb-35">
+          <span className="mr-2">E</span>
+          Read and circle the adjectives in the chart.
+        </h5>
 
-                {/* باقي السطور */}
-                {q.lines.slice(1).map((line, i) => (
-                  <span key={i} className="ml-8">
-                    {line}
-                  </span>
+        <table className="w-full border-collapse text-[20px]">
+          <tbody>
+            {/* ROW 1 */}
+            <tr>
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">1</span>
+
+                {["Is", "Wayne", "short", "?"].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-[1px]">{word}</span>
+                    ) : (
+                      renderWord(word, `1-${index}`)
+                    )}
+                  </React.Fragment>
                 ))}
+              </td>
 
-                {/* الفراغ */}
-                <Droppable droppableId={`slot-${index}`}>
-                  {(provided) => (
-                    <div className="relative inline-block ml-6">
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="w-[90px] text-center font-bold"
-                        style={{
-                          paddingTop: 20,
-                          borderBottom: `3px solid ${
-                            wrongInput.includes(index) ? "red" : "black"
-                          }`,
-                        }}
-                      >
-                        <span className="text-[#1C398E]">{answers[index]}</span>
-                        {provided.placeholder}
-                      </div>
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">2</span>
 
-                      {showAnswer && wrongInput.includes(index) && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "100px",
-                            transform: "translateY(-50%)",
-                            width: "22px",
-                            height: "22px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            border: "2px solid white",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: "13px",
-                              lineHeight: "1",
-                              transform: "translateY(-1px)",
-                            }}
-                          >
-                            ✕
-                          </span>
-                        </div>
+                {[
+                  "They",
+                  "are",
+                  "sad",
+                  "after",
+                  "losing",
+                  "the",
+                  "game",
+                  ".",
+                ].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-[1px]">{word}</span>
+                    ) : (
+                      renderWord(word, `2-${index}`)
+                    )}
+                  </React.Fragment>
+                ))}
+              </td>
+
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">3</span>
+
+                {["The", "car", "is", "shiny", "."].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-px">{word}</span>
+                    ) : (
+                      renderWord(word, `3-${index}`)
+                    )}
+                  </React.Fragment>
+                ))}
+              </td>
+            </tr>
+
+            {/* ROW 2 */}
+            <tr>
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">4</span>
+
+                {["Is", "he", "unhappy", "?"].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-px">{word}</span>
+                    ) : (
+                      renderWord(word, `4-${index}`)
+                    )}
+                  </React.Fragment>
+                ))}
+              </td>
+
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">5</span>
+
+                {["The", "students", "are", "helpful", "."].map(
+                  (word, index) => (
+                    <React.Fragment key={index}>
+                      {word === "?" || word === "." ? (
+                        <span className="mx-px">{word}</span>
+                      ) : (
+                        renderWord(word, `5-${index}`)
                       )}
-                    </div>
-                  )}
-                </Droppable>
-              </div>
-            ))}
-          </div>
+                    </React.Fragment>
+                  ),
+                )}
+              </td>
 
-          {/* 🔘 الأزرار نفسها */}
-          <Button
-            handleShowAnswer={showAnswerFun}
-            handleStartAgain={reset}
-            checkAnswers={checkAnswers}
-          />
-        </div>
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">6</span>
+
+                {["Tina", "is", "slim", "and", "tall", "."].map(
+                  (word, index) => (
+                    <React.Fragment key={index}>
+                      {word === "?" || word === "." ? (
+                        <span className="mx-px">{word}</span>
+                      ) : (
+                        renderWord(word, `6-${index}`)
+                      )}
+                    </React.Fragment>
+                  ),
+                )}
+              </td>
+            </tr>
+
+            {/* ROW 3 */}
+            <tr>
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">7</span>
+
+                {["We", "are", "a", "large", "family", "."].map(
+                  (word, index) => (
+                    <React.Fragment key={index}>
+                      {word === "?" || word === "." ? (
+                        <span className="mx-px">{word}</span>
+                      ) : (
+                        renderWord(word, `7-${index}`)
+                      )}
+                    </React.Fragment>
+                  ),
+                )}
+              </td>
+
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">8</span>
+
+                {["The", "room", "is", "dark", "."].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-px">{word}</span>
+                    ) : (
+                      renderWord(word, `8-${index}`)
+                    )}
+                  </React.Fragment>
+                ))}
+              </td>
+
+              <td className="border border-[#7A2D91] p-4 align-top whitespace-nowrap">
+                <span className="font-bold mr-3">9</span>
+
+                {["Are", "you", "angry", "?"].map((word, index) => (
+                  <React.Fragment key={index}>
+                    {word === "?" || word === "." ? (
+                      <span className="mx-px">{word}</span>
+                    ) : (
+                      renderWord(word, `9-${index}`)
+                    )}
+                  </React.Fragment>
+                ))}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={handleShow}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={handleCheck}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

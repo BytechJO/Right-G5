@@ -180,7 +180,7 @@ const Unit2_Page5_Q2 = () => {
         }}
       >
         <div className="div-forall">
-          <h5 className="header-title-page8 mb-7">
+          <h5 className="header-title-page8 mb-15">
             <span className="ex-A mr-2">B</span>
             Using the words and phrases in the box, finish the story.
           </h5>
@@ -191,7 +191,7 @@ const Unit2_Page5_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-wrap gap-3 p-3  rounded-xl items-center justify-center  w-fit mx-auto"
+                className="flex flex-nowrap gap-3  rounded-xl items-center justify-start min-w-[1400px]"
               >
                 {words.map((w, i) => {
                   const used = answers.includes(w);
@@ -208,7 +208,7 @@ const Unit2_Page5_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="px-3 py-1 bg-white rounded-lg border cursor-pointer "
+                          className="px-3 py-1 bg-white rounded-lg border cursor-pointer whitespace-nowrap"
                           style={{
                             opacity: used ? 0.5 : 1,
                             ...provided.draggableProps.style,

@@ -107,7 +107,7 @@ const Review2_Page1_Q3 = () => {
   return (
     <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-27">
+        <h5 className="header-title-page8 mb-22">
           <span className="mr-3">C</span>
           Read and circle the correct answer.
         </h5>
@@ -120,7 +120,7 @@ const Review2_Page1_Q3 = () => {
               display: "flex",
               alignItems: "flex-start",
               gap: "10px",
-              marginBottom: "40px",
+              marginBottom: "65px",
             }}
           >
             {/* الرقم */}

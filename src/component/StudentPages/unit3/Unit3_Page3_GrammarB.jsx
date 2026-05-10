@@ -236,12 +236,12 @@ const GrammarB = () => {
             {option(0, "short")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img1} />
+          <img style={{ width: "20%", height: "auto"}} src={img1} />
         </div>
 
         {/* 2 */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 whitespace-nowrap ml-5">
             <span>
               {" "}
               <span className="font-bold mr-1">2</span> She
@@ -255,12 +255,12 @@ const GrammarB = () => {
             {option(1, "happy")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img2} />
+          <img style={{ width: "20%", height: "auto"}} src={img2} />
         </div>
 
         {/* 3 */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 whitespace-nowrap">
             <span>
               {" "}
               <span className="font-bold mr-1">3</span> The boy
@@ -274,12 +274,12 @@ const GrammarB = () => {
             {option(2, "dirty")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img3} />
+          <img style={{ width: "20%", height: "auto"}} src={img3} />
         </div>
 
         {/* 4 */}
         <div className="flex items-center flex-nowrap">
-          <div className="flex items-center gap-2 whitespace-nowrap">
+          <div className="flex items-center gap-2 whitespace-nowrap ml-5">
             <span>
               {" "}
               <span className="font-bold mr-1">4</span> The lions
@@ -293,11 +293,11 @@ const GrammarB = () => {
             {option(3, "scary")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img4} />
+          <img style={{ width: "20%", height: "auto"}} src={img4} />
         </div>
 
         {/* 5 */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <div className="flex items-center gap-2">
             <span>
               {" "}
@@ -312,11 +312,11 @@ const GrammarB = () => {
             {option(4, "are")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img5} />
+          <img style={{ width: "20%", height: "auto"}} src={img5} />
         </div>
 
         {/* 6 */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ml-5">
           <div className="flex items-center gap-2">
             <span>
               {" "}
@@ -331,7 +331,7 @@ const GrammarB = () => {
             {option(5, "are")}
           </div>
 
-          <img style={{ width: 60, height: 40 }} src={img6} />
+          <img style={{ width: "20%", height: "auto"}} src={img6} />
         </div>
       </div>
       <div className="flex justify-center gap-6 mt-8">

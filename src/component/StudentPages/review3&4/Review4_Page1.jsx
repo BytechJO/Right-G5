@@ -1,4 +1,4 @@
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 36.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36.png";
 import "./Review4_Page1.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -18,7 +18,7 @@ const Review4_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 37 })}
+          onClick={() => openPopup("exercise", { startIndex: 41 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -39,7 +39,7 @@ const Review4_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 38 })}
+          onClick={() => openPopup("exercise", { startIndex: 42 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -60,7 +60,7 @@ const Review4_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 39 })}
+          onClick={() => openPopup("exercise", { startIndex: 43 })}
           style={{ overflow: "visible" }}
         >
           <image

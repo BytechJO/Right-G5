@@ -1,409 +1,284 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review3_Page1_Q1.css";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import boy from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 34/Ex A 1.svg";
-import girl from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 34/Ex A 2.svg";
-import sarah from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 34/Ex A 3.svg";
-import jack from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 34/Ex A 4.svg";
 
 const Review3_Page1_Q1 = () => {
-  const items = [
+  const wordBank = ["sardines", "yummy", "salty", "cupboard"];
+
+  const correctAnswers = ["yummy", "sardines", "cupboard", "salty"];
+
+  const sentences = [
     {
-      text: "What do you have in your lunchbox?",
-      answer: null,
-      speaker: "boy",
+      before: "",
+      after: "! I love strawberries!",
+      width: "340px",
     },
-
     {
-      text: "I have ______ sandwiches.",
-      answer: "lunch meat",
-      speaker: "girl",
+      before: "Get those",
+      after: "away from me! They are so smelly.",
+      width: "280px",
     },
-
-    { text: "Do you have ______ fruit?", answer: "any", speaker: "boy" },
-
     {
-      text: "Yes, I have some ______ and ______.",
-      answer: ["grapes", "cherries"],
-      speaker: "girl",
+      before: "Can you get me the peanut butter from the",
+      after: "?",
+      width: "300px",
     },
-
-    { text: "Do you have any sweets?", answer: null, speaker: "boy" },
-
     {
-      text: "No, I haven’t any ______, but I have some ______.",
-      answer: ["sweets", "chips"],
-      speaker: "girl",
+      before: "The chips taste very",
+      after: ".",
+      width: "260px",
     },
-
-    { text: "Can I have ______?", answer: "some", speaker: "boy" },
-
-    {
-      text: "What’s the ______? Are you ______?",
-      answer: ["matter", "hungry"],
-      speaker: "girl",
-    },
-
-    { text: "Yes, I am!", answer: null, speaker: "boy" },
   ];
 
-  const wordBank = [
-    "sweets",
-    "chips",
-    "some",
-    "lunch meat",
-    "hungry",
-    "any",
-    "grapes",
-    "matter",
-    "cherries",
-  ];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-  const [answers, setAnswers] = useState(
-    items.map((item) =>
-      !item.answer
-        ? [] // 🔥 جملة بدون فراغ
-        : Array.isArray(item.answer)
-          ? ["", ""]
-          : [""],
-    ),
-  );
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [wrongMarks, setWrongMarks] = useState([]);
+  const [errors, setErrors] = useState([false, false, false, false]);
 
-  // =========================
-  // DRAG END (🔥 FIXED)
-  // =========================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const [correctLocked, setCorrectLocked] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
-    const value = draggableId.replace("season-", "");
-    const [qIndex, blankIndex] = destination.droppableId.split("-").map(Number);
+  const [locked, setLocked] = useState(false);
+
+  // normalize
+  const normalize = (text) => {
+    return text
+      .toLowerCase()
+      .replace(/[.,!?]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  };
+
+  // change
+  const handleChange = (i, value) => {
+    if (correctLocked[i]) return;
 
     const updated = [...answers];
-    updated[qIndex][blankIndex] = value;
+    updated[i] = value;
 
     setAnswers(updated);
+
+    const updatedErrors = [...errors];
+    updatedErrors[i] = false;
+
+    setErrors(updatedErrors);
   };
 
-  // =========================
-  // SHOW ANSWERS (🔥 FIXED)
-  // =========================
-  const showAnswers = () => {
-    setAnswers(
-      items.map((item) =>
-        Array.isArray(item.answer) ? item.answer : [item.answer],
-      ),
-    );
-    setShowCorrect(true);
-    setWrongMarks([]);
-  };
-  // =========================
-  // RESET
-  // =========================
-  const resetAll = () => {
-    setAnswers(
-      items.map((item) =>
-        !item.answer ? [] : Array.isArray(item.answer) ? ["", ""] : [""],
-      ),
-    );
-    setShowCorrect(false);
-    setWrongMarks([]);
-  };
-  // =========================
-  // CHECK ANSWERS (🔥 FIXED)
-  // =========================
-  const checkAnswers = () => {
-    if (showCorrect) return;
+  // check
+  const handleCheck = () => {
+    if (locked) return;
 
-    // ❌ تحقق إذا في فراغ
-    const hasEmpty = answers.some((arr) => arr.some((val) => val === ""));
-    if (hasEmpty) {
-      ValidationAlert.info();
+    if (answers.some((a) => normalize(a) === "")) {
+      ValidationAlert.info("Complete all fields.");
       return;
     }
 
     let score = 0;
-    let total = 0;
-    let wrong = [];
 
-    items.forEach((item, i) => {
-      // 🔥 تجاهل الجمل اللي بدون فراغ
-      if (!item.answer) return;
+    const newErrors = answers.map((a, i) => {
+      const correct = normalize(a) === normalize(correctAnswers[i]);
 
-      if (Array.isArray(item.answer)) {
-        item.answer.forEach((ans, j) => {
-          total++;
-          if (answers[i][j]?.trim().toLowerCase() === ans.toLowerCase()) {
-            score++;
-          } else {
-            wrong.push({ qIndex: i, blankIndex: j });
-          }
-        });
-      } else {
-        total++;
-        if (answers[i][0]?.trim().toLowerCase() === item.answer.toLowerCase()) {
-          score++;
-        } else {
-          wrong.push({ qIndex: i, blankIndex: 0 });
-        }
-      }
+      if (correct) score++;
+
+      return !correct;
     });
 
-    setWrongMarks(wrong);
-    setShowCorrect(true);
+    const updatedLocked = answers.map(
+      (a, i) => normalize(a) === normalize(correctAnswers[i]),
+    );
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    setErrors(newErrors);
 
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+    setCorrectLocked(updatedLocked);
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    const total = correctAnswers.length;
+
+    const msg = `Score: ${score} / ${total}`;
+
+    if (score === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (score === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
-  const usedWords = answers.flat().filter(Boolean);
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div
-          className="div-forall"
-          style={{ width: "60%", marginBottom: "40px" }}
-        >
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>A</span>Read and complete the
-            conversation. Use the words below.
-          </h5>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "25px",
-              flexWrap: "wrap",
-            }}
-          ></div>
-          {/* WORD BANK */}
-          <Droppable droppableId="bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginTop: "20px",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: "20px",
-                  // justifyContent: "center",
-                }}
-              >
-                {wordBank.map((word, index) => {
-                  const isUsed = usedWords.includes(word);
 
-                  return (
-                    <Draggable
-                      key={word}
-                      draggableId={`season-${word}`}
-                      index={index}
-                      isDragDisabled={isUsed} // 🔥 يمنع السحب
-                    >
-                      {(provided) => (
-                        <span
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="season-chip"
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: isUsed ? "not-allowed" : "grab",
-                            fontSize: "16px",
-                            opacity: isUsed ? 0.4 : 1, // 🔥 تخفيف اللون
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {word}
-                        </span>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          {/* CONTENT */}
+  // show
+  const handleShow = () => {
+    setAnswers(correctAnswers);
+
+    setErrors([false, false, false, false]);
+
+    setCorrectLocked([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  // reset
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setErrors([false, false, false, false]);
+
+    setCorrectLocked([false, false, false, false]);
+
+    setLocked(false);
+  };
+
+  // input
+  const renderInput = (i, width) => (
+    <span
+      style={{
+        position: "relative",
+      }}
+    >
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || correctLocked[i]}
+        onChange={(e) => handleChange(i, e.target.value)}
+        style={{
+          width: width,
+          border: "none",
+          borderBottom: errors[i] ? "1px solid red" : "1px solid black",
+          outline: "none",
+          background: "transparent",
+          fontSize: "20px",
+          color: "#6D2980",
+          fontWeight: "600",
+          paddingBottom: "10px",
+        }}
+      />
+
+      {/* ❌ */}
+      {errors[i] && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-10px",
+            right: "0px",
+            width: "22px",
+            transform: "translateY(-50%)",
+            height: "22px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            fontSize: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  return (
+    <div
+      style={{
+        padding: "30px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div className="div-forall">
+        {/* HEADER */}
+        <h5 className="header-title-page8 mb-20">
+          <span className="mr-2">A</span>
+          Read and write the correct word.
+        </h5>
+
+        {/* WORD BANK */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "40px",
+          }}
+        >
           <div
             style={{
-              position: "relative", // 🔥 مهم
+              background: "#d9d2dc",
+              borderRadius: "12px",
+              padding: "14px 40px",
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: "20px",
+              gap: "50px",
+              fontSize: "18px",
+              fontWeight: "500",
             }}
           >
-            {/* 🔵 LEFT SIDE (QUESTIONS) */}
-            <div style={{ flex: 1 }}>
-              <div className="space-y-6">
-                {items.map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <img
-                      src={item.speaker === "boy" ? boy : girl}
-                      alt="avatar"
-                      style={{ width: "35px", height: "35px" }}
-                    />
+            {wordBank.map((word, i) => (
+              <span key={i}>{word}</span>
+            ))}
+          </div>
+        </div>
 
-                    <div>
-                      <div>
-                        {!item.answer ? (
-                          <span>{item.text}</span>
-                        ) : (
-                          item.text.split("______").map((part, j) => {
-                            const isWrong = wrongMarks.some(
-                              (w) => w.qIndex === i && w.blankIndex === j,
-                            );
-
-                            return (
-                              <span key={j}>
-                                {part}
-
-                                {j < (answers[i]?.length || 0) && (
-                                  <Droppable droppableId={`${i}-${j}`}>
-                                    {(provided) => (
-                                      <span
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                        style={{
-                                          display: "inline-block",
-                                          minWidth: "100px",
-                                          borderBottom: `2px solid ${
-                                            showCorrect
-                                              ? isWrong
-                                                ? "red"
-                                                : "#1C398E"
-                                              : "black"
-                                          }`,
-                                          margin: "0 5px",
-                                          textAlign: "center",
-                                          fontWeight: "bold",
-                                          position: "relative",
-                                          color: "#1C398E",
-                                        }}
-                                      >
-                                        {answers[i][j]}
-                                        {provided.placeholder}
-
-                                        {showCorrect && isWrong && (
-                                          <div
-                                            style={{
-                                              position: "absolute",
-                                              top: "-6px",
-                                              right: "-6px",
-                                              transform: "translateY(-50%)",
-                                              width: "22px",
-                                              height: "22px",
-                                              background: "#ef4444",
-                                              color: "white",
-                                              borderRadius: "50%",
-                                              fontSize: "12px",
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              fontWeight: "bold",
-                                              border: "2px solid white",
-                                              boxShadow:
-                                                "0 2px 6px rgba(0,0,0,0.2)",
-                                              pointerEvents: "none",
-                                            }}
-                                          >
-                                            ✕
-                                          </div>
-                                        )}
-                                      </span>
-                                    )}
-                                  </Droppable>
-                                )}
-                              </span>
-                            );
-                          })
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 🟠 RIGHT SIDE (IMAGES) */}
+        {/* QUESTIONS */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "34px",
+            fontSize: "18px",
+          }}
+        >
+          {sentences.map((s, i) => (
             <div
+              key={i}
               style={{
-                position: "absolute",
-                top: "50px", // 🔥 عدلها حسب المكان
-                right: "0px", // 🔥 أو 20px حسب المسافة
                 display: "flex",
-                flexDirection: "row",
-                gap: "10px",
                 alignItems: "center",
+                gap: "12px",
               }}
             >
-              <img
-                src={sarah}
-                alt="sarah"
-                style={{ width: "150px", height: "120px" }}
-              />
-              <img
-                src={jack}
-                alt="jack"
-                style={{ width: "150px", height: "120px" }}
-              />
+              {/* NUMBER */}
+              <span
+                style={{
+                  fontWeight: "bold",
+                  width: "20px",
+                }}
+              >
+                {i + 1}
+              </span>
+
+              {/* BEFORE */}
+              <span>{s.before}</span>
+
+              {/* INPUT */}
+              {renderInput(i, s.width)}
+
+              {/* AFTER */}
+              <span>{s.after}</span>
             </div>
-          </div>
+          ))}
         </div>
 
         {/* BUTTONS */}
         <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
+          <button className="try-again-button" onClick={handleReset}>
             Start Again ↻
           </button>
-          <button onClick={showAnswers} className="show-answer-btn">
+
+          <button className="show-answer-btn" onClick={handleShow}>
             Show Answer
           </button>
-          <button onClick={checkAnswers} className="check-button2">
+
+          <button className="check-button2" onClick={handleCheck}>
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+    </div>
   );
 };
 

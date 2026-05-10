@@ -1,5 +1,5 @@
 
-import page_5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 32.png";
+import page_5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 32.png";
 import "./Unit4_Page5.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 const Unit4_Page5 = ({ openPopup }) => {
@@ -19,7 +19,7 @@ const Unit4_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 27 })}
+          onClick={() => openPopup("exercise", { startIndex: 29 })}
           style={{ overflow: "visible" }}
         >
           <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
@@ -34,7 +34,7 @@ const Unit4_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 28 })}
+          onClick={() => openPopup("exercise", { startIndex: 30 })}
           style={{ overflow: "visible" }}
         >
           <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
@@ -49,7 +49,7 @@ const Unit4_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 29 })}
+          onClick={() => openPopup("exercise", { startIndex: 31 })}
           style={{ overflow: "visible" }}
         >
           <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />

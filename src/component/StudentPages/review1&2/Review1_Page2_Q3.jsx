@@ -161,8 +161,8 @@ const Review1_Page2_Q3 = () => {
               <img
                 src={img1}
                 style={{
-                  width: "200px",
-                  height: "200px",
+                  width: "150px",
+                  height: "150px",
                   marginLeft: "20px",
                   padding: "4px",
                 }}
@@ -189,8 +189,8 @@ const Review1_Page2_Q3 = () => {
               <img
                 src={img2}
                 style={{
-                  width: "200px",
-                  height: "200px",
+                  width: "150px",
+                  height: "150px",
                   marginLeft: "20px",
                   padding: "4px",
                 }}
@@ -217,8 +217,8 @@ const Review1_Page2_Q3 = () => {
               <img
                 src={img3}
                 style={{
-                  width: "200px",
-                  height: "200px",
+                  width: "150px",
+                  height: "150px",
                   marginLeft: "20px",
                   padding: "4px",
                 }}

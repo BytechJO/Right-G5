@@ -183,8 +183,8 @@ const Page_D_Questions = () => {
               <img
                 src={img1}
                 style={{
-                  width: "170px",
-                  height: "170px",
+                  width: "120px",
+                  height: "120px",
                   marginLeft: "20px",
                   padding: "5px",
                 }}
@@ -225,8 +225,8 @@ const Page_D_Questions = () => {
               <img
                 src={img2}
                 style={{
-                  width: "170px",
-                  height: "170px",
+                  width: "120px",
+                  height: "120px",
                   marginLeft: "20px",
                   padding: "5px",
                 }}
@@ -266,8 +266,8 @@ const Page_D_Questions = () => {
               <img
                 src={img3}
                 style={{
-                  width: "170px",
-                  height: "170px",
+                  width: "120px",
+                  height: "120px",
                   padding: "5px",
                   marginLeft: "20px",
                 }}

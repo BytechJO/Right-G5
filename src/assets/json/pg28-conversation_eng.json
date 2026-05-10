@@ -1,0 +1,1671 @@
+{
+  "language_code": "eng",
+  "segments": [
+    {
+      "text": "Page 28, Conversation. Listen and read, then say ",
+      "start_time": 0.239,
+      "end_time": 5.299,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.239,
+          "end_time": 0.539
+        },
+        {
+          "text": " ",
+          "start_time": 0.539,
+          "end_time": 0.639
+        },
+        {
+          "text": "28,",
+          "start_time": 0.639,
+          "end_time": 1.22
+        },
+        {
+          "text": " ",
+          "start_time": 1.22,
+          "end_time": 1.379
+        },
+        {
+          "text": "Conversation.",
+          "start_time": 1.379,
+          "end_time": 2.099
+        },
+        {
+          "text": " ",
+          "start_time": 2.099,
+          "end_time": 2.579
+        },
+        {
+          "text": "Listen",
+          "start_time": 2.579,
+          "end_time": 2.919
+        },
+        {
+          "text": " ",
+          "start_time": 2.919,
+          "end_time": 3.019
+        },
+        {
+          "text": "and",
+          "start_time": 3.019,
+          "end_time": 3.179
+        },
+        {
+          "text": " ",
+          "start_time": 3.179,
+          "end_time": 3.259
+        },
+        {
+          "text": "read,",
+          "start_time": 3.259,
+          "end_time": 3.5
+        },
+        {
+          "text": " ",
+          "start_time": 3.5,
+          "end_time": 3.919
+        },
+        {
+          "text": "then",
+          "start_time": 3.919,
+          "end_time": 4.119
+        },
+        {
+          "text": " ",
+          "start_time": 4.119,
+          "end_time": 4.239
+        },
+        {
+          "text": "say",
+          "start_time": 4.239,
+          "end_time": 4.559
+        },
+        {
+          "text": " ",
+          "start_time": 4.559,
+          "end_time": 5.299
+        }
+      ]
+    },
+    {
+      "text": "This mall is wonderful. We can go shopping because my mom's at the grocery store. ",
+      "start_time": 5.299,
+      "end_time": 10.659,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "This",
+          "start_time": 5.299,
+          "end_time": 5.5
+        },
+        {
+          "text": " ",
+          "start_time": 5.5,
+          "end_time": 5.639
+        },
+        {
+          "text": "mall",
+          "start_time": 5.639,
+          "end_time": 5.9
+        },
+        {
+          "text": " ",
+          "start_time": 5.9,
+          "end_time": 5.98
+        },
+        {
+          "text": "is",
+          "start_time": 5.98,
+          "end_time": 6.099
+        },
+        {
+          "text": " ",
+          "start_time": 6.099,
+          "end_time": 6.259
+        },
+        {
+          "text": "wonderful.",
+          "start_time": 6.259,
+          "end_time": 6.759
+        },
+        {
+          "text": " ",
+          "start_time": 6.759,
+          "end_time": 7.099
+        },
+        {
+          "text": "We",
+          "start_time": 7.099,
+          "end_time": 7.179
+        },
+        {
+          "text": " ",
+          "start_time": 7.179,
+          "end_time": 7.259
+        },
+        {
+          "text": "can",
+          "start_time": 7.259,
+          "end_time": 7.399
+        },
+        {
+          "text": " ",
+          "start_time": 7.399,
+          "end_time": 7.479
+        },
+        {
+          "text": "go",
+          "start_time": 7.48,
+          "end_time": 7.579
+        },
+        {
+          "text": " ",
+          "start_time": 7.579,
+          "end_time": 7.739
+        },
+        {
+          "text": "shopping",
+          "start_time": 7.739,
+          "end_time": 8.3
+        },
+        {
+          "text": " ",
+          "start_time": 8.3,
+          "end_time": 8.479
+        },
+        {
+          "text": "because",
+          "start_time": 8.479,
+          "end_time": 8.76
+        },
+        {
+          "text": " ",
+          "start_time": 8.76,
+          "end_time": 8.859
+        },
+        {
+          "text": "my",
+          "start_time": 8.859,
+          "end_time": 9.019
+        },
+        {
+          "text": " ",
+          "start_time": 9.019,
+          "end_time": 9.099
+        },
+        {
+          "text": "mom's",
+          "start_time": 9.099,
+          "end_time": 9.5
+        },
+        {
+          "text": " ",
+          "start_time": 9.5,
+          "end_time": 9.599
+        },
+        {
+          "text": "at",
+          "start_time": 9.599,
+          "end_time": 9.679
+        },
+        {
+          "text": " ",
+          "start_time": 9.679,
+          "end_time": 9.719
+        },
+        {
+          "text": "the",
+          "start_time": 9.719,
+          "end_time": 9.78
+        },
+        {
+          "text": " ",
+          "start_time": 9.78,
+          "end_time": 9.88
+        },
+        {
+          "text": "grocery",
+          "start_time": 9.88,
+          "end_time": 10.26
+        },
+        {
+          "text": " ",
+          "start_time": 10.26,
+          "end_time": 10.38
+        },
+        {
+          "text": "store.",
+          "start_time": 10.38,
+          "end_time": 10.659
+        },
+        {
+          "text": " ",
+          "start_time": 10.659,
+          "end_time": 10.659
+        }
+      ]
+    },
+    {
+      "text": "I like this mall, too. It has fantastic clothes stores. ",
+      "start_time": 11.779,
+      "end_time": 15.119,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "I",
+          "start_time": 11.779,
+          "end_time": 11.88
+        },
+        {
+          "text": " ",
+          "start_time": 11.88,
+          "end_time": 11.939
+        },
+        {
+          "text": "like",
+          "start_time": 11.939,
+          "end_time": 12.139
+        },
+        {
+          "text": " ",
+          "start_time": 12.139,
+          "end_time": 12.219
+        },
+        {
+          "text": "this",
+          "start_time": 12.219,
+          "end_time": 12.38
+        },
+        {
+          "text": " ",
+          "start_time": 12.38,
+          "end_time": 12.479
+        },
+        {
+          "text": "mall,",
+          "start_time": 12.479,
+          "end_time": 12.639
+        },
+        {
+          "text": " ",
+          "start_time": 12.639,
+          "end_time": 12.779
+        },
+        {
+          "text": "too.",
+          "start_time": 12.779,
+          "end_time": 13.0
+        },
+        {
+          "text": " ",
+          "start_time": 13.0,
+          "end_time": 13.319
+        },
+        {
+          "text": "It",
+          "start_time": 13.319,
+          "end_time": 13.399
+        },
+        {
+          "text": " ",
+          "start_time": 13.399,
+          "end_time": 13.46
+        },
+        {
+          "text": "has",
+          "start_time": 13.46,
+          "end_time": 13.599
+        },
+        {
+          "text": " ",
+          "start_time": 13.599,
+          "end_time": 13.679
+        },
+        {
+          "text": "fantastic",
+          "start_time": 13.679,
+          "end_time": 14.319
+        },
+        {
+          "text": " ",
+          "start_time": 14.319,
+          "end_time": 14.399
+        },
+        {
+          "text": "clothes",
+          "start_time": 14.399,
+          "end_time": 14.659
+        },
+        {
+          "text": " ",
+          "start_time": 14.659,
+          "end_time": 14.759
+        },
+        {
+          "text": "stores.",
+          "start_time": 14.759,
+          "end_time": 15.119
+        },
+        {
+          "text": " ",
+          "start_time": 15.119,
+          "end_time": 15.119
+        }
+      ]
+    },
+    {
+      "text": "You can find good jeans. ",
+      "start_time": 16.139,
+      "end_time": 17.539,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "You",
+          "start_time": 16.139,
+          "end_time": 16.26
+        },
+        {
+          "text": " ",
+          "start_time": 16.26,
+          "end_time": 16.319
+        },
+        {
+          "text": "can",
+          "start_time": 16.319,
+          "end_time": 16.42
+        },
+        {
+          "text": " ",
+          "start_time": 16.42,
+          "end_time": 16.52
+        },
+        {
+          "text": "find",
+          "start_time": 16.52,
+          "end_time": 16.68
+        },
+        {
+          "text": " ",
+          "start_time": 16.68,
+          "end_time": 16.779
+        },
+        {
+          "text": "good",
+          "start_time": 16.779,
+          "end_time": 16.94
+        },
+        {
+          "text": " ",
+          "start_time": 16.94,
+          "end_time": 17.02
+        },
+        {
+          "text": "jeans.",
+          "start_time": 17.02,
+          "end_time": 17.539
+        },
+        {
+          "text": " ",
+          "start_time": 17.539,
+          "end_time": 17.539
+        }
+      ]
+    },
+    {
+      "text": "Girls always like clothes. Not me. The arcade is my favorite place. ",
+      "start_time": 18.659,
+      "end_time": 24.059,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "Girls",
+          "start_time": 18.659,
+          "end_time": 19.139
+        },
+        {
+          "text": " ",
+          "start_time": 19.139,
+          "end_time": 19.279
+        },
+        {
+          "text": "always",
+          "start_time": 19.279,
+          "end_time": 19.699
+        },
+        {
+          "text": " ",
+          "start_time": 19.699,
+          "end_time": 19.819
+        },
+        {
+          "text": "like",
+          "start_time": 19.819,
+          "end_time": 20.039
+        },
+        {
+          "text": " ",
+          "start_time": 20.039,
+          "end_time": 20.139
+        },
+        {
+          "text": "clothes.",
+          "start_time": 20.139,
+          "end_time": 20.599
+        },
+        {
+          "text": " ",
+          "start_time": 20.599,
+          "end_time": 21.26
+        },
+        {
+          "text": "Not",
+          "start_time": 21.26,
+          "end_time": 21.479
+        },
+        {
+          "text": " ",
+          "start_time": 21.479,
+          "end_time": 21.559
+        },
+        {
+          "text": "me.",
+          "start_time": 21.559,
+          "end_time": 21.739
+        },
+        {
+          "text": " ",
+          "start_time": 21.739,
+          "end_time": 22.119
+        },
+        {
+          "text": "The",
+          "start_time": 22.119,
+          "end_time": 22.199
+        },
+        {
+          "text": " ",
+          "start_time": 22.199,
+          "end_time": 22.319
+        },
+        {
+          "text": "arcade",
+          "start_time": 22.319,
+          "end_time": 22.719
+        },
+        {
+          "text": " ",
+          "start_time": 22.719,
+          "end_time": 22.76
+        },
+        {
+          "text": "is",
+          "start_time": 22.76,
+          "end_time": 22.879
+        },
+        {
+          "text": " ",
+          "start_time": 22.879,
+          "end_time": 22.979
+        },
+        {
+          "text": "my",
+          "start_time": 22.979,
+          "end_time": 23.18
+        },
+        {
+          "text": " ",
+          "start_time": 23.18,
+          "end_time": 23.239
+        },
+        {
+          "text": "favorite",
+          "start_time": 23.239,
+          "end_time": 23.619
+        },
+        {
+          "text": " ",
+          "start_time": 23.619,
+          "end_time": 23.679
+        },
+        {
+          "text": "place.",
+          "start_time": 23.68,
+          "end_time": 24.059
+        },
+        {
+          "text": " ",
+          "start_time": 24.059,
+          "end_time": 24.059
+        }
+      ]
+    },
+    {
+      "text": "The arcade is fine, but the bookstores are even better. Let's head over to a bookstore now. ",
+      "start_time": 25.119,
+      "end_time": 31.719,
+      "speaker": {
+        "id": "speaker_4",
+        "name": "Speaker 4"
+      },
+      "words": [
+        {
+          "text": "The",
+          "start_time": 25.119,
+          "end_time": 25.18
+        },
+        {
+          "text": " ",
+          "start_time": 25.18,
+          "end_time": 25.239
+        },
+        {
+          "text": "arcade",
+          "start_time": 25.239,
+          "end_time": 25.619
+        },
+        {
+          "text": " ",
+          "start_time": 25.619,
+          "end_time": 25.659
+        },
+        {
+          "text": "is",
+          "start_time": 25.659,
+          "end_time": 25.76
+        },
+        {
+          "text": " ",
+          "start_time": 25.76,
+          "end_time": 25.84
+        },
+        {
+          "text": "fine,",
+          "start_time": 25.84,
+          "end_time": 26.099
+        },
+        {
+          "text": " ",
+          "start_time": 26.099,
+          "end_time": 26.399
+        },
+        {
+          "text": "but",
+          "start_time": 26.399,
+          "end_time": 26.5
+        },
+        {
+          "text": " ",
+          "start_time": 26.5,
+          "end_time": 26.539
+        },
+        {
+          "text": "the",
+          "start_time": 26.539,
+          "end_time": 26.639
+        },
+        {
+          "text": " ",
+          "start_time": 26.639,
+          "end_time": 26.699
+        },
+        {
+          "text": "bookstores",
+          "start_time": 26.699,
+          "end_time": 27.439
+        },
+        {
+          "text": " ",
+          "start_time": 27.439,
+          "end_time": 27.499
+        },
+        {
+          "text": "are",
+          "start_time": 27.5,
+          "end_time": 27.639
+        },
+        {
+          "text": " ",
+          "start_time": 27.639,
+          "end_time": 27.739
+        },
+        {
+          "text": "even",
+          "start_time": 27.739,
+          "end_time": 28.139
+        },
+        {
+          "text": " ",
+          "start_time": 28.139,
+          "end_time": 28.199
+        },
+        {
+          "text": "better.",
+          "start_time": 28.199,
+          "end_time": 28.519
+        },
+        {
+          "text": " ",
+          "start_time": 28.519,
+          "end_time": 29.179
+        },
+        {
+          "text": "Let's",
+          "start_time": 29.179,
+          "end_time": 29.34
+        },
+        {
+          "text": " ",
+          "start_time": 29.34,
+          "end_time": 29.379
+        },
+        {
+          "text": "head",
+          "start_time": 29.379,
+          "end_time": 29.479
+        },
+        {
+          "text": " ",
+          "start_time": 29.479,
+          "end_time": 29.519
+        },
+        {
+          "text": "over",
+          "start_time": 29.519,
+          "end_time": 29.679
+        },
+        {
+          "text": " ",
+          "start_time": 29.679,
+          "end_time": 29.759
+        },
+        {
+          "text": "to",
+          "start_time": 29.76,
+          "end_time": 29.84
+        },
+        {
+          "text": " ",
+          "start_time": 29.84,
+          "end_time": 29.92
+        },
+        {
+          "text": "a",
+          "start_time": 29.92,
+          "end_time": 29.939
+        },
+        {
+          "text": " ",
+          "start_time": 29.939,
+          "end_time": 29.999
+        },
+        {
+          "text": "bookstore",
+          "start_time": 30.0,
+          "end_time": 30.439
+        },
+        {
+          "text": " ",
+          "start_time": 30.439,
+          "end_time": 30.499
+        },
+        {
+          "text": "now.",
+          "start_time": 30.5,
+          "end_time": 30.799
+        },
+        {
+          "text": " ",
+          "start_time": 30.799,
+          "end_time": 31.719
+        }
+      ]
+    },
+    {
+      "text": "Wait a minute, Tom. Who said anything about a bookstore? Helen and I often like to go shopping for clothes and shoes, and I need some boots today. ",
+      "start_time": 31.719,
+      "end_time": 42.219,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Wait",
+          "start_time": 31.719,
+          "end_time": 31.84
+        },
+        {
+          "text": " ",
+          "start_time": 31.84,
+          "end_time": 31.899
+        },
+        {
+          "text": "a",
+          "start_time": 31.899,
+          "end_time": 31.939
+        },
+        {
+          "text": " ",
+          "start_time": 31.939,
+          "end_time": 31.999
+        },
+        {
+          "text": "minute,",
+          "start_time": 32.0,
+          "end_time": 32.239
+        },
+        {
+          "text": " ",
+          "start_time": 32.239,
+          "end_time": 32.34
+        },
+        {
+          "text": "Tom.",
+          "start_time": 32.34,
+          "end_time": 32.659
+        },
+        {
+          "text": " ",
+          "start_time": 32.659,
+          "end_time": 32.959
+        },
+        {
+          "text": "Who",
+          "start_time": 32.959,
+          "end_time": 33.079
+        },
+        {
+          "text": " ",
+          "start_time": 33.079,
+          "end_time": 33.159
+        },
+        {
+          "text": "said",
+          "start_time": 33.159,
+          "end_time": 33.319
+        },
+        {
+          "text": " ",
+          "start_time": 33.319,
+          "end_time": 33.399
+        },
+        {
+          "text": "anything",
+          "start_time": 33.399,
+          "end_time": 33.86
+        },
+        {
+          "text": " ",
+          "start_time": 33.86,
+          "end_time": 34.0
+        },
+        {
+          "text": "about",
+          "start_time": 34.0,
+          "end_time": 34.2
+        },
+        {
+          "text": " ",
+          "start_time": 34.2,
+          "end_time": 34.279
+        },
+        {
+          "text": "a",
+          "start_time": 34.279,
+          "end_time": 34.319
+        },
+        {
+          "text": " ",
+          "start_time": 34.319,
+          "end_time": 34.38
+        },
+        {
+          "text": "bookstore?",
+          "start_time": 34.38,
+          "end_time": 35.04
+        },
+        {
+          "text": " ",
+          "start_time": 35.04,
+          "end_time": 35.359
+        },
+        {
+          "text": "Helen",
+          "start_time": 35.36,
+          "end_time": 35.719
+        },
+        {
+          "text": " ",
+          "start_time": 35.719,
+          "end_time": 35.779
+        },
+        {
+          "text": "and",
+          "start_time": 35.779,
+          "end_time": 35.88
+        },
+        {
+          "text": " ",
+          "start_time": 35.88,
+          "end_time": 36.119
+        },
+        {
+          "text": "I",
+          "start_time": 36.119,
+          "end_time": 36.379
+        },
+        {
+          "text": " ",
+          "start_time": 36.379,
+          "end_time": 36.52
+        },
+        {
+          "text": "often",
+          "start_time": 36.52,
+          "end_time": 36.799
+        },
+        {
+          "text": " ",
+          "start_time": 36.799,
+          "end_time": 36.86
+        },
+        {
+          "text": "like",
+          "start_time": 36.86,
+          "end_time": 37.02
+        },
+        {
+          "text": " ",
+          "start_time": 37.02,
+          "end_time": 37.059
+        },
+        {
+          "text": "to",
+          "start_time": 37.059,
+          "end_time": 37.18
+        },
+        {
+          "text": " ",
+          "start_time": 37.18,
+          "end_time": 37.239
+        },
+        {
+          "text": "go",
+          "start_time": 37.239,
+          "end_time": 37.36
+        },
+        {
+          "text": " ",
+          "start_time": 37.36,
+          "end_time": 37.5
+        },
+        {
+          "text": "shopping",
+          "start_time": 37.5,
+          "end_time": 38.059
+        },
+        {
+          "text": " ",
+          "start_time": 38.059,
+          "end_time": 38.139
+        },
+        {
+          "text": "for",
+          "start_time": 38.139,
+          "end_time": 38.299
+        },
+        {
+          "text": " ",
+          "start_time": 38.299,
+          "end_time": 38.36
+        },
+        {
+          "text": "clothes",
+          "start_time": 38.36,
+          "end_time": 38.68
+        },
+        {
+          "text": " ",
+          "start_time": 38.68,
+          "end_time": 38.739
+        },
+        {
+          "text": "and",
+          "start_time": 38.739,
+          "end_time": 38.899
+        },
+        {
+          "text": " ",
+          "start_time": 38.899,
+          "end_time": 38.979
+        },
+        {
+          "text": "shoes,",
+          "start_time": 38.979,
+          "end_time": 39.499
+        },
+        {
+          "text": " ",
+          "start_time": 39.499,
+          "end_time": 39.739
+        },
+        {
+          "text": "and",
+          "start_time": 39.739,
+          "end_time": 39.84
+        },
+        {
+          "text": " ",
+          "start_time": 39.84,
+          "end_time": 40.0
+        },
+        {
+          "text": "I",
+          "start_time": 40.0,
+          "end_time": 40.059
+        },
+        {
+          "text": " ",
+          "start_time": 40.059,
+          "end_time": 40.099
+        },
+        {
+          "text": "need",
+          "start_time": 40.099,
+          "end_time": 40.36
+        },
+        {
+          "text": " ",
+          "start_time": 40.36,
+          "end_time": 40.419
+        },
+        {
+          "text": "some",
+          "start_time": 40.419,
+          "end_time": 40.639
+        },
+        {
+          "text": " ",
+          "start_time": 40.639,
+          "end_time": 40.7
+        },
+        {
+          "text": "boots",
+          "start_time": 40.7,
+          "end_time": 41.0
+        },
+        {
+          "text": " ",
+          "start_time": 41.0,
+          "end_time": 41.079
+        },
+        {
+          "text": "today.",
+          "start_time": 41.079,
+          "end_time": 41.459
+        },
+        {
+          "text": " ",
+          "start_time": 41.459,
+          "end_time": 42.219
+        }
+      ]
+    },
+    {
+      "text": "Okay, we want to check out the electronic store first. ",
+      "start_time": 42.219,
+      "end_time": 46.139,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "Okay,",
+          "start_time": 42.219,
+          "end_time": 42.639
+        },
+        {
+          "text": " ",
+          "start_time": 42.639,
+          "end_time": 42.879
+        },
+        {
+          "text": "we",
+          "start_time": 42.879,
+          "end_time": 43.04
+        },
+        {
+          "text": " ",
+          "start_time": 43.04,
+          "end_time": 43.079
+        },
+        {
+          "text": "want",
+          "start_time": 43.079,
+          "end_time": 43.22
+        },
+        {
+          "text": " ",
+          "start_time": 43.22,
+          "end_time": 43.239
+        },
+        {
+          "text": "to",
+          "start_time": 43.239,
+          "end_time": 43.34
+        },
+        {
+          "text": " ",
+          "start_time": 43.34,
+          "end_time": 43.379
+        },
+        {
+          "text": "check",
+          "start_time": 43.379,
+          "end_time": 43.599
+        },
+        {
+          "text": " ",
+          "start_time": 43.599,
+          "end_time": 43.659
+        },
+        {
+          "text": "out",
+          "start_time": 43.659,
+          "end_time": 43.819
+        },
+        {
+          "text": " ",
+          "start_time": 43.819,
+          "end_time": 43.879
+        },
+        {
+          "text": "the",
+          "start_time": 43.879,
+          "end_time": 43.939
+        },
+        {
+          "text": " ",
+          "start_time": 43.939,
+          "end_time": 44.079
+        },
+        {
+          "text": "electronic",
+          "start_time": 44.079,
+          "end_time": 44.799
+        },
+        {
+          "text": " ",
+          "start_time": 44.799,
+          "end_time": 44.86
+        },
+        {
+          "text": "store",
+          "start_time": 44.86,
+          "end_time": 45.139
+        },
+        {
+          "text": " ",
+          "start_time": 45.139,
+          "end_time": 45.219
+        },
+        {
+          "text": "first.",
+          "start_time": 45.219,
+          "end_time": 45.68
+        },
+        {
+          "text": " ",
+          "start_time": 45.68,
+          "end_time": 46.139
+        }
+      ]
+    },
+    {
+      "text": "The electronics can wait, too. I want to go to the food court. I'm starving. ",
+      "start_time": 46.139,
+      "end_time": 51.899,
+      "speaker": {
+        "id": "speaker_5",
+        "name": "Speaker 5"
+      },
+      "words": [
+        {
+          "text": "The",
+          "start_time": 46.139,
+          "end_time": 46.239
+        },
+        {
+          "text": " ",
+          "start_time": 46.239,
+          "end_time": 46.379
+        },
+        {
+          "text": "electronics",
+          "start_time": 46.379,
+          "end_time": 47.139
+        },
+        {
+          "text": " ",
+          "start_time": 47.139,
+          "end_time": 47.2
+        },
+        {
+          "text": "can",
+          "start_time": 47.2,
+          "end_time": 47.34
+        },
+        {
+          "text": " ",
+          "start_time": 47.34,
+          "end_time": 47.379
+        },
+        {
+          "text": "wait,",
+          "start_time": 47.379,
+          "end_time": 47.719
+        },
+        {
+          "text": " ",
+          "start_time": 47.719,
+          "end_time": 47.779
+        },
+        {
+          "text": "too.",
+          "start_time": 47.779,
+          "end_time": 48.139
+        },
+        {
+          "text": " ",
+          "start_time": 48.139,
+          "end_time": 48.399
+        },
+        {
+          "text": "I",
+          "start_time": 48.399,
+          "end_time": 48.419
+        },
+        {
+          "text": " ",
+          "start_time": 48.419,
+          "end_time": 48.5
+        },
+        {
+          "text": "want",
+          "start_time": 48.5,
+          "end_time": 48.659
+        },
+        {
+          "text": " ",
+          "start_time": 48.659,
+          "end_time": 48.68
+        },
+        {
+          "text": "to",
+          "start_time": 48.68,
+          "end_time": 48.72
+        },
+        {
+          "text": " ",
+          "start_time": 48.72,
+          "end_time": 48.739
+        },
+        {
+          "text": "go",
+          "start_time": 48.739,
+          "end_time": 48.84
+        },
+        {
+          "text": " ",
+          "start_time": 48.84,
+          "end_time": 48.939
+        },
+        {
+          "text": "to",
+          "start_time": 48.939,
+          "end_time": 49.059
+        },
+        {
+          "text": " ",
+          "start_time": 49.059,
+          "end_time": 49.079
+        },
+        {
+          "text": "the",
+          "start_time": 49.079,
+          "end_time": 49.139
+        },
+        {
+          "text": " ",
+          "start_time": 49.139,
+          "end_time": 49.279
+        },
+        {
+          "text": "food",
+          "start_time": 49.279,
+          "end_time": 49.52
+        },
+        {
+          "text": " ",
+          "start_time": 49.52,
+          "end_time": 49.599
+        },
+        {
+          "text": "court.",
+          "start_time": 49.599,
+          "end_time": 50.099
+        },
+        {
+          "text": " ",
+          "start_time": 50.099,
+          "end_time": 50.219
+        },
+        {
+          "text": "I'm",
+          "start_time": 50.219,
+          "end_time": 50.399
+        },
+        {
+          "text": " ",
+          "start_time": 50.399,
+          "end_time": 50.439
+        },
+        {
+          "text": "starving.",
+          "start_time": 50.439,
+          "end_time": 51.099
+        },
+        {
+          "text": " ",
+          "start_time": 51.099,
+          "end_time": 51.899
+        }
+      ]
+    },
+    {
+      "text": "Okay. We can all go with Hansel, then split up and go to the stores we want to shop in. ",
+      "start_time": 51.899,
+      "end_time": 58.219,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Okay.",
+          "start_time": 51.899,
+          "end_time": 52.279
+        },
+        {
+          "text": " ",
+          "start_time": 52.279,
+          "end_time": 52.559
+        },
+        {
+          "text": "We",
+          "start_time": 52.559,
+          "end_time": 52.659
+        },
+        {
+          "text": " ",
+          "start_time": 52.659,
+          "end_time": 52.699
+        },
+        {
+          "text": "can",
+          "start_time": 52.699,
+          "end_time": 52.819
+        },
+        {
+          "text": " ",
+          "start_time": 52.819,
+          "end_time": 52.899
+        },
+        {
+          "text": "all",
+          "start_time": 52.899,
+          "end_time": 53.059
+        },
+        {
+          "text": " ",
+          "start_time": 53.059,
+          "end_time": 53.139
+        },
+        {
+          "text": "go",
+          "start_time": 53.139,
+          "end_time": 53.259
+        },
+        {
+          "text": " ",
+          "start_time": 53.259,
+          "end_time": 53.359
+        },
+        {
+          "text": "with",
+          "start_time": 53.36,
+          "end_time": 53.5
+        },
+        {
+          "text": " ",
+          "start_time": 53.5,
+          "end_time": 53.599
+        },
+        {
+          "text": "Hansel,",
+          "start_time": 53.599,
+          "end_time": 54.319
+        },
+        {
+          "text": " ",
+          "start_time": 54.319,
+          "end_time": 54.419
+        },
+        {
+          "text": "then",
+          "start_time": 54.419,
+          "end_time": 54.579
+        },
+        {
+          "text": " ",
+          "start_time": 54.579,
+          "end_time": 54.699
+        },
+        {
+          "text": "split",
+          "start_time": 54.699,
+          "end_time": 55.079
+        },
+        {
+          "text": " ",
+          "start_time": 55.079,
+          "end_time": 55.199
+        },
+        {
+          "text": "up",
+          "start_time": 55.199,
+          "end_time": 55.719
+        },
+        {
+          "text": " ",
+          "start_time": 55.719,
+          "end_time": 55.799
+        },
+        {
+          "text": "and",
+          "start_time": 55.799,
+          "end_time": 55.899
+        },
+        {
+          "text": " ",
+          "start_time": 55.899,
+          "end_time": 55.979
+        },
+        {
+          "text": "go",
+          "start_time": 55.979,
+          "end_time": 56.139
+        },
+        {
+          "text": " ",
+          "start_time": 56.139,
+          "end_time": 56.18
+        },
+        {
+          "text": "to",
+          "start_time": 56.18,
+          "end_time": 56.299
+        },
+        {
+          "text": " ",
+          "start_time": 56.299,
+          "end_time": 56.36
+        },
+        {
+          "text": "the",
+          "start_time": 56.36,
+          "end_time": 56.459
+        },
+        {
+          "text": " ",
+          "start_time": 56.459,
+          "end_time": 56.52
+        },
+        {
+          "text": "stores",
+          "start_time": 56.52,
+          "end_time": 57.039
+        },
+        {
+          "text": " ",
+          "start_time": 57.039,
+          "end_time": 57.219
+        },
+        {
+          "text": "we",
+          "start_time": 57.219,
+          "end_time": 57.419
+        },
+        {
+          "text": " ",
+          "start_time": 57.419,
+          "end_time": 57.459
+        },
+        {
+          "text": "want",
+          "start_time": 57.459,
+          "end_time": 57.639
+        },
+        {
+          "text": " ",
+          "start_time": 57.639,
+          "end_time": 57.659
+        },
+        {
+          "text": "to",
+          "start_time": 57.659,
+          "end_time": 57.779
+        },
+        {
+          "text": " ",
+          "start_time": 57.779,
+          "end_time": 57.84
+        },
+        {
+          "text": "shop",
+          "start_time": 57.84,
+          "end_time": 58.079
+        },
+        {
+          "text": " ",
+          "start_time": 58.079,
+          "end_time": 58.099
+        },
+        {
+          "text": "in.",
+          "start_time": 58.099,
+          "end_time": 58.219
+        },
+        {
+          "text": " ",
+          "start_time": 58.219,
+          "end_time": 58.219
+        }
+      ]
+    },
+    {
+      "text": "There's a chicken place straight ahead. They will have juice and some food for Hansel.",
+      "start_time": 59.359,
+      "end_time": 63.219,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "There's",
+          "start_time": 59.359,
+          "end_time": 59.54
+        },
+        {
+          "text": " ",
+          "start_time": 59.54,
+          "end_time": 59.579
+        },
+        {
+          "text": "a",
+          "start_time": 59.579,
+          "end_time": 59.599
+        },
+        {
+          "text": " ",
+          "start_time": 59.599,
+          "end_time": 59.719
+        },
+        {
+          "text": "chicken",
+          "start_time": 59.719,
+          "end_time": 59.979
+        },
+        {
+          "text": " ",
+          "start_time": 59.979,
+          "end_time": 60.039
+        },
+        {
+          "text": "place",
+          "start_time": 60.039,
+          "end_time": 60.259
+        },
+        {
+          "text": " ",
+          "start_time": 60.259,
+          "end_time": 60.319
+        },
+        {
+          "text": "straight",
+          "start_time": 60.319,
+          "end_time": 60.52
+        },
+        {
+          "text": " ",
+          "start_time": 60.52,
+          "end_time": 60.599
+        },
+        {
+          "text": "ahead.",
+          "start_time": 60.599,
+          "end_time": 61.199
+        },
+        {
+          "text": " ",
+          "start_time": 61.199,
+          "end_time": 61.259
+        },
+        {
+          "text": "They",
+          "start_time": 61.259,
+          "end_time": 61.36
+        },
+        {
+          "text": " ",
+          "start_time": 61.36,
+          "end_time": 61.399
+        },
+        {
+          "text": "will",
+          "start_time": 61.399,
+          "end_time": 61.5
+        },
+        {
+          "text": " ",
+          "start_time": 61.5,
+          "end_time": 61.559
+        },
+        {
+          "text": "have",
+          "start_time": 61.559,
+          "end_time": 61.719
+        },
+        {
+          "text": " ",
+          "start_time": 61.719,
+          "end_time": 61.779
+        },
+        {
+          "text": "juice",
+          "start_time": 61.779,
+          "end_time": 61.959
+        },
+        {
+          "text": " ",
+          "start_time": 61.959,
+          "end_time": 62.0
+        },
+        {
+          "text": "and",
+          "start_time": 62.0,
+          "end_time": 62.119
+        },
+        {
+          "text": " ",
+          "start_time": 62.119,
+          "end_time": 62.139
+        },
+        {
+          "text": "some",
+          "start_time": 62.139,
+          "end_time": 62.239
+        },
+        {
+          "text": " ",
+          "start_time": 62.239,
+          "end_time": 62.379
+        },
+        {
+          "text": "food",
+          "start_time": 62.379,
+          "end_time": 62.54
+        },
+        {
+          "text": " ",
+          "start_time": 62.54,
+          "end_time": 62.599
+        },
+        {
+          "text": "for",
+          "start_time": 62.599,
+          "end_time": 62.699
+        },
+        {
+          "text": " ",
+          "start_time": 62.699,
+          "end_time": 62.739
+        },
+        {
+          "text": "Hansel.",
+          "start_time": 62.739,
+          "end_time": 63.219
+        }
+      ]
+    }
+  ]
+}

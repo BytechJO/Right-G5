@@ -132,7 +132,7 @@ const Review1_Page1_Q2 = () => {
           Unscramble and write the expression.
         </h5>
 
-        <div className="grid grid-cols-2 gap-x-16 gap-y-15 text-[20px]">
+        <div className="grid grid-cols-2 gap-x-16 gap-y-20 text-[20px]">
           <div>
             <span className="font-bold mr-4">1</span>
             {questions[0].scrambled}

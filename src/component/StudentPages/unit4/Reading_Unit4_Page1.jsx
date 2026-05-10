@@ -1,15 +1,15 @@
-import page24 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 38.png";
+import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 38.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit4_Page1.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 4/P 38/full.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 4/P 38/Pg38_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 4/P 38/Pg38_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 4/P 38/Pg38_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 4/P 38/Pg38_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U4/PG 38/cd2pg38-story-adult-lady_NILS0ysY.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U4/PG 38/Pg38_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U4/PG 38/Pg38_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U4/PG 38/Pg38_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U4/PG 38/Pg38_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
-// import video3 from "../../../assets/videos/reading/grade 3 unit 4 page 38-39 reading.mp4";
+import video3 from "../../../assets/videos/grade 5 unit 4 reading page 38-39.mp4";
 
 const Reading_Unit4_Page1 = ({ openPopup }) => {
   const audioRef = useRef(null);
@@ -18,36 +18,16 @@ const Reading_Unit4_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
     {
-      start: 0.259,
-      end: 30.139,
-      text: "Page thirty-eight, Reading: Our African Safari. Stella's mom and dad are planning a summer trip. The weather is warm. They are going on an African safari in June. The family is excited. Stella exclaims, Look, Mom, there is a lion. The lion growls. Does it want cookies? asks Sarah. No way! shouts John. Lions eat meat. Look, it's eating some meat now.",
-    },
-    {
-      start: 31.319,
-      end: 52.939,
-      text: "Wow, look at that peacock, says John. It has wonderful colors, adds Stella. Does it want some grapes? Sarah asks. Yes, give it some, answers Mom. Look at the monkeys in the trees, shouts John. Do they want some bananas? Sarah asks.",
-    },
-    {
-      start: 54.099,
-      end: 63.119,
-      text: "No, they have bananas in the trees, says Dad. They have plenty to eat. I want to feed them some apples, says Sarah.",
-    },
-    {
-      start: 65.379,
-      end: 75.519,
-      text: "They don't want any apples, Sarah. They only want bananas, replies Stella. Hey, here come some elephants. They're awesome, says John.",
-    },
-    {
-      start: 77.379,
-      end: 101.699,
-      text: "Give them some peanuts, says Mom. Yes, Mom. Look, they're eating from the bucket, shouts Sarah and Stella. I'm hungry, Mom, Sarah says. I'm hungry too, adds John. Oh, no, cries Dad. We don't have any food. Well, it's fun. We don't have food, but we have friends, laughs Mom.",
+      start: 0.14,
+      end: 97.119,
+      text: "Page thirty-eight. In and around the pond. What kind of animals live in or around the pond? There are many different kinds of animals. You need to look closely to find the animals, but they are there. This is a tiny green tree frog. It lives near the pond and often climbs trees. When this frog is in a green tree, you can't see it very well. Dragonflies are big insects. They frequently fly back and forth across the pond. They like to eat smaller insects. They never eat tree frogs, and tree frogs never eat them because dragonflies are too big. Some animals, such as snails, protect themselves with their shells. Snails are tiny and soft, but they live inside hard shells. Their shells protect them from enemies. If another animal wants to eat the snail, it must first break its shell. That can be a hard thing to do. This turtle is resting on a rock in the pond. Like snails, turtles stay safe from danger inside their tough shells. They hide until the danger is gone. Then they come out and look for insects to eat. This snake can hide in the grass around the pond. It usually eats earthworms that come up through the grass. Some snakes have long, sharp teeth called fangs. These snakes can be very dangerous. This is a beaver. It's like a big rat with a large flat tail. It lives in the pond. It builds a home out of trees and tree branches. It cuts down the trees with its long, sharp teeth. The beaver can stay very safe in its home. There are many different animals living in and around a pond. What other animals do you know that live in a pond?",
     },
   ];
   const clickableAreas = [
-    { x1: 15.26, y1: 35.78, x2: 51.62, y2: 48.0, sound: sound2 },
-    { x1: 56.0, y1: 35.98, x2: 92.44, y2: 48.0, sound: sound3 },
-    { x1: 16.0, y1: 84.0, x2: 51.9, y2: 95.5, sound: sound4 },
-    { x1: 56.0, y1: 84.5, x2: 93.7, y2: 94.9, sound: sound5 },
+    { x1: 15.26, y1: 35.78, x2: 52.6, y2: 50.47, sound: sound2 },
+    { x1: 56.0, y1: 35.98, x2: 92.44, y2: 49.63, sound: sound3 },
+    { x1: 15.32, y1: 81.95, x2: 52.9, y2: 95.5, sound: sound4 },
+    { x1: 55.62, y1: 81.78, x2: 93.7, y2: 94.9, sound: sound5 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -176,7 +156,7 @@ const Reading_Unit4_Page1 = ({ openPopup }) => {
                     borderRadius: "20px",
                   }}
                 >
-                  {/* <source src={video3} type="video/mp4" /> */}
+                  <source src={video3} type="video/mp4" />
                 </video>
               </div>,
             )

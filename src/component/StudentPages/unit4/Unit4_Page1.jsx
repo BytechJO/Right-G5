@@ -1,275 +1,261 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 4 My E-Friend Folder/Page 28.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28.png";
 import "./Unit4_Page1.css";
-import Unit4_Page1_find from "./Unit4_Page1_find";
-import Unit4_Page1_Vocab from "./Unit4_Page1_Vocab";
-import Unit4_Page1_Read from "./Unit4_Pag1_Read";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U4/PG 28/pg28-conversation.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import allunit4 from "../../../assets/audio/ClassBook/Unit 4/unit4-main.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/Unit 4/P 28/sound14.mp3";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U4/PG 28/cd17pg28-vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U4/PG 28/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U4/PG 28/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U4/PG 28/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U4/PG 28/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U4/PG 28/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U4/PG 28/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U4/PG 28/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U4/PG 28/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U4/PG 28/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U4/PG 28/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U4/PG 28/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U4/PG 28/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U4/PG 28/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U4/PG 28/sound14.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28/SVG/Asset 32.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28/SVG/Asset 33.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28/SVG/Asset 34.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28/SVG/Asset 36.svg";
+import wordJson from "../../../assets/json/pg28-conversation_eng.json";
+import video from "../../../assets/videos/grade 5 unit 4 page 28.mp4";
 
 const Unit4_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Stella",
+          text: "This mall is wonderful! We can go shopping because my mom’s at the grocery store.",
+        },
+        {
+          speaker: "Helen",
+          text: "I like this mall, too. It has fantastic clothes stores. You can find good jeans.",
+        },
+      ],
+    },
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "John",
+          text: "Girls always like clothes! Not me! The arcade is my favorite place.",
+        },
+        {
+          speaker: "Tom",
+          text: "The arcade is fine, but the bookstores are even better. Let’s head over to a bookstore now.",
+        },
+      ],
+    },
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Stella",
+          text: "Wait a minute, Tom. Who said anything about a bookstore? Helen and I often like to go shopping for clothes and shoes, and I need some boots today.",
+        },
+        {
+          speaker: "Harley",
+          text: "Okay. We want to check out the electronics store first.",
+        },
+      ],
+    },
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Hansel",
+          text: "The electronics can wait, too! I want to go to the food court. I’m starving.",
+        },
+        {
+          speaker: "Stella",
+          text: "Okay. We can all go with Hansel, then split up and go to the stores we want to shop in.",
+        },
+        {
+          speaker: "Helen",
+          text: "There’s a chicken place straight ahead. They will have juice and some food for Hansel.",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
     {
-      start: 0.08,
-      end: 4.16,
-      text: "Page 28, unit 4. My e-friend.",
+      start: 0.239,
+      end: 5.299,
+      text: "Page 28, Conversation. Listen and read, then say",
     },
     {
-      start: 4.28,
-      end: 5.06,
-      text: "Vocabulary.",
+      start: 5.299,
+      end: 10.659,
+      text: "This mall is wonderful! We can go shopping because my mom’s at the grocery store.",
     },
     {
-      start: 6.16,
-      end: 15.48,
-      text: "1. email address. 2. minimize. 3. enlarge. 4. exit.",
+      start: 11.779,
+      end: 15.119,
+      text: "I like this mall, too. It has fantastic clothes stores.",
     },
     {
-      start: 16.5,
-      end: 25.38,
-      text: "5.call. 6. chat box. 7.chat. 8. camera.",
-    },
-    { start: 26.96, end: 29.2, text: "9. emoticons." },
-    { start: 30.28, end: 31.78, text: "10. picture." },
-    { start: 32.82, end: 37.04, text: "11. send. 12. search." },
-    { start: 38.18, end: 42.66, text: "13. laptop. 14. type." },
-    {
-      start: 44.26,
-      end: 54.14,
-      text: "Page 28, listen and read along. Voiceless T-H: bath, thirsty, Thursday.",
+      start: 16.139,
+      end: 17.539,
+      text: "You can find good jeans.",
     },
     {
-      start: 54.84,
-      end: 58.52,
-      text: "Page 29, Reading. Listen and read along.",
+      start: 18.659,
+      end: 24.059,
+      text: "Girls always like clothes! Not me! The arcade is my favorite place.",
     },
     {
-      start: 59.72,
-      end: 62.22,
-      text: "Helen and Stella get an email.",
+      start: 25.119,
+      end: 31.719,
+      text: "The arcade is fine, but the bookstores are even better. Let’s head over to a bookstore now.",
     },
     {
-      start: 62.92,
-      end: 82.04,
-      text: "Hey friends! How are you doing, Helen and Stella? This is Julia, your friend from London Court School. Our school is big. Look at the pictures of London. The weather is very rainy. London gets very cold in winter. However, in the spring, London is very pretty.",
+      start: 31.719,
+      end: 42.219,
+      text: "Wait a minute, Tom. Who said anything about a bookstore? Helen and I often like to go shopping for clothes and shoes, and I need some boots today.",
     },
     {
-      start: 83.14,
-      end: 92.1,
-      text: "What's the weather like where you live? Please send me an email when you can. I'm waiting to hear from you. Your friend, Julia.",
+      start: 42.219,
+      end: 46.139,
+      text: "Okay. We want to check out the electronics store first.",
     },
     {
-      start: 92.8,
-      end: 97.04,
-      text: "Page 29, listen, read and repeat.",
+      start: 46.139,
+      end: 51.899,
+      text: "The electronics can wait, too! I want to go to the food court. I’m starving.",
     },
-    { start: 97.04, end: 98.2, text: "Please send me an email." },
-    { start: 99.34, end: 101.26, text: "I will tomorrow." },
     {
-      start: 101.26,
-      end: 109.92,
-      text: "Page 29, listen and read along. Voiced T-H: mother, that, this",
+      start: 51.899,
+      end: 58.219,
+      text: "Okay, we can all go with Hansel, then split up and go to the stores we wanna shop in.",
+    },
+    {
+      start: 59.359,
+      end: 63.2,
+      text: "There’s a chicken place straight ahead. They will have juice and some food for Hansel.",
     },
   ];
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 40.8, y1: 13.3, sound: 1, isPrimary: true },
-    // // الصوت الأول – منطقة إضافية
-    { x1: 26.13, y1: 14.93, x2: 41.21, y2: 16.46, sound: 1, isPrimary: false },
-    //
+  const captionTimings = [
+    [
+      captionsExample[1],
+      {
+        start: captionsExample[2].start,
+        end: captionsExample[3].end,
+      },
+    ],
 
-    // // الصوت الثاني – الأساسية
-    { x1: 71, y1: 18.3, sound: 2, isPrimary: true },
-    // // الصوت الثاني – الإضافية
-    { x1: 75.25, y1: 15.44, x2: 76.54, y2: 16.29, sound: 2, isPrimary: false },
-    //
+    [captionsExample[4], captionsExample[5]],
 
-    // // الصوت الثالث – الأساسية
-    { x1: 75.6, y1: 18.3, sound: 3, isPrimary: true },
-    // // الصوت الثالث – الإضافية
-    { x1: 76.98, y1: 15.44, x2: 77.84, y2: 16.12, sound: 3, isPrimary: false },
-    //
+    [captionsExample[6], captionsExample[7]],
 
-    // // الصوت الرابع – الأساسية
-    { x1: 80.4, y1: 18.4, sound: 4, isPrimary: true },
-    // // الصوت الرابع – الإضافية
-    { x1: 78.48, y1: 15.44, x2: 79.56, y2: 16.29, sound: 4, isPrimary: false },
-    //
-
-    // // الصوت الخامس – الأساسية
-    { x1: 40.5, y1: 20.8, sound: 5, isPrimary: true },
-    // // الصوت الخامس – الإضافية
-    { x1: 40.56, y1: 18.49, x2: 44.22, y2: 21.25, sound: 5, isPrimary: false },
-    //
-
-    // // الصوت السادس – الأساسية
-    { x1: 38.5, y1: 38.6, sound: 6, isPrimary: true },
-    // // الصوت السادس – الإضافية
-    { x1: 27.42, y1: 42.35, x2: 56.08, y2: 43.03, sound: 6, isPrimary: false },
-
-    // الصوت السابع – الأساسية
-    { x1: 34.8, y1: 27.4, sound: 7, isPrimary: true },
-    // الصوت السابع – الإضافية
-    { x1: 27.64, y1: 25.09, x2: 34.75, y2: 32.03, sound: 7, isPrimary: false },
-    //
-    // الصوت الثامن – الأساسية
-    { x1: 67.555, y1: 33.4, sound: 8, isPrimary: true },
-    // الصوت الثامن – الإضافية
-    { x1: 65.34, y1: 33.21, x2: 67.5, y2: 36, sound: 8, isPrimary: false },
-    //
-
-    // الصوت التاسع – الأساسية
-    { x1: 31.5, y1: 47.9, sound: 9, isPrimary: true },
-    // الصوت التاسع – الإضافية
-    { x1: 26.99, y1: 44.55, x2: 39.05, y2: 46.58, sound: 9, isPrimary: false },
-    //
-
-    // الصوت العاشر – الأساسية
-    { x1: 75, y1: 48.2, sound: 10, isPrimary: true },
-    // الصوت العاشر – الإضافية
-    { x1: 65.77, y1: 44.38, x2: 78.48, y2: 55.38, sound: 10, isPrimary: false },
-    //
-
-    // الصوت الحادي عشر – الأساسية
-    { x1: 52.6, y1: 46.8, sound: 11, isPrimary: true },
-    // الصوت الحادي عشر – الإضافية
-    { x1: 56.94 , y1: 47.60, x2:  64.05, y2: 49.29, sound: 11, isPrimary: false },
-    //
-
-    // الصوت الثاني عشر – الأساسية
-    { x1: 52.6, y1: 50.4, sound: 12, isPrimary: true },
-    // الصوت الثاني عشر – الإضافية
-    { x1: 56.51, y1: 49.97, x2: 64.26, y2: 52.00, sound: 12, isPrimary: false },
-    //
-
-    // الصوت الثالث عشر – الأساسية
-    { x1: 73.2, y1: 61.5, sound: 13, isPrimary: true },
-    // الصوت الثالث عشر – الإضافية
-    { x1: 65.13, y1: 62.15, x2: 82.15, y2: 69.09, sound: 13, isPrimary: false },
-    //
-
-    // الصوت الرابع عشر – الأساسية
-    { x1: 74.2, y1: 73, sound: 14, isPrimary: true },
-    // الصوت الرابع عشر – الإضافية
-    { x1: 70.94, y1: 70.13, x2:84.73, y2: 72.95, sound: 14, isPrimary: false },
+    [captionsExample[8], captionsExample[9], captionsExample[10]],
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-    13: sound13,
-    14: sound14,
-  };
+  const filteredSegments = wordJson.segments.slice(1);
 
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      [
+        ...(filteredSegments[1]?.words || []),
+        ...(filteredSegments[2]?.words || []),
+      ],
+    ],
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
+    [filteredSegments[3]?.words || [], filteredSegments[4]?.words || []],
+
+    [filteredSegments[5]?.words || [], filteredSegments[6]?.words || []],
+
+    [
+      filteredSegments[7]?.words || [],
+      filteredSegments[8]?.words || [],
+      filteredSegments[9]?.words || [],
+    ],
+  ];
+
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+  ];
+  const captionVoc = [
+    {
+      start: 0.479,
+      end: 8.22,
+      text: "Page 28, Unit 4, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
+    },
+
+    { start: 9.399, end: 11.199, text: "1. grocery store." },
+    { start: 11.96, end: 13.96, text: "2. clothes store." },
+    { start: 14.92, end: 16.899, text: "3. jeans." },
+    { start: 17.84, end: 19.719, text: "4. arcade." },
+
+    { start: 20.739, end: 22.779, text: "5. bookstore." },
+    { start: 23.68, end: 25.5, text: "6. boots." },
+    { start: 26.379, end: 28.519, text: "7. electronics." },
+    { start: 29.399, end: 31.399, text: "8. food court." },
+
+    { start: 32.119, end: 35.059, text: "9. check out (verb)." },
+    { start: 35.7, end: 37.579, text: "10. not me." },
+    { start: 38.439, end: 40.54, text: "11. head over." },
+
+    { start: 41.439, end: 43.319, text: "12. wait a minute." },
+    { start: 44.219, end: 46.399, text: "13. split up." },
+    { start: 47.239, end: 49.2, text: "14. straight ahead." },
+  ];
+
+  const wordTimingsVoc = [
+    { start: 9.399, end: 11.199 },
+    { start: 11.96, end: 13.96 },
+    { start: 14.92, end: 16.899 },
+    { start: 17.84, end: 19.719 },
+
+    { start: 20.739, end: 22.779 },
+    { start: 23.68, end: 25.5 },
+    { start: 26.379, end: 28.519 },
+    { start: 29.399, end: 31.399 },
+
+    { start: 32.119, end: 35.059 },
+    { start: 35.7, end: 37.579 },
+    { start: 38.439, end: 40.54 },
+
+    { start: 41.439, end: 43.319 },
+    { start: 44.219, end: 46.399 },
+    { start: 47.239, end: 49.2 },
+  ];
+
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-      {/* <img
-        src={page_1}
-        onClick={handleImageClick}
-        style={{ display: "block" }}
-      /> */}
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit4-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -278,7 +264,7 @@ const Unit4_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -286,7 +272,17 @@ const Unit4_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allunit4} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={5.0}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                  video={video}
+                />
               </div>,
             )
           }
@@ -297,14 +293,14 @@ const Unit4_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit4-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -314,25 +310,56 @@ const Unit4_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit4_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={8}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "grocery store",
+                    "clothes store",
+                    "jeans",
+                    "arcade",
+                    "bookstore",
+                    "boots",
+                    "electronics",
+                    "food court",
+                    "check out (verb)",
+                    "not me",
+                    "head over",
+                    "wait a minute",
+                    "split up",
+                    "straight ahead",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit4-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -342,9 +369,9 @@ const Unit4_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit4_Page1_Vocab />
-              </>,
+              <CriticalThinking
+                title={"Why do the children have some time to shop?"}
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -354,36 +381,9 @@ const Unit4_Page1 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit4-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit4_Page1_Read />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
