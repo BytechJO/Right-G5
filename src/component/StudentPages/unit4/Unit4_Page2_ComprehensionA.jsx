@@ -229,8 +229,8 @@ const Unit4_Page2_ComprehensionA = () => {
       <h5 className="header-title-page8-read mb-8">
         <span className="ex-A-read mr-2">A</span>
         Write <span className="text-[#31B7F5]">true</span> or{" "}
-        <span className="text-[#31B7F5]">false</span> for each statement. If
-        the statement is false, correct it by changing the underlined adverb.
+        <span className="text-[#31B7F5]">false</span> for each statement. If the
+        statement is false, correct it by changing the underlined adverb.
       </h5>
 
       {/* QUESTIONS */}
@@ -244,7 +244,7 @@ const Unit4_Page2_ComprehensionA = () => {
                 value={answers[i].tf}
                 disabled={locked || correctLocked[i]?.tf}
                 onChange={(e) => updateField(i, "tf", e.target.value)}
-                className={`border-b outline-none w-[120px] text-center font-semibold text-[#6D2980]
+                className={`border-b outline-none w-[120px] text-center font-semibold text-[#00AEEF]
                 ${errors[i]?.tf ? "border-red-500" : "border-black"}
                 `}
               />
@@ -279,10 +279,7 @@ const Unit4_Page2_ComprehensionA = () => {
             {/* SENTENCE */}
             <div className="flex-1">
               <span className="font-bold mr-2">{i + 1}</span>
-              {s.before}{" "}
-              <span className="underline text-[#6D2980] font-semibold">
-                {s.underlined}
-              </span>{" "}
+              {s.before} <span className="underline">{s.underlined}</span>{" "}
               {s.after}
             </div>
 
@@ -297,7 +294,7 @@ const Unit4_Page2_ComprehensionA = () => {
                   normalize(answers[i].tf) === "true"
                 }
                 onChange={(e) => updateField(i, "correction", e.target.value)}
-                className={`border-b outline-none w-[140px] text-center font-semibold text-[#00AEEF]
+                className={`border-b outline-none w-[140px] text-center font-semibold text-[#6D2980]
                 ${errors[i]?.correction ? "border-red-500" : "border-black"}
                 `}
               />

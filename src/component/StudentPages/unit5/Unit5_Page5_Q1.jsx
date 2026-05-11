@@ -1,322 +1,269 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Unit5_Page5_Q1.css";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 6.svg";
-import img7 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 7.svg";
-import img8 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 8.svg";
-import img9 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 9.svg";
-import img10 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 10.svg";
-import img11 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 11.svg";
-import img12 from "../../../assets/imgs/pages/classbook/Right 3 Unit 5 At Toms House! Folder/Page 44/Ex A 12.svg";
 
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/Asset 16.svg";
+import trueImg from "../../../assets/imgs/true.svg";
+import flaseImg from "../../../assets/imgs/false.svg";
 const Unit5_Page5_Q1 = () => {
-  const groups = [
-    {
-      title: "sky",
-      correctWords: ["cry", "July", "shy"],
-      items: [
-        { img: img1, word: "candy" },
-        { img: img2, word: "Penny" },
-        { img: img3, word: "cry" },
-        { img: img4, word: "bunny" },
-        { img: img5, word: "July" },
-        { img: img6, word: "baby" },
-        { img: img7, word: "shy" },
-      ],
-    },
-    {
-      title: "candy",
-      correctWords: ["party", "bunny", "baby", "sunny"],
-      items: [
-        { img: img8, word: "sky" },
-        { img: img9, word: "party" },
-        { img: img10, word: "July" },
-        { img: img11, word: "bunny" },
-        { img: img12, word: "baby" },
-        { img: img1, word: "sunny" },
-      ],
-    },
-  ];
-  const [answers, setAnswers] = useState(
-    groups.map((group) => Array(group.items.length).fill(false)),
-  );
-  const [locked, setLocked] = useState(false); // ⭐ NEW — يمنع التعديل بعد Show Answer
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+  const [locked, setLocked] = useState(false);
+  const [result, setResult] = useState([]);
 
-  // ----------- الداتا الجديدة الخاصة بسؤال short a ---------------
+  const correctAnswers = ["check", "check", "x", "check", "x"];
 
-  const handleSelect = (groupIndex, itemIndex) => {
-    if (locked) return;
+  const handleSelect = (i, val) => {
+    if (locked || result[i] === true) return;
 
-    const updated = answers.map((group) => [...group]);
-    updated[groupIndex][itemIndex] = !updated[groupIndex][itemIndex];
+    const updated = [...answers];
+    updated[i] = val;
     setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
+
+  const choiceBox = (i, val) => {
+    const isWrongBox = result[i] === false && answers[i] === val;
+    return (
+      <button
+        type="button"
+        disabled={locked || result[i] === true}
+        onClick={() => handleSelect(i, val)}
+        style={{
+          width: "45px",
+          position: "relative",
+          height: "45px",
+          border: "2px solid #6D2980",
+          borderRadius: "8px",
+          color: "#6D2980",
+          fontSize: "24px",
+          fontWeight: "bold",
+          cursor: locked || result[i] === true ? "default" : "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {answers[i] === val && (
+          <img
+            src={val === "check" ? trueImg : flaseImg}
+            alt=""
+            style={{
+              width: "24px",
+              height: "24px",
+              objectFit: "contain",
+            }}
+          />
+        )}
+        {isWrongBox && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-10px",
+              right: "-10px",
+              width: "20px",
+              height: "20px",
+              background: "#ef4444",
+              color: "white",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              fontWeight: "bold",
+              border: "2px solid white",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              pointerEvents: "none",
+              zIndex: 3,
+            }}
+          >
+            ✕
+          </span>
+        )}
+      </button>
+    );
+  };
+
+  const answerBoxes = (i) => (
+    <span
+      style={{
+        position: "relative",
+        display: "inline-flex",
+        gap: "8px",
+        marginRight: "8px",
+      }}
+    >
+      {choiceBox(i, "check", "✓")}
+      {choiceBox(i, "x", "✕")}
+    </span>
+  );
 
   const checkAnswers = () => {
     if (locked) return;
 
-    // ✅ لازم على الأقل اختيار واحد من كل جروب
-    const hasEmptyGroup = answers.some(
-      (groupAnswers) => !groupAnswers.some((isSelected) => isSelected),
-    );
-
-    if (hasEmptyGroup) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please choose at least one picture from each group.",
-      );
+    if (answers.some((a) => !a)) {
+      ValidationAlert.info("Please complete all fields.");
       return;
     }
 
-    let score = 0;
-    let total = 0;
+    let correctCount = 0;
 
-    groups.forEach((group, groupIndex) => {
-      group.items.forEach((item, itemIndex) => {
-        const isSelected = answers[groupIndex][itemIndex];
-        const isCorrect = group.correctWords.includes(item.word);
-
-        if (isCorrect) total++;
-
-        if (isSelected && isCorrect) {
-          score++;
-        }
-      });
+    const res = answers.map((a, i) => {
+      const ok = a === correctAnswers[i];
+      if (ok) correctCount++;
+      return ok;
     });
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    setResult(res);
 
-    const scoreMessage = `
-    <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+    const total = correctAnswers.length;
 
-    if (score === total) ValidationAlert.success(scoreMessage);
-    else if (score === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers(correctAnswers);
+    setResult([true, true, true, true, true]);
     setLocked(true);
   };
-  const resetAnswers = () => {
-    setAnswers(groups.map((group) => Array(group.items.length).fill(false)));
+
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+    setResult([]);
     setLocked(false);
   };
 
-  // ⭐⭐⭐ NEW — Show Answer
-  const showAnswer = () => {
-    const correctSelections = groups.map((group) =>
-      group.items.map((item) => group.correctWords.includes(item.word)),
-    );
-
-    setAnswers(correctSelections);
-    setLocked(true);
-  };
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          position: "relative",
-          width: "60%",
-        }}
-      >
-        <div>
-          <h5 className="header-title-page8">
-            <span className="ex-A" style={{ marginRight: "10px" }}>
-              A
-            </span>{" "}
-            Which pictures have the same{" "}
-            <span style={{ color: "#2e3192" }}>-y sound</span>? Circle.
-          </h5>
-        </div>
+      <div className="div-forall">
+        <h5 className="header-title-page8 mb-22">
+          <span className="ex-A" style={{ marginRight: "10px" }}>
+            A
+          </span>
+          Read and write <span className="text-[#D1232A]">✓</span> or{" "}
+          <span className="text-[#D1232A]">✗</span>. Is the underlined word used
+          correctly or incorrectly?
+        </h5>
 
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "10px",
-            flexWrap: "wrap",
-            marginTop: "20px",
+            display: "grid",
+            gridTemplateColumns: "1fr 280px",
+            gap: "30px",
+            alignItems: "start",
           }}
         >
-          {groups.map((group, groupIndex) => (
-            <div
-              key={groupIndex}
-              style={{
-                border: "2px solid #F79530",
-                borderRadius: "18px",
-                padding: "18px 16px 12px",
-                position: "relative",
-                width: "360px",
-                background: "#fff",
-              }}
-            >
-              {/* عنوان البوكس */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "-18px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "#FEF3E6",
-                  padding: "6px 18px",
-                  borderRadius: "14px",
-                  fontWeight: "500",
-                  fontSize: "22px",
-                }}
-              >
-                {group.title}
-              </div>
-
-              {/* العناصر داخل البوكس */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "18px 14px",
-                  alignItems: "start",
-                  justifyItems: "center",
-                  marginTop: "16px",
-                }}
-              >
-                {group.items.map((item, itemIndex) => {
-                  const isSelected = answers[groupIndex][itemIndex];
-                  const isCorrect = group.correctWords.includes(item.word);
-                  const isWrong = locked && isSelected && !isCorrect;
-
-                  return (
-                    <div
-                      key={itemIndex}
-                      onClick={() => handleSelect(groupIndex, itemIndex)}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        cursor: locked ? "default" : "pointer",
-                        position: "relative",
-                        minHeight: "120px",
-                      }}
-                    >
-                      {/* الدائرة الحمراء */}
-                      <div
-                        style={{
-                          width: "92px",
-                          height: "92px",
-                          position: "relative", // 🔥 مهم
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {/* الصورة */}
-                        <img
-                          src={item.img}
-                          alt={item.word}
-                          style={{
-                            width: "74px",
-                            height: "74px",
-                            objectFit: "contain",
-                            position: "relative",
-                            zIndex: 1,
-                          }}
-                        />
-
-                        {/* 🔵 الدائرة فوق الصورة */}
-                        {isSelected && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              inset: 0,
-                              borderRadius: "50%",
-                              border: "3px solid #2c5287",
-                              zIndex: 2, // 🔥 فوق الصورة
-                              pointerEvents: "none",
-                            }}
-                          />
-                        )}
-                      </div>
-
-                      {/* الكلمة تحت الصورة */}
-                      <span
-                        style={{
-                          marginTop: "6px",
-                          fontSize: "18px",
-                          textAlign: "center",
-                          lineHeight: "1.1",
-                        }}
-                      >
-                        {item.word}
-                      </span>
-
-                      {/* اكس إذا غلط */}
-                      {isWrong && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            right: "-20px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "22px",
-                            height: "22px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            border: "2px solid white",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: "13px",
-                              lineHeight: "1",
-                              transform: "translateY(-1px)",
-                            }}
-                          >
-                            ✕
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+          <div
+            style={{
+              fontSize: "18px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "25px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {answerBoxes(0)}
+              <span style={{ fontWeight: "bold" }}>1</span>
+              <span>
+                Dad prepared a{" "}
+                <span style={{ textDecoration: "underline" }}>barbecue</span>{" "}
+                with a lot of meat.
+              </span>
             </div>
-          ))}
+
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {answerBoxes(1)}
+              <span style={{ fontWeight: "bold" }}>2</span>
+              <span>
+                <span style={{ textDecoration: "underline" }}>Sharks</span> live
+                in water and eat fish.
+              </span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {answerBoxes(2)}
+              <span style={{ fontWeight: "bold" }}>3</span>
+              <span>
+                The <span style={{ textDecoration: "underline" }}>entire</span>{" "}
+                the teacher gave us was very challenging.
+              </span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {answerBoxes(3)}
+              <span style={{ fontWeight: "bold" }}>4</span>
+              <span>
+                Tom had to give a{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  presentation
+                </span>{" "}
+                in front of the class.
+              </span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {answerBoxes(4)}
+              <span style={{ fontWeight: "bold" }}>5</span>
+              <span>
+                Henry wants the{" "}
+                <span style={{ textDecoration: "underline" }}>shish kebab</span>{" "}
+                for German chocolate cake.
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <img
+              src={img1}
+              alt=""
+              style={{
+                width: "280px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
+          </div>
         </div>
       </div>
+
       <div className="action-buttons-container">
-        <button onClick={resetAnswers} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
-        {/* ⭐⭐⭐ NEW: زر Show Answer */}
-        <button onClick={showAnswer} className="show-answer-btn swal-continue">
+
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

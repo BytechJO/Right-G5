@@ -2,248 +2,225 @@ import React, { useState } from "react";
 import "./Unit5_Page5_Q2.css";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import blue from "../../../assets/audio/ClassBook/Unit 5/P 44/unit5-pg44-EXB.mp3";
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+
+import leftImage from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/Asset 33.svg";
+
+import Jonas from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 34.svg";
+
+import Natalie from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 35.svg";
+
+import Pete from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 36.svg";
+
+import Sophia from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 37.svg";
+
+import Felicity from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 38.svg";
+
+import cloud from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 44/SVG/Asset 39.svg";
 
 const Unit5_Page5_Q2 = () => {
-const captions = [
-  {
-    start: 0.419,
-    end: 26.739,
-    text: "Page 44, write activities. Exercise B. Do both words have the same Y sound? Listen and write check or X. Fly. Try. Funny. Cry. Dry. Sly. My. Honey. Why. Buy. Runny. Candy"
-  }
-];
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
 
-  const groups = [
-    { id: 1, word1: "fly", word2: "try", answer: "yes" },
-    { id: 2, word1: "funny", word2: "cry", answer: "no" },
-    { id: 3, word1: "dry", word2: "sly", answer: "yes" },
-    { id: 4, word1: "my", word2: "honey", answer: "no" },
-    { id: 5, word1: "why", word2: "buy", answer: "yes" },
-    { id: 6, word1: "runny", word2: "candy", answer: "yes" },
-  ];
-
-  const [selected, setSelected] = useState(Array(groups.length).fill(null));
-  const [showResult2, setShowResult2] = useState(false);
   const [locked, setLocked] = useState(false);
 
-  const handleSelect = (groupIndex, value) => {
-    if (locked || showResult2) return;
+  const [result, setResult] = useState([]);
 
-    const updated = [...selected];
-    updated[groupIndex] = value;
-    setSelected(updated);
-  };
+  const correctAnswers = [
+    ["I would prefer a burger, please."],
 
-  const showAnswers = () => {
-    const correctSelections = groups.map((g) => g.answer);
-    setSelected(correctSelections);
-    setShowResult2(true);
-    setLocked(true);
-  };
+    ["I would like lemonade, please."],
 
-  const checkAnswers = () => {
-    if (locked || showResult2) return;
+    ["Could I please have a bagel?", "Could I please have bagels?"],
 
-    if (selected.some((val) => val === null)) {
-      ValidationAlert.info("Please choose ✓ or ✗ for all items!");
-      return;
-    }
+    ["I would like some milk, please."],
 
-    let correctCount = 0;
+    ["Could you please give me some waffles?"],
+  ];
 
-    groups.forEach((group, index) => {
-      if (selected[index] === group.answer) {
-        correctCount++;
-      }
+
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+
+    updated[i] = val;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
+  };
+  const showAnswers = () => {
+    setAnswers([
+      correctAnswers[0][0],
+      correctAnswers[1][0],
+      correctAnswers[2][0],
+      correctAnswers[3][0],
+      correctAnswers[4][0],
+    ]);
 
-    const total = groups.length;
-    const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    setResult([true, true, true, true, true]);
 
-    const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${correctCount} / ${total}
-        </span>
-      </div>
-    `;
-
-    if (correctCount === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
-
-    setShowResult2(true);
     setLocked(true);
   };
 
   const reset = () => {
-    setSelected(Array(groups.length).fill(null));
-    setShowResult2(false);
+    setAnswers(["", "", "", "", ""]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
-  const renderChoiceBox = (index, value, symbol) => {
-    const isSelected = selected[index] === value;
-    const isWrong =
-      showResult2 &&
-      selected[index] === value &&
-      groups[index].answer !== value;
-
-    return (
-      <div
-        onClick={() => handleSelect(index, value)}
-        style={{
-          width: "34px",
-          height: "34px",
-          border: "2px solid #F79530",
-          borderRadius: "9px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: locked ? "default" : "pointer",
-          background: isSelected ? "#fff" : "#fff",
-          position: "relative",
-          fontSize: "22px",
-          fontWeight: "700",
-          color: isSelected ? "#2c5287" : "transparent",
-          lineHeight: 1,
-          userSelect: "none",
-        }}
-      >
-        {isSelected ? symbol : ""}
-
-        {isWrong && (
-          <span
-            style={{
-              position: "absolute",
-              right: "-14px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "20px",
-              height: "20px",
-              background: "#ef4444",
-              color: "white",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "bold",
-              border: "2px solid white",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-              pointerEvents: "none",
-              zIndex: 3,
-            }}
-          >
-            ✕
-          </span>
-        )}
-      </div>
-    );
-  };
+  const rightCharacters = [Jonas, Natalie, Pete, Sophia, Felicity];
 
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <h3 className="header-title-page8">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
           <span className="ex-A" style={{ marginRight: "10px" }}>
             B
-          </span>{" "}
-          Do both words have the same{" "}
-          <span style={{ color: "#2e3192" }}>-y sound</span>? Listen and write{" "}
-          <span style={{ color: "#D52328" }}>✓</span> or{" "}
-          <span style={{ color: "#D52328" }}>✗</span>.
-        </h3>
+          </span>
+          Read the chart and complete.
+        </h5>
 
-        <QuestionAudioPlayer src={blue} captions={captions} stopAtSecond={11.5} />
-
+        {/* MAIN CONTENT */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            columnGap: "70px",
-            rowGap: "34px",
-            marginTop: "10px",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "55px",
+            marginBottom: "40px",
           }}
         >
-          {groups.map((group, index) => (
-            <div
-              key={group.id}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "32px 1fr 1fr 40px 40px",
-                alignItems: "center",
-                columnGap: "14px",
-                minHeight: "52px",
-              }}
-            >
-              <span
+          {/* LEFT IMAGE */}
+          <img
+            src={leftImage}
+            alt=""
+            style={{
+              width: "450px",
+              objectFit: "contain",
+            }}
+          />
+
+          {/* RIGHT SIDE */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+              marginTop: "6px",
+            }}
+          >
+            {rightCharacters.map((char, i) => (
+              <div
+                key={i}
                 style={{
-                  fontWeight: "700",
-                  fontSize: "18px",
-                  color: "#1f1f1f",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
                 }}
               >
-                {group.id}
-              </span>
+                {/* CHARACTER */}
+                <img
+                  src={char}
+                  alt=""
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    objectFit: "contain",
+                  }}
+                />
 
-              <span
-                style={{
-                  fontSize: "18px",
-                  color: "#2b2b2b",
-                }}
-              >
-                {group.word1}
-              </span>
+                {/* NUMBER */}
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                  }}
+                >
+                  {i + 1}
+                </span>
 
-              <span
-                style={{
-                  fontSize: "18px",
-                  color: "#2b2b2b",
-                }}
-              >
-                {group.word2}
-              </span>
+                {/* CLOUD */}
+                <div
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  <img
+                    src={cloud}
+                    alt=""
+                    style={{
+                      width: "250px",
+                      height: "90px",
+                    }}
+                  />
 
-              {renderChoiceBox(index, "yes", "✓")}
-              {renderChoiceBox(index, "no", "✗")}
-            </div>
-          ))}
+                  {/* INPUT */}
+                  <textarea
+                    rows={2}
+                    value={answers[i]}
+                    disabled={locked || result[i] === true}
+                    placeholder="Write here..."
+                    onChange={(e) => handleChange(i, e.target.value)}
+                    style={{
+                      position: "absolute",
+                      top: "16px",
+                      left: "40px",
+
+                      width: "200px",
+                      height: "60px",
+
+                      outline: "none",
+                      background: "transparent",
+
+                      fontSize: "18px",
+
+                      color:  "#6D2980",
+
+                      fontWeight: "600",
+
+                      resize: "none",
+
+                      overflow: "hidden",
+
+                      lineHeight: "1.4",
+
+                      whiteSpace: "pre-wrap",
+                      border: "1.5px dashed #c084d2",
+                      borderRadius: "10px",
+                      padding: "6px 10px",
+                    }}
+                  />
+          
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
         </button>
       </div>
     </div>

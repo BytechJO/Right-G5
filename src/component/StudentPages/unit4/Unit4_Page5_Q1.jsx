@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import grammer_u1 from "../../../assets/audio/ClassBook/U4/PG 32/cd20pg32.mp3";
-
+import trueImg from "../../../assets/imgs/true.svg";
+import flaseImg from "../../../assets/imgs/false.svg";
 const Unit4_Page5_Q1 = () => {
   const captions = [
     {
@@ -259,8 +260,8 @@ const Unit4_Page5_Q1 = () => {
             A
           </span>
           Listen and write <span className="text-[#D1232A]">✓</span> or{" "}
-          <span className="text-[#D1232A]">✕</span>. For{" "}
-          <span className="text-[#D1232A]">✕</span>, write the correct word.
+          <span className="text-[#D1232A]">✗</span>. For{" "}
+          <span className="text-[#D1232A]">✗</span>, write the correct word.
         </h5>
         <QuestionAudioPlayer
           src={grammer_u1}
@@ -403,7 +404,17 @@ const Unit4_Page5_Q1 = () => {
                     userSelect: "none",
                   }}
                 >
-                  {answers[i].symbol === "✓" ? "✓" : ""}
+                  {answers[i].symbol === "✓" && (
+                    <img
+                      src={trueImg}
+                      alt=""
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  )}
                 </div>
 
                 {/* ✕ BUTTON */}
@@ -435,7 +446,17 @@ const Unit4_Page5_Q1 = () => {
                     userSelect: "none",
                   }}
                 >
-                  {answers[i].symbol === "✕" ? "✕" : ""}
+                  {answers[i].symbol === "✕" && (
+                    <img
+                      src={flaseImg}
+                      alt=""
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  )}
                 </div>
 
                 {/* ERROR */}
