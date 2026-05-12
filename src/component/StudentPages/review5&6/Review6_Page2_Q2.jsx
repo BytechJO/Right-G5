@@ -1,6 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review6_Page2_Q2.css";
 
 import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 1.svg";
 import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 3.svg";

@@ -1,299 +1,380 @@
-import React, { useState, useRef } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review5_Page1_Q2.css";
+import React, { useState } from "react";
 
-import behind from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex B 1.svg";
-import under from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex B 2.svg";
-import between from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex B 3.svg";
-import inFrontOf from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex B 4.svg";
-import on from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Asset 10.svg";
-import nextTo from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Asset 9.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Review5_Page1_Q2 = () => {
-  const leftRefs = useRef({});
-  const rightRefs = useRef({});
-  const items = [
-    { id: 1, text: "behind" },
-    { id: 2, text: "in front of" },
-    { id: 3, text: "next to" },
-    { id: 4, text: "between" },
-    { id: 5, text: "on" },
-    { id: 6, text: "under" },
+  const questions = [
+    {
+      before: "He had lots of",
+      underlined: "information",
+      after: "about British Columbia.",
+      tf: "true",
+      correction: "",
+    },
+
+    {
+      before: "The",
+      underlined: "presentation",
+      after: "consisted of meat and vegetables.",
+      tf: "false",
+      correction: "shish kebab",
+    },
+
+    {
+      before: "Maybe we could",
+      underlined: "assignment",
+      after: "shish kebabs tonight.",
+      tf: "false",
+      correction: "barbecue",
+    },
+
+    {
+      before: "Mark ate the",
+      underlined: "both",
+      after: "apple cake by himself.",
+      tf: "false",
+      correction: "entire",
+    },
+
+    {
+      before: "I have an",
+      underlined: "entire",
+      after: "to do in math class tomorrow.",
+      tf: "false",
+      correction: "exam",
+    },
   ];
 
-  const images = [
-    { id: "a", src: behind },
-    { id: "b", src: under },
-    { id: "c", src: between },
-    { id: "d", src: inFrontOf },
-    { id: "e", src: on },
-    { id: "f", src: nextTo },
-  ];
-  const correctAnswers = {
-    1: "a",
-    2: "d",
-    3: "f",
-    4: "c",
-    5: "e",
-    6: "b",
-  };
+  const [answers, setAnswers] = useState(
+    questions.map(() => ({
+      tf: "",
+      correction: "",
+    })),
+  );
+
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [connections, setConnections] = useState([]);
-  const [wrongMap, setWrongMap] = useState({});
-  const getRelativePos = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const parent = e.target.closest(".container").getBoundingClientRect();
 
-    return {
-      x: rect.left - parent.left + rect.width / 2,
-      y: rect.top - parent.top + rect.height / 2,
-    };
-  };
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const handleSelect = (id, e) => {
-    const pos = getRelativePos(e);
-    setSelected({ id, ...pos });
-  };
+  const handleChange = (i, field, value) => {
+    if (locked || result[i]?.tf === true) return;
 
-  const handleImage = (id, e) => {
-    if (!selected) return;
+    const updated = [...answers];
 
-    const pos = getRelativePos(e);
+    updated[i][field] = value;
 
-    const newConnection = {
-      from: selected.id,
-      to: id,
-      x1: selected.x,
-      y1: selected.y,
-      x2: pos.x,
-      y2: pos.y,
-    };
+    // إذا كتب true فضي التصحيح
+    if (field === "tf" && value.toLowerCase().trim() === "true") {
+      updated[i].correction = "";
+    }
 
-    // ✅ نحذف القديم ونضيف الجديد
-    const filtered = connections.filter(
-      (c) => c.from !== selected.id && c.to !== id,
-    );
+    setAnswers(updated);
 
-    setConnections([...filtered, newConnection]);
+    setResult((prev) => {
+      const copy = [...prev];
 
-    setSelected(null);
-  };
-  const resetAll = () => {
-    setConnections([]);
-    setSelected(null);
-    setLocked(false);
-    setWrongMap({});
-  };
+      copy[i] = undefined;
 
-  const showAnswers = () => {
-    const parent = document.querySelector(".container").getBoundingClientRect();
-
-    const newConnections = items.map((item) => {
-      const to = correctAnswers[item.id];
-
-      const leftEl = leftRefs.current[item.id];
-      const rightEl = rightRefs.current[to];
-
-      const leftRect = leftEl.getBoundingClientRect();
-      const rightRect = rightEl.getBoundingClientRect();
-
-      return {
-        from: item.id,
-        to: to,
-        x1: leftRect.left - parent.left + leftRect.width / 2,
-        y1: leftRect.top - parent.top + leftRect.height / 2,
-        x2: rightRect.left - parent.left + rightRect.width / 2,
-        y2: rightRect.top - parent.top + rightRect.height / 2,
-      };
+      return copy;
     });
-
-    setConnections(newConnections);
-    setLocked(true);
   };
+
   const checkAnswers = () => {
     if (locked) return;
 
-    if (connections.length !== items.length) {
-      ValidationAlert.info("Complete all matches first!");
+    const hasEmpty = answers.some((a) => {
+      if (!a.tf.trim()) return true;
+
+      if (normalize(a.tf) === "false" && !a.correction.trim()) return true;
+
+      return false;
+    });
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all fields.");
+
       return;
     }
 
-    let score = 0;
-    const wrongs = {};
+    let correctCount = 0;
 
-    connections.forEach((c) => {
-      const isCorrect = correctAnswers[c.from] === c.to;
+    const newResults = answers.map((a, i) => {
+      const tfCorrect = normalize(a.tf) === questions[i].tf;
 
-      if (isCorrect) {
-        score++;
-      } else {
-        wrongs[c.from] = true; // 👈 نخزن الغلط حسب رقم السؤال
+      let correctionCorrect = true;
+
+      if (questions[i].tf === "false") {
+        correctionCorrect =
+          normalize(a.correction) === normalize(questions[i].correction);
       }
+
+      if (tfCorrect && correctionCorrect) {
+        correctCount++;
+      }
+
+      return {
+        tf: tfCorrect,
+        correction: correctionCorrect,
+      };
     });
 
-    setWrongMap(wrongs);
+    setResult(newResults);
 
-    const total = items.length;
+    const total = questions.length;
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const message = `
-<div style="font-size:20px;text-align:center;">
-<span style="color:${color};font-weight:bold;">
-Score: ${score} / ${total}
-</span>
-</div>
-`;
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (score === total) ValidationAlert.success(message);
-    else if (score === 0) ValidationAlert.error(message);
-    else ValidationAlert.warning(message);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      {
+        tf: "true",
+        correction: "",
+      },
+
+      {
+        tf: "false",
+        correction: "shish kebab",
+      },
+
+      {
+        tf: "false",
+        correction: "barbecue",
+      },
+
+      {
+        tf: "false",
+        correction: "entire",
+      },
+
+      {
+        tf: "false",
+        correction: "exam",
+      },
+    ]);
+
+    setResult(
+      questions.map(() => ({
+        tf: true,
+        correction: true,
+      })),
+    );
 
     setLocked(true);
   };
 
+  const handleReset = () => {
+    setAnswers(
+      questions.map(() => ({
+        tf: "",
+        correction: "",
+      })),
+    );
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span style={{ marginRight: "10px" }}>B</span>
-          Read, match, and write.
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-20 flex">
+          <span className="mr-2.5">B</span>
+
+          <div className="flex flex-col">
+            <span>
+              Read and write <span className="text-[#1DA1F2]">true</span> or{" "}
+              <span className="text-[#1DA1F2]">false</span>.
+            </span>
+
+            <span>
+              For false, change the underlined word to make the sentence
+              correct.
+            </span>
+          </div>
         </h5>
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-8">
+          {questions.map((q, i) => {
+            const isTrue = normalize(answers[i].tf) === "true";
 
-        <div className="container relative w-full h-[600px]">
-          {/* الخطوط */}
-          <svg className="absolute w-full h-full pointer-events-none">
-            {connections.map((c, i) => (
-              <path
+            return (
+              <div
                 key={i}
-                d={`M ${c.x1} ${c.y1}
-                C ${(c.x1 + c.x2) / 2} ${c.y1},
-                  ${(c.x1 + c.x2) / 2} ${c.y2},
-                  ${c.x2} ${c.y2}`}
-                stroke="red"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray="5,5"
-              />
-            ))}
-          </svg>
-
-          {/* اليسار (كلمات + بوكس) */}
-          <div className="absolute top-10 left-10 w-full flex flex-col gap-6">
-            {items.map((item, index) => {
-              const img = images[index];
-              const isRight = index % 2 !== 0;
-
-              return (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between w-[90%]"
+                className="
+                    flex
+                    items-start
+                    gap-4
+                  "
+              >
+                {/* NUMBER */}
+                <span
+                  className="
+                      font-bold
+                      text-[18px]
+                      w-6
+                    "
                 >
-                  {/* 🔹 اليسار */}
-                  <div className="flex items-center gap-4">
-                    <div style={{ width: "150px" }}>
-                      <span style={{ fontWeight: "bold", marginRight: "10px" }}>
-                        {item.id}
-                      </span>
-                      {item.text}
-                      {wrongMap[item.id] && (
-                        <span
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            border: "2px solid white",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                            pointerEvents: "none",
-                            zIndex: 3,
-                          }}
-                        >
-                          ✕
-                        </span>
-                      )}
-                    </div>
+                  {i + 1}
+                </span>
 
-                    <div
-                      ref={(el) => (leftRefs.current[item.id] = el)}
-                      onClick={(e) => handleSelect(item.id, e)}
-                      className="w-10 h-10 flex items-center justify-center cursor-pointer"
-                      style={{
-                        border: "2px solid orange",
-                        borderRadius: "10px",
-                        backgroundColor:
-                          selected?.id === item.id ? "#fde68a" : "#fff",
-                      }}
-                    >
-                      {connections.find((c) => c.from === item.id)?.to}
-                    </div>
-                  </div>
+                {/* TF INPUT */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={answers[i].tf}
+                    disabled={locked || result[i]?.tf === true}
+                    onChange={(e) => handleChange(i, "tf", e.target.value)}
+                    className={`
+                        w-[86px]
+                        h-[34px]
+                        rounded-full
+                        border
+                        border-[#7A2D91]
+                        text-center
+                        outline-none
+                        bg-transparent
+                        text-[18px]
+                        font-semibold
+                        text-[#1DA1F2]
+                      `}
+                  />
 
-                  {/* 🔹 اليمين (الصورة + البوكس) */}
-                  <div
-                    onClick={(e) => handleImage(img.id, e)}
-                    className="flex items-center gap-3 cursor-pointer"
-                    style={{
-                      marginRight: isRight ? "40px" : "0px",
-                    }}
-                  >
-                    <div
-                      ref={(el) => (rightRefs.current[img.id] = el)}
+                  {/* TF WRONG */}
+                  {result[i]?.tf === false && (
+                    <span
                       style={{
-                        width: "30px",
-                        height: "30px",
-                        border: "2px solid orange",
-                        borderRadius: "8px",
+                        position: "absolute",
+                        top: "-8px",
+                        right: "-8px",
+                        width: "20px",
+                        height: "20px",
+                        background: "#ef4444",
+                        color: "white",
+                        borderRadius: "50%",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        backgroundColor:
-                          selected?.id &&
-                          connections.find((c) => c.to === img.id)
-                            ? "#fff"
-                            : "#fff",
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        border: "2px solid white",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                       }}
                     >
-                      {img.id}
-                    </div>
+                      ✕
+                    </span>
+                  )}
+                </div>
 
-                    <img
-                      src={img.src}
-                      alt=""
-                      style={{ width: "80px", height: "60px" }}
+                {/* SENTENCE */}
+                <div className="flex items-end flex-wrap gap-2 text-[20px] leading-[1.7]">
+                  <span>{q.before}</span>
+
+                  <span className="underline">{q.underlined}</span>
+
+                  <span>{q.after}</span>
+
+                  {/* CORRECTION */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={answers[i].correction}
+                      disabled={
+                        isTrue || locked || result[i]?.correction === true
+                      }
+                      onChange={(e) =>
+                        handleChange(i, "correction", e.target.value)
+                      }
+                      className={`
+                        w-[190px]
+                        border-0
+                        border-b
+                        outline-none
+                        bg-transparent
+                        text-[18px]
+                        font-semibold
+                        pb-0.5
+
+                        ${
+                          result[i]?.correction === false
+                            ? "border-[#D1232A] text-[#6D2980]"
+                            : "border-black text-[#6D2980]"
+                        }
+
+                        ${isTrue ? "opacity-40" : ""}
+                      `}
                     />
+
+                    {!isTrue && result[i]?.correction === false && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "-8px",
+                          right: "-8px",
+                          width: "22px",
+                          height: "22px",
+                          background: "#ef4444",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        ✕
+                      </span>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

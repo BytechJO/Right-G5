@@ -189,7 +189,7 @@ const Unit5_Page6_Q2 = () => {
           stopAtSecond={8.5}
         />
         {/* TOP TEXT */}
-        <div className="flex flex-col gap-1 text-[18px] leading-[1.5] mb-6">
+        <div className="flex flex-col gap-1 text-[18px] leading-normal mb-6">
           <div>
             Jane is sitting in a restaurant. She waits patiently for the server
             to come and take her order.
@@ -282,7 +282,7 @@ const Unit5_Page6_Q2 = () => {
           {questions.map((q, i) => (
             <div key={i} className="flex items-center gap-5">
               {/* NUMBER */}
-              <span className="font-bold text-[18px] w-[24px]">{i + 1}</span>
+              <span className="font-bold text-[18px] w-6">{i + 1}</span>
 
               {/* QUESTION */}
               <div className="text-[18px] flex-1">{q}</div>

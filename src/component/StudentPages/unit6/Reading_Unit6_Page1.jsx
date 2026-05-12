@@ -1,4 +1,4 @@
-import page24 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 56.png";
+import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 56.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit6_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/Unit 6/P 56/unit6-pg56-readingall.mp3";

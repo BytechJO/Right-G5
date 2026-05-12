@@ -1,178 +1,349 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Unit6_Page5_Q1.css";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex B 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex B 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex B 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex B 4.svg";
-import sound1 from "../../../assets/audio/ClassBook/Unit 6/P 50/unit6-pg50-EXB.mp3";
+import boxArrowRight from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 50/Asset 2.svg";
+import boxArrowleft from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 50/Asset 3.svg";
 
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit6_Page5_Q2 = () => {
-  const items = [
-    {
-      img: img1,
-      options: ["gl", "fl", "pl"],
-      correct: "gl",
-    },
-    {
-      img: img2,
-      options: ["cl", "bl", "sl"],
-      correct: "bl",
-    },
-    {
-      img: img3,
-      options: ["cl", "gl", "fl"],
-      correct: "cl",
-    },
-    {
-      img: img4,
-      options: ["fl", "sl", "gl"],
-      correct: "fl",
-    },
+  const words = [
+    "take advantage of",
+    "half price",
+    "in a row",
+    "made it",
+    "try it out",
   ];
 
-  const [selected, setSelected] = useState(Array(items.length).fill(""));
+  const correctAnswers = [
+    ["take advantage of"],
+    ["half price"],
+    ["made it", "made it!"],
+    ["in a row"],
+    ["try it out"],
+  ];
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
   const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const captions = [
-    {
-      start: 0.14,
-      end: 16.02,
-      text: "Page 50, write activities. Exercise B. Look, listen, and choose. One, glass. Two, blender. Three, class. Four, float.",
-    },
-  ];
-  const chooseOption = (i, value) => {
-    if (locked) return;
+  const [result, setResult] = useState([]);
 
-    const newSelected = [...selected];
-    newSelected[i] = value;
-    setSelected(newSelected);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+    updated[i] = val;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
+    });
   };
 
-  const resetAll = () => {
-    setSelected(Array(items.length).fill(""));
-    setLocked(false);
-    setShowResult(false);
-  };
-  const showAnswers = () => {
-    setSelected(items.map((i) => i.correct));
-    setLocked(true);
-  };
   const checkAnswers = () => {
     if (locked) return;
 
-    if (selected.includes("")) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    items.forEach((item, i) => {
-      if (selected[i] === item.correct) {
-        score++;
-      }
+    const newResults = answers.map((ans, i) => {
+      const ok = correctAnswers[i].some(
+        (correct) => normalize(correct) === normalize(ans),
+      );
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = items.length;
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      correctAnswers[0][0],
+      correctAnswers[1][0],
+      correctAnswers[2][0],
+      correctAnswers[3][0],
+      correctAnswers[4][0],
+    ]);
+
+    setResult([true, true, true, true, true]);
 
     setLocked(true);
-    setShowResult(true);
   };
-  const isWrong = (index) => {
-    return showResult && selected[index] !== items[index].correct;
+
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+    setResult([]);
+    setLocked(false);
   };
+  const input = (i, width = "w-[220px]") => (
+    <span className="relative inline-block  mb-2.5">
+      <input
+        value={answers[i]}
+        onChange={(e) => handleChange(i, e.target.value)}
+        disabled={locked || result[i] === true}
+        className={`border-b outline-none text-[#6D2980] font-bold bg-transparent
+      ${result[i] === false ? "border-red-500" : "border-black"}
+      ${width}`}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-10px",
+            right: "-10px",
+            transform: "translateY(-50%)",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
   return (
-    <div className="main-container-component">
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-5">
-          <span className="ex-A mr-4">B</span>
-          Look, listen, and choose
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span className="ex-A mr-2.5">B</span>
+          Read and complete the conversations.
         </h5>
-        <QuestionAudioPlayer
-          src={sound1}
-          captions={captions}
-          stopAtSecond={6.9}
-        />
-        <div className="flex w-full">
-          <div className="flex justify-center w-full">
-            <div className="grid grid-cols-2 gap-y-10 gap-x-[200px] mt-10">
-              {items.map((item, i) => (
-                <div key={i} className="flex flex-col justify-between h-40">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-[20px] font-bold text-[#2a4e7c]">
-                      {i + 1}
-                    </span>
 
-                    <img
-                      src={item.img}
-                      alt=""
-                      style={{
-                        width: "80px",
-                        height: "auto",
-                      }}
-                    />
+        {/* WORD BANK */}
+        <div className="flex justify-center mb-10">
+          <div
+            className="
+              bg-[#E8DFF0]
+              rounded-2xl
+              px-8
+              py-4
+              flex
+              gap-16
+              text-[18px]
+            "
+          >
+            {words.map((word, i) => (
+              <span key={i}>{word}</span>
+            ))}
+          </div>
+        </div>
 
-                    {/* OPTIONS */}
-                    <div className="flex flex-col gap-1.5 text-[18px] ml-4">
-                      <div className="relative  mt-2">
-                        {/* ❌ */}
-                        {isWrong(i) && (
-                          <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-md">
-                            ✕
-                          </span>
-                        )}
-                      </div>
-                      {item.options.map((opt, idx) => (
-                        <span
-                          key={idx}
-                          onClick={() => chooseOption(i, opt)}
-                          className={`cursor-pointer px-2 py-0.5 rounded-full ${
-                            selected[i] === opt
-                              ? isWrong(i)
-                                ? "border-2 border-red-500"
-                                : "border-2 border-[#1C398E]"
-                              : "hover:bg-gray-100"
-                          }`}
-                        >
-                          {opt}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+        {/* CONVERSATIONS */}
+        <div className="grid grid-cols-2 gap-x-10 gap-y-8">
+          {/* BOX 1 */}
+          <div className="relative w-[420px] min-h-[170px]">
+            <img
+              src={boxArrowRight}
+              alt=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "fill",
+              }}
+            />
+
+            <div className="relative z-10 p-6">
+              <span className="absolute -left-8 top-3 font-bold text-[18px]">
+                1
+              </span>
+
+              {/* BOX 1 */}
+              <p className="text-[18px]">We should</p>
+
+              {input(0, "w-[220px]")}
+
+              <p className="text-[18px]">the discount. Let’s buy five.</p>
+            </div>
+          </div>
+
+          {/* BOX 2 */}
+          <div className="relative w-[420px] min-h-[170px]">
+            <img
+              src={boxArrowleft}
+              alt=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "fill",
+              }}
+            />
+
+            <div
+              style={{
+                position: "relative",
+                zIndex: 10,
+                paddingTop: "20px",
+                paddingLeft: "50px",
+              }}
+            >
+              <span className="absolute -left-5 top-3 font-bold text-[18px]">
+                2
+              </span>
+
+              <p className="text-[18px]">Yes, at</p>
+
+              {input(1, "w-[220px]")}
+
+              <p className="text-[18px]">
+                , they would only be fifty cents each.
+              </p>
+            </div>
+          </div>
+
+          {/* BOX 3 */}
+          {/* BOX 3 */}
+          <div className="relative w-[420px] min-h-[170px]">
+            <img
+              src={boxArrowRight}
+              alt=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "fill",
+              }}
+            />
+
+            <div
+              style={{
+                position: "relative",
+                zIndex: 10,
+                paddingTop: "10px",
+                paddingLeft: "10px",
+              }}
+            >
+              <span className="absolute -left-8 top-3 font-bold text-[18px]">
+                3
+              </span>
+
+              <p className="text-[18px]">Hooray! I</p>
+
+              {input(2, "w-[240px]")}
+
+              <div style={{ fontSize: "18px" }}>
+                {/* السطر الأول */}
+                <div>
+                  <span>! I got three baskets</span>
                 </div>
-              ))}
+
+                {/* السطر الثاني */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  {input(3, "w-[210px]")}
+
+                  <span>.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* BOX 4 */}
+          <div className="relative w-[420px] min-h-[170px]">
+            <img
+              src={boxArrowleft}
+              alt=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "fill",
+              }}
+            />
+
+            <div
+              style={{
+                position: "relative",
+                zIndex: 10,
+                paddingTop: "25px",
+                paddingLeft: "50px",
+              }}
+            >
+              <span className="absolute -left-5 top-3 font-bold text-[18px]">
+                4
+              </span>
+
+              <p className="text-[18px]">Good job! Now can I</p>
+
+              {input(4, "w-[220px]")}
+
+              <p className="text-[18px]">? I want to see if I can win.</p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

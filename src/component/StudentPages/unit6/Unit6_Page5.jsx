@@ -1,4 +1,4 @@
-import page_5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50.png";
+import page_5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 50.png";
 import "./Unit6_Page5.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 const Unit6_Page5 = ({ openPopup }) => {
@@ -17,7 +17,7 @@ const Unit6_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 48 })}
+          onClick={() => openPopup("exercise", { startIndex: 50 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -39,7 +39,7 @@ const Unit6_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 49 })}
+          onClick={() => openPopup("exercise", { startIndex: 51 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -61,7 +61,7 @@ const Unit6_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 50 })}
+          onClick={() => openPopup("exercise", { startIndex: 52 })}
           style={{ overflow: "visible" }}
         >
           <image

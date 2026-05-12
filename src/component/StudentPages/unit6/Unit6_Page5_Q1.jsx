@@ -1,215 +1,294 @@
 import React, { useState } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Unit6_Page5_Q1.css";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex A 6.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Unit6_Page5_Q1 = () => {
-  const items = [
+  const words = ["attractions", "shoot", "bunch", "trade"];
+
+  const sentences = [
     {
-      img: img1,
-      options: ["sl", "pl"],
-      correct: "sl",
-      word: "__eep",
+      before: "There are many",
+      after: "at a carnival, such as rides, games, and shows.",
     },
+
     {
-      img: img2,
-      options: ["pl", "fl"],
-      correct: "pl",
-      word: "air__ane",
+      before: "We could",
+      after: "cars. I’ll give you this red one for your blue one.",
     },
+
     {
-      img: img3,
-      options: ["cl", "sl"],
-      correct: "cl",
-      word: "__own",
+      before: "How many baskets can you",
+      after: "in one game?",
     },
+
     {
-      img: img4,
-      options: ["pl", "fl"],
-      correct: "pl",
-      word: "__ate",
-    },
-    {
-      img: img5,
-      options: ["fl", "sl"],
-      correct: "sl",
-      word: "__ide",
-    },
-    {
-      img: img6,
-      options: ["pl", "fl"],
-      correct: "fl",
-      word: "__ag",
+      before: "I bought a",
+      after: "of tickets so I can go on lots of rides.",
     },
   ];
 
-  const [selected, setSelected] = useState(Array(items.length).fill(""));
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
+  const correctAnswers = [["attractions"], ["trade"], ["shoot"], ["bunch"]];
+
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+
   const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const chooseOption = (i, value) => {
-    if (locked) return;
 
-    const newSelected = [...selected];
-    newSelected[i] = value;
-    setSelected(newSelected);
+  const [result, setResult] = useState([]);
 
-    const newAnswers = [...answers];
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    newAnswers[i] = items[i].word.replace("__", value).replace("_", value);
-    setAnswers(newAnswers);
-  };
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
 
-  const resetAll = () => {
-    setSelected(Array(items.length).fill(""));
-    setAnswers(Array(items.length).fill(""));
-    setLocked(false);
-    setShowResult(false);
-  };
+    const updated = [...answers];
 
-  const showAnswers = () => {
-    setSelected(items.map((i) => i.correct));
+    updated[i] = val;
 
-    const newAnswers = items.map((i) => {
-      return i.word.replace("__", i.correct).replace("_", i.correct);
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-
-    setAnswers(newAnswers);
-    setLocked(true);
   };
+
   const checkAnswers = () => {
     if (locked) return;
-    if (selected.includes("")) {
-      ValidationAlert.info("Please complete all answers.");
+
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    items.forEach((item, i) => {
-      if (selected[i] === item.correct) {
-        score++;
-      }
+    const newResults = answers.map((ans, i) => {
+      const ok = correctAnswers[i].some(
+        (correct) => normalize(correct) === normalize(ans),
+      );
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = items.length;
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      correctAnswers[0][0],
+      correctAnswers[1][0],
+      correctAnswers[2][0],
+      correctAnswers[3][0],
+    ]);
+
+    setResult([true, true, true, true]);
 
     setLocked(true);
-    setShowResult(true);
   };
-  const isWrong = (index) => {
-    return showResult && selected[index] !== items[index].correct;
+
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
+
   return (
-    <div className="main-container-component">
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-5">
-          <span className="ex-A mr-4">A</span>
-          Look, circle, and write.
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-15">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Read and write the correct word.
         </h5>
-        <div className="flex w-full">
-          <div className="grid grid-cols-3 gap-y-10 w-full gap-x-[60px] mt-10 justify-center">
-            {items.map((item, i) => (
-              <div key={i} className="flex flex-col justify-between h-40">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[20px] font-bold text-[#2a4e7c]">
-                    {i + 1}
-                  </span>
 
-                  <img
-                    src={item.img}
-                    alt=""
-                    style={{
-                      width: "80px",
-                      height: "auto",
-                    }}
-                  />
-
-                  {/* OPTIONS */}
-                  <div className="flex flex-col gap-1.5 text-[18px]">
-                    {item.options.map((opt, idx) => (
-                      <span
-                        key={idx}
-                        onClick={() => chooseOption(i, opt)}
-                        className={`cursor-pointer px-2 py-0.5 ${
-                          selected[i] === opt
-                            ? "border-2 border-[#1C398E] rounded-full"
-                            : "hover:bg-gray-100 rounded-full"
-                        }`}
-                      >
-                        {opt}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="relative w-40 mt-2">
-                  {/* ❌ */}
-                  {isWrong(i) && (
-                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-md">
-                      ✕
-                    </span>
-                  )}
-
-                  <div className="text-[22px] flex items-end gap-1">
-                    {(() => {
-                      const parts = item.word.split(/__|_/); // يقسم الكلمة
-
-                      return (
-                        <>
-                          <span>{parts[0]}</span>
-
-                          {/* الحرف بالمكان الصحيح */}
-                          <span
-                            className={`px-1 min-w-6 text-center border-b-2 ${
-                              isWrong(i) ? "border-red-500" : "border-black"
-                            } text-[#1C398E]`}
-                          >
-                            {selected[i] || ""}
-                          </span>
-
-                          <span>{parts[1]}</span>
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
-              </div>
+        {/* WORD BANK */}
+        <div className="flex justify-center mb-10">
+          <div
+            className="
+              bg-[#E8DFF0]
+              rounded-2xl
+              px-10
+              py-4
+              flex
+              gap-24
+              text-[22px]
+              font-medium
+            "
+          >
+            {words.map((word, i) => (
+              <span key={i}>{word}</span>
             ))}
           </div>
         </div>
+
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-8">
+          {sentences.map((item, i) => (
+            <div
+              key={i}
+              className="
+                  flex
+                  items-start
+                  gap-4
+                "
+            >
+              {/* NUMBER */}
+              <span
+                className="
+                    font-bold
+                    text-[22px]
+                    w-6
+                  "
+              >
+                {i + 1}
+              </span>
+
+              {/* SENTENCE */}
+              <div
+                className="
+                    flex
+                    items-end
+                    flex-wrap
+                    text-[22px]
+                    leading-[1.8]
+                    flex-1
+                  "
+              >
+                <span>{item.before}</span>
+
+                {/* INPUT */}
+                <div className="relative mx-2">
+                  <input
+                    type="text"
+                    value={answers[i]}
+                    disabled={locked || result[i] === true}
+                    onChange={(e) => handleChange(i, e.target.value)}
+                    className={`
+                        w-[170px]
+                        border-0
+                        border-b
+                        outline-none
+                        bg-transparent
+                        text-[22px]
+                        font-semibold
+                        pb-0.5
+                        ml-2
+                        ${
+                          result[i] === false
+                            ? "border-[#D1232A] text-[#6D2980]"
+                            : "border-black text-[#6D2980]"
+                        }
+                      `}
+                  />
+
+                  {/* WRONG */}
+                  {result[i] === false && (
+                    <span
+                      style={{
+                        position: "absolute",
+
+                        top: "-8px",
+
+                        right: "-8px",
+
+                        width: "22px",
+
+                        height: "22px",
+
+                        background: "#ef4444",
+
+                        color: "white",
+
+                        borderRadius: "50%",
+
+                        display: "flex",
+
+                        alignItems: "center",
+
+                        justifyContent: "center",
+
+                        fontSize: "12px",
+
+                        fontWeight: "bold",
+
+                        border: "2px solid white",
+
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      ✕
+                    </span>
+                  )}
+                </div>
+
+                <span>{item.after}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

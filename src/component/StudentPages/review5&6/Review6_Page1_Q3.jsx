@@ -1,296 +1,230 @@
 import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review6_Page2_Q2.css";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Review6_Page1_Q3 = () => {
-  const wordBank = [
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
+  const words = [
+    "it",
+    "was",
+    "if",
+    "might",
+    "can",
+    "run",
+
+    "would",
+    "done",
+    "have",
+    "must",
+    "see",
+    "could",
+
+    "through",
+    "over",
+    "did",
+    "shall",
+    "should",
+    "between",
+
+    "the",
+    "may",
+    "were",
+    "stop",
+    "does",
+    "will",
   ];
 
   const correctAnswers = [
-    ["June", "Monday"],
-    ["September", "Thursday"],
+    "might",
+    "can",
+    "would",
+    "must",
+    "could",
+    "shall",
+    "should",
+    "may",
+    "will",
   ];
 
-  const [answers, setAnswers] = useState([
-    ["", ""],
-    ["", ""],
-  ]);
+  const [selected, setSelected] = useState([]);
 
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [wrongMarks, setWrongMarks] = useState([]);
+  const [wrongSelections, setWrongSelections] = useState([]);
 
-  // ================= DRAG =================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const [locked, setLocked] = useState(false);
 
-    const value = draggableId.replace("word-", "");
-    const [qIndex, blankIndex] = destination.droppableId.split("-");
+  const toggleWord = (word) => {
+    if (locked) return;
 
-    const updated = [...answers];
-    updated[qIndex][blankIndex] = value;
-
-    setAnswers(updated);
+    if (selected.includes(word)) {
+      setSelected(selected.filter((w) => w !== word));
+    } else {
+      setSelected([...selected, word]);
+    }
   };
 
-  // ================= SHOW =================
-  const showAnswers = () => {
-    setAnswers(correctAnswers);
-    setShowCorrect(true);
-    setWrongMarks([]);
-  };
-
-  // ================= RESET =================
-  const resetAll = () => {
-    setAnswers([
-      ["", ""],
-      ["", ""],
-    ]);
-    setShowCorrect(false);
-    setWrongMarks([]);
-  };
-
-  // ================= CHECK =================
   const checkAnswers = () => {
-    if (showCorrect) return;
+    if (locked) return;
 
-    if (answers.some((q) => q.includes(""))) {
-      ValidationAlert.info("Oops!", "Please complete all answers.");
+    if (selected.length === 0) {
+      ValidationAlert.info("Please select the modal verbs.");
+
       return;
     }
 
-    let score = 0;
-    let wrong = [];
+    const wrong = selected.filter((word) => !correctAnswers.includes(word));
 
-    answers.forEach((q, qi) => {
-      q.forEach((ans, i) => {
-        if (ans === correctAnswers[qi][i]) {
-          score++;
-        } else {
-          wrong.push(`${qi}-${i}`);
-        }
-      });
-    });
+    setWrongSelections(wrong);
 
-    setWrongMarks(wrong);
-    setShowCorrect(true);
+    const allCorrect =
+      correctAnswers.every((w) => selected.includes(w)) && wrong.length === 0;
 
-    const total = 4;
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const correctCount = selected.filter((w) =>
+      correctAnswers.includes(w),
+    ).length;
+
+    const total = correctAnswers.length;
+
+    const color = allCorrect ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${score} / ${total}
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (allCorrect) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const usedWords = answers.flat().filter(Boolean);
+  const showAnswers = () => {
+    setSelected(correctAnswers);
+
+    setWrongSelections([]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setSelected([]);
+
+    setWrongSelections([]);
+
+    setLocked(false);
+  };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-col items-center p-8">
-        <div className="div-forall w-[60%]">
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>C</span>
-            Read and write.
-          </h5>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-25">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            C
+          </span>
+          Circle the words that are modal verbs.
+        </h5>
 
-          {/* 🔵 MONTHS */}
-          <Droppable droppableId="months" direction="horizontal">
-            {(provided) => (
+        {/* WORDS */}
+        <div
+          className="
+            grid
+            grid-cols-6
+            gap-y-15
+            gap-x-16
+            pl-8
+          "
+        >
+          {words.map((word, i) => {
+            const isSelected = selected.includes(word);
+
+            const isWrong = wrongSelections.includes(word);
+
+            return (
               <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="flex gap-3 p-3 border-2 border-dashed rounded-xl mt-5 justify-center"
+                key={i}
+                onClick={() => toggleWord(word)}
+                className="
+                    relative
+                    cursor-pointer
+                    inline-block
+                    w-fit
+                    text-[20px]
+                  "
               >
-                {wordBank
-                  .filter((w) =>
-                    ["June", "July", "August", "September", "October"].includes(
-                      w,
-                    ),
-                  )
-                  .map((word, index) => {
-                    const isUsed = usedWords.includes(word);
+                {/* CIRCLE */}
+                {isSelected && (
+                  <span
+                    className={`
+                        absolute
+                        -inset-1.5
+                        border-2
+                        rounded-full
+                        pointer-events-none
 
-                    return (
-                      <Draggable
-                        key={word}
-                        draggableId={`word-${word}`}
-                        index={index}
-                        isDragDisabled={isUsed}
-                      >
-                        {(provided) => (
-                          <span
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              padding: "7px 14px",
-                              border: "2px solid #2c5287",
-                              borderRadius: "8px",
-                              background: "white",
-                              fontWeight: "bold",
-                              cursor: isUsed ? "not-allowed" : "grab",
-                              opacity: isUsed ? 0.4 : 1,
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {word}
-                          </span>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                {provided.placeholder}
+                        ${isWrong ? "border-[#D1232A]" : "border-[#6D2980]"}
+                      `}
+                  ></span>
+                )}
+
+                {/* WRONG */}
+                {isWrong && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-15px",
+                      right: "-8px",
+                      width: "20px",
+                      height: "20px",
+                      background: "#ef4444",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                      zIndex: 20,
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
+
+                <span className="relative z-10">{word}</span>
               </div>
-            )}
-          </Droppable>
-
-          {/* 🟢 DAYS */}
-          <Droppable droppableId="days" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="flex gap-3 p-3 border-2 border-dashed rounded-xl mt-3 justify-center"
-              >
-                {wordBank
-                  .filter((w) =>
-                    [
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                    ].includes(w),
-                  )
-                  .map((word, index) => {
-                    const isUsed = usedWords.includes(word);
-
-                    return (
-                      <Draggable
-                        key={word}
-                        draggableId={`word-${word}`}
-                        index={index}
-                        isDragDisabled={isUsed}
-                      >
-                        {(provided) => (
-                          <span
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              padding: "7px 14px",
-                              border: "2px solid #2c5287",
-                              borderRadius: "8px",
-                              background: "white",
-                              fontWeight: "bold",
-                              cursor: isUsed ? "not-allowed" : "grab",
-                              opacity: isUsed ? 0.4 : 1,
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {word}
-                          </span>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-          {/* 🟢 QUESTIONS */}
-          <div className="mt-10 space-y-8 text-lg">
-            {[0, 1].map((qIndex) => (
-              <div key={qIndex}>
-                <div className="mb-2">
-                  <b>{qIndex + 1}</b>{" "}
-                  {qIndex === 0
-                    ? "It is the sixth month of the year and the second day of the week."
-                    : "It is the ninth month of the year and the fifth day of the week."}
-                </div>
-
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span>The month is</span>
-
-                  {[0, 1].map((blankIndex) => {
-                    const id = `${qIndex}-${blankIndex}`;
-                    const isWrong = wrongMarks.includes(id);
-
-                    return (
-                      <React.Fragment key={id}>
-                        <Droppable droppableId={id}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                              className="relative min-w-[140px] border-b-2 px-2 font-bold text-[#1C398E]"
-                              style={{
-                                borderColor: isWrong ? "red" : "black",
-                              }}
-                            >
-                              {answers[qIndex][blankIndex]}
-                              {provided.placeholder}
-
-                              {showCorrect && isWrong && (
-                                <span className="absolute -right-1 top-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-md">
-                                  ✕
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </Droppable>
-
-                        {blankIndex === 0 && <span>, and the day is</span>}
-                      </React.Fragment>
-                    );
-                  })}
-
-                  <span>.</span>
-                </div>
-
-                <div className="border-b mt-2"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* BUTTONS */}
-        <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
-            Start Again ↻
-          </button>
-
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
-
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+            );
+          })}
         </div>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

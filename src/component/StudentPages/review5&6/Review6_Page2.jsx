@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import page_2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55.png";
+import React from "react";
+import page_2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 55.png";
 import "./Review6_Page2.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 // import Unit4_Page6_Q2 from "./Unit4_Page6_Q2";
@@ -20,7 +20,7 @@ const Review6_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 60 })}
+          onClick={() => openPopup("exercise", { startIndex: 65 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -41,7 +41,7 @@ const Review6_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 61 })}
+          onClick={() => openPopup("exercise", { startIndex: 66 })}
           style={{ overflow: "visible" }}
         >
           <image

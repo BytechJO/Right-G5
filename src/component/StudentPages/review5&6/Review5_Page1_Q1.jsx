@@ -1,503 +1,286 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import imgA from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 1.svg";
-import imgB from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 2.svg";
-import imgC from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 3.svg";
-import imgD from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 4.svg";
-import imgE from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 5.svg";
-import imgF from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 52/Ex A 6.svg";
-
-const Review5_Page1_Q1 = () => {
-  const objectsBank = [
-    "ball",
-    "sink",
-    "book",
-    "fruit",
-    "car",
-    "washing machine",
+const Unit6_Page2_Q1 = () => {
+  const words = [
+    "shark",
+    "barbecue",
+    "recipe",
+    "Mediterranean food",
+    "assignment",
   ];
 
-  const roomsBank = [
-    "bathroom",
-    "garage",
-    "kitchen",
-    "bedroom",
-    "living room",
-    "basement",
+  const definitions = [
+    "Cooking over an open fire using charcoal",
+
+    "A type of food found in a certain part of the world",
+
+    "A type of fish that lives in the ocean",
+
+    "A set of directions for cooking something",
+
+    "A job, or work, that is given to someone",
   ];
 
-  const questions = [
-    { id: 1, img: imgA, object: "ball", correct: "bedroom" },
-    { id: 2, img: imgB, object: "sink", correct: "bathroom" },
-    { id: 3, img: imgC, object: "book", correct: "living room" },
-    { id: 4, img: imgD, object: "fruit", correct: "kitchen" },
-    { id: 5, img: imgE, object: "car", correct: "garage" },
-    { id: 6, img: imgF, object: "washing machine", correct: "basement" },
+  const correctAnswers = [
+    ["barbecue"],
+
+    ["Mediterranean food"],
+
+    ["shark"],
+
+    ["recipe"],
+
+    ["assignment"],
   ];
-  const [wrongAnswers, setWrongAnswers] = useState({});
-  const [objectAnswers, setObjectAnswers] = useState({});
-  const [roomAnswers, setRoomAnswers] = useState({});
+
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+
   const [locked, setLocked] = useState(false);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || locked) return;
+  const [result, setResult] = useState([]);
 
-    const draggableId = result.draggableId;
-    const droppableId = result.destination.droppableId;
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    const isObject = draggableId.startsWith("obj-");
-    const isRoom = draggableId.startsWith("room-");
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
 
-    // ❌ منع وضع object في مكان room
-    if (droppableId.startsWith("room-") && !isRoom) return;
+    const updated = [...answers];
 
-    // ❌ منع وضع room في مكان object
-    if (droppableId.startsWith("object-") && !isObject) return;
+    updated[i] = val;
 
-    // 👇 كمل الكود تبعك زي ما هو
-    if (droppableId.startsWith("object-")) {
-      const id = droppableId.split("-")[1];
-      const value = draggableId.replace("obj-", "");
+    setAnswers(updated);
 
-      const existingKey = Object.keys(objectAnswers).find(
-        (key) => objectAnswers[key] === value,
-      );
+    setResult((prev) => {
+      const copy = [...prev];
 
-      if (existingKey) {
-        setObjectAnswers((prev) => {
-          const newState = { ...prev };
-          delete newState[existingKey];
-          return newState;
-        });
-      }
+      copy[i] = undefined;
 
-      setObjectAnswers((prev) => ({
-        ...prev,
-        [id]: value,
-      }));
-    } else if (droppableId.startsWith("room-")) {
-      const id = droppableId.split("-")[1];
-      const value = draggableId.replace("room-", "");
-
-      const existingKey = Object.keys(roomAnswers).find(
-        (key) => roomAnswers[key] === value,
-      );
-
-      if (existingKey) {
-        setRoomAnswers((prev) => {
-          const newState = { ...prev };
-          delete newState[existingKey];
-          return newState;
-        });
-      }
-
-      setRoomAnswers((prev) => ({
-        ...prev,
-        [id]: value,
-      }));
-    }
-  };
-
-  const reset = () => {
-    setObjectAnswers({});
-    setRoomAnswers({});
-    setLocked(false);
-  };
-
-  const showAnswers = () => {
-    const filledObjects = {};
-    const filledRooms = {};
-    questions.forEach((q) => {
-      filledObjects[q.id] = q.object;
-      filledRooms[q.id] = q.correct;
+      return copy;
     });
-    setObjectAnswers(filledObjects);
-    setRoomAnswers(filledRooms);
-    setLocked(true);
   };
 
   const checkAnswers = () => {
     if (locked) return;
 
-    const emptyObjects = questions.some((q) => !objectAnswers[q.id]);
-    const emptyRooms = questions.some((q) => !roomAnswers[q.id]);
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
 
-    if (emptyObjects || emptyRooms) {
-      ValidationAlert.info("Please complete all answers.");
       return;
     }
-    const wrong = {};
 
-    questions.forEach((q) => {
-      const isCorrect =
-        objectAnswers[q.id] === q.object && roomAnswers[q.id] === q.correct;
+    let correctCount = 0;
 
-      if (!isCorrect) {
-        wrong[q.id] = true;
-      }
+    const newResults = answers.map((ans, i) => {
+      const ok = correctAnswers[i].some(
+        (correct) => normalize(correct) === normalize(ans),
+      );
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setWrongAnswers(wrong);
-    let correct = 0;
+    setResult(newResults);
 
-    questions.forEach((q) => {
-      if (objectAnswers[q.id] === q.object && roomAnswers[q.id] === q.correct) {
-        correct++;
-      }
-    });
+    const total = answers.length;
 
-    const total = questions.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
-        <b>Score: ${correct} / ${total}</b>
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
       </div>
     `;
 
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      correctAnswers[0][0],
+      correctAnswers[1][0],
+      correctAnswers[2][0],
+      correctAnswers[3][0],
+      correctAnswers[4][0],
+    ]);
+
+    setResult([true, true, true, true, true]);
 
     setLocked(true);
   };
 
-  const getUsedObjects = () => Object.values(objectAnswers);
-  const getUsedRooms = () => Object.values(roomAnswers);
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div className="div-forall">
-          <h5 className="header-title-page8">
-            <span style={{ marginRight: "10px" }}>A</span>
-            Read, look, and write. Use the words below.
-          </h5>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-12">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Read and write the word with its definition.
+        </h5>
 
-          <div className="w-full mx-auto">
-            {/* OBJECTS BANK */}
-            <Droppable droppableId="objects-bank" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    display: "flex",
-                    gap: "12px",
-                    padding: "10px",
-                    border: "2px dashed #2c5287",
-                    borderRadius: "10px",
-                    marginTop: "20px",
-                    justifyContent: "center",
-                    width: "100%",
-                    marginBottom: "10px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {objectsBank
-                    .filter((a) => !getUsedObjects().includes(a))
-                    .map((a, index) => (
-                      <Draggable
-                        key={a}
-                        draggableId={`obj-${a}`}
-                        index={index}
-                        isDragDisabled={locked}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              padding: "7px 14px",
-                              border: "2px solid #2c5287",
-                              borderRadius: "8px",
-                              background: "white",
-                              fontWeight: "bold",
-                              cursor: "grab",
-                              fontSize: "16px",
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {a}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* ROOMS BANK */}
-            <Droppable droppableId="rooms-bank" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    display: "flex",
-                    gap: "12px",
-                    padding: "10px",
-                    border: "2px dashed #38a169",
-                    borderRadius: "10px",
-                    marginTop: "10px",
-                    justifyContent: "center",
-                    width: "100%",
-                    marginBottom: "20px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {roomsBank
-                    .filter((a) => !getUsedRooms().includes(a))
-                    .map((a, index) => (
-                      <Draggable
-                        key={a}
-                        draggableId={`room-${a}`}
-                        index={index}
-                        isDragDisabled={locked}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              padding: "7px 14px",
-                              border: "2px solid #38a169",
-                              borderRadius: "8px",
-                              background: "white",
-                              fontWeight: "bold",
-                              cursor: "grab",
-                              fontSize: "16px",
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {a}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* QUESTIONS GRID */}
-            <div className="grid grid-cols-3 gap-10 mb-20">
-              {questions.map((q) => (
-                <div key={q.id} className="flex flex-col items-start">
-                  {/* الرقم + الصورة */}
-                  <div className="flex gap-2 items-start">
-                    <span className="font-bold text-lg">{q.id}</span>
-                    <img
-                      src={q.img}
-                      style={{
-                        height: "120px",
-                        border: "2px solid orange",
-                        borderRadius: "10px",
-                      }}
-                    />
-                  </div>
-
-                  {/* سؤال: Where is the [object]? */}
-                  <Droppable droppableId={`object-${q.id}`}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        style={{
-                          width: "270px",
-                          borderBottom: "2px solid black",
-                          minHeight: "35px",
-                          marginTop: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "5px" }}>Where is the</span>
-
-                        {objectAnswers[q.id] ? (
-                          <Draggable
-                            draggableId={`obj-${objectAnswers[q.id]}`}
-                            index={0}
-                            isDragDisabled={locked}
-                          >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={provided.draggableProps.style}
-                              >
-                                <div style={{ position: "relative" }}>
-                                  <span className="text-[#1C398E] font-semibold">
-                                    {objectAnswers[q.id]}
-                                  </span>
-
-                                  {locked && wrongAnswers[q.id] && (
-                                    <span
-                                      style={{
-                                        position: "absolute",
-                                        right: "-20px",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                        width: "20px",
-                                        height: "20px",
-                                        background: "#ef4444",
-                                        color: "white",
-                                        borderRadius: "50%",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: "12px",
-                                        fontWeight: "bold",
-                                        border: "2px solid white",
-                                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                                        pointerEvents: "none",
-                                        zIndex: 3,
-                                      }}
-                                    >
-                                      ✕
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ) : (
-                          // 👇 البوكس الفاضي
-                          <div
-                            style={{
-                              width: "60px",
-                              height: "26px",
-                              border: "2px dashed #aaa",
-                              borderRadius: "6px",
-                              margin: "0 6px",
-                            }}
-                          />
-                        )}
-
-                        <span style={{ marginLeft: "5px" }}>.</span>
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  {/* جواب: It's in the [room]. */}
-                  <Droppable droppableId={`room-${q.id}`}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        style={{
-                          width: "270px",
-                          borderBottom: "2px solid black",
-                          minHeight: "35px",
-                          marginTop: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "5px" }}>It's in the</span>
-
-                        {roomAnswers[q.id] ? (
-                          <Draggable
-                            draggableId={`room-${roomAnswers[q.id]}`}
-                            index={0}
-                            isDragDisabled={locked}
-                          >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={provided.draggableProps.style}
-                              >
-                                <div style={{ position: "relative" }}>
-                                  <span className="text-[#1C398E] font-semibold">
-                                    {roomAnswers[q.id]}
-                                  </span>
-
-                                  {locked && wrongAnswers[q.id] && (
-                                    <span
-                                      style={{
-                                        position: "absolute",
-                                        right: "-20px",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                        width: "20px",
-                                        height: "20px",
-                                        background: "#ef4444",
-                                        color: "white",
-                                        borderRadius: "50%",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: "12px",
-                                        fontWeight: "bold",
-                                        border: "2px solid white",
-                                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                                        pointerEvents: "none",
-                                        zIndex: 3,
-                                      }}
-                                    >
-                                      ✕
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ) : (
-                          <div
-                            style={{
-                              width: "60px",
-                              height: "26px",
-                              border: "2px dashed #aaa",
-                              borderRadius: "6px",
-                              margin: "0 6px",
-                            }}
-                          />
-                        )}
-
-                        <span style={{ marginLeft: "5px" }}>.</span>
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* BUTTONS */}
-          <div className="action-buttons-container mt-10">
-            <button onClick={reset} className="try-again-button">
-              Start Again ↻
-            </button>
-            <button
-              onClick={showAnswers}
-              className="show-answer-btn swal-continue"
-            >
-              Show Answer
-            </button>
-            <button onClick={checkAnswers} className="check-button2">
-              Check Answer ✓
-            </button>
+        {/* WORD BANK */}
+        <div className="flex justify-center mb-10">
+          <div
+            className="
+              bg-[#E8DFF0]
+              rounded-[18px]
+              px-8
+              py-4
+              flex
+              gap-12
+              text-[18px]
+              font-medium
+            "
+          >
+            {words.map((word, i) => (
+              <span key={i}>{word}</span>
+            ))}
           </div>
         </div>
+
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-8">
+          {definitions.map((q, i) => (
+            <div
+              key={i}
+              className="
+                flex
+                items-start
+                gap-4
+              "
+            >
+              {/* NUMBER */}
+              <span
+                className="
+                  font-bold
+                  text-[18px]
+                  w-7
+                "
+              >
+                {i + 1}
+              </span>
+
+              {/* QUESTION + INPUT */}
+              <div className="flex-1 relative">
+                <div
+                  className="
+                    text-[18px]
+                    leading-[1.7]
+                    inline
+                  "
+                >
+                  {q}
+                </div>
+
+                <input
+                  type="text"
+                  value={answers[i]}
+                  disabled={locked || result[i] === true}
+                  onChange={(e) => handleChange(i, e.target.value)}
+                  className={`
+                    ml-3
+                    w-[420px]
+                    border-0
+                    border-b
+                    outline-none
+                    bg-transparent
+                    text-[18px]
+                    font-semibold
+                    pb-1
+
+                    ${
+                      result[i] === false
+                        ? "border-[#D1232A] text-[#6D2980]"
+                        : "border-black text-[#6D2980]"
+                    }
+                  `}
+                />
+
+                {/* WRONG */}
+                {result[i] === false && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-8px",
+                      right: "-8px",
+                      width: "20px",
+                      height: "20px",
+                      background: "#ef4444",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 
-export default Review5_Page1_Q1;
+export default Unit6_Page2_Q1;

@@ -63,11 +63,11 @@ const Unit4_Page6_SpeakingA = () => {
 
             {/* EXAMPLES */}
             {i !== 2 ? (
-              <div className="ml-[32px] text-[#00AEEF] leading-[1.5] mb-4">
+              <div className="ml-8 text-[#00AEEF] leading-normal mb-4">
                 {item.example}
               </div>
             ) : (
-              <div className="ml-[32px] text-[#00AEEF] leading-[1.5] mb-4 flex flex-wrap items-center">
+              <div className="ml-8 text-[#00AEEF] leading-normal mb-4 flex flex-wrap items-center">
                 <span>
                   Sorry to bother you, but this is not what I ordered. Could I
                   please get a
@@ -85,7 +85,7 @@ const Unit4_Page6_SpeakingA = () => {
             )}
 
             {/* LABEL + INPUT */}
-            <div className="ml-[32px] flex items-center">
+            <div className="ml-8 flex items-center">
               <span className="text-[#00AEEF] font-semibold mr-2">
                 {item.label}
               </span>

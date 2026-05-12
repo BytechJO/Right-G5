@@ -1,423 +1,254 @@
 import React, { useState } from "react";
-import Button from "../../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex C 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 50/Ex C 2.svg";
 
 const Unit6_Page5_Q3 = () => {
-  const grid = [
-    [
-      "h",
-      "i",
-      "j",
-      "k",
-      "s",
-      "t",
-      "e",
-      "l",
-      "l",
-      "a",
-      "m",
-      "u",
-      "f",
-      "r",
-      "q",
-      "r",
-      "e",
-      "c",
-      "o",
-      "m",
-      "m",
-      "e",
-      "n",
-      "d",
-      "s",
-      "f",
-      "x",
-      "c",
-      "s",
-      "a",
-      "e",
-      "e",
-    ],
-    [
-      "e",
-      "v",
-      "e",
-      "r",
-      "y",
-      "o",
-      "n",
-      "e",
-      "k",
-      "i",
-      "u",
-      "j",
-      "k",
-      "k",
-      "i",
-      "j",
-      "u",
-      "t",
-      "g",
-      "f",
-      "v",
-      "t",
-      "o",
-      "m",
-      "l",
-      "o",
-      "k",
-      "s",
-      "t",
-      "a",
-      "r",
-      "t",
-    ],
-    [
-      "t",
-      "w",
-      "e",
-      "d",
-      "s",
-      "v",
-      "c",
-      "a",
-      "k",
-      "u",
-      "b",
-      "j",
-      "s",
-      "x",
-      "g",
-      "a",
-      "r",
-      "d",
-      "e",
-      "n",
-      "t",
-      "y",
-      "h",
-      "f",
-      "g",
-      "v",
-    ],
-  ];
-  const letters = grid;
-  const wordsToFind = [
-    "stella",
-    "recommends",
-    "everyone",
-    "to",
-    "start",
-    "a",
-    "garden",
+  const questions = [
+    {
+      prompt: "we / museum",
+      answers: ["Shall we go to the museum?"],
+    },
+
+    {
+      prompt: "they / dentist",
+      answers: ["Shall they go to the dentist?"],
+    },
+
+    {
+      prompt: "you / library",
+      answers: ["Shall you go to the library?"],
+    },
+
+    {
+      prompt: "we / supermarket",
+      answers: ["Should we go to the supermarket?"],
+    },
   ];
 
-  const correctPositions = {
-    stella: [4, 5, 6, 7, 8, 9],
-    recommends: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-    everyone: [
-      100 + 0,
-      100 + 1,
-      100 + 2,
-      100 + 3,
-      100 + 4,
-      100 + 5,
-      100 + 6,
-      100 + 7,
-    ],
-    to: [100 + 21, 100 + 22],
-    start: [100 + 27, 100 + 28, 100 + 29, 100 + 30, 100 + 31],
-    a: [200 + 7],
-    garden: [200 + 14, 200 + 15, 200 + 16, 200 + 17, 200 + 18, 200 + 19],
-  };
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const [locked, setLocked] = useState(false);
-  const [sentence, setSentence] = useState("");
-  const [selected, setSelected] = useState([]);
-  const [currentWord, setCurrentWord] = useState("");
-  const [foundWords, setFoundWords] = useState([]);
-  const [coloredCells, setColoredCells] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
 
-  const handleMouseDown = (index) => {
-    if (locked) return;
+  const [result, setResult] = useState([]);
 
-    const row = Math.floor(index / 100);
-    const col = index % 100;
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    setIsDragging(true);
-    setSelected([index]);
-    setCurrentWord(letters[row][col]);
-  };
-  const handleMouseEnter = (index) => {
-    if (!isDragging || locked) return;
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
 
-    const lastIndex = selected[selected.length - 1];
+    const updated = [...answers];
 
-    if (index === lastIndex + 1 || index === lastIndex - 1) {
-      if (!selected.includes(index)) {
-        const row = Math.floor(index / 100);
-        const col = index % 100;
+    updated[i] = val;
 
-        setSelected((prev) => [...prev, index]);
-        setCurrentWord((prev) => prev + letters[row][col]);
-      }
-    }
-  };
+    setAnswers(updated);
 
-  const handleTouchMove = (e) => {
-    if (!isDragging || locked) return;
-    e.preventDefault(); // منع التمرير في الصفحة أثناء السحب
+    setResult((prev) => {
+      const copy = [...prev];
 
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (!element) return;
+      copy[i] = undefined;
 
-    const index = element.getAttribute("data-index");
-    if (index !== null) {
-      handleMouseEnter(Number(index));
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (locked) return;
-    setIsDragging(false);
-
-    const reversedWord = currentWord.split("").reverse().join("");
-
-    const matchedWord = wordsToFind.find(
-      (word) => word === currentWord || word === reversedWord,
-    );
-
-    if (matchedWord && !foundWords.includes(matchedWord)) {
-      setFoundWords((prev) => [...prev, matchedWord]);
-      setColoredCells((prev) => [...prev, ...selected]);
-      setSentence(
-        wordsToFind
-          .filter((word) => [...foundWords, matchedWord].includes(word))
-          .join(" "),
-      );
-    }
-
-    setSelected([]);
-    setCurrentWord("");
-  };
-
-  const reset = () => {
-    setSelected([]);
-    setCurrentWord("");
-    setFoundWords([]);
-    setColoredCells([]);
-    setSentence("");
-    setLocked(false);
-  };
-
-  const showAnswers = () => {
-    let allCells = [];
-    wordsToFind.forEach((word) => {
-      if (correctPositions[word]) {
-        allCells.push(...correctPositions[word]);
-      }
+      return copy;
     });
-    setFoundWords(wordsToFind);
-    setColoredCells(allCells);
-    setSelected([]);
-    setCurrentWord("");
-    setSentence(wordsToFind.join(" "));
-    setLocked(true);
   };
 
   const checkAnswers = () => {
     if (locked) return;
-    const total = wordsToFind.length;
-    const score = foundWords.length;
 
-    if (score === 0) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
+
       return;
     }
 
-    if (score < total) {
-      ValidationAlert.warning(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:orange;">Score: ${score} / ${total}</b>
-        </div>
-      `);
+    let correctCount = 0;
+
+    const newResults = answers.map((ans, i) => {
+      const ok = questions[i].answers.some(
+        (correct) => normalize(correct) === normalize(ans),
+      );
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.success(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:green;">Score: ${score} / ${total}</b>
-        </div>
-      `);
+      ValidationAlert.warning(msg);
     }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      questions[0].answers[0],
+      questions[1].answers[0],
+      questions[2].answers[0],
+      questions[3].answers[0],
+    ]);
+
+    setResult([true, true, true, true]);
+
     setLocked(true);
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
 
-        width: "100%",
-        boxSizing: "border-box",
-      }}
-    >
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5
-          className="header-title-page8 pb-2.5"
-        >
-          <span className="ex-A" style={{ marginRight: "10px" }}>
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-23">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
             C
           </span>
-          What does Stella recommend in I Love My Garden! on page 47?
+          Read and write sentences.
         </h5>
 
-        {/* Words List */}
-        <div className="flex flex-wrap justify-center gap-3 mb-5 border-2 border-dashed border-gray-300 rounded-[14px] p-3">
-          {wordsToFind.map((word) => (
-            <span
-              key={word}
-              className={`px-3 py-1.5 rounded-[10px] border-2 border-[#2c5287] font-semibold transition duration-200 ${
-                foundWords.includes(word)
-                  ? "bg-[#2c5287] text-white border-[#2c5287]"
-                  : "bg-white text-black"
-              }`}
-              style={{ fontSize: "clamp(12px, 2vw, 15px)" }}
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15">
+          {questions.map((item, i) => (
+            <div
+              key={i}
+              className="
+                  flex
+                  items-end
+                  gap-4
+                "
             >
-              {word}
-            </span>
+              {/* NUMBER */}
+              <span
+                className="
+                    font-bold
+                    text-[20px]
+                    w-6
+                  "
+              >
+                {i + 1}
+              </span>
+
+              {/* PROMPT */}
+              <span className="text-[20px] whitespace-nowrap">
+                {item.prompt}
+              </span>
+
+              {/* INPUT */}
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={answers[i]}
+                  disabled={locked || result[i] === true}
+                  onChange={(e) => handleChange(i, e.target.value)}
+                  className={`
+                      w-full
+                      border-0
+                      border-b
+                      outline-none
+                      bg-transparent
+                      text-[20px]
+                      font-semibold
+                      pb-0.5
+
+                      ${
+                        result[i] === false
+                          ? "border-[#D1232A] text-[#6D2980]"
+                          : "border-black text-[#6D2980]"
+                      }
+                    `}
+                />
+
+                {/* WRONG */}
+                {result[i] === false && (
+                  <span
+                    style={{
+                      position: "absolute",
+
+                      top: "-8px",
+
+                      right: "-8px",
+
+                      width: "22px",
+
+                      height: "22px",
+
+                      background: "#ef4444",
+
+                      color: "white",
+
+                      borderRadius: "50%",
+
+                      display: "flex",
+
+                      alignItems: "center",
+
+                      justifyContent: "center",
+
+                      fontSize: "12px",
+
+                      fontWeight: "bold",
+
+                      border: "2px solid white",
+
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
+              </div>
+            </div>
           ))}
         </div>
+      </div>
 
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          {/* Grid Wrapper */}
-          <div
-            className="border-2 border-[#f28c63] px-4 pt-4 pb-5"
-            style={{ width: "fit-content", margin: "0 auto" }}
-          >
-            <div
-              className="bg-[#daf5ff] rounded-[15px] p-2 sm:p-[15px]"
-              style={{
-                userSelect: "none",
-                width: "max-content",
-                touchAction: "none", // 🔥 الحل السحري لمنع تحريك الصفحة أثناء السحب على الآيباد
-                WebkitOverflowScrolling: "touch",
-              }}
-            >
-              {letters.map((row, rowIndex) => (
-                <div
-                  key={rowIndex}
-                  style={{
-                    display: "flex",
-                    gap: "clamp(1px, 0.3vw, 4px)", // مسافة تتغير حسب الشاشة
-                    width: "fit-content",
-                  }}
-                >
-                  {row.map((letter, colIndex) => {
-                    const index = rowIndex * 100 + colIndex;
-                    const isSelected = selected.includes(index);
-                    const isFound = coloredCells.includes(index);
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-                    return (
-                      <span
-                        key={index}
-                        data-index={index}
-                        onMouseDown={() => handleMouseDown(index)}
-                        onMouseEnter={() => handleMouseEnter(index)}
-                        onMouseUp={handleMouseUp}
-                        onDragStart={(e) => e.preventDefault()}
-                        onTouchStart={(e) => {
-                          e.preventDefault(); // 🔥 منع تحريك الصفحة عند بدء اللمس
-                          handleMouseDown(index);
-                        }}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleMouseUp}
-                        className={`
-                          flex items-center justify-center
-                          cursor-pointer
-                          transition
-                          ${isSelected ? "bg-[#ffd54f] rounded-sm" : ""}
-                          ${isFound ? "bg-[#4caf50] text-white rounded-sm" : ""}
-                        `}
-                        style={{
-                          width: "clamp(16px, 2.5vw, 25px)", // 🔥 عرض ديناميكي
-                          height: "clamp(22px, 3.5vw, 35px)", // 🔥 طول ديناميكي
-                          fontSize: "clamp(12px, 1.8vw, 18px)", // 🔥 حجم خط ديناميكي
-                        }}
-                      >
-                        {letter}
-                      </span>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                marginTop: "15px",
-              }}
-            >
-              <img
-                src={img1}
-                alt="start"
-                style={{
-                  width: "clamp(40px, 10vw, 100px)", // 🔥 حجم ديناميكي للصور
-                  height: "auto",
-                }}
-              />
-
-              <div
-                style={{
-                  flex: 1,
-                  borderBottom: "2px solid black",
-                  height: "30px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  value={sentence}
-                  readOnly
-                  style={{
-                    width: "100%",
-                    border: "none",
-                    outline: "none",
-                    background: "transparent",
-                    fontSize: "clamp(14px, 2vw, 18px)", // 🔥 حجم خط ديناميكي للإجابة
-                  }}
-                />
-              </div>
-
-              <img
-                src={img2}
-                alt="end"
-                style={{
-                  width: "clamp(40px, 10vw, 100px)", // 🔥 حجم ديناميكي للصور
-                  height: "auto",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* BUTTONS */}
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

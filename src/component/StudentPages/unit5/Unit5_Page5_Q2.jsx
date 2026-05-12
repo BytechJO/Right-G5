@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Unit5_Page5_Q2.css";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 

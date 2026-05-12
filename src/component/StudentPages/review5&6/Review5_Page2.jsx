@@ -1,4 +1,4 @@
-import page_2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 53.png";
+import page_2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 53.png";
 import "./Review5_Page2.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 // import Unit4_Page6_Q2 from "./Unit4_Page6_Q2";
@@ -12,14 +12,14 @@ const Review5_Page2 = ({ openPopup }) => {
       {/* <img src={page_2} /> */}
 
       <div
-        className="click-icon-review5-page2-2 hover:scale-110 transition"
+        className="click-icon-review5-page2-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 55 })}
+          onClick={() => openPopup("exercise", { startIndex: 59 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -34,14 +34,14 @@ const Review5_Page2 = ({ openPopup }) => {
       </div>
 
       <div
-        className="click-icon-review5-page2-3  hover:scale-110 transition"
+        className="click-icon-review5-page2-2  hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 56 })}
+          onClick={() => openPopup("exercise", { startIndex: 60 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -54,7 +54,27 @@ const Review5_Page2 = ({ openPopup }) => {
           />
         </svg>
       </div>
-
+      <div
+        className="click-icon-review5-page2-3  hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 61 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
     </div>
   );
 };

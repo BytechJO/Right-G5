@@ -1,226 +1,228 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review6_Page2_Q2.css";
 
 const Review6_Page1_Q2 = () => {
-  const [lines, setLines] = useState([]);
-  const [startDot, setStartDot] = useState(null);
-  const [wrongTextIndexes, setWrongTextIndexes] = useState([]);
-  const imageDotRefs = useRef([]);
-  const textDotRefs = useRef([]);
-  const containerRef = useRef(null);
-  const [isChecked, setIsChecked] = useState(false);
-  const [showedAnswer, setShowedAnswer] = useState(false);
-  const items = [
-    { letter: "a", word: "3rd" },
-    { letter: "b", word: "4th" },
-    { letter: "c", word: "1st" },
-    { letter: "d", word: "2nd" },
-    { letter: "e", word: "8th" },
-    { letter: "f", word: "6th" },
-    { letter: "g", word: "9th" },
-    { letter: "h", word: "10th" },
-    { letter: "i", word: "7th" },
-    { letter: "j", word: "5th" },
+  const questions = [
+    {
+      before: "After Chloe shot the basketball into the hoop, she yelled, “I",
+
+      after: "!”",
+
+      answer: "made it",
+
+      width: "170px",
+    },
+
+    {
+      before: "I am an",
+
+      after: "at skiing; on winter vacations, I go every day.",
+
+      answer: "expert",
+
+      width: "170px",
+    },
+
+    {
+      before:
+        "We watched the swimmers for a long time. We wanted to jump in, but the water was cold. Finally I asked, “",
+
+      after: "?”",
+
+      answer: "Shall we",
+
+      width: "170px",
+    },
+
+    {
+      before:
+        "My brother only paid $4 for his soccer ball. The regular price was $8, but he got a",
+
+      after: ".",
+
+      answer: "half price",
+
+      width: "170px",
+    },
   ];
 
-  const words = [
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh",
-    "eighth",
-    "ninth",
-    "tenth",
-  ];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-  const correctMatches = {
-    0: 2, // a → third
-    1: 3, // b → fourth
-    2: 0, // c → first
-    3: 1, // d → second
-    4: 7, // e → eighth
-    5: 5, // f → sixth
-    6: 8, // g → ninth
-    7: 9, // h → tenth
-    8: 6, // i → seventh
-    9: 4, // j → fifth
-  };
-  const handleDotClick = (index, type) => {
-    if (isChecked || showedAnswer) return;
-    if (!startDot) {
-      setStartDot({ index, type });
-      return;
-    }
+  const [result, setResult] = useState([]);
 
-    if (startDot.type === type) {
-      setStartDot(null);
-      return;
-    }
+  const [locked, setLocked] = useState(false);
 
-    const imageIndex = startDot.type === "image" ? startDot.index : index;
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,",]/g, "")
+      .replace(/[’']/g, "'")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    const textIndex = startDot.type === "text" ? startDot.index : index;
+  const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
 
-    setLines((prevLines) => {
-      let updatedLines = [...prevLines];
+    const updated = [...answers];
 
-      updatedLines = updatedLines.filter((line) => {
-        const img =
-          line.from.type === "image" ? line.from.index : line.to.index;
+    updated[i] = val;
 
-        return img !== imageIndex;
-      });
+    setAnswers(updated);
 
-      updatedLines = updatedLines.filter((line) => {
-        const txt = line.from.type === "text" ? line.from.index : line.to.index;
+    setResult((prev) => {
+      const copy = [...prev];
 
-        return txt !== textIndex;
-      });
+      copy[i] = undefined;
 
-      updatedLines.push({
-        from: { index: imageIndex, type: "image" },
-        to: { index: textIndex, type: "text" },
-      });
-
-      return updatedLines;
+      return copy;
     });
-
-    setStartDot(null);
-  };
-  const formatOrdinal = (word) => {
-    const match = word.match(/(\d+)(st|nd|rd|th)/);
-    if (!match) return word;
-
-    return (
-      <>
-        {match[1]}
-        <sup style={{ fontSize: "0.6em", marginLeft: "1px" }}>{match[2]}</sup>
-      </>
-    );
-  };
-  const showAnswers = () => {
-    if (isChecked) return;
-
-    const answerLines = Object.keys(correctMatches).map((imgIndex) => ({
-      from: { index: parseInt(imgIndex), type: "image" },
-      to: { index: correctMatches[imgIndex], type: "text" },
-    }));
-
-    setLines(answerLines);
-    setShowedAnswer(true);
-  };
-  const resetAll = () => {
-    setLines([]);
-    setStartDot(null);
-    setIsChecked(false);
-    setShowedAnswer(false);
-    setWrongTextIndexes([]);
   };
 
   const checkAnswers = () => {
-    if (showedAnswer) return;
+    if (locked) return;
 
-    if (lines.length !== items.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please complete all matches before checking.",
-      );
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all fields.");
+
       return;
     }
 
-    let score = 0;
-    const wrongIndexes = [];
+    let correctCount = 0;
 
-    lines.forEach((line) => {
-      const imageIndex =
-        line.from.type === "image" ? line.from.index : line.to.index;
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i].answer);
 
-      const textIndex =
-        line.from.type === "text" ? line.from.index : line.to.index;
+      if (ok) correctCount++;
 
-      if (correctMatches[imageIndex] === textIndex) {
-        score++;
-      } else {
-        wrongIndexes.push(textIndex);
-      }
+      return ok;
     });
 
-    setWrongTextIndexes(wrongIndexes);
+    setResult(newResults);
 
-    const total = items.length;
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    setIsChecked(true);
-    setShowedAnswer(true);
+    if (correctCount === total) {
+      setLocked(true);
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers(["made it", "expert", "Shall we", "half price"]);
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-        position: "relative",
-      }}
-    >
-      <div className="div-forall" style={{ width: "60%" }}>
-        <h5 className="header-title-page8">
-          <span style={{ marginRight: "10px" }}>B</span>
-          Match.
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-20">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            B
+          </span>
+          Write the correct vocabulary word or expression on each line.
         </h5>
-        <div className="flex justify-center mt-7">
-          {/* 🟢 LEFT SIDE (words) */}
-          <div className="w-[35%] flex flex-col gap-4">
-            {words.map((word, i) => (
-              <div
-                key={i}
-                onClick={() => handleDotClick(i, "text")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  cursor: "pointer",
-                }}
+
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15">
+          {questions.map((q, i) => (
+            <div
+              key={i}
+              className="
+                  flex
+                  items-start
+                  gap-4
+                "
+            >
+              {/* NUMBER */}
+              <span
+                className="
+                    font-bold
+                    text-[18px]
+                    w-6
+                  "
               >
-                <span
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    width: "30%", // 🔥 مهم
-                    justifyContent: "flex-start",
-                    padding: "2px 6px",
-                    borderRadius: "6px",
-                    background:
-                      startDot?.index === i && startDot?.type === "text"
-                        ? "#fde68a"
-                        : "transparent",
-                  }}
-                >
-                  {isChecked && wrongTextIndexes.includes(i) && (
+                {i + 1}
+              </span>
+
+              {/* SENTENCE */}
+              <div
+                className="
+                    flex-1
+                    text-[18px]
+                    leading-[1.9]
+                    flex
+                    flex-wrap
+                    items-end
+                    gap-2
+                  "
+              >
+                <span>{q.before}</span>
+
+                {/* INPUT */}
+                <div className="relative inline-block">
+                  <input
+                    type="text"
+                    value={answers[i]}
+                    disabled={locked || result[i] === true}
+                    onChange={(e) => handleChange(i, e.target.value)}
+                    style={{
+                      width: q.width,
+                      border: "none",
+                      borderBottom:
+                        result[i] === false
+                          ? "1px solid #D1232A"
+                          : "1px solid black",
+                      outline: "none",
+                      background: "transparent",
+                      fontSize: "18px",
+                      fontWeight: "600",
+                      color: "#6D2980",
+                      paddingBottom: "2px",
+                      padding: "0",
+                      lineHeight: "1",
+                    }}
+                  />
+
+                  {/* WRONG */}
+                  {result[i] === false && (
                     <span
                       style={{
                         position: "absolute",
-                        left: "-20px",
-                        top: "20%",
+                        top: "-8px",
+                        right: "-8px",
                         width: "20px",
                         height: "20px",
                         background: "#ef4444",
@@ -232,130 +234,34 @@ const Review6_Page1_Q2 = () => {
                         fontSize: "12px",
                         fontWeight: "bold",
                         border: "2px solid white",
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                        pointerEvents: "none",
+                        boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
                       }}
                     >
                       ✕
                     </span>
                   )}
-                  <span style={{ fontWeight: "bold", marginRight: 4 }}>
-                    {i + 1}
-                  </span>
-                  {word}
-                </span>
+                </div>
 
-                <div
-                  ref={(el) => (textDotRefs.current[i] = el)}
-                  className="w-3 h-3 bg-[orange] rounded-full"
-                />
+                <span>{q.after}</span>
               </div>
-            ))}
-          </div>
-
-          {/* 🟠 RIGHT SIDE (letters + ordinals) */}
-          <div
-            className="flex flex-col gap-4 items-end"
-            style={{
-              width: "30%", // 🔥 صغّر العرض
-              alignItems: "flex-end",
-            }}
-          >
-            {items.map((item, i) => (
-              <div
-                key={i}
-                onClick={() => handleDotClick(i, "image")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between", // 🔥
-                  width: "40%", // 🔥 مهم
-                  cursor: "pointer",
-                }}
-              >
-                <div
-                  ref={(el) => (imageDotRefs.current[i] = el)}
-                  className="w-3 h-3 bg-[orange] rounded-full"
-                />
-
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "80px",
-                    padding: "2px 6px",
-                    borderRadius: "6px",
-                    background:
-                      startDot?.index === i && startDot?.type === "image"
-                        ? "#fde68a"
-                        : "transparent",
-                  }}
-                >
-                  <span style={{ fontWeight: "bold", marginRight: 10 }}>
-                    {item.letter}
-                  </span>
-                  {formatOrdinal(item.word)}
-                </span>
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* SVG */}
-        <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          {lines.map((line, i) => {
-            const imageIndex =
-              line.from.type === "image" ? line.from.index : line.to.index;
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-            const textIndex =
-              line.from.type === "text" ? line.from.index : line.to.index;
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-            const imgDot = imageDotRefs.current[imageIndex];
-            const txtDot = textDotRefs.current[textIndex];
-
-            if (!imgDot || !txtDot || !containerRef.current) return null;
-
-            const imgRect = imgDot.getBoundingClientRect();
-            const txtRect = txtDot.getBoundingClientRect();
-            const containerRect = containerRef.current.getBoundingClientRect();
-
-            const x1 = imgRect.left + imgRect.width / 2 - containerRect.left;
-            const y1 = imgRect.top + imgRect.height / 2 - containerRect.top;
-
-            const x2 = txtRect.left + txtRect.width / 2 - containerRect.left;
-            const y2 = txtRect.top + txtRect.height / 2 - containerRect.top;
-
-            return (
-              <path
-                key={i}
-                d={`
-                  M ${x1} ${y1}
-                  C ${(x1 + x2) / 2} ${y1},
-                    ${(x1 + x2) / 2} ${y2},
-                    ${x2} ${y2}
-                `}
-                stroke="orange"
-                strokeWidth="3"
-                fill="none"
-                strokeLinecap="round"
-                strokeDasharray="6,6" // 🔥 هذا اللي بخلي الخط منقط
-              />
-            );
-          })}
-        </svg>
-
-        <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
-            Start Again ↻
-          </button>
-
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
-
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 54.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 54.png";
 import "./Review6_Page1.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -18,7 +18,7 @@ const Review6_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 57 })}
+          onClick={() => openPopup("exercise", { startIndex: 62 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -39,7 +39,7 @@ const Review6_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 58 })}
+          onClick={() => openPopup("exercise", { startIndex: 63 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -60,7 +60,7 @@ const Review6_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 59 })}
+          onClick={() => openPopup("exercise", { startIndex: 64 })}
           style={{ overflow: "visible" }}
         >
           <image
