@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import page25 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 57.png";
 import "./Reading_Unit6_Page1.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.5_Adult Lady.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.6_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.7_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.5_Adult Lady.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.6_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.8_Adult Lady.mp3";
 const Reading_Unit6_Page2 = () => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
