@@ -1,5 +1,5 @@
 import React from "react";
-import page_6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63.png";
+import page_6 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 63.png";
 
 // import song from "../../../assets/img_unit5/sounds-unit5/Pg15.Sing_Adult Lady.mp3";
 import "./Unit7_Page6.css";
@@ -12,7 +12,6 @@ const Unit7_Page6 = ({ openPopup }) => {
       style={{ backgroundImage: `url(${page_6})` }}
     >
       {/* <img src={page_6} /> */}
-
       <div
         className="click-icon-unit7-page6-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -21,7 +20,7 @@ const Unit7_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 66 })}
+          onClick={() => openPopup("exercise", { startIndex: 70 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -42,7 +41,28 @@ const Unit7_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 67 })}
+          onClick={() => openPopup("exercise", { startIndex: 71 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>{" "}
+      <div
+        className="click-icon-unit7-page6-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 72 })}
           style={{ overflow: "visible" }}
         >
           <image

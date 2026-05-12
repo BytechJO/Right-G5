@@ -51,7 +51,7 @@ const Unit4_Page6_SpeakingA = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-10 text-[18px]">
+      <div className="space-y-10 text-[18px] mt-10">
         {situations.map((item, i) => (
           <div key={i}>
             {/* NUMBER + TEXT */}

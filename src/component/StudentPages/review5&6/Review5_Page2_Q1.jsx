@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // LEFT TABLE IMAGES
-import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Untitled-3.png";
-import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Untitled-113.png";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Untitled-12.png";
 
 // RIGHT TABLE IMAGES
 
@@ -108,7 +107,12 @@ const Review5_Page2_Q1 = () => {
   };
 
   const showAnswers = () => {
-    setAnswers([questions[0].answer, questions[1].answer, questions[2].answer, questions[3].answer]);
+    setAnswers([
+      questions[0].answer,
+      questions[1].answer,
+      questions[2].answer,
+      questions[3].answer,
+    ]);
 
     setResult([true, true, true, true]);
 
@@ -138,32 +142,21 @@ const Review5_Page2_Q1 = () => {
           Read the chart and write sentences using prefer and like.
         </h5>
 
-        <div className="flex gap-6 justify-center mb-10">
-          {/* LEFT BIG IMAGE */}
-          <img
-            src={img1}
-            alt=""
-            style={{
-              width: "350px",
-              height: "260px",
-              objectFit: "contain",
-            }}
-          />
-
+        <div className="flex justify-center mb-10">
           {/* RIGHT BIG IMAGE */}
           <img
             src={img2}
             alt=""
             style={{
-              width: "350px",
-              height: "260px",
+              width: "500px",
+              height: "auto",
               objectFit: "contain",
             }}
           />
         </div>
 
         {/* SENTENCES */}
-        <div className="flex flex-col gap-8 mb-15">
+        <div className="flex flex-col gap-8 mb-12">
           {questions.map((q, i) => (
             <div
               key={i}

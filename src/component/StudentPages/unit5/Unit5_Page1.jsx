@@ -26,10 +26,10 @@ import sound17 from "../../../assets/audio/ClassBook/U5/PG 40/sound17.mp3";
 import sound18 from "../../../assets/audio/ClassBook/U5/PG 40/sound18.mp3";
 import sound19 from "../../../assets/audio/ClassBook/U5/PG 40/sound19.mp3";
 import CriticalThinking from "../../CriticalThinking";
-import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/Asset 1.svg";
-import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/Asset 2.svg";
-import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/Asset 3.svg";
-import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/Asset 4.svg";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/12-01.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/1-02.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/1-03.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/1-04.svg";
 import wordJson from "../../../assets/json/cd21pg40-conversation_eng.json";
 import video from "../../../assets/videos/grade 5 unit 5 page 40.mp4";
 

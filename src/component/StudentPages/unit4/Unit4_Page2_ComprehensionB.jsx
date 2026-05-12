@@ -65,9 +65,8 @@ const Unit4_Page2_ComprehensionB = () => {
           style={{
             width: "170px",
             height: "180px",
-            borderRadius: "20px",
-            objectFit: "cover",
-            marginTop: "-10px",
+            objectFit: "contain",
+            marginTop: "32px",
           }}
         />
       </div>

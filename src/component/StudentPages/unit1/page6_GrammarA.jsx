@@ -14,7 +14,7 @@ const GrammarA = () => {
       </div>
 
       {/* السؤال 1 */}
-      <div className="mb-4">
+      <div className="mb-12">
         <div className="flex items-start gap-2">
           <img
             src={img}

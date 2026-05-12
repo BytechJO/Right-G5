@@ -1,292 +1,301 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63/Ex E 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63/Ex E 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63/Ex E 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63/Ex E 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 7 Thats My School Folder/Page 63/Ex E 5.svg";
-
+import grammer_u1 from "../../../assets/audio/ClassBook/U7/PG 63/cd35pg63.mp3";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit7_Page6_Q2 = () => {
-  const [userAnswers, setUserAnswers] = useState({
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-    5: "",
-  });
-  const [checked, setChecked] = useState(false);
-
-  const words = ["him", "us", "me", "them", "her"];
-
-  const correctAnswers = {
-    1: "him",
-    2: "them",
-    3: "her",
-    4: "us",
-    5: "me",
-  };
   const questions = [
-    { id: 1, image: img1 },
-    { id: 2, image: img2 },
-    { id: 3, image: img3 },
-    { id: 4, image: img4 },
-    { id: 5, image: img5 },
+    {
+      question: "David is playing basketball with his brother.",
+
+      answer: "true",
+    },
+
+    {
+      question: "Jimmy is winning the game.",
+
+      answer: "false",
+    },
+
+    {
+      question: "Jimmy is feeling disappointed.",
+
+      answer: "true",
+    },
+
+    {
+      question: "John doesn’t want to play basketball.",
+
+      answer: "false",
+    },
   ];
+  const captions = [
+    {
+      start: 0.259,
+      end: 7.079,
+      text: "Page 63, Write Activities, Exercise D. Listen, read, and write true or false.",
+    },
 
-  const onDragEnd = (result) => {
-    if (checked) return; // 🔥 منع التعديل بعد التشيك
+    {
+      start: 8.119,
+      end: 16.219,
+      text: "David and his little brother Jimmy are playing basketball in their backyard. David is winning. His brother doesn't like this. He walks away from the game.",
+    },
 
-    const { destination, draggableId } = result;
-    if (!destination) return;
+    {
+      start: 17.6,
+      end: 26.439,
+      text: "“Are you leaving?” David asks. “I thought we were having a great time.” “Not me,” said Jimmy. “You're the one who's winning. I am losing.”",
+    },
 
-    const inputId = destination.droppableId;
+    {
+      start: 28.0,
+      end: 34.819,
+      text: "David feels bad for his brother. Jimmy is feeling disappointed. Just as Jimmy is leaving, David's friend John passes by.",
+    },
 
-    const word = draggableId.split("-")[0]; // 🔥 ناخذ الكلمة بس
+    {
+      start: 36.0,
+      end: 43.619,
+      text: "“Is your brother leaving the game?” “Yes,” said David. “He is losing. He doesn't like to lose. You can join me if you like.”",
+    },
 
-    setUserAnswers((prev) => ({
-      ...prev,
-      [inputId]: word,
-    }));
+    {
+      start: 44.68,
+      end: 53.52,
+      text: "John is happy that David invited him. They start playing basketball together. John is doing really well. David is trying to beat him, but it seems like John is winning.",
+    },
+  ];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) => str.toLowerCase().trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
-  const checkAnswers = () => {
-    if (checked) return;
-    const hasEmpty = questions.some(
-      (q) => !userAnswers[q.id] || userAnswers[q.id].trim() === "",
-    );
 
-    if (hasEmpty) {
-      ValidationAlert.info("كمل كل الفراغات");
+  const checkAnswers = () => {
+    if (locked) return;
+
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please answer all questions.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    questions.forEach((q) => {
-      if (
-        userAnswers[q.id]?.toLowerCase().trim() ===
-        correctAnswers[q.id]?.toLowerCase()
-      ) {
-        score++;
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === questions[i].answer;
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setChecked(true);
+    setResult(newResults);
 
     const total = questions.length;
-    ValidationAlert[
-      score === total
-        ? "success"
-        : score === 0
-          ? "error"
-          : "warning"
-    ](`
-        Score: ${score} / ${total}
-  `);
-  };
-  const handleShowAnswer = () => {
-    const answers = {};
-    questions.forEach((q) => {
-      answers[q.id] = correctAnswers[q.id];
-    });
 
-    setUserAnswers(answers);
-    setChecked(true);
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
-  const handleStartAgain = () => {
-    setUserAnswers({ 1: "", 2: "", 3: "", 4: "", 5: "" });
-    setChecked(false);
+
+  const showAnswers = () => {
+    setAnswers(["true", "false", "true", "false"]);
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div className="div-forall">
-          <h5 className="header-title-page8 pb-2.5">
-            <span
-              className="ex-A"
-              style={{ marginRight: "10px", marginBottom: 7 }}
-            >
-              E
-            </span>
-            Look and write. Use the words below.
-          </h5>
-
-          {/* الكلمات */}
-          <Droppable droppableId="words" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginTop: "20px",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: "20px",
-                  // justifyContent: "center",
-                }}
-              >
-                {words.map((word, index) => {
-                  return (
-                    <Draggable
-                      key={`${word}-${index}`}
-                      draggableId={`${word}-${index}`}
-                      index={index}
-                      isDragDisabled={checked} // بس بعد التشيك
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: checked ? "not-allowed" : "grab",
-                            fontSize: "16px",
-
-                            opacity: provided.snapshot?.isDragging ? 0.6 : 1, // 🔥 بس وقت السحب
-
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {word}
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-          {/* الصور - صف واحد 5 صور */}
-          <div
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-4">
+          <span
+            className="ex-A"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(5, 1fr)",
-              gap: "10px",
+              marginRight: "10px",
             }}
           >
-            {questions.map((q) => (
-              <div
-                key={q.id}
-                style={{
-                  borderRadius: "10px",
-                  padding: "6px",
-                  textAlign: "center",
-                }}
-              >
-                {/* رقم السؤال */}
-                <div
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    textAlign: "left",
-                    marginBottom: "4px",
-                    color: "#333",
-                  }}
-                >
-                  {q.id}
-                </div>
+            D
+          </span>
+          Listen, read, and write <span className="text-[#00AEEF]">true</span>{" "}
+          or <span className="text-[#00AEEF]">false</span>.
+        </h5>
+        <QuestionAudioPlayer
+          src={grammer_u1}
+          captions={captions}
+          stopAtSecond={7.5}
+        />
+        {/* STORY */}
+        <div
+          style={{
+            width: "860px",
+            border: "3px solid #7A2D91",
+            borderRadius: "20px",
+            padding: "22px",
+            fontSize: "18px",
+            lineHeight: "1.35",
+            marginBottom: "30px",
+          }}
+        >
+          <p className="mb-6">
+            David and his little brother, Jimmy, are playing basketball in their
+            backyard. David is winning. His brother doesn’t like this. He walks
+            away from the game. “Are you leaving?” David asks. “I thought we
+            were having a great time.”
+          </p>
 
-                <img
-                  src={q.image}
-                  alt={`q${q.id}`}
-                  style={{
-                    width: "100%",
-                    height: "150px",
-                    objectFit: "contain",
-                    borderRadius: "8px",
-                  }}
+          <p className="mb-6">
+            “Not me!” said Jimmy. “You’re the one who is winning. I am losing.”
+            David feels bad for his brother. Jimmy is feeling disappointed. Just
+            as Jimmy is leaving, David’s friend John passes by. “Is your brother
+            leaving the game?”
+          </p>
+
+          <p>
+            “Yes,” says David. “He is losing. He doesn’t like to lose. You can
+            join me if you like.” John is happy that David invited him. They
+            start playing basketball together. John is doing really well. David
+            is trying to beat him, but it seems like John is winning!
+          </p>
+        </div>
+
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-4 mb-12">
+          {questions.map((q, i) => (
+            <div
+              key={i}
+              className="
+                  flex
+                  items-center
+                  gap-5
+                "
+            >
+              {/* NUMBER */}
+              <span className="font-bold text-[18px] w-5">{i + 1}</span>
+
+              {/* QUESTION */}
+              <div className="text-[18px] w-[470px]">{q.question}</div>
+
+              {/* INPUT */}
+              <div className="relative">
+                <input
+                  type="text"
+                  value={answers[i]}
+                  disabled={locked || result[i] === true}
+                  onChange={(e) => handleChange(i, e.target.value)}
+                  className={`
+                      w-[150px]
+                      h-10
+                      rounded-[18px]
+                      border-2
+                      outline-none
+                      bg-transparent
+                      text-[18px]
+                      font-semibold
+                      text-center
+
+                      ${
+                        result[i] === false
+                          ? "border-[#7A2D91] text-[#00AEEF]"
+                          : "border-[#7A2D91] text-[#00AEEF]"
+                      }
+                    `}
                 />
 
-                <Droppable droppableId={String(q.id)}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      style={{
-                        position: "relative",
-                        marginTop: "6px",
-                        borderBottom: checked
-                          ? userAnswers[q.id]?.toLowerCase().trim() ===
-                            correctAnswers[q.id]?.toLowerCase()
-                            ? "2px solid black"
-                            : "2px solid red"
-                          : "2px solid black",
-                        minHeight: "26px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        fontSize: "18px",
-                      }}
-                    >
-                      <span style={{ color: "#2c5287", fontWeight: "bold" }}>
-                        {" "}
-                        {userAnswers[q.id]}
-                      </span>
-                      {checked &&
-                        userAnswers[q.id] !== correctAnswers[q.id] && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              left: "80%",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              width: "20px",
-                              height: "20px",
-                              background: "#ef4444",
-                              color: "white",
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              border: "2px solid white",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                              pointerEvents: "none",
-                              zIndex: 3,
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                {/* WRONG */}
+                {result[i] === false && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-8px",
+                      right: "-8px",
+                      width: "20px",
+                      height: "20px",
+                      background: "#ef4444",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    ✕
+                  </span>
+                )}
               </div>
-            ))}
-          </div>
-
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-            checkAnswers={checkAnswers}
-          />
+            </div>
+          ))}
         </div>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

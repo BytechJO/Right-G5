@@ -137,8 +137,8 @@ const Unit5_Page5_Q2 = () => {
                   src={char}
                   alt=""
                   style={{
-                    width: "70px",
-                    height: "70px",
+                    width: "95px",
+                    height: "95px",
                     objectFit: "contain",
                   }}
                 />

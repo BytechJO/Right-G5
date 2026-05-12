@@ -176,7 +176,7 @@ const Unit5_Page5_Q1 = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 280px",
+            gridTemplateColumns: "1fr 300px",
             gap: "30px",
             alignItems: "start",
           }}
@@ -186,7 +186,7 @@ const Unit5_Page5_Q1 = () => {
               fontSize: "18px",
               display: "flex",
               flexDirection: "column",
-              gap: "25px",
+              gap: "35px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -245,7 +245,7 @@ const Unit5_Page5_Q1 = () => {
               src={img1}
               alt=""
               style={{
-                width: "280px",
+                width: "300px",
                 height: "auto",
                 objectFit: "contain",
               }}

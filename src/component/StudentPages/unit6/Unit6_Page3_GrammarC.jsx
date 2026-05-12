@@ -125,7 +125,7 @@ const Unit6_Page3_GrammarC = () => {
       <div className="space-y-10 text-[18px] mt-10">
         {/* 1 */}
         <div className="flex gap-6 items-center">
-          <span className="font-bold mt-5">1</span>
+          <span className="font-bold -mt-25">1</span>
 
           {/* IMAGE */}
           <img
@@ -180,7 +180,7 @@ const Unit6_Page3_GrammarC = () => {
 
         {/* 2 */}
         <div className="flex gap-6 items-center">
-          <span className="font-bold mt-5">2</span>
+          <span className="font-bold -mt-25">2</span>
 
           {/* IMAGE */}
           <img

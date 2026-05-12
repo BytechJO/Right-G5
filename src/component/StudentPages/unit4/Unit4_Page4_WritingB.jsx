@@ -35,7 +35,7 @@ const Unit4_Page4_WritingB = () => {
       </h5>
 
       {/* SENTENCES */}
-      <div className="space-y-7 text-[18px]">
+      <div className="space-y-7 text-[18px] mt-10">
         {starters.map((starter, i) => (
           <div key={i} className="flex items-center">
             {/* STARTER */}
