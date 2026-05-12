@@ -4,17 +4,15 @@ import "./Reading_Unit6_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.5_Adult Lady.mp3";
 import sound2 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.6_Adult Lady.mp3";
 import sound3 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.7_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 6/P 57/Pg57_1.8_Adult Lady.mp3";
 const Reading_Unit6_Page2 = () => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const clickableAreas = [
-    { x1: 8.06, y1: 39.3, x2: 45.76, y2: 48.95, sound: sound1 },
-    { x1: 48.35, y1: 39.13, x2: 86.27, y2: 49.97, sound: sound2 },
-    { x1: 8.06, y1:79.58, x2: 46.26, y2: 93.96, sound: sound3 },
-    { x1: 48.56, y1: 86.35, x2: 85.84, y2: 95.32, sound: sound4 },
+    { x1: 6.12, y1: 31.35, x2: 43.82, y2: 50.13, sound: sound1 },
+    { x1: 50.72, y1: 23.73, x2: 88.86, y2: 49.97, sound: sound2 },
+    { x1: 51.15, y1: 54.87, x2: 88.86, y2: 73.66, sound: sound3 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();

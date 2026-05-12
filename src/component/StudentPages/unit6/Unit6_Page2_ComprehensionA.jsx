@@ -250,7 +250,7 @@ const Unit6_Page2_ComprehensionA = () => {
       </h5>
 
       {/* TABLE */}
-      <div className="border border-[#8b5fa8]">
+      <div className="border border-[#8b5fa8] mt-10">
         {/* HEADERS */}
         <div className="grid grid-cols-3 bg-[#f3eef7] border-b border-[#8b5fa8]">
           {["Verb Phrase", "Modal Verb", "Negative Phrase"].map((title, i) => (

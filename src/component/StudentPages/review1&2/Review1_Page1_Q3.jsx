@@ -12,7 +12,7 @@ const Review1_Page1_Q3 = () => {
   const [matches, setMatches] = useState({});
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
-  const [selectedSentence, setSelectedSentence] = useState(null);
+  const [validatedMatches, setValidatedMatches] = useState({});
 
   const imageRefs = useRef([]);
   const sentenceRefs = useRef([]);
@@ -43,60 +43,64 @@ const Review1_Page1_Q3 = () => {
   };
 
   const selectImage = (id) => {
-    if (matches[id] === correct[id]) return;
+    if (showResult && validatedMatches[id] === correct[id]) return;
 
-    // إذا اختار جملة → اربط
-    if (selectedSentence !== null) {
-      setMatches((prev) => {
-        const updated = { ...prev };
-
-        Object.keys(updated).forEach((imgKey) => {
-          if (updated[imgKey] === selectedSentence) {
-            delete updated[imgKey];
-          }
-        });
-
-        updated[id] = selectedSentence;
-        return updated;
-      });
-
-      setSelectedSentence(null);
-      return;
-    }
-
-    // السلوك القديم (اختيار صورة)
     setSelectedImg(id);
-    setShowResult(false);
+
+    // أول ما يبدأ يعدل شيل التقييم القديم
+    setValidatedMatches((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
   };
 
   const selectSentence = (id) => {
-    if (
-      Object.entries(matches).some(
-        ([imgId, sentId]) => sentId === id && correct[imgId] === sentId,
-      )
-    )
-      return;
+    if (selectedImg === null) return;
 
-    if (selectedImg !== null) {
-      setMatches((prev) => {
-        const updated = { ...prev };
-
-        Object.keys(updated).forEach((imgKey) => {
-          if (updated[imgKey] === id) {
-            delete updated[imgKey];
-          }
-        });
-
-        updated[selectedImg] = id;
-        return updated;
-      });
-
+    // إذا الصورة مثبتة صح لا تعدلها
+    if (showResult && validatedMatches[selectedImg] === correct[selectedImg]) {
       setSelectedImg(null);
-
       return;
     }
-    setSelectedSentence(id);
-    setShowResult(false);
+
+    // إذا الجملة مثبتة صح لا تستخدمها
+    const alreadyCorrectlyUsed =
+      showResult &&
+      Object.entries(validatedMatches).some(
+        ([imgId, sentId]) =>
+          Number(sentId) === id &&
+          correct[imgId] === Number(sentId) &&
+          Number(imgId) !== selectedImg,
+      );
+
+    if (alreadyCorrectlyUsed) {
+      return;
+    }
+
+    setMatches((prev) => {
+      const updated = { ...prev };
+
+      // احذف الربط القديم لنفس الكلمة
+      Object.keys(updated).forEach((imgKey) => {
+        // إذا الكلمة مستخدمة بصورة ثانية
+        if (updated[imgKey] === id) {
+          // إذا الصورة مثبتة صح لا تحذفها
+          if (showResult && validatedMatches[imgKey] === correct[imgKey]) {
+            return;
+          }
+
+          // غير هيك احذف الربط القديم
+          delete updated[imgKey];
+        }
+      });
+
+      updated[selectedImg] = id;
+
+      return updated;
+    });
+
+    setSelectedImg(null);
   };
   const checkAnswers = () => {
     if (locked) return;
@@ -126,7 +130,7 @@ const Review1_Page1_Q3 = () => {
     } else {
       ValidationAlert.warning(message);
     }
-
+    setValidatedMatches(matches);
     setShowResult(true);
   };
 
@@ -137,7 +141,7 @@ const Review1_Page1_Q3 = () => {
   };
 
   const reset = () => {
-    setSelectedSentence(null);
+    setValidatedMatches({});
     setSelectedImg(null);
     setMatches({});
     setShowResult(false);
@@ -155,9 +159,7 @@ const Review1_Page1_Q3 = () => {
         position: "relative",
       }}
     >
-      <div
-        className="div-forall"
-      >
+      <div className="div-forall">
         <h5 className="header-title-page8  mb-6">
           <span className=" mr-3">C</span>
           Look, read, and match.{" "}
@@ -188,7 +190,32 @@ const Review1_Page1_Q3 = () => {
                       selectedImg === i ? "#6d2980" : "transparent",
                   }}
                 />
-
+                {showResult &&
+                  validatedMatches[i] !== undefined &&
+                  correct[i] !== validatedMatches[i] && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        width: "20px",
+                        height: "20px",
+                        background: "#ef4444",
+                        color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                        border: "2px solid white",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                        zIndex: 5,
+                      }}
+                    >
+                      ✕
+                    </span>
+                  )}
                 <div
                   ref={(el) => (imageRefs.current[i] = el)}
                   className="absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition z-10"
@@ -222,57 +249,13 @@ const Review1_Page1_Q3 = () => {
                     width: "12px",
                     height: "12px",
                     backgroundColor: "#00AEEF",
-                    transform:
-                      selectedSentence === i ? "scale(1.4)" : "scale(1)",
-                    boxShadow:
-                      selectedSentence === i
-                        ? "0 0 0 4px rgba(249,115,22,0.2)"
-                        : "none",
                   }}
                 ></div>
 
                 {/* 🔥 البوكس */}
-                <div
-                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]"
-                  style={{
-                    border:
-                      selectedSentence === i
-                        ? "2px solid #f97316"
-                        : "2px solid transparent",
-                  }}
-                >
+                <div className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]">
                   <span className="font-bold mr-3">{i + 1}</span>
                   {sent.text}
-                  {showResult &&
-                    Object.entries(matches).some(
-                      ([imgId, sentId]) =>
-                        sentId == i && correct[imgId] !== sentId,
-                    ) && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: "-10px",
-                          right: "-10px",
-                          transform: "translateY(-50%)",
-                          width: "20px",
-                          height: "20px",
-                          background: "#ef4444",
-                          color: "white",
-                          borderRadius: "50%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                          border: "2px solid white",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                          pointerEvents: "none",
-                          zIndex: 3,
-                        }}
-                      >
-                        ✕
-                      </span>
-                    )}
                 </div>
               </div>
             ))}

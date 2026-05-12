@@ -200,7 +200,7 @@ const Unit6_Page3_GrammarB = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-8 text-[18px]">
+      <div className="space-y-8 text-[18px] mt-10">
         {/* 1 */}
         <div className="flex items-center gap-4">
           <span className="font-bold">1</span>

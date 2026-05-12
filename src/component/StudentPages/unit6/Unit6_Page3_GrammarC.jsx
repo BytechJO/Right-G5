@@ -122,7 +122,7 @@ const Unit6_Page3_GrammarC = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-10 text-[18px]">
+      <div className="space-y-10 text-[18px] mt-10">
         {/* 1 */}
         <div className="flex gap-6 items-center">
           <span className="font-bold mt-5">1</span>

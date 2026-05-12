@@ -32,7 +32,7 @@ const ReadingSection = ({
 
     span.classList.add("custom-underline");
 
-    span.style.borderBottom = "2px solid black";
+    span.style.borderBottom = "2px solid red";
 
     try {
       range.surroundContents(span);

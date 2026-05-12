@@ -1,197 +1,473 @@
 import React, { useState } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 3.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 4.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 5.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 6.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 6 Lets Run! Folder/Page 55/Ex E 7.svg";
+const Review6_Page2_Q1 = () => {
+  const poemLines = [
+    ["It", "could", "be", "a", "feather."],
 
-const Review6_Page2_Q2 = () => {
-  const [locked, setLocked] = useState(false);
-  const [showedAnswer, setShowedAnswer] = useState(false);
-  const items = [
-    { word: "an", correct: false, img: img1 },
-    { word: "fl", correct: true, img: img2 },
-    { word: "cr", correct: true, img: img3 },
-    { word: "cra", correct: false, img: img4 },
-    { word: "lio", correct: false, img: img5 },
-    { word: "sk", correct: true, img: img6 },
+    ["It", "might", "be", "a", "toad."],
+
+    ["Might", "it", "be", "a", "toaster?"],
+
+    ["It", "couldn’t", "be", "a", "road."],
+
+    [],
+
+    ["Will", "you", "look", "inside", "the", "box?"],
+
+    ["Would", "you", "like", "to", "know?"],
+
+    ["No,", "let’s", "wait", "for", "a", "little", "more."],
+
+    ["I", "know!", "It", "could", "be", "snow."],
+
+    ["We", "could", "have", "all", "the", "answers"],
+
+    ["By", "looking", "inside."],
+
+    ["But", "then", "we", "might", "miss", "all", "the", "fun"],
+
+    ["Of", "trying", "to", "decide."],
   ];
-  const [answers, setAnswers] = useState(Array(items.length).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const handleSelect = (index, value) => {
-    if (locked) return;
 
-    setAnswers((prev) => {
-      const updated = [...prev];
-      updated[index] = value;
-      return updated;
-    });
+  const [selectedWords, setSelectedWords] = useState({});
+
+  const [answers, setAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  const toggleWord = (lineIndex, wordIndex) => {
+    setSelectedWords((prev) => ({
+      ...prev,
+
+      [lineIndex]: prev[lineIndex] === wordIndex ? null : wordIndex,
+    }));
   };
-  const showAnswers = () => {
-    const correct = items.map((item) => (item.correct ? "y" : "n"));
-    setAnswers(correct);
-    setShowResult(true);
-    setShowedAnswer(true);
-    setLocked(true);
+
+  const handleChange = (index, value) => {
+    const updated = [...answers];
+
+    updated[index] = value;
+
+    setAnswers(updated);
   };
-  const resetAll = () => {
-    setAnswers(Array(items.length).fill(null)); // ❗ مش ""
-    setShowResult(false);
-    setLocked(false);
-    setShowedAnswer(false);
-  };
-  const checkAnswers = () => {
-    if (locked || showedAnswer) return;
 
-    // ❗ لازم يجاوب الكل
-    const allAnswered = answers.every((a) => a !== null);
-
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions.");
-      return;
-    }
-
-    let score = 0;
-
-    items.forEach((item, i) => {
-      if (
-        (item.correct && answers[i] === "y") ||
-        (!item.correct && answers[i] === "n")
-      ) {
-        score++;
-      }
-    });
-
-    const total = items.length; // 🔥 = 6
-
-    const message = `
-        Score: ${score} / ${total}
-  `;
-
-    setShowResult(true);
-    setLocked(true);
-
-    if (score === total) ValidationAlert.success(message);
-    else if (score === 0) ValidationAlert.error(message);
-    else ValidationAlert.warning(message);
-  };
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-        position: "relative",
-      }}
-    >
-      <div className="div-forall" style={{ width: "60%" }}>
-        <h5 className="header-title-page8">
-          <span style={{ marginRight: "10px" }}>E</span>
-          Write <span style={{ color: "#2e3192" }}>y</span> in the blank only
-          under the pictures that end with
-          <span style={{ color: "#2e3192" }}>y</span>.
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            F
+          </span>
+          Circle all the modal verbs in the poem below called, WHAT IS IT{" "}
+          <br /> Write your own version of this poem by filling in the blank
+          lines.
+          <br /> Remember to use rhyming words in your poem.
         </h5>
-        <div className="grid grid-cols-3 gap-10">
-          {items.map((item, i) => {
-            const isWrong =
-              showResult &&
-              ((item.correct && answers[i] !== "y") ||
-                (!item.correct && answers[i] !== "n"));
 
-            return (
-              <div key={i} className="relative text-center">
-                {/* الصورة */}
-                <img
-                  src={item.img}
-                  style={{ width: "90px", height: "auto" }}
-                  className="mb-2 mx-auto"
-                />
+        {/* CONTENT */}
+        <div className="flex gap-14 mb-10">
+          {/* LEFT POEM */}
+          <div className="flex flex-col gap-4 w-[360px]">
+            {/* TITLE */}
+            <div
+              className="
+                text-[18px]
+                mb-1
+              "
+            >
+              WHAT IS IT?
+            </div>
 
-                {/* الكلمة + الخط */}
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg">
-                    {i + 1} {item.word}
-                  </span>
+            {poemLines.map((line, lineIndex) => {
+              if (line.length === 0) {
+                return <div key={lineIndex} className="h-5"></div>;
+              }
 
-                  {/* الخط + البوكسين */}
-                  <div className="relative w-24">
-                    {/* الخط */}
-                    <div
-                      className={`border-b-2 w-full h-6
-                  "border-black"
-              `}
-                    />
+              return (
+                <div
+                  key={lineIndex}
+                  className="
+                      flex
+                      flex-wrap
+                      gap-2
+                      text-[18px]
+                    "
+                >
+                  {line.map((word, wordIndex) => {
+                    const isSelected = selectedWords[lineIndex] === wordIndex;
 
-                    {/* البوكسين فوق الخط */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-2">
-                      {/* Y */}
-                      <div
-                        onClick={() => handleSelect(i, "y")}
-                        className={`px-2 py-0.5 border rounded text-xs font-bold cursor-pointer
-                  ${answers[i] === "y" ? "bg-[#1C398E] text-white" : "bg-white"}
-                  ${locked ? "cursor-not-allowed " : "hover:bg-[#1C398E]"}
-                `}
+                    return (
+                      <span
+                        key={wordIndex}
+                        onClick={() => toggleWord(lineIndex, wordIndex)}
+                        className="
+                              relative
+                              cursor-pointer
+                              inline-block
+                              px-[3px]
+                              py-px
+                            "
                       >
-                        Y
-                      </div>
+                        {/* CIRCLE */}
+                        {isSelected && (
+                          <span
+                            className="
+                                  absolute
+                                  inset-[-5px]
+                                  border-2
+                                  border-[#6D2980]
+                                  rounded-full
+                                  pointer-events-none
+                                "
+                          ></span>
+                        )}
 
-                      {/* NO */}
-                      <div
-                        onClick={() => handleSelect(i, "n")}
-                        className={`px-2 py-0.5 border rounded text-xs font-bold cursor-pointer 
-                  ${answers[i] === "n" ? "bg-[#1C398E] text-white" : "bg-white"}
-                  ${locked ? "cursor-not-allowed " : "hover:bg-gray-200"}
-                `}
-                      >
-                        No
-                      </div>
-                    </div>
-                  </div>
+                        <span className="relative z-10">{word}</span>
+                      </span>
+                    );
+                  })}
                 </div>
+              );
+            })}
+          </div>
 
-                {/* ❌ الغلط */}
-                {isWrong && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      width: "22px",
-                      height: "22px",
-                      background: "#ef4444",
-                      color: "white",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                      border: "2px solid white",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                      pointerEvents: "none",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {/* RIGHT SIDE */}
+          <div className="flex flex-col gap-4 w-[430px]">
+            {/* TITLE */}
+            <div
+              className="
+                text-[18px]
+                underline
+                mb-1
+              "
+            >
+              WHAT IS IT?
+            </div>
+
+            {/* 1 */}
+            <div className="flex items-end text-[18px]">
+              <span>It could be</span>
+
+              <input
+                type="text"
+                value={answers[0]}
+                onChange={(e) => handleChange(0, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+
+            {/* 2 */}
+            <div className="flex items-end text-[18px]">
+              <span>It might be</span>
+
+              <input
+                type="text"
+                value={answers[1]}
+                onChange={(e) => handleChange(1, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+
+            {/* 3 */}
+            <div className="flex items-end text-[18px]">
+              <span>Might it be a</span>
+
+              <input
+                type="text"
+                value={answers[2]}
+                onChange={(e) => handleChange(2, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>?</span>
+            </div>
+
+            {/* 4 */}
+            <div className="flex items-end text-[18px]">
+              <span>It couldn’t be a</span>
+
+              <input
+                type="text"
+                value={answers[3]}
+                onChange={(e) => handleChange(3, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+            </div>
+
+            <div className="h-5"></div>
+
+            {/* 5 */}
+            <div className="flex items-end text-[18px]">
+              <span>Will you</span>
+
+              <input
+                type="text"
+                value={answers[4]}
+                onChange={(e) => handleChange(4, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>?</span>
+            </div>
+
+            {/* 6 */}
+            <div className="flex items-end text-[18px]">
+              <span>Would you</span>
+
+              <input
+                type="text"
+                value={answers[5]}
+                onChange={(e) => handleChange(5, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>?</span>
+            </div>
+
+            {/* 7 */}
+            <div className="flex items-end text-[18px]">
+              <span>No, let’s</span>
+
+              <input
+                type="text"
+                value={answers[6]}
+                onChange={(e) => handleChange(6, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+
+            {/* 8 */}
+            <div className="flex items-end text-[18px]">
+              <span>I know!</span>
+
+              <input
+                type="text"
+                value={answers[7]}
+                onChange={(e) => handleChange(7, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  text-[18px]
+                  font-semibold
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+
+            {/* 9 */}
+            <div className="flex items-end text-[18px]">
+              <span>We could</span>
+
+              <input
+                type="text"
+                value={answers[8]}
+                onChange={(e) => handleChange(8, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+            </div>
+
+            {/* 10 */}
+            <div className="flex items-end text-[18px]">
+              <span>By</span>
+
+              <input
+                type="text"
+                value={answers[9]}
+                onChange={(e) => handleChange(9, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+
+            {/* 11 */}
+            <div className="flex items-end text-[18px]">
+              <span>But then we might</span>
+
+              <input
+                type="text"
+                value={answers[10]}
+                onChange={(e) => handleChange(10, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+            </div>
+
+            {/* 12 */}
+            <div className="flex items-end text-[18px]">
+              <span>Of trying</span>
+
+              <input
+                type="text"
+                value={answers[11]}
+                onChange={(e) => handleChange(11, e.target.value)}
+                className="
+                  flex-1
+                  border-0
+                  border-b
+                  border-black
+                  outline-none
+                  bg-transparent
+                  font-semibold
+                  text-[18px]
+                  ml-2
+                  text-[#6D2980]
+                "
+              />
+
+              <span>.</span>
+            </div>
+          </div>
         </div>
+        {/* BUTTONS */}
         <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
+          <button
+            className="try-again-button"
+            onClick={() => {
+              setAnswers(["", "", "", "", "", "", "", "", "", "", "", ""]);
+
+              setSelectedWords({});
+            }}
+          >
             Start Again ↻
-          </button>
-
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
-
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
           </button>
         </div>
       </div>
@@ -199,4 +475,4 @@ const Review6_Page2_Q2 = () => {
   );
 };
 
-export default Review6_Page2_Q2;
+export default Review6_Page2_Q1;

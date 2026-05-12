@@ -1,68 +1,51 @@
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 56.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit6_Page1.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 6/P 56/unit6-pg56-readingall.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 6/P 56/Pg56_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 6/P 56/Pg56_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 6/P 56/Pg56_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 6/P 56/Pg56_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U6/PG 56/cd3pg56-story.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U6/PG 56/Pg56_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U6/PG 56/Pg56_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U6/PG 56/Pg56_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U6/PG 56/Pg56_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
-// import video3 from "../../../assets/videos/reading/grade 3 unit 6 page 56-57. reading.mp4";
+import video3 from "../../../assets/videos/grade 5 unit 6 reading page 56-57.mp4";
 
 const Reading_Unit6_Page1 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const captionsExample = [
+  const captions = [
     {
-      start: 0.079,
-      end: 3.379,
-      text: "Page 56, reading. Let's go to the beach.",
+      start: 0.16,
+      end: 70.58,
+      text: "Page 56, The Lights Go Out. Brian was at home with his younger brother, Freddy. Their father was working late that night. The boys sat on the sofa watching TV. Then, all of a sudden, the lights went out. “Don’t worry, Freddy, I have everything under control,” said Brian. He found a few candles and a couple of flashlights. He gave one flashlight to Freddy. Suddenly, they heard a loud noise. It sounded like someone crashed into something. “What was that?” cried Freddy. “I’m scared.” “I don’t know,” said Brian. “Would you please bring me the phone? I think I should call the police.” Freddy gave Brian the phone. Brian picked up the phone and then thought for a moment. He might call and then find out nothing was wrong. He decided to call only if there was an emergency. He remembered when a firefighter came to their school. He talked to the class about safety and how to stay safe. He also told them what to do during an emergency. He told them they should stay calm and not panic. “Don’t worry, Freddy, I’m sure there is nothing to worry about,” said Brian. Freddy still looked scared. “Shall we go look outside and check? I’m sure it’s nothing,” said Brian, trying to comfort Freddy.",
     },
+
     {
-      start: 4.42,
-      end: 24.359,
-      text: "It's a hot day. Harley is thinking about swimming to cool off. He asks his mom if they can go to the beach. That's a great idea. I'd like to go, too, adds Helen. Mom agrees. Mom, where are my swimming trunks? I can't find them, Harley asks, confused.",
+      start: 72.28,
+      end: 95.18,
+      text: "Brian looked out the door while Freddy stood behind him. They both opened the door and pointed their flashlights onto the porch. They saw a flowerpot lying on its side. Could someone or something have knocked it over? Suddenly, something brown walked by. “Ah!” they both screamed. “Oh, look, it’s Pumpkin,” said Freddy. “Pumpkin must have knocked the flowerpot over,” said Brian.",
     },
+
     {
-      start: 25.479,
-      end: 30.079,
-      text: "Where are my shoes? Mom, can you help me find them? Helen shouts.",
+      start: 96.2,
+      end: 134.78,
+      text: "Pumpkin was Mrs. Tupper’s cat. Mrs. Tupper was their neighbor who lived next door. She loved two things in life: books and cats. “I’m sure Mrs. Tupper is worried about Pumpkin. Let’s go and take Pumpkin to her,” said Brian. “Could you please go alone?” said Freddy. “I would rather go to sleep now.” “Okay, I’ll go alone,” said Brian. Brian took the cat, Pumpkin, and went to Mrs. Tupper’s house. He found her back door open. “Mrs. Tupper,” called Brian from behind the open door. There was no answer. He walked inside. It was very dark. “Mrs. Tupper,” he said while flashing his light on the couch.",
     },
+
     {
-      start: 31.719,
-      end: 45.36,
-      text: "I want to take my ball to the beach. Mom, do you know where it is? asks Hansel. Have you seen my sunglasses? Harley asks Hansel. They're next to the lamp in your bedroom, Hansel replies.",
-    },
-    {
-      start: 46.979,
-      end: 50.599,
-      text: "Have you seen my swimming trunks and goggles? Hansel asks.",
-    },
-    {
-      start: 52.02,
-      end: 72.339,
-      text: "Yeah, they're in the basement on the shelf above the washing machine, says Harley. Are you ready? Mom asks. We're ready, Mom! shout the three of them. Then let's go. Let's get the bags in the car, says Mom. Mom, let's take a picture of the boat, suggests Hansel.",
-    },
-    {
-      start: 73.579,
-      end: 89.86,
-      text: "Mom, can we take a ride on the boat? asks Harley. Sure, boys, answers Mom. Hansel looks scared. Mom is concerned. What's wrong, Hansel? she asks. Hansel replies, I'm afraid of the sea, Mom.",
-    },
-    {
-      start: 90.939,
-      end: 107.399,
-      text: "Don't worry, comforts Harley. The sea is wonderful. It just takes time to get to know it. Hansel is no longer afraid of the sea. Dad drives the boat through the water. It's a beautiful day to be out on the water in a boat. Everyone is very happy.",
+      start: 135.84,
+      end: 166.92,
+      text: "Someone in the chair moved. There she was, Mrs. Tupper, sleeping in the chair. “Goodness,” she said, “I must have fallen asleep.” Brian gave the cat to Mrs. Tupper. “Thank you, Brian,” said Mrs. Tupper. “My son must have forgotten to close the door when he left to go out with his friends. That must be how Pumpkin got out of the house.” “Good night, Mrs. Tupper.” Brian went back home. He was relieved that nothing was wrong. As he opened his front door, the lights came back on. Finally. That was a night he wouldn’t forget.",
     },
   ];
   const clickableAreas = [
-    { x1: 15.11, y1: 34.57, x2: 51.31, y2: 48.61, sound: sound2 },
-    { x1: 55.62, y1: 35.07, x2: 92.03, y2: 48.61, sound: sound3 },
-    { x1: 15.11, y1: 84.49, x2: 51.52, y2: 95.15, sound: sound4 },
-    { x1: 55.62, y1: 80.09, x2: 92.67, y2: 95.66, sound: sound5 },
+    { x1: 15.11, y1: 29.66, x2: 52.6, y2: 52.17, sound: sound2 },
+    { x1: 55.62, y1: 32.7, x2: 92.89, y2: 51.83, sound: sound3 },
+    { x1: 15.11, y1: 80.26, x2: 53.38, y2: 95.83, sound: sound4 },
+    { x1: 55.62, y1: 76.7, x2: 93.67, y2: 95.66, sound: sound5 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -143,7 +126,7 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captionsExample} />
+                <AudioWithCaption src={sound1} captions={captions} />
               </div>,
             )
           }
@@ -191,7 +174,7 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
                     borderRadius: "20px",
                   }}
                 >
-                  {/* <source src={video3} type="video/mp4" /> */}
+                  <source src={video3} type="video/mp4" />
                 </video>
               </div>,
             )

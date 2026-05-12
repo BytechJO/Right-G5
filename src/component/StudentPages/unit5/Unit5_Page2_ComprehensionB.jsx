@@ -1,5 +1,4 @@
-import { FaRedo } from "react-icons/fa";
-
+import { FaRedo,FaArrowUp } from "react-icons/fa";
 const Unit5_Page2_ComprehensionB = ({
   enableUnderline,
   handleResetUnderline,
@@ -37,13 +36,10 @@ const Unit5_Page2_ComprehensionB = ({
       <div className="relative group">
         <div
           onClick={enableUnderline}
-          className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#6D2980] hover:bg-[#5a2169] cursor-pointer transition shadow-sm"
+          className="mx-auto flex items-center justify-center w-14 h-14 rounded-xl bg-[#B497BD] hover:bg-[#a284ab] cursor-pointer transition shadow-sm"
         >
-          <div className="bg-white p-3 rounded-full shadow text-[#6D2980] font-bold">
-            ↑
-          </div>
+          <FaArrowUp className="text-white text-xl" />
         </div>
-
         <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
           Go to Reading
         </span>
