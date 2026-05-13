@@ -18,7 +18,7 @@ const Review8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 80 })}
+          onClick={() => openPopup("exercise", { startIndex: 83 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -39,7 +39,28 @@ const Review8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 81 })}
+          onClick={() => openPopup("exercise", { startIndex: 84 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+      <div
+        className="click-icon-review8-page1-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 85 })}
           style={{ overflow: "visible" }}
         >
           <image

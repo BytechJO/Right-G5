@@ -1,57 +1,75 @@
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 74.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit8_Page1.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 8/P 74/unit8-pg74-readingall.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 8/P 74/Pg74_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 8/P 74/Pg74_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 8/P 74/Pg74_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 8/P 74/Pg74_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U8/PG 74/cd4pg74-story-adult-lady_1CKo40XZ.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U8/PG 74/Pg74_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U8/PG 74/Pg74_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U8/PG 74/Pg74_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U8/PG 74/Pg74_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
-// import video3 from "../../../assets/videos/reading/grade 3 unit 8 page 74-75 reading.mp4";
+import video3 from "../../../assets/videos/grade 5 unit 8 reading page 74-75.mp4";
 
 const Reading_Unit8_Page1 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const captionsExample = [
+  const captions = [
     {
-      start: 0.26,
-      end: 63.66,
-      text: "Page 74, Reading. Where's Hansel's camera? Last week, Hansel was at his friend's birthday party. There were many children at the party for Philip's birthday. Hansel wanted to take a picture with his camera. Oh, no! cried Hansel. What's wrong? asked Philip. I want to take some pictures, but I can't find my camera anywhere. I forgot where I put it, complained Hansel. Philip said, I'll help you look for your camera. What does it look like? It's white, and it has a long band, replied Hansel. Can you help us, Mom? asked Philip. We are looking for Hansel's camera. Philip's mom said, Sure, boys. I saw Stella taking a picture of her friends with a camera. That might be Hansel's camera. Thanks, Mom, said Philip. Stella was looking at some pictures she had taken with her camera. She said happily, Look, Hansel, I took some nice pictures. Do you want to look at them?",
+      start: 0.22,
+      end: 10.84,
+      text: "Page 74. Trina's trip to Holland. Trina and her mom are traveling from New York to Holland. Trina doesn't know anything about Holland except what her mother has told her.",
     },
 
     {
-      start: 64.67,
-      end: 78.12,
-      text: "No, Stella, not right now. I'm looking for my camera. Have you seen it? asked Hansel. Did you find your camera yet, Hansel? Philip asked. No, I didn't, answered Hansel. I guess it's lost.",
+      start: 12.09,
+      end: 55.06,
+      text: "She and her mother are looking at an atlas, a book of maps. “Here is where we are going,” her mom says. “It's a little village in Holland. It is where I grew up.” The pilot is talking to the passengers now. He says that they will be landing sometime soon. “We're finally here,” says Mom. “That is Holland below us.” Trina looks out the window. She can see villages and farms. Crops are growing in the fields. The flowers are blooming. There is a river, too. At the airport, Mom rents a car. She is speaking Dutch with the people in Holland. Trina can understand only some of the words. Mom and Trina put their bags in the car. They drive off. Suddenly, Trina sees something strange.",
     },
 
     {
-      start: 79.37,
-      end: 93.98,
-      text: "Have you found your camera, Hansel? asked Philip's mom. No, Mrs. Dewey. I believe I saw Harley taking a picture of Sarah with a camera, said Mrs. Dewey. I'll go find them. Thanks, Mrs. Dewey, replied Hansel.",
+      start: 56.14,
+      end: 64.68,
+      text: "“What is that, Mom?” asks Trina. “That's a windmill,” says Mom. “Long ago, everyone in Holland used windmills to pump water.”",
     },
 
     {
-      start: 95.1,
-      end: 99.74,
-      text: "Sarah, that's my camera. How did you get it? asked Hansel, relieved.",
+      start: 66.18,
+      end: 68.43,
+      text: "Trina and Mom finally arrived at their hotel.",
     },
 
     {
-      start: 100.8,
-      end: 122.74,
-      text: "Harley found it in the grass. He took some pictures, then he gave it to me to hold. Here you are. We didn't know this was your camera, Sarah replied happily. Thank you. I'm so happy my camera is not lost, said Hansel.",
+      start: 69.94,
+      end: 90.24,
+      text: "Someone who works in the hotel takes their bags and shows them their room. “The weather is perfect for a bike ride,” says Mom. Trina and Mom go to the lobby in the hotel. There, they rent two bicycles. They ride for miles. They see more windmills. They see fields of tulips, the pretty flowers that grow all over Holland.",
+    },
+
+    {
+      start: 91.77,
+      end: 107.03,
+      text: "The next day, Mom takes Trina to the village where she grew up. There is a festival that is going on. Everyone is celebrating the harvest of the tulips. Trina and Mom go to a restaurant. They sit at a table outside. They decide to have tea and cookies.",
+    },
+
+    {
+      start: 108.61,
+      end: 131.48,
+      text: "“These cookies are delicious,” says Trina. “It's like having dessert before dinner.” Mom talks in Dutch with everyone in the restaurant. She tells them that it is good to be back in Holland. Trina and Mom stay in Holland for two weeks, then they have to go back to New York. “We'll be home just in time for the Fourth of July,” says Mom. “We can see the fireworks,” says Trina.",
+    },
+
+    {
+      start: 132.54,
+      end: 144.12,
+      text: "“Did you like your visit to Holland?” asks Mom. “Yes. It was fun to see the place you were born and raised in. Everyone there was so nice. I liked everything about the trip,” says Trina.",
     },
   ];
   const clickableAreas = [
-    { x1: 15.32, y1: 36.26, x2: 53.03, y2: 49.97, sound: sound2 },
-    { x1: 55.4, y1: 31.86, x2: 93.32, y2: 49.97, sound: sound3 },
-    { x1: 15.11, y1: 81.1, x2: 52.6, y2: 94.98, sound: sound4 },
-    { x1: 55.62, y1: 81.1, x2: 93.54, y2: 95.32, sound: sound5 },
+    { x1: 15.11, y1: 33.72, x2: 53.03, y2: 49.97, sound: sound2 },
+    { x1: 55.4, y1: 33.86, x2: 93.32, y2: 49.97, sound: sound3 },
+    { x1: 15.11, y1: 68.92, x2: 53.5, y2: 95.5, sound: sound4 },
+    { x1: 55.62, y1: 84.1, x2: 93.54, y2: 95.32, sound: sound5 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -132,7 +150,7 @@ const Reading_Unit8_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captionsExample} />
+                <AudioWithCaption src={sound1} captions={captions} />
               </div>,
             )
           }
@@ -180,7 +198,7 @@ const Reading_Unit8_Page1 = ({ openPopup }) => {
                     borderRadius: "20px",
                   }}
                 >
-                  {/* <source src={video3} type="video/mp4" /> */}
+                  <source src={video3} type="video/mp4" />
                 </video>
               </div>,
             )

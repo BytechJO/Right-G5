@@ -127,17 +127,20 @@ const Unit8_Page5_Q1 = () => {
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`
-        ${width}
-        border-0
-        border-b
-        outline-none
-        bg-transparent
-        text-[18px]
-        font-semibold
-        text-[#6D2980]
+    ${width}
+    border-0
+    border-b
+    outline-none
+    bg-transparent
+    text-[18px]
+    text-[#6D2980]
+    font-semibold
+    leading-none
+    align-middle
+    px-1
 
-        ${result[i] === false ? "border-[#D1232A]" : "border-black"}
-      `}
+    ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+  `}
       />
 
       {result[i] === false && (
@@ -157,6 +160,7 @@ const Unit8_Page5_Q1 = () => {
             fontSize: "11px",
             fontWeight: "bold",
             border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
           ✕

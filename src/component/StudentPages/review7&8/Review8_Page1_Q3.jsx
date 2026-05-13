@@ -2,32 +2,18 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const Unit8_Page5_Q2 = () => {
+const Review8_Page1_Q3 = () => {
   const questions = [
-    "anything",
-    "something",
-    "anyone",
-    "nobody",
-    "anyone",
-    "somebody",
-    "someone",
-    "everyone",
-    "anything",
+    "anybody",
+    "no one",
     "nothing",
+    "someone",
+    "somebody",
+    "everybody",
+    "everything",
   ];
 
-  const [answers, setAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [answers, setAnswers] = useState(["", "", "", "", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -105,25 +91,22 @@ const Unit8_Page5_Q2 = () => {
 
   const showAnswers = () => {
     setAnswers([
-      "anything",
-      "something",
-      "anyone",
-      "nobody",
-      "anyone",
-      "somebody",
-      "someone",
-      "everyone",
-      "anything",
+      "anybody",
+      "no one",
       "nothing",
+      "someone",
+      "somebody",
+      "everybody",
+      "everything",
     ]);
 
-    setResult([true, true, true, true, true, true, true, true, true, true]);
+    setResult([true, true, true, true, true, true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers(["", "", "", "", "", "", "", "", "", ""]);
+    setAnswers(["", "", "", "", "", "", ""]);
 
     setResult([]);
 
@@ -135,22 +118,19 @@ const Unit8_Page5_Q2 = () => {
       <input
         type="text"
         value={answers[i]}
+        placeholder="type here..."
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`
           ${width}
           border-0
-          border-b
           outline-none
           bg-transparent
+          text-center
           text-[18px]
           text-[#6D2980]
           font-semibold
-          leading-none
-          align-middle
           px-1
-
-          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
         `}
       />
 
@@ -184,51 +164,115 @@ const Unit8_Page5_Q2 = () => {
     <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-12">
+        <h5 className="header-title-page8 mb-20">
           <span
-            className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            B
+            C
           </span>
-          Use the correct indefinite pronouns to ask and answer the questions.
+          Finish the chart.
         </h5>
 
-        {/* QUESTIONS */}
-        <div className="text-[18px] leading-[3.3] flex flex-col gap-6">
-          <div>
-            <span className="font-bold mr-4">1</span>
-            Did you see {inputField(0, "w-[140px]")} from the hot-air balloon?
-            Yes, I saw {inputField(1, "w-[150px]")}.
-          </div>
+        {/* TABLE */}
+        <table
+          className="border-collapse text-[18px]"
+          style={{
+            width: "920px",
+          }}
+        >
+          <tbody>
+            {/* HEADER */}
+            <tr>
+              <td className="border-2 border-[#6d2980] h-[70px] w-40 bg-[#E6E0EA]"></td>
 
-          <div>
-            <span className="font-bold mr-4">2</span>
-            Will {inputField(2, "w-[160px]")} come to the store today? No,{" "}
-            {inputField(3, "w-[160px]")} will come. We’re closed.
-          </div>
+              <td className="border-2 border-[#6d2980] text-center  bg-[#E6E0EA]">
+                one
+              </td>
 
-          <div>
-            <span className="font-bold mr-4">3</span>
-            Does {inputField(4, "w-[160px]")} have a pencil I could use? Yes,{" "}
-            {inputField(5, "w-[170px]")} has one.
-          </div>
+              <td className="border-2 border-[#6d2980] text-center  bg-[#E6E0EA]">
+                body
+              </td>
 
-          <div>
-            <span className="font-bold mr-4">4</span>
-            Can {inputField(6, "w-[170px]")} please help me carry these boxes?
-            Of course, {inputField(7, "w-[170px]")} will help.
-          </div>
+              <td className="border-2 border-[#6d2980] text-center  bg-[#E6E0EA]">
+                thing
+              </td>
+            </tr>
 
-          <div>
-            <span className="font-bold mr-4">5</span>
-            Is there {inputField(8, "w-[170px]")} in the fridge to eat? No,
-            there’s {inputField(9, "w-[170px]")} to eat, but we can go to the
-            store.
-          </div>
-        </div>
+            {/* ANY */}
+            <tr>
+              <td className="border-2 border-[#6d2980] text-center h-[70px] bg-[#E6E0EA]">
+                any
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">anyone</td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(0, "w-[120px] h-[38px]")}
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                anything
+              </td>
+            </tr>
+
+            {/* NO */}
+            <tr>
+              <td className="border-2 border-[#6d2980] text-center h-[70px] bg-[#E6E0EA]">
+                no
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(1, "w-[120px] h-[38px]")}
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">nobody</td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(2, "w-[120px] h-[38px]")}
+              </td>
+            </tr>
+
+            {/* SOME */}
+            <tr>
+              <td className="border-2 border-[#6d2980] text-center h-[70px] bg-[#E6E0EA]">
+                some
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(3, "w-[120px] h-[38px]")}
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(4, "w-[120px] h-[38px]")}
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                something
+              </td>
+            </tr>
+
+            {/* EVERY */}
+            <tr>
+              <td className="border-2 border-[#6d2980] text-center h-[70px] bg-[#E6E0EA]">
+                every
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                everyone
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(5, "w-[120px] h-[38px]")}
+              </td>
+
+              <td className="border-2 border-[#6d2980] text-center">
+                {inputField(6, "w-[120px] h-[38px]")}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       {/* BUTTONS */}
@@ -249,4 +293,4 @@ const Unit8_Page5_Q2 = () => {
   );
 };
 
-export default Unit8_Page5_Q2;
+export default Review8_Page1_Q3;

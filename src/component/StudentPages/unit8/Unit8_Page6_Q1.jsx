@@ -1,271 +1,246 @@
 import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Unit8_Page6_Q1.css";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 69/Asset 11.svg";
-
+import grammer_u1 from "../../../assets/audio/ClassBook/U8/PG 69/CD40.Pg69_Instructions_Adult Lady.mp3";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit8_Page6_Q1 = () => {
-  const items = [
-    { text: "Did Helen comb her hair?", answer: "Yes, she did." },
-    { text: "Did Helen brush her teeth?", answer: "Yes, she did." },
-    { text: "Did Tom help his mom?", answer: "Yes, he did." },
-    { text: "Did Tom wash the dishes?", answer: "No, he didn’t." },
+  const questions = ["his", "his", "his", "his", "his"];
+  const captions = [
+    {
+      start: 0.379,
+      end: 14.119,
+      text: "Page 69, right activities, exercise C. First, listen to the sample paragraph. Then underline the correct pronoun that agrees with the indefinite pronoun. Finally, read each sentence aloud.",
+    },
+
+    {
+      start: 16.039,
+      end: 36.579,
+      text: "Timothy was surprised when he got to school. Everyone was at his/her locker, hurrying to class. He couldn't understand why because school wasn't supposed to start for an hour. When he asked someone, though, she said it was because class started one hour early today, so everybody could finish his/her classes today before the big show.",
+    },
+
+    {
+      start: 37.919,
+      end: 67.259,
+      text: "That's when Timothy remembered. Of course, somebody was coming to the school today to show his pets to the students, and his pets happened to include a ten-foot snake, a crocodile, an eagle, and a lion cub. Anyone who hadn't finished his/her assignments by two o'clock that day had to stay in class and complete them. So everyone was hurrying to his/her classes to get an early start. Timothy hurried as well, so he wouldn't miss the show that afternoon.",
+    },
   ];
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
 
-  const wordBank = [
-    "Yes, she did.",
-    "Yes, he did.",
-    "No, she didn’t.",
-    "No, he didn’t.",
-  ];
+  const [result, setResult] = useState([]);
 
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [wrongMarks, setWrongMarks] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-  // =========================
-  // DRAG END (🔥 FIXED)
-  // =========================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const normalize = (str) => str.toLowerCase().replace(/\s+/g, " ").trim();
 
-    const value = draggableId.replace("season-", "");
-    const index = Number(destination.droppableId);
+  const handleSelect = (i, value) => {
+    if (locked || result[i] === true) return;
 
     const updated = [...answers];
-    updated[index] = value;
+
+    updated[i] = value;
+
     setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  // =========================
-  // SHOW ANSWERS (🔥 FIXED)
-  // =========================
-  const showAnswers = () => {
-    setAnswers(items.map((item) => item.answer));
-    setShowCorrect(true);
-    setWrongMarks([]);
-  };
-
-  // =========================
-  // RESET
-  // =========================
-  const resetAll = () => {
-    setAnswers(items.map(() => ""));
-    setShowCorrect(false);
-    setWrongMarks([]);
-  };
-
-  // =========================
-  // CHECK ANSWERS (🔥 FIXED)
-  // =========================
   const checkAnswers = () => {
-    if (showCorrect) return;
+    if (locked) return;
 
-    // ❌ إذا في فراغ
-    if (answers.includes("")) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
-    let total = items.length;
-    let wrong = [];
+    let correctCount = 0;
 
-    items.forEach((item, i) => {
-      if (answers[i]?.trim().toLowerCase() === item.answer.toLowerCase()) {
-        score++;
-      } else {
-        wrong.push({ qIndex: i });
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setWrongMarks(wrong);
-    setShowCorrect(true);
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers(["his", "his", "his", "his", "his"]);
+
+    setResult([true, true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  const optionCircle = (qIndex, option) => {
+    const isSelected = answers[qIndex] === option;
+
+    const isWrong = result[qIndex] === false && isSelected;
+
+    return (
+      <span className="relative inline-flex items-center">
+        <button
+          onClick={() => handleSelect(qIndex, option)}
+          className={`
+  relative
+  px-2
+  pb-1
+  leading-none
+  flex
+  items-center
+  justify-center
+  text-[18px]
+  font-medium
+  transition-all
+
+  ${
+    isWrong
+      ? "border-b-2 border-[#D1232A] text-[#1DA1F2]"
+      : isSelected
+        ? "border-b-2 border-[#6D2980] text-[#1DA1F2]"
+        : "border-b-2 border-transparent text-[#1DA1F2]"
+  }
+`}
+        >
+          {option}
+
+          {isWrong && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-15px",
+                right: "-8px",
+                width: "20px",
+                height: "20px",
+                background: "#ef4444",
+                color: "white",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "11px",
+                fontWeight: "bold",
+                border: "2px solid white",
+                boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+              }}
+            >
+              ✕
+            </span>
+          )}
+        </button>
+      </span>
+    );
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div
-          className="div-forall"
-          style={{ width: "60%", marginBottom: "40px" }}
-        >
-          <h5 className="header-title-page8">
-            <span className="ex-A" style={{marginRight:"10px"}}>D</span>Look and write the answers.
-          </h5>
-          <div
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-4">
+          <span
+            className="ex-A"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "25px",
-              marginTop: "20px",
-              flexWrap: "wrap",
+              marginRight: "10px",
             }}
           >
-            <img
-              src={img1}
-              style={{ width: "auto", height: "auto", objectFit: "cover" }}
-            />
+            C
+          </span>
+          First, listen to the sample paragraph. Then underline the correct
+          pronoun <br /> that agrees with the indefinite pronoun. Finally, read
+          each sentence aloud.
+        </h5>
+        <QuestionAudioPlayer
+          src={grammer_u1}
+          captions={captions}
+          stopAtSecond={14.8}
+        />
+        {/* QUESTIONS */}
+        <div className="text-[18px] leading-[3.3] flex flex-col gap-2">
+          <div>
+            <span className="font-bold mr-4">1</span>
+            Did anyone forget ({optionCircle(0, "their")},{" "}
+            {optionCircle(0, "his")}) book today?
           </div>
-          {/* WORD BANK */}
-          <Droppable droppableId="bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginTop: "20px",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: "20px",
-                  // justifyContent: "center",
-                }}
-              >
-                {wordBank.map((word, index) => (
-                  <Draggable
-                    key={word}
-                    draggableId={`season-${word}`}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <span
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="season-chip"
-                        style={{
-                          padding: "7px 14px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          background: "white",
-                          fontWeight: "bold",
-                          cursor: "grab",
-                          fontSize: "16px",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {word}
-                      </span>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          {/* CONTENT */}
 
-          <div className="space-y-6">
-            {items.map((item, i) => (
-              <div key={i} className="flex items-center gap-7">
-                {/* TEXT */}
-                <span className="text-base">
-                  {i + 1}. {item.text}
-                </span>
-
-                {/* INLINE DROP */}
-                <Droppable droppableId={`${i}`}>
-                  {(provided) => {
-                    const isWrong = wrongMarks.some((w) => w.qIndex === i);
-
-                    return (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        style={{
-                          position: "relative",
-                          minWidth: "120px",
-                          textAlign: "center",
-                          fontWeight: "bold",
-                          color: answers[i] ? "#1C398E" : "black", // الكلمة أزرق غامق
-                          borderBottom: `2px solid ${
-                            showCorrect
-                              ? isWrong
-                                ? "red"
-                                : "#1C398E"
-                              : "black"
-                          }`,
-                          paddingBottom: "4px",
-                        }}
-                      >
-                        {answers[i]}
-                        {provided.placeholder}
-
-                        {showCorrect && isWrong && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "50%",
-                              right: "-28px",
-                              transform: "translateY(-50%)",
-                              width: "22px",
-                              height: "22px",
-                              background: "#ef4444",
-                              color: "white",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontWeight: "bold",
-                              border: "2px solid white",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                              pointerEvents: "none",
-                            }}
-                          >
-                            ✕
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }}
-                </Droppable>
-              </div>
-            ))}
+          <div>
+            <span className="font-bold mr-4">2</span>I think someone left (
+            {optionCircle(1, "his")}, {optionCircle(1, "their")}) tennis racket
+            here.
           </div>
-        </div>
 
-        {/* BUTTONS */}
-        <div className="action-buttons-container">
-          <button onClick={resetAll} className="try-again-button">
-            Start Again ↻
-          </button>
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+          <div>
+            <span className="font-bold mr-4">3</span>
+            No one is going to forget ({optionCircle(2, "their")},{" "}
+            {optionCircle(2, "his")}) pencil on testing day, I hope!
+          </div>
+
+          <div>
+            <span className="font-bold mr-4">4</span>
+            Does someone have ({optionCircle(3, "his")},{" "}
+            {optionCircle(3, "their")}) car here?
+          </div>
+
+          <div>
+            <span className="font-bold mr-4">5</span>
+            Everybody knew ({optionCircle(4, "their")}, {optionCircle(4, "his")}
+            ) cell phone wouldn’t work in the countryside.
+          </div>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

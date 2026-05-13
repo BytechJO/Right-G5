@@ -92,7 +92,7 @@ const Review1_Page1_Q2 = () => {
         value={answers[i]}
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
-        className={`border-b-1 outline-none text-center text-[#6D2980] font-bold bg-transparent ${width}
+        className={`border-b outline-none text-center text-[#6D2980] font-bold bg-transparent ${width}
           ${result[i] === false ? "border-red-500" : "border-black"}
         `}
       />
