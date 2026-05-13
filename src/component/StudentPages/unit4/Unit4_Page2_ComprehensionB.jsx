@@ -26,7 +26,7 @@ const Unit4_Page2_ComprehensionB = () => {
 
       <div className="flex justify-between items-start gap-10">
         {/* QUESTIONS */}
-        <div className="flex-1 space-y-10 text-[18px] mt-5">
+        <div className="flex-1 space-y-10 text-[18px] mt-10">
           {/* Q1 */}
           <div>
             <div className="mb-3">

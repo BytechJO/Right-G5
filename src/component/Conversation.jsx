@@ -4,7 +4,15 @@ import QuestionAudioPlayer from "./QuestionAudioPlayer";
 import pauseBtn from "../assets/Page 01/Right Video Button.svg";
 
 const ConversationItem = React.memo(
-  ({ number, dialogues, image, currentTime, wordsData = [], captions }) => {
+  ({
+    number,
+    dialogues,
+    image,
+    currentTime,
+    wordsData = [],
+    captions,
+    imageWidth,
+  }) => {
     return (
       <div className="flex items-start gap-3 mb-10">
         <span
@@ -53,7 +61,7 @@ const ConversationItem = React.memo(
             src={image}
             alt={`scene-${number}`}
             style={{
-              width: "250px",
+              width: imageWidth || "250px",
               height: "100%",
               objectFit: "contain",
               marginLeft: "16px",
@@ -113,6 +121,7 @@ const Conversation = ({
   wordTimings,
   captionTimings,
   video,
+  imageWidth,
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
@@ -168,6 +177,7 @@ const Conversation = ({
           currentTime={currentTime}
           wordsData={wordTimings?.[index]}
           captions={captionTimings?.[index]}
+          imageWidth={imageWidth}
         />
       ))}
       {showVideo && (

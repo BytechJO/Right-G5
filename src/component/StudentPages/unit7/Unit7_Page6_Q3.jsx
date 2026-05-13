@@ -6,9 +6,9 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is V
 
 const Unit7_Page6_Q3 = () => {
   const correctAnswers = [
-    "The boy is making a sandwich.",
-    "The woman is combing her hair.",
-    "The woman is riding on the subway.",
+    "Are they playing basketball?",
+    "Are they drinking coffee?",
+    "Are they picking apples?",
   ];
 
   const [answers, setAnswers] = useState(["", "", ""]);

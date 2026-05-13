@@ -120,7 +120,7 @@ const Unit7_Page2_ComprehensionA = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-10 text-[20px]">
+      <div className="space-y-10 text-[20px] mt-10">
         {/* 1 */}
         <div className="flex gap-4 items-start">
           <span className="font-bold">1</span>

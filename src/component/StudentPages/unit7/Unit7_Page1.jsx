@@ -23,10 +23,10 @@ import sound14 from "../../../assets/audio/ClassBook/U7/PG 58/sound14.mp3";
 import sound15 from "../../../assets/audio/ClassBook/U7/PG 58/sound15.mp3";
 import sound16 from "../../../assets/audio/ClassBook/U7/PG 58/sound16.mp3";
 import CriticalThinking from "../../CriticalThinking";
-import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 1.svg";
-import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 2.svg";
-import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 3.svg";
-import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 4.svg";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 15.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 22.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 23.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 58/SVG/Asset 25.svg";
 import wordJson from "../../../assets/json/cd31pg58-conversation_eng.json";
 import video from "../../../assets/videos/grade 5 unit 7 page 58.mp4";
 
@@ -409,6 +409,7 @@ const Unit7_Page1 = ({ openPopup }) => {
                   wordTimings={Voc}
                   openPopup={openPopup}
                   video={video}
+                  imageWidth="300px"
                 />
               </div>,
             )

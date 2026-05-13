@@ -216,7 +216,7 @@ const Unit7_Page4_WritingA = () => {
       </h5>
 
       {/* PARAGRAPHS */}
-      <div className="space-y-5 text-[18px] leading-relaxed">
+      <div className="space-y-5 text-[18px] leading-relaxed mt-10">
         {paragraphs.map((paragraph, i) => (
           <div key={i} className="relative">
             {renderLine(paragraph.text, i)}

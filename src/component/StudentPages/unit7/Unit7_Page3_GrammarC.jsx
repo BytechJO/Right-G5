@@ -124,7 +124,7 @@ const Unit6_Page3_GrammarC = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-10 text-[18px] mt-10">
+      <div className="space-y-2 text-[18px] mt-10">
         {/* 1 */}
         <div className="flex gap-6 items-center">
           <span className="font-bold -mt-20">1</span>
@@ -134,8 +134,8 @@ const Unit6_Page3_GrammarC = () => {
             src={img1}
             alt="museum"
             style={{
-              width: "150px",
-              height: "150px",
+              width: "120px",
+              height: "120px",
               objectFit: "contain",
             }}
           />
@@ -189,8 +189,8 @@ const Unit6_Page3_GrammarC = () => {
             src={img2}
             alt="mountains"
             style={{
-              width: "150px",
-              height: "150px",
+              width: "120px",
+              height: "120px",
               objectFit: "contain",
             }}
           />
@@ -247,8 +247,8 @@ const Unit6_Page3_GrammarC = () => {
             src={img3}
             alt="mountains"
             style={{
-              width: "150px",
-              height: "150px",
+              width: "120px",
+              height: "120px",
               objectFit: "contain",
             }}
           />

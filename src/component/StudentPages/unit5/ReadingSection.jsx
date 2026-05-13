@@ -46,6 +46,7 @@ const ReadingSection = ({
     if (readingRef.current && !originalHtmlRef.current) {
       originalHtmlRef.current = readingRef.current.innerHTML;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="p-6 flex flex-col items-center ">

@@ -24,10 +24,10 @@ import sound15 from "../../../assets/audio/ClassBook/U6/PG 46/sound15.mp3";
 import sound16 from "../../../assets/audio/ClassBook/U6/PG 46/sound16.mp3";
 import sound17 from "../../../assets/audio/ClassBook/U6/PG 46/sound17.mp3";
 import CriticalThinking from "../../CriticalThinking";
-import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/Asset 1.svg";
-import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/Asset 2.svg";
-import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/Asset 3.svg";
-import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/Asset 4.svg";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/2.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/3.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 46/SVG/4.svg";
 import wordJson from "../../../assets/json/cd26pg46-conversation_eng.json";
 import video from "../../../assets/videos/grade 5 unit 6 page 46.mp4";
 
