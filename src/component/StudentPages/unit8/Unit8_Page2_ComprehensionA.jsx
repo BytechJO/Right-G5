@@ -139,7 +139,7 @@ const Unit8_Page2_ComprehensionA = () => {
       </h5>
 
       {/* QUESTIONS */}
-      <div className="space-y-8 text-[18px]mt-10">
+      <div className="space-y-8 text-[18px] mt-10">
         {questions.map((question, i) => (
           <div
             key={i}
