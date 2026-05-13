@@ -119,7 +119,51 @@ const Unit8_Page5_Q1 = () => {
 
     setLocked(false);
   };
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+        ${width}
+        border-0
+        border-b
+        outline-none
+        bg-transparent
+        text-[18px]
+        font-semibold
+        text-[#6D2980]
 
+        ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+      `}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
   return (
     <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
@@ -151,309 +195,22 @@ const Unit8_Page5_Q1 = () => {
           }}
         >
           {wordBank.map((word, i) => {
-            const used = answers.some((a) => normalize(a) === normalize(word));
-
-            return (
-              <span
-                key={i}
-                style={{
-                  textDecoration: used ? "line-through" : "none",
-                }}
-              >
-                {word}
-              </span>
-            );
+            return <span key={i}>{word}</span>;
           })}
         </div>
 
         {/* PARAGRAPH */}
+        {/* PARAGRAPH */}
         <div className="text-[18px] leading-[3.3]">
-          There’s a great new{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[0]}
-              disabled={locked || result[0] === true}
-              onChange={(e) => handleChange(0, e.target.value)}
-              className={`
-                w-[180px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[0] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[0] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>{" "}
-          you can play with your friends. I{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[1]}
-              disabled={locked || result[1] === true}
-              onChange={(e) => handleChange(1, e.target.value)}
-              className={`
-                w-[130px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[1] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[1] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>{" "}
-          it at the toy store the other day. That toy store is sometimes my{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[2]}
-              disabled={locked || result[2] === true}
-              onChange={(e) => handleChange(2, e.target.value)}
-              className={`
-                w-[180px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[2] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[2] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>
+          There’s a great new {inputField(0, "w-[180px]")} you can play with
+          your friends. I {inputField(1, "w-[130px]")} it at the toy store the
+          other day. That toy store is sometimes my {inputField(2, "w-[180px]")}
           . I like to go there a lot to look at the games and play on the
-          computer. Anyway, you might{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[3]}
-              disabled={locked || result[3] === true}
-              onChange={(e) => handleChange(3, e.target.value)}
-              className={`
-                w-[170px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[3] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[3] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>{" "}
-          at how fun and inexpensive this game is. It’s all about climbing a
-          mountain, so it’s called On{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[4]}
-              disabled={locked || result[4] === true}
-              onChange={(e) => handleChange(4, e.target.value)}
-              className={`
-                w-[210px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[4] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[4] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>
-          . The board in the game has a bunch of people on it that{" "}
-          <span className="relative inline-block">
-            <input
-              type="text"
-              value={answers[5]}
-              disabled={locked || result[5] === true}
-              onChange={(e) => handleChange(5, e.target.value)}
-              className={`
-                w-[190px]
-                border-0
-                border-b
-                outline-none
-                bg-transparent
-                text-[18px]
-                font-semibold
-
-                ${
-                  result[5] === false
-                    ? "border-[#D1232A] text-[#6D2980]"
-                    : "border-black text-[#6D2980]"
-                }
-              `}
-            />
-
-            {result[5] === false && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  width: "20px",
-                  height: "20px",
-                  background: "#ef4444",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                ✕
-              </span>
-            )}
-          </span>{" "}
-          because that’s how you will see them when you get to the top of the
-          mountain.
+          computer. Anyway, you might {inputField(3, "w-[170px]")} at how fun
+          and inexpensive this game is. It’s all about climbing a mountain, so
+          it’s called On {inputField(4, "w-[210px]")}. The board in the game has
+          a bunch of people on it that {inputField(5, "w-[190px]")} because
+          that’s how you will see them when you get to the top of the mountain.
         </div>
       </div>
 
