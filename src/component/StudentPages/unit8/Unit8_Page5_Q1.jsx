@@ -1,228 +1,477 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from "react";
-import "./Unit8_Page5_Q1.css";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 6.svg";
-import img7 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 7.svg";
-import img8 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 68/Ex A 8.svg";
 
 const Unit8_Page5_Q1 = () => {
-  const [locked, setLocked] = useState(false);
-
-  const questions = [
-    {
-      id: 1,
-      image1: img1,
-      image2: img2,
-      correct: "✓",
-    },
-    { id: 2, image1: img3, image2: img4, correct: "✓" },
-    {
-      id: 3,
-      image1: img5,
-      image2: img6,
-      correct: "✗",
-    },
-    { id: 4, image1: img7, image2: img8, correct: "✗" },
+  const wordBank = [
+    "spotted",
+    "board game",
+    "look like ants",
+    "be shocked",
+    "Top of the World",
+    "second home",
   ];
 
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState([]);
+  const questions = [
+    "board game",
+    "spotted",
+    "second home",
+    "be shocked",
+    "Top of the World",
+    "look like ants",
+  ];
 
-  const selectAnswer = (id, value) => {
-    if (locked) return;
-    setAnswers({ ...answers, [id]: value });
-    setShowResult(false);
-  };
+  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
 
-  const showAnswers = () => {
-    const corrects = {};
-    questions.forEach((q) => {
-      corrects[q.id] = q.correct;
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-    setAnswers(corrects);
-    setShowResult([]);
-    setLocked(true);
   };
 
   const checkAnswers = () => {
     if (locked) return;
-    const isEmpty = questions.some((q) => !answers[q.id]);
-    if (isEmpty) {
-      ValidationAlert.info("Please choose ✓ or ✗ for all questions!");
+
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong",
-    );
-    setShowResult(results);
-    setLocked(true);
+    let correctCount = 0;
 
-    const correctCount = results.filter((r) => r === "correct").length;
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
     const total = questions.length;
-    const scoreMsg = `${correctCount} / ${total}`;
 
-    let color =
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const resultHTML = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
         <span style="color:${color}; font-weight:bold;">
-          Score: ${scoreMsg}
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(resultHTML);
-    else if (correctCount === 0) ValidationAlert.error(resultHTML);
-    else ValidationAlert.warning(resultHTML);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const resetAnswers = () => {
-    setAnswers({});
-    setShowResult([]);
+  const showAnswers = () => {
+    setAnswers([
+      "board game",
+      "spotted",
+      "second home",
+      "be shocked",
+      "Top of the World",
+      "look like ants",
+    ]);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
   return (
-    <>
-      <div
-        className="u8p5-wrapper"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Read and write.
+        </h5>
+
+        {/* WORD BOX */}
         <div
-          className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
+            width: "760px",
+            background: "#E9E1EC",
+            borderRadius: "14px",
+            padding: "16px 30px",
+            display: "grid",
+            gridTemplateColumns: "repeat(3,1fr)",
+            rowGap: "10px",
+            margin: "0 auto 35px auto",
+            fontSize: "18px",
           }}
         >
-          <h5 className="header-title-page8">
-            <span className="ex-A" style={{ marginRight: "10px" }}>
-              A
-            </span>{" "}
-            <span style={{ color: "#2e3192" }}>1</span> Do they both have the
-            same <span style={{ color: "#2e3192" }}>consonant blend</span>?
-            Write <span style={{ color: "#D52328" }}>✓</span> or{" "}
-            <span style={{ color: "#D52328" }}>✗</span>.
-          </h5>
+          {wordBank.map((word, i) => {
+            const used = answers.some((a) => normalize(a) === normalize(word));
 
-          <div className="grid grid-cols-4 gap-[30px] mt-5 u8p5-grid">
-            {questions.map((q, index) => (
-              <div
-                key={q.id}
-                className="u8p5-card p-4 bg-white flex flex-col items-center gap-3 relative"
+            return (
+              <span
+                key={i}
+                style={{
+                  textDecoration: used ? "line-through" : "none",
+                }}
               >
-                {/* رقم السؤال */}
-                <p className="w-full text-left text-[20px] u8p5-card-num">
-                  <span className="text-[darkblue] font-bold">{q.id}.</span>
-                </p>
+                {word}
+              </span>
+            );
+          })}
+        </div>
 
-                <div className="flex flex-col items-center gap-3.5">
-                  {/* الصور */}
-                  <div className="u8p5-images-box border-2 border-[#ff6b57] rounded-xl p-4 w-[200px]">
-                    <div className="flex">
-                      {/* الديف الأول */}
-                      <div className="u8p5-img-cell w-1/2 border-r-2 border-[#ff6b57] flex items-center justify-center h-[150px]">
-                        <img
-                          src={q.image1}
-                          alt=""
-                          style={{ height: "120px", objectFit: "contain" }}
-                        />
-                      </div>
+        {/* PARAGRAPH */}
+        <div className="text-[18px] leading-[3.3]">
+          There’s a great new{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[0]}
+              disabled={locked || result[0] === true}
+              onChange={(e) => handleChange(0, e.target.value)}
+              className={`
+                w-[180px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
 
-                      {/* الديف الثاني */}
-                      <div className="u8p5-img-cell w-1/2 flex items-center justify-center h-[150px]">
-                        <img
-                          src={q.image2}
-                          alt=""
-                          style={{ height: "120px", objectFit: "contain" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                ${
+                  result[0] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
 
-                  {/* الخيارات */}
-                  <div className="u8p5-opts-row flex gap-5">
-                    {/* ✓ */}
-                    <div className="relative">
-                      <div
-                        className={`u8p5-opt-btn w-[45px] h-[45px] border-2 border-[#ff6b57] rounded-md flex items-center justify-center cursor-pointer text-[22px] font-bold transition-all duration-150 hover:bg-[#ffe3df] ${
-                          answers[q.id] === "✓"
-                            ? "bg-[#2c5287] text-white"
-                            : "bg-white"
-                        }`}
-                        onClick={() => selectAnswer(q.id, "✓")}
-                      >
-                        ✓
-                      </div>
+            {result[0] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>{" "}
+          you can play with your friends. I{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[1]}
+              disabled={locked || result[1] === true}
+              onChange={(e) => handleChange(1, e.target.value)}
+              className={`
+                w-[130px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
 
-                      {showResult[index] === "wrong" &&
-                        answers[q.id] === "✓" && (
-                          <div className="u8p5-wrong-badge absolute -top-2.5 -right-2.5 w-[22px] h-[22px] rounded-full bg-red-500 text-white flex items-center justify-center text-[14px] font-bold border-2 border-white z-3">
-                            ✕
-                          </div>
-                        )}
-                    </div>
+                ${
+                  result[1] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
 
-                    {/* ✗ */}
-                    <div className="relative">
-                      <div
-                        className={`u8p5-opt-btn w-[45px] h-[45px] border-2 border-[#ff6b57] rounded-md flex items-center justify-center cursor-pointer text-[22px] font-bold transition-all duration-150 ${
-                          answers[q.id] === "✗"
-                            ? "bg-[#2c5287] text-white"
-                            : "bg-white hover:bg-[#ffe3df]"
-                        }`}
-                        onClick={() => selectAnswer(q.id, "✗")}
-                      >
-                        ✗
-                      </div>
+            {result[1] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>{" "}
+          it at the toy store the other day. That toy store is sometimes my{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[2]}
+              disabled={locked || result[2] === true}
+              onChange={(e) => handleChange(2, e.target.value)}
+              className={`
+                w-[180px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
 
-                      {showResult[index] === "wrong" &&
-                        answers[q.id] === "✗" && (
-                          <div className="u8p5-wrong-badge absolute -top-2.5 -right-2.5 w-[22px] h-[22px] rounded-full bg-red-500 text-white flex items-center justify-center text-[14px] font-bold border-2 border-white z-3">
-                            ✕
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                ${
+                  result[2] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
 
-          <div className="action-buttons-container">
-            <button onClick={resetAnswers} className="try-again-button">
-              Start Again ↻
-            </button>
-            <button
-              onClick={showAnswers}
-              className="show-answer-btn swal-continue"
-            >
-              Show Answer
-            </button>
-            <button onClick={checkAnswers} className="check-button2">
-              Check Answer ✓
-            </button>
-          </div>
+            {result[2] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>
+          . I like to go there a lot to look at the games and play on the
+          computer. Anyway, you might{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[3]}
+              disabled={locked || result[3] === true}
+              onChange={(e) => handleChange(3, e.target.value)}
+              className={`
+                w-[170px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
+
+                ${
+                  result[3] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
+
+            {result[3] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>{" "}
+          at how fun and inexpensive this game is. It’s all about climbing a
+          mountain, so it’s called On{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[4]}
+              disabled={locked || result[4] === true}
+              onChange={(e) => handleChange(4, e.target.value)}
+              className={`
+                w-[210px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
+
+                ${
+                  result[4] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
+
+            {result[4] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>
+          . The board in the game has a bunch of people on it that{" "}
+          <span className="relative inline-block">
+            <input
+              type="text"
+              value={answers[5]}
+              disabled={locked || result[5] === true}
+              onChange={(e) => handleChange(5, e.target.value)}
+              className={`
+                w-[190px]
+                border-0
+                border-b
+                outline-none
+                bg-transparent
+                text-[18px]
+                font-semibold
+
+                ${
+                  result[5] === false
+                    ? "border-[#D1232A] text-[#6D2980]"
+                    : "border-black text-[#6D2980]"
+                }
+              `}
+            />
+
+            {result[5] === false && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "-8px",
+                  right: "-8px",
+                  width: "20px",
+                  height: "20px",
+                  background: "#ef4444",
+                  color: "white",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  border: "2px solid white",
+                }}
+              >
+                ✕
+              </span>
+            )}
+          </span>{" "}
+          because that’s how you will see them when you get to the top of the
+          mountain.
         </div>
       </div>
-    </>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

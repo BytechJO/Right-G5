@@ -28,7 +28,7 @@ const Unit7_Page4_WritingB = () => {
       </h5>
 
       {/* CONTENT */}
-      <div className="space-y-10 text-[18px] mt10">
+      <div className="space-y-10 text-[18px] mt-10">
         {/* 1 */}
         <div className="flex items-center gap-3">
           <span>Lori said,</span>

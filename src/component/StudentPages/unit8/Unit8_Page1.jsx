@@ -1,232 +1,417 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 64.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 64.png";
 import "./Unit8_Page1.css";
-import Unit5_Page1_Read from "./Unit8_Pag1_Read";
-import Unit5_Page1_Vocab from "./Unit8_Page1_Vocab";
-import Unit5_Page1_find from "./Unit8_Page1_find";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U8/PG 64/cd36pg64-conversation.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import allunit3 from "../../../assets/audio/ClassBook/Unit 8/P 64/unit8-pg64-allunit.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/Unit 8/P 64/sound14.mp3";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U8/PG 64/cd37pg64-vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U8/PG 64/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U8/PG 64/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U8/PG 64/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U8/PG 64/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U8/PG 64/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U8/PG 64/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U8/PG 64/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U8/PG 64/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U8/PG 64/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U8/PG 64/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U8/PG 64/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U8/PG 64/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U8/PG 64/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U8/PG 64/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U8/PG 64/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U8/PG 64/sound16.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 64/SVG/1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 64/SVG/2.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 64/SVG/3.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 64/SVG/4.svg";
+import wordJson from "../../../assets/json/cd36pg64-conversation_eng.json";
+import video from "../../../assets/videos/grade 5 unit 8 page 64.mp4";
 
 const Unit8_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Tom",
+          text: "Hey, everyone! Those are the hot-air balloons! Do you think anyone is giving rides?",
+        },
+        {
+          speaker: "Helen",
+          text: "We could ask someone.",
+        },
+        {
+          speaker: "Harley",
+          text: "I’m shocked our parents said we could take a ride.",
+        },
+        {
+          speaker: "Stella",
+          text: "Wow, there’s a rainbow one over there. It’s beautiful!",
+        },
+        {
+          speaker: "Tom",
+          text: "Excuse me, sir. Is somebody giving hot-air balloon rides today?",
+        },
+      ],
+    },
+
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "Helen",
+          text: "What a view! Everyone down there looks like ants.",
+        },
+        {
+          speaker: "Tom",
+          text: "Someone has to get some pictures.",
+        },
+        {
+          speaker: "Stella",
+          text: "I brought my camera, so I’ll volunteer.",
+        },
+        {
+          speaker: "Helen",
+          text: "I feel like I’m on the top of the world! The landscape is beautiful up here.",
+        },
+      ],
+    },
+
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Harley",
+          text: "Is that your house, Tom? We’re about to fly over it.",
+        },
+        {
+          speaker: "Tom",
+          text: "Let me see. Yeah, that is my house! Oh, I recognize the lady out in front, my aunt Phyllis. Our house is her second home. She plays board games with me. She’s a pilot.",
+        },
+      ],
+    },
+
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Stella",
+          text: "Now, we are flying over my favorite mall. There are so many people there. It’s really crowded. It has a nice cinema.",
+        },
+        {
+          speaker: "Harley",
+          text: "Yes, let’s go there this weekend! Hey, do you think anyone can spot us?",
+        },
+        {
+          speaker: "Stella",
+          text: "I doubt it. Don’t lean too far out of the basket, Harley! Let’s see if we can find the park from up here!",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
     {
-      start: 0.08,
-      end: 8.68,
-      text: "Page 64, unit 8. At our grandparents' farm. Page 64, unit 8, vocabulary.",
+      start: 0.219,
+      end: 4.98,
+      text: "Page 64, Conversation. Listen and read, then say.",
     },
 
     {
-      start: 9.98,
-      end: 13.7,
-      text: "One, cottage. Two, tractor.",
+      start: 6.019,
+      end: 10.619,
+      text: "Hey, everyone. Those are the hot air balloons. Do you think anyone is giving rides?",
     },
 
     {
-      start: 14.72,
-      end: 16.219,
-      text: "Three, mill.",
+      start: 11.739,
+      end: 13.719,
+      text: "We could ask someone.",
     },
 
     {
-      start: 17.44,
-      end: 26.46,
-      text: "Four, barn. Five, horse. Six, dog. Seven, chick.",
+      start: 13.719,
+      end: 16.5,
+      text: "I'm shocked our parents said we could take a ride.",
     },
 
     {
-      start: 27.56,
-      end: 29.0,
-      text: "Eight, chicken.",
+      start: 17.539,
+      end: 21.879,
+      text: "Wow, there's a rainbow one over there. It's beautiful.",
     },
 
     {
-      start: 30.04,
-      end: 42.12,
-      text: "Nine, sheep. 10, fence. 11, wheat. 12, farmer. 13, cow.",
+      start: 21.879,
+      end: 25.559,
+      text: "Excuse me, sir. Is somebody giving hot air balloon rides today?",
     },
 
     {
-      start: 43.3,
-      end: 62.52,
-      text: "14, dog kennel. Page 64, listen and read along. E-S. Boxes, buses, brushes, sandwiches. Page 65, reading. Listen and read along. Helping out on the farm.",
+      start: 26.619,
+      end: 29.5,
+      text: "What a view. Everyone down there looks like ants.",
     },
 
     {
-      start: 63.92,
-      end: 102.02,
-      text: "Tom and his sister were visiting their grandparents for one week. They live on a farm. Tom and his sister like it because it reminds them of the past. The weather was sunny. It didn't rain the whole week. There are many animals on the farm. Tom and his sister helped their grandparents on the farm. Tom's sister fed the horses. Tom milked the cows and fed corn to the chickens. They watched their grandpa ride the tractor. Tom would like to ride on the tractor one day. Page 65, listen, read and repeat.",
+      start: 30.659,
+      end: 33.259,
+      text: "Someone has to get some pictures.",
     },
 
     {
-      start: 102.02,
-      end: 104.04,
-      text: "Where were you last week?",
+      start: 33.259,
+      end: 35.599,
+      text: "I brought my camera, so I'll volunteer.",
     },
 
     {
-      start: 104.04,
-      end: 104.9,
-      text: "I was on the farm.",
+      start: 36.719,
+      end: 42.0,
+      text: "I feel like I'm on the top of the world. The landscape is beautiful up here.",
     },
 
     {
-      start: 106.1,
-      end: 119.04,
-      text: "Page 65, listen and read along. G-R, P-R, B-R. Grandmother, green, present, prize, brown.",
+      start: 42.0,
+      end: 45.86,
+      text: "Is that your house, Tom? We're about to fly over it.",
+    },
+
+    {
+      start: 45.86,
+      end: 59.979,
+      text: "Let me see. Yeah, that is my house. Oh, I recognize the lady out in front, my Aunt Phyllis. Our house is her second home. She plays board games with me. She's a pilot.",
+    },
+
+    {
+      start: 59.979,
+      end: 69.719,
+      text: "Now we are flying over my favorite mall. There are so many people there. It's really crowded. It has a nice cinema.",
+    },
+
+    {
+      start: 69.72,
+      end: 75.199,
+      text: "Yes, let's go there this weekend. Hey, do you think anyone can spot us?",
+    },
+
+    {
+      start: 76.239,
+      end: 82.999,
+      text: "I doubt it. Don't lean too far out of the basket, Harley. Let's see if we can find the park from up here.",
+    },
+  ];
+  const captionTimings = [
+    [
+      captionsExample[1],
+      captionsExample[2],
+      captionsExample[3],
+      captionsExample[4],
+      captionsExample[5],
+    ],
+
+    [
+      captionsExample[6],
+      captionsExample[7],
+      captionsExample[8],
+      captionsExample[9],
+    ],
+
+    [captionsExample[10], captionsExample[11]],
+
+    [captionsExample[12], captionsExample[13], captionsExample[14]],
+  ];
+  const filteredSegments = wordJson.segments.slice(1);
+
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+      filteredSegments[3]?.words || [],
+      filteredSegments[4]?.words || [],
+    ],
+
+    [
+      filteredSegments[5]?.words || [],
+      filteredSegments[6]?.words || [],
+      filteredSegments[7]?.words || [],
+      filteredSegments[8]?.words || [],
+    ],
+
+    [filteredSegments[9]?.words || [], filteredSegments[10]?.words || []],
+
+    [
+      filteredSegments[11]?.words || [],
+      filteredSegments[12]?.words || [],
+      filteredSegments[13]?.words || [],
+    ],
+  ];
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+    sound16,
+  ];
+  const captionVoc = [
+    {
+      start: 0.399,
+      end: 4.94,
+      text: "Page 64, unit eight, vocabulary. Listen and repeat.",
+    },
+
+    {
+      start: 5.46,
+      end: 8.119,
+      text: "Find the words and expressions in the conversation above.",
+    },
+
+    {
+      start: 8.92,
+      end: 10.939,
+      text: "1. hot air balloon.",
+    },
+
+    {
+      start: 11.759,
+      end: 13.639,
+      text: "2. rainbow.",
+    },
+
+    {
+      start: 14.659,
+      end: 16.819,
+      text: "3. volunteer.",
+    },
+
+    {
+      start: 17.76,
+      end: 19.379,
+      text: "4. doubt.",
+    },
+
+    {
+      start: 20.399,
+      end: 22.379,
+      text: "5. landscape.",
+    },
+
+    {
+      start: 23.359,
+      end: 25.359,
+      text: "6. recognize.",
+    },
+
+    {
+      start: 26.239,
+      end: 28.019,
+      text: "7. pilot.",
+    },
+
+    {
+      start: 28.939,
+      end: 30.739,
+      text: "8. crowded.",
+    },
+
+    {
+      start: 31.699,
+      end: 33.539,
+      text: "9. lean.",
+    },
+
+    {
+      start: 34.239,
+      end: 36.699,
+      text: "10. be shocked.",
+    },
+
+    {
+      start: 37.559,
+      end: 40.079,
+      text: "11. looks like ants.",
+    },
+
+    {
+      start: 41.04,
+      end: 43.519,
+      text: "12. top of the world.",
+    },
+
+    {
+      start: 44.399,
+      end: 46.699,
+      text: "13. fly over.",
+    },
+
+    {
+      start: 47.759,
+      end: 50.619,
+      text: "14. her second home.",
+    },
+
+    {
+      start: 51.52,
+      end: 53.699,
+      text: "15. board games.",
+    },
+
+    {
+      start: 54.639,
+      end: 57.68,
+      text: "16. spot (noun).",
     },
   ];
 
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 45.4, y1: 16.5, sound: 1, isPrimary: true },
-    { x1: 28.47, y1: 15.59, x2: 52.17, y2: 27, sound: 1, isPrimary: false },
+  const wordTimingsVoc = [
+    { start: 8.92, end: 10.939 },
+    { start: 11.759, end: 13.639 },
+    { start: 14.659, end: 16.819 },
+    { start: 17.76, end: 19.379 },
+    { start: 20.399, end: 22.379 },
 
-    { x1: 35.9, y1: 50.8, sound: 2, isPrimary: true },
-    { x1: 34.07, y1: 50.5, x2: 59.26, y2: 60, sound: 2, isPrimary: false },
+    { start: 23.359, end: 25.359 },
+    { start: 26.239, end: 28.019 },
+    { start: 28.939, end: 30.739 },
+    { start: 31.699, end: 33.539 },
+    { start: 34.239, end: 36.699 },
 
-    { x1: 54.26, y1: 13, sound: 3, isPrimary: true },
+    { start: 37.559, end: 40.079 },
+    { start: 41.04, end: 43.519 },
+    { start: 44.399, end: 46.699 },
+    { start: 47.759, end: 50.619 },
+    { start: 51.52, end: 53.699 },
 
-    { x1: 74.87, y1: 35, sound: 4, isPrimary: true },
-    { x1: 67.25, y1: 28.98, x2: 92.67, y2: 39.98, sound: 4, isPrimary: false },
-
-    { x1: 71.13, y1: 47.8, sound: 5, isPrimary: true },
-
-    { x1: 86.4, y1: 53.3, sound: 6, isPrimary: true },
-
-    { x1: 82.5, y1: 75.8, sound: 7, isPrimary: true },
-    { x1: 86.89, y1: 76.53, x2: 94.86, y2: 80.6, sound: 7, isPrimary: false },
-
-    { x1: 65.4, y1: 54, sound: 8, isPrimary: true },
-
-    { x1: 84.6, y1: 57.4, sound: 9, isPrimary: true },
-
-    { x1: 50.5, y1: 62.3, sound: 10, isPrimary: true },
-
-    { x1: 27, y1: 35.76, sound: 11, isPrimary: true },
-    { x1: 22.9, y1: 35.24, x2: 33.45, y2: 43.37, sound: 11, isPrimary: false },
-
-    { x1: 34.4, y1: 33, sound: 12, isPrimary: true },
-    { x1: 30.44, y1: 27.12, x2: 33.24, y2: 33.89, sound: 12, isPrimary: false },
-
-    { x1: 78.8, y1: 59.1, sound: 13, isPrimary: true },
-    { x1: 68.57, y1: 62.83, x2: 90.33, y2: 72, sound: 13, isPrimary: false },
-
-    { x1: 88.8, y1: 44.2, sound: 14, isPrimary: true },
-    { x1: 87.1, y1: 45.57, x2: 97.66, y2: 50.3, sound: 14, isPrimary: false },
+    { start: 54.639, end: 57.68 },
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-    13: sound13,
-    14: sound14,
-  };
 
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
-
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit8-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -235,7 +420,7 @@ const Unit8_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -243,7 +428,18 @@ const Unit8_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allunit3} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={5}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                  video={video}
+                  imageWidth="300px"
+                />
               </div>,
             )
           }
@@ -254,14 +450,14 @@ const Unit8_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit8-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -271,25 +467,58 @@ const Unit8_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={8.3}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "hot air balloon",
+                    "rainbow",
+                    "volunteer",
+                    "doubt",
+                    "landscape",
+                    "recognize",
+                    "pilot",
+                    "crowded",
+                    "lean",
+                    "(be) shocked",
+                    "looks like ants",
+                    "top of the world",
+                    "fly over",
+                    "(her) second home",
+                    "board games",
+                    "spot (noun)",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit8-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -299,9 +528,9 @@ const Unit8_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_Vocab />
-              </>,
+              <CriticalThinking
+                title={"Why does Tom like his aunt Phyllis?"}
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -311,36 +540,9 @@ const Unit8_Page1 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit8-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit5_Page1_Read />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>

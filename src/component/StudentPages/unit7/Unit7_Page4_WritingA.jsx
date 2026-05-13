@@ -83,9 +83,9 @@ const Unit7_Page4_WritingA = () => {
   };
 
   // check
-  // check
   const handleCheck = () => {
     if (locked) return;
+
     let score = 0;
 
     let hasMissingQuotes = false;
@@ -96,8 +96,8 @@ const Unit7_Page4_WritingA = () => {
     paragraphs.forEach((paragraph, i) => {
       const selected = [...selectedQuotes[i]].sort((a, b) => a - b);
 
-      // لازم يحط كل الكوتيشن
-      if (selected.length !== paragraph.quotes.length) {
+      // إذا أقل من المطلوب فقط
+      if (selected.length < paragraph.quotes.length) {
         newErrors[i] = false;
         newLocked[i] = false;
 
@@ -119,13 +119,18 @@ const Unit7_Page4_WritingA = () => {
       newLocked[i] = isCorrect;
     });
 
-    setErrors(newErrors);
-    setCorrectLocked(newLocked);
-
+    // إذا في نقص لا تظهر ✕
     if (hasMissingQuotes) {
+      setErrors([false, false, false, false, false]);
+
       ValidationAlert.info("Please complete all quotation marks.");
+
       return;
     }
+
+    setErrors(newErrors);
+
+    setCorrectLocked(newLocked);
 
     const total = paragraphs.length;
 
@@ -141,6 +146,7 @@ const Unit7_Page4_WritingA = () => {
 
     if (score === total) {
       setLocked(true);
+
       ValidationAlert.success(msg);
     } else if (score === 0) {
       ValidationAlert.error(msg);

@@ -1,4 +1,4 @@
-import page24 from "../../../assets/imgs/pages/classbook/Right 3 Unit 8 At Our Grandparents Farm Folder/Page 74.png";
+import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 74.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit8_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/Unit 8/P 74/unit8-pg74-readingall.mp3";

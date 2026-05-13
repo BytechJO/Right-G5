@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import grammer_u1 from "../../../assets/audio/ClassBook/U6/PG 48/cd29pg48-grammar.mp3";
+import grammer_u1 from "../../../assets/audio/ClassBook/U6/PG 51/cd30pg51.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit6_Page6_Q1 = () => {
   const questions = [
@@ -29,8 +29,18 @@ const Unit6_Page6_Q1 = () => {
   const captions = [
     {
       start: 0.099,
-      end: 10.68,
-      text: "Page 48, grammar, modal verbs. I might go to the concert. Shall we go to the concert? James shouldn't take the backpack. Should James take the backpack?",
+      end: 6.72,
+      text: "Page 51, write activities, exercise D. Listen to the story and then answer the questions.",
+    },
+    {
+      start: 8,
+      end: 10.8,
+      text: "Danny and his friend Sam go out together every month.",
+    },
+    {
+      start: 12.68,
+      end: 44.72,
+      text: "This month, Danny wants to go to the movies. We can go to the cinema, says Danny. I'd rather go to the carnival, says Sam. Okay, let's go to the carnival, says Danny. At the carnival, Danny and Sam find lots of fun rides. Sam says, I'd like to try out the roller coaster. Shall we try this ride together? Danny looks at the roller coaster. Danny is afraid of heights. He says, No way. I'd rather go on a less scary ride. This one is not my cup of tea. You go ahead. I'll wait for you here.",
     },
   ];
   const [answers, setAnswers] = useState(["", "", "", ""]);
@@ -150,7 +160,7 @@ const Unit6_Page6_Q1 = () => {
         <QuestionAudioPlayer
           src={grammer_u1}
           captions={captions}
-          stopAtSecond={1.8}
+          stopAtSecond={7.2}
         />
         {/* BIG CONTAINER */}
         <div className="flex flex-col gap-4">
