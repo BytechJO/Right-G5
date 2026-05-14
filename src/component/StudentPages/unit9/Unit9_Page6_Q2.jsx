@@ -1,223 +1,317 @@
-import React, { useState } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import WrongMark from "../../WrongMark";
+import React, { useState, useRef } from "react";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex E 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex E 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex E 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex E 4.svg";
-import Button from "../../Button";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 8.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 10.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 17.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 18.svg";
+
+import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Unit9_Page6_Q2 = () => {
-  const items = [
-    {
-      img: img1,
-      q: "Was he at the zoo?",
-      options: ["Yes, he was.", "No, he wasn’t."],
-      correct: "No, he wasn’t.",
-    },
-    {
-      q: "Was she in the restaurant?",
-      img: img2,
-      options: ["Yes, she was.", "No, she wasn’t."],
-      correct: "Yes, she was.",
-    },
-    {
-      q: "Was she at the bakery?",
-      img: img3,
-      options: ["Yes, she was.", "No, she wasn’t."],
-      correct: "No, she wasn’t.",
-    },
-    {
-      q: "Where is she now?",
-      img: img4,
-      options: ["She is on the train.", "She is in the computer lab."],
-      correct: "She is in the computer lab.",
-    },
+  const questions = [
+    "If it snows, we’ll have a snowball fight.",
+    "If she reads the book, she’ll get an A on her paper.",
+    "When Helen calls her friend, they will be able to play together.",
+    "If the man fixes the tire on his bike, he will be able to ride the bike.",
   ];
 
-  const [selected, setSelected] = useState(Array(items.length).fill(""));
-  const [answers, setAnswers] = useState(Array(items.length).fill(""));
+  const [answers, setAnswers] = useState([
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+  ]);
+
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
 
-  const chooseOption = (i, value) => {
-    if (locked) return;
+  const inputRefs = useRef([]);
 
-    const newSelected = [...selected];
-    newSelected[i] = value;
-    setSelected(newSelected);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    const newAnswers = [...answers];
-    newAnswers[i] = items[i].start + value + items[i].end;
-    setAnswers(newAnswers);
-  };
+  const handleChange = (qIndex, lineIndex, value) => {
+    if (locked || result[qIndex] === true) return;
 
-  const resetAll = () => {
-    setSelected(Array(items.length).fill(""));
-    setAnswers(Array(items.length).fill(""));
-    setLocked(false);
-    setShowResult(false);
-  };
+    const updated = [...answers];
 
-  const showAnswers = () => {
-    setSelected(items.map((i) => i.correct));
-    setAnswers(items.map((i) => i.start + i.correct + i.end));
-    setLocked(true);
+    updated[qIndex][lineIndex] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[qIndex] = undefined;
+
+      return copy;
+    });
+
+    // ينزل تلقائي للسطر الثاني
+    if (lineIndex === 0 && value.length >= 35) {
+      inputRefs.current[qIndex]?.focus();
+    }
   };
 
   const checkAnswers = () => {
     if (locked) return;
 
-    if (selected.includes("")) {
-      ValidationAlert.info();
+    const hasEmpty = answers.some((group) =>
+      group.every((line) => !line.trim()),
+    );
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    items.forEach((item, i) => {
-      if (selected[i] === item.correct) {
-        score++;
-      }
+    const newResults = answers.map((group, i) => {
+      // اعتبر الانبوتين كأنهم input واحد
+      const combined = `${group[0]} ${group[1]}`;
+
+      const ok = normalize(combined) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = items.length;
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-  <div style="font-size:20px;text-align:center;">
-    <span style="color:${color}; font-weight:bold;">
-      Score: ${score} / ${total}
-    </span>
-  </div>
-`;
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
 
-    setLocked(true);
-    setShowResult(true); // 🔥 مهم
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
+  const showAnswers = () => {
+    setAnswers([
+      ["If it snows,", "we’ll have a snowball fight."],
+      ["If she reads the book,", "she’ll get an A on her paper."],
+      ["When Helen calls her friend,", "they will be able to play together."],
+      [
+        "If the man fixes the tire on his bike,",
+        "he will be able to ride the bike.",
+      ],
+    ]);
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers([
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+    ]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  const lineInput = (qIndex, lineIndex, width) => (
+    <span className="relative inline-block">
+      <input
+        ref={lineIndex === 1 ? (el) => (inputRefs.current[qIndex] = el) : null}
+        type="text"
+        value={answers[qIndex][lineIndex]}
+        disabled={locked || result[qIndex] === true}
+        onChange={(e) => handleChange(qIndex, lineIndex, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[qIndex] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {lineIndex === 1 && result[qIndex] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
             E
           </span>
-          Read, look, and circle
+          Look at each pair of pictures, and then write a sentence about them.
         </h5>
 
-        <div className="grid grid-cols-2 gap-y-5 gap-x-20 mt-10 mb-10">
-          {items.map((item, i) => (
-            <div
-              key={i}
+        {/* TOP ROW */}
+        <div className="flex gap-10 mb-12">
+          {/* IMAGE 1 */}
+          <div>
+            <img
+              src={img1}
+              alt=""
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                position: "relative",
+                width: "300px",
+                height: "auto",
               }}
-            >
-              {/* الرقم + السؤال */}
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <span style={{ fontWeight: "bold", fontSize: "18px" }}>
-                  {i + 1}.
-                </span>
-                <span style={{ fontSize: "18px" }}>{item.q}</span>
-              </div>
+            />
 
-              {/* الصورة */}
-              <img
-                src={item.img}
-                alt=""
-                style={{
-                  width: "300px",
-                  height: "auto",
-                  border: "2px solid orange",
-                  borderRadius: 10,
-                  alignSelf: "flex-start",
-                }}
-              />
+            <div className="mt-5 flex items-start gap-4">
+              <span className="font-bold text-[18px]">1</span>
 
-              {/* الخيارات */}
-              <div className="flex flex-col gap-3 text-[20px]">
-                {item.options.map((opt, idx) => (
-                  <div key={idx} style={{ position: "relative" }}>
-                    <span
-                      onClick={() => chooseOption(i, opt)}
-                      style={{
-                        display: "inline-block",
-                        padding: "6px 14px",
-                        borderRadius: "20px",
-                        cursor: "pointer",
-                        minWidth: "90px",
+              <div className="flex flex-col gap-4">
+                {lineInput(0, 0, "w-[320px]")}
 
-                        border:
-                          selected[i] === opt
-                            ? locked
-                              ? opt === item.correct
-                                ? "2px solid #1C398E"
-                                : "2px solid #ef4444"
-                              : "2px solid #1C398E"
-                            : "2px solid transparent",
-                      }}
-                    >
-                      {opt}
-                    </span>
-
-                    {/* ❌ */}
-                    {showResult &&
-                      selected[i] === opt &&
-                      opt !== item.correct && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "6px",
-                            right: "50%",
-                            transform: "translateY(-50%)",
-                            width: "22px",
-                            height: "22px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            border: "2px solid white",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          ✕
-                        </div>
-                      )}
-                  </div>
-                ))}
+                {lineInput(0, 1, "w-[320px]")}
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* IMAGE 2 */}
+          <div>
+            <img
+              src={img2}
+              alt=""
+              style={{
+                width: "300px",
+                height: "auto",
+              }}
+            />
+
+            <div className="mt-5 flex items-start gap-4">
+              <span className="font-bold text-[18px]">2</span>
+
+              <div className="flex flex-col gap-4">
+                {lineInput(1, 0, "w-[320px]")}
+
+                {lineInput(1, 1, "w-[320px]")}
+              </div>
+            </div>
+          </div>
         </div>
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={resetAll}
-          checkAnswers={checkAnswers}
-        />
+
+        {/* BOTTOM ROW */}
+        <div className="flex gap-10 mb-10">
+          {/* IMAGE 3 */}
+          <div>
+            <img
+              src={img3}
+              alt=""
+              style={{
+                width: "300px",
+                height: "auto",
+              }}
+            />
+
+            <div className="mt-5 flex items-start gap-4">
+              <span className="font-bold text-[18px]">3</span>
+
+              <div className="flex flex-col gap-4">
+                {lineInput(2, 0, "w-[320px]")}
+
+                {lineInput(2, 1, "w-[320px]")}
+              </div>
+            </div>
+          </div>
+
+          {/* IMAGE 4 */}
+          <div>
+            <img
+              src={img4}
+              alt=""
+              style={{
+                width: "300px",
+                height: "auto",
+              }}
+            />
+
+            <div className="mt-5 flex items-start gap-4">
+              <span className="font-bold text-[18px]">4</span>
+
+              <div className="flex flex-col gap-4">
+                {lineInput(3, 0, "w-[320px]")}
+
+                {lineInput(3, 1, "w-[320px]")}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

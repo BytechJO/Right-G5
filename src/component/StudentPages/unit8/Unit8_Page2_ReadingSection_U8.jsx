@@ -5,7 +5,7 @@ import ComprehensionB from "./Unit8_Page2_ComprehensionB";
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U8/PG 65/cd38pg65-reading.mp3";
 
-const ReadingSection_U7 = () => {
+const ReadingSection_U8 = () => {
   const paragraphs = [
     <>
       (<span className="text-[#1E88E5]">continued from Unit 7</span>)
@@ -125,4 +125,4 @@ const ReadingSection_U7 = () => {
   );
 };
 
-export default ReadingSection_U7;
+export default ReadingSection_U8;

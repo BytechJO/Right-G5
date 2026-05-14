@@ -257,11 +257,11 @@ export const lessons = [
   { component: Review8_Page2_Q2, unit: 8, isReview: true, lastOfUnit: true }, //87
 
   //unit9
-  { component: Unit9_Page5_Q1, unit: 9 }, //84
-  { component: Unit9_Page5_Q2, unit: 9 }, //85
-  { component: Unit9_Page5_Q3, unit: 9 }, //86
-  { component: Unit9_Page6_Q1, unit: 9 }, //87
-  { component: Unit9_Page6_Q2, unit: 9, lastOfUnit: true }, //88
+  { component: Unit9_Page5_Q1, unit: 9 }, //88
+  { component: Unit9_Page5_Q2, unit: 9 }, //89
+  { component: Unit9_Page5_Q3, unit: 9 }, //90
+  { component: Unit9_Page6_Q1, unit: 9 }, //91
+  { component: Unit9_Page6_Q2, unit: 9, lastOfUnit: true }, //92
 
   //unit10
   { component: Unit10_Page5_Q1, unit: 10 }, //89

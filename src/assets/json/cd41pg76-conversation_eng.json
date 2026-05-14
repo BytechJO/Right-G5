@@ -1,0 +1,906 @@
+{
+  "language_code": "eng",
+  "segments": [
+    {
+      "text": "Page 76, Conversation. Listen and read, then say. ",
+      "start_time": 0.179,
+      "end_time": 6.139,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.179,
+          "end_time": 0.5
+        },
+        {
+          "text": " ",
+          "start_time": 0.5,
+          "end_time": 0.599
+        },
+        {
+          "text": "76,",
+          "start_time": 0.599,
+          "end_time": 1.259
+        },
+        {
+          "text": " ",
+          "start_time": 1.259,
+          "end_time": 1.419
+        },
+        {
+          "text": "Conversation.",
+          "start_time": 1.419,
+          "end_time": 2.159
+        },
+        {
+          "text": " ",
+          "start_time": 2.159,
+          "end_time": 2.7
+        },
+        {
+          "text": "Listen",
+          "start_time": 2.7,
+          "end_time": 3.079
+        },
+        {
+          "text": " ",
+          "start_time": 3.079,
+          "end_time": 3.319
+        },
+        {
+          "text": "and",
+          "start_time": 3.319,
+          "end_time": 3.459
+        },
+        {
+          "text": " ",
+          "start_time": 3.459,
+          "end_time": 3.559
+        },
+        {
+          "text": "read,",
+          "start_time": 3.559,
+          "end_time": 3.859
+        },
+        {
+          "text": " ",
+          "start_time": 3.859,
+          "end_time": 4.339
+        },
+        {
+          "text": "then",
+          "start_time": 4.339,
+          "end_time": 4.639
+        },
+        {
+          "text": " ",
+          "start_time": 4.639,
+          "end_time": 4.92
+        },
+        {
+          "text": "say.",
+          "start_time": 4.92,
+          "end_time": 5.199
+        },
+        {
+          "text": " ",
+          "start_time": 5.199,
+          "end_time": 6.139
+        }
+      ]
+    },
+    {
+      "text": "Hello?",
+      "start_time": 6.139,
+      "end_time": 6.46,
+      "speaker": {
+        "id": "speaker_paul",
+        "name": "Paul"
+      },
+      "words": [
+        {
+          "text": "Hello?",
+          "start_time": 6.139,
+          "end_time": 6.46
+        },
+        {
+          "text": " ",
+          "start_time": 6.46,
+          "end_time": 6.46
+        }
+      ]
+    },
+    {
+      "text": "Hi, Paul. This is Victor. I'm bored today. If you finish studying, will you play soccer with me this afternoon?",
+      "start_time": 7.44,
+      "end_time": 14.659,
+      "speaker": {
+        "id": "speaker_victor",
+        "name": "Victor"
+      },
+      "words": [
+        {
+          "text": "Hi,",
+          "start_time": 7.44,
+          "end_time": 7.559
+        },
+        {
+          "text": " ",
+          "start_time": 7.559,
+          "end_time": 7.679
+        },
+        {
+          "text": "Paul.",
+          "start_time": 7.679,
+          "end_time": 7.94
+        },
+        {
+          "text": " ",
+          "start_time": 7.94,
+          "end_time": 8.279
+        },
+        {
+          "text": "This",
+          "start_time": 8.279,
+          "end_time": 8.42
+        },
+        {
+          "text": " ",
+          "start_time": 8.42,
+          "end_time": 8.479
+        },
+        {
+          "text": "is",
+          "start_time": 8.479,
+          "end_time": 8.559
+        },
+        {
+          "text": " ",
+          "start_time": 8.559,
+          "end_time": 8.659
+        },
+        {
+          "text": "Victor.",
+          "start_time": 8.659,
+          "end_time": 9.059
+        },
+        {
+          "text": " ",
+          "start_time": 9.059,
+          "end_time": 9.659
+        },
+        {
+          "text": "I'm",
+          "start_time": 9.659,
+          "end_time": 9.8
+        },
+        {
+          "text": " ",
+          "start_time": 9.8,
+          "end_time": 9.88
+        },
+        {
+          "text": "bored",
+          "start_time": 9.88,
+          "end_time": 10.139
+        },
+        {
+          "text": " ",
+          "start_time": 10.139,
+          "end_time": 10.179
+        },
+        {
+          "text": "today.",
+          "start_time": 10.179,
+          "end_time": 10.5
+        },
+        {
+          "text": " ",
+          "start_time": 10.5,
+          "end_time": 11.019
+        },
+        {
+          "text": "If",
+          "start_time": 11.019,
+          "end_time": 11.119
+        },
+        {
+          "text": " ",
+          "start_time": 11.119,
+          "end_time": 11.159
+        },
+        {
+          "text": "you",
+          "start_time": 11.159,
+          "end_time": 11.259
+        },
+        {
+          "text": " ",
+          "start_time": 11.259,
+          "end_time": 11.319
+        },
+        {
+          "text": "finish",
+          "start_time": 11.319,
+          "end_time": 11.579
+        },
+        {
+          "text": " ",
+          "start_time": 11.579,
+          "end_time": 11.739
+        },
+        {
+          "text": "studying,",
+          "start_time": 11.739,
+          "end_time": 12.259
+        },
+        {
+          "text": " ",
+          "start_time": 12.259,
+          "end_time": 12.46
+        },
+        {
+          "text": "will",
+          "start_time": 12.46,
+          "end_time": 12.619
+        },
+        {
+          "text": " ",
+          "start_time": 12.619,
+          "end_time": 12.659
+        },
+        {
+          "text": "you",
+          "start_time": 12.659,
+          "end_time": 12.719
+        },
+        {
+          "text": " ",
+          "start_time": 12.719,
+          "end_time": 12.799
+        },
+        {
+          "text": "play",
+          "start_time": 12.799,
+          "end_time": 12.96
+        },
+        {
+          "text": " ",
+          "start_time": 12.96,
+          "end_time": 13.099
+        },
+        {
+          "text": "soccer",
+          "start_time": 13.099,
+          "end_time": 13.42
+        },
+        {
+          "text": " ",
+          "start_time": 13.42,
+          "end_time": 13.5
+        },
+        {
+          "text": "with",
+          "start_time": 13.5,
+          "end_time": 13.639
+        },
+        {
+          "text": " ",
+          "start_time": 13.639,
+          "end_time": 13.719
+        },
+        {
+          "text": "me",
+          "start_time": 13.719,
+          "end_time": 13.799
+        },
+        {
+          "text": " ",
+          "start_time": 13.799,
+          "end_time": 13.879
+        },
+        {
+          "text": "this",
+          "start_time": 13.88,
+          "end_time": 14.039
+        },
+        {
+          "text": " ",
+          "start_time": 14.039,
+          "end_time": 14.119
+        },
+        {
+          "text": "afternoon?",
+          "start_time": 14.119,
+          "end_time": 14.659
+        }
+      ]
+    },
+    {
+      "text": "I would love to go if there's a game today. Is the soccer club meeting at the school?",
+      "start_time": 15.539,
+      "end_time": 20.119,
+      "speaker": {
+        "id": "speaker_paul",
+        "name": "Paul"
+      },
+      "words": [
+        {
+          "text": "I",
+          "start_time": 15.539,
+          "end_time": 15.579
+        },
+        {
+          "text": " ",
+          "start_time": 15.579,
+          "end_time": 15.619
+        },
+        {
+          "text": "would",
+          "start_time": 15.619,
+          "end_time": 15.799
+        },
+        {
+          "text": " ",
+          "start_time": 15.799,
+          "end_time": 15.859
+        },
+        {
+          "text": "love",
+          "start_time": 15.859,
+          "end_time": 16.02
+        },
+        {
+          "text": " ",
+          "start_time": 16.02,
+          "end_time": 16.059
+        },
+        {
+          "text": "to",
+          "start_time": 16.059,
+          "end_time": 16.139
+        },
+        {
+          "text": " ",
+          "start_time": 16.139,
+          "end_time": 16.199
+        },
+        {
+          "text": "go",
+          "start_time": 16.199,
+          "end_time": 16.299
+        },
+        {
+          "text": " ",
+          "start_time": 16.299,
+          "end_time": 16.34
+        },
+        {
+          "text": "if",
+          "start_time": 16.34,
+          "end_time": 16.5
+        },
+        {
+          "text": " ",
+          "start_time": 16.5,
+          "end_time": 16.539
+        },
+        {
+          "text": "there's",
+          "start_time": 16.539,
+          "end_time": 16.719
+        },
+        {
+          "text": " ",
+          "start_time": 16.719,
+          "end_time": 16.759
+        },
+        {
+          "text": "a",
+          "start_time": 16.76,
+          "end_time": 16.779
+        },
+        {
+          "text": " ",
+          "start_time": 16.779,
+          "end_time": 16.899
+        },
+        {
+          "text": "game",
+          "start_time": 16.899,
+          "end_time": 17.119
+        },
+        {
+          "text": " ",
+          "start_time": 17.119,
+          "end_time": 17.219
+        },
+        {
+          "text": "today.",
+          "start_time": 17.219,
+          "end_time": 17.559
+        },
+        {
+          "text": " ",
+          "start_time": 17.559,
+          "end_time": 18.0
+        },
+        {
+          "text": "Is",
+          "start_time": 18.0,
+          "end_time": 18.139
+        },
+        {
+          "text": " ",
+          "start_time": 18.139,
+          "end_time": 18.199
+        },
+        {
+          "text": "the",
+          "start_time": 18.199,
+          "end_time": 18.299
+        },
+        {
+          "text": " ",
+          "start_time": 18.299,
+          "end_time": 18.379
+        },
+        {
+          "text": "soccer",
+          "start_time": 18.379,
+          "end_time": 18.68
+        },
+        {
+          "text": " ",
+          "start_time": 18.68,
+          "end_time": 18.719
+        },
+        {
+          "text": "club",
+          "start_time": 18.719,
+          "end_time": 18.939
+        },
+        {
+          "text": " ",
+          "start_time": 18.939,
+          "end_time": 18.999
+        },
+        {
+          "text": "meeting",
+          "start_time": 19.0,
+          "end_time": 19.26
+        },
+        {
+          "text": " ",
+          "start_time": 19.26,
+          "end_time": 19.34
+        },
+        {
+          "text": "at",
+          "start_time": 19.34,
+          "end_time": 19.479
+        },
+        {
+          "text": " ",
+          "start_time": 19.479,
+          "end_time": 19.52
+        },
+        {
+          "text": "the",
+          "start_time": 19.52,
+          "end_time": 19.6
+        },
+        {
+          "text": " ",
+          "start_time": 19.6,
+          "end_time": 19.719
+        },
+        {
+          "text": "school?",
+          "start_time": 19.719,
+          "end_time": 20.119
+        }
+      ]
+    },
+    {
+      "text": "Exactly. If I come to get you, will you be ready by 3:00?",
+      "start_time": 21.159,
+      "end_time": 25.219,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Exactly.", "start_time": 21.159, "end_time": 21.84 },
+        { "text": "If", "start_time": 22.42, "end_time": 22.52 },
+        { "text": "I", "start_time": 22.619, "end_time": 22.68 },
+        { "text": "come", "start_time": 22.739, "end_time": 22.879 },
+        { "text": "to", "start_time": 22.939, "end_time": 23.019 },
+        { "text": "get", "start_time": 23.079, "end_time": 23.239 },
+        { "text": "you,", "start_time": 23.319, "end_time": 23.42 },
+        { "text": "will", "start_time": 23.559, "end_time": 23.68 },
+        { "text": "you", "start_time": 23.739, "end_time": 23.819 },
+        { "text": "be", "start_time": 23.879, "end_time": 23.999 },
+        { "text": "ready", "start_time": 24.059, "end_time": 24.26 },
+        { "text": "by", "start_time": 24.319, "end_time": 24.479 },
+        { "text": "3:00?", "start_time": 24.659, "end_time": 25.219 }
+      ]
+    },
+    {
+      "text": "Yes, that'll work. Why don't we call Mark and Joe as well? Could you give Mark a ring, and I'll ring Joe?",
+      "start_time": 26.159,
+      "end_time": 32.04,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Yes,", "start_time": 26.159, "end_time": 26.399 },
+        { "text": "that'll", "start_time": 26.559, "end_time": 26.84 },
+        { "text": "work.", "start_time": 26.899, "end_time": 27.159 },
+        { "text": "Why", "start_time": 27.439, "end_time": 27.539 },
+        { "text": "don't", "start_time": 27.579, "end_time": 27.699 },
+        { "text": "we", "start_time": 27.739, "end_time": 27.859 },
+        { "text": "call", "start_time": 27.939, "end_time": 28.099 },
+        { "text": "Mark", "start_time": 28.18, "end_time": 28.359 },
+        { "text": "and", "start_time": 28.399, "end_time": 28.479 },
+        { "text": "Joe", "start_time": 28.579, "end_time": 28.719 },
+        { "text": "as", "start_time": 28.76, "end_time": 28.879 },
+        { "text": "well?", "start_time": 28.939, "end_time": 29.179 },
+        { "text": "Could", "start_time": 29.619, "end_time": 29.719 },
+        { "text": "you", "start_time": 29.76, "end_time": 29.819 },
+        { "text": "give", "start_time": 29.879, "end_time": 30.0 },
+        { "text": "Mark", "start_time": 30.119, "end_time": 30.34 },
+        { "text": "a", "start_time": 30.399, "end_time": 30.459 },
+        { "text": "ring,", "start_time": 30.539, "end_time": 30.819 },
+        { "text": "and", "start_time": 30.92, "end_time": 31.039 },
+        { "text": "I'll", "start_time": 31.079, "end_time": 31.279 },
+        { "text": "ring", "start_time": 31.359, "end_time": 31.579 },
+        { "text": "Joe?", "start_time": 31.799, "end_time": 32.04 }
+      ]
+    },
+    {
+      "text": "Hi, Mark. What's up?",
+      "start_time": 32.939,
+      "end_time": 33.979,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Hi,", "start_time": 32.939, "end_time": 33.059 },
+        { "text": "Mark.", "start_time": 33.139, "end_time": 33.419 },
+        { "text": "What's", "start_time": 33.5, "end_time": 33.7 },
+        { "text": "up?", "start_time": 33.799, "end_time": 33.979 }
+      ]
+    },
+    {
+      "text": "Not much. My family and I are relaxing at the pool today.",
+      "start_time": 34.939,
+      "end_time": 38.779,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Not", "start_time": 34.939, "end_time": 35.119 },
+        { "text": "much.", "start_time": 35.239, "end_time": 35.52 },
+        { "text": "My", "start_time": 35.86, "end_time": 36.0 },
+        { "text": "family", "start_time": 36.059, "end_time": 36.36 },
+        { "text": "and", "start_time": 36.419, "end_time": 36.52 },
+        { "text": "I", "start_time": 36.86, "end_time": 37.02 },
+        { "text": "are", "start_time": 37.099, "end_time": 37.219 },
+        { "text": "relaxing", "start_time": 37.279, "end_time": 37.819 },
+        { "text": "at", "start_time": 37.86, "end_time": 37.939 },
+        { "text": "the", "start_time": 37.979, "end_time": 38.079 },
+        { "text": "pool", "start_time": 38.139, "end_time": 38.36 },
+        { "text": "today.", "start_time": 38.419, "end_time": 38.779 }
+      ]
+    },
+    {
+      "text": "Ah, that sounds nice. Hey, if Paul and I get a game going today at 3:00, will you join us?",
+      "start_time": 39.7,
+      "end_time": 45.839,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Ah,", "start_time": 39.7, "end_time": 39.859 },
+        { "text": "that", "start_time": 39.939, "end_time": 40.119 },
+        { "text": "sounds", "start_time": 40.2, "end_time": 40.439 },
+        { "text": "nice.", "start_time": 40.52, "end_time": 40.819 },
+        { "text": "Hey,", "start_time": 41.259, "end_time": 41.419 },
+        { "text": "if", "start_time": 41.719, "end_time": 41.819 },
+        { "text": "Paul", "start_time": 41.979, "end_time": 42.36 },
+        { "text": "and", "start_time": 42.439, "end_time": 42.54 },
+        { "text": "I", "start_time": 42.739, "end_time": 42.839 },
+        { "text": "get", "start_time": 42.879, "end_time": 42.979 },
+        { "text": "a", "start_time": 43.04, "end_time": 43.099 },
+        { "text": "game", "start_time": 43.159, "end_time": 43.36 },
+        { "text": "going", "start_time": 43.419, "end_time": 43.68 },
+        { "text": "today", "start_time": 43.719, "end_time": 44.02 },
+        { "text": "at", "start_time": 44.099, "end_time": 44.18 },
+        { "text": "3:00,", "start_time": 44.559, "end_time": 44.68 },
+        { "text": "will", "start_time": 45.0, "end_time": 45.139 },
+        { "text": "you", "start_time": 45.18, "end_time": 45.279 },
+        { "text": "join", "start_time": 45.34, "end_time": 45.52 },
+        { "text": "us?", "start_time": 45.599, "end_time": 45.839 }
+      ]
+    },
+    {
+      "text": "I'd love to, but I have an appointment. I will get my braces off today.",
+      "start_time": 46.879,
+      "end_time": 51.219,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "I'd", "start_time": 46.879, "end_time": 47.059 },
+        { "text": "love", "start_time": 47.159, "end_time": 47.36 },
+        { "text": "to,", "start_time": 47.419, "end_time": 47.639 },
+        { "text": "but", "start_time": 47.719, "end_time": 48.219 },
+        { "text": "I", "start_time": 48.36, "end_time": 48.379 },
+        { "text": "have", "start_time": 48.439, "end_time": 48.559 },
+        { "text": "an", "start_time": 48.599, "end_time": 48.639 },
+        { "text": "appointment.", "start_time": 48.7, "end_time": 49.18 },
+        { "text": "I", "start_time": 49.659, "end_time": 49.7 },
+        { "text": "will", "start_time": 49.779, "end_time": 49.899 },
+        { "text": "get", "start_time": 49.939, "end_time": 50.059 },
+        { "text": "my", "start_time": 50.119, "end_time": 50.239 },
+        { "text": "braces", "start_time": 50.299, "end_time": 50.68 },
+        { "text": "off", "start_time": 50.739, "end_time": 50.879 },
+        { "text": "today.", "start_time": 50.939, "end_time": 51.219 }
+      ]
+    },
+    {
+      "text": "Hey, that's great news. Congratulations. If you finish in time, will you come to the stadium?",
+      "start_time": 52.059,
+      "end_time": 57.399,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Hey,", "start_time": 52.059, "end_time": 52.279 },
+        { "text": "that's", "start_time": 52.36, "end_time": 52.599 },
+        { "text": "great", "start_time": 52.659, "end_time": 52.899 },
+        { "text": "news.", "start_time": 52.959, "end_time": 53.319 },
+        {
+          "text": "Congratulations.",
+          "start_time": 53.559,
+          "end_time": 54.619
+        },
+        { "text": "If", "start_time": 55.079, "end_time": 55.159 },
+        { "text": "you", "start_time": 55.18, "end_time": 55.299 },
+        { "text": "finish", "start_time": 55.36, "end_time": 55.639 },
+        { "text": "in", "start_time": 55.68, "end_time": 55.779 },
+        { "text": "time,", "start_time": 55.84, "end_time": 56.079 },
+        { "text": "will", "start_time": 56.159, "end_time": 56.259 },
+        { "text": "you", "start_time": 56.299, "end_time": 56.399 },
+        { "text": "come", "start_time": 56.439, "end_time": 56.579 },
+        { "text": "to", "start_time": 56.639, "end_time": 56.719 },
+        { "text": "the", "start_time": 56.759, "end_time": 56.879 },
+        { "text": "stadium?", "start_time": 56.939, "end_time": 57.399 }
+      ]
+    },
+    {
+      "text": "I'll see how it goes. If I can, I'll rush right over.",
+      "start_time": 58.319,
+      "end_time": 61.539,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "I'll", "start_time": 58.319, "end_time": 58.419 },
+        { "text": "see", "start_time": 58.5, "end_time": 58.599 },
+        { "text": "how", "start_time": 58.659, "end_time": 58.759 },
+        { "text": "it", "start_time": 58.819, "end_time": 58.899 },
+        { "text": "goes.", "start_time": 58.979, "end_time": 59.299 },
+        { "text": "If", "start_time": 59.659, "end_time": 59.759 },
+        { "text": "I", "start_time": 59.84, "end_time": 59.919 },
+        { "text": "can,", "start_time": 59.979, "end_time": 60.219 },
+        { "text": "I'll", "start_time": 60.419, "end_time": 60.559 },
+        { "text": "rush", "start_time": 60.719, "end_time": 60.919 },
+        { "text": "right", "start_time": 61.0, "end_time": 61.18 },
+        { "text": "over.", "start_time": 61.299, "end_time": 61.539 }
+      ]
+    },
+    {
+      "text": "Okay. Look for the team with the red shirts.",
+      "start_time": 62.52,
+      "end_time": 65.659,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Okay.", "start_time": 62.52, "end_time": 62.919 },
+        { "text": "Look", "start_time": 63.439, "end_time": 63.599 },
+        { "text": "for", "start_time": 63.699, "end_time": 63.799 },
+        { "text": "the", "start_time": 63.84, "end_time": 63.939 },
+        { "text": "team", "start_time": 64.019, "end_time": 64.279 },
+        { "text": "with", "start_time": 64.339, "end_time": 64.479 },
+        { "text": "the", "start_time": 64.519, "end_time": 64.619 },
+        { "text": "red", "start_time": 64.699, "end_time": 65.059 },
+        { "text": "shirts.", "start_time": 65.139, "end_time": 65.659 }
+      ]
+    },
+    {
+      "text": "Hello, Joe. What's new with you? ",
+      "start_time": 66.76,
+      "end_time": 68.76,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Hello,",
+          "start_time": 66.76,
+          "end_time": 67.0
+        },
+        {
+          "text": " ",
+          "start_time": 67.0,
+          "end_time": 67.099
+        },
+        {
+          "text": "Joe.",
+          "start_time": 67.099,
+          "end_time": 67.299
+        },
+        {
+          "text": " ",
+          "start_time": 67.299,
+          "end_time": 67.979
+        },
+        {
+          "text": "What's",
+          "start_time": 67.979,
+          "end_time": 68.159
+        },
+        {
+          "text": " ",
+          "start_time": 68.159,
+          "end_time": 68.219
+        },
+        {
+          "text": "new",
+          "start_time": 68.22,
+          "end_time": 68.319
+        },
+        {
+          "text": " ",
+          "start_time": 68.319,
+          "end_time": 68.36
+        },
+        {
+          "text": "with",
+          "start_time": 68.36,
+          "end_time": 68.519
+        },
+        {
+          "text": " ",
+          "start_time": 68.519,
+          "end_time": 68.58
+        },
+        {
+          "text": "you?",
+          "start_time": 68.58,
+          "end_time": 68.76
+        },
+        {
+          "text": " ",
+          "start_time": 68.76,
+          "end_time": 68.76
+        }
+      ]
+    },
+    {
+      "text": "A bike. Remember the money I saved from mowing people's lawns last summer?",
+      "start_time": 69.819,
+      "end_time": 75.119,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "A", "start_time": 69.819, "end_time": 69.979 },
+        { "text": "bike.", "start_time": 70.08, "end_time": 70.659 },
+        { "text": "Remember", "start_time": 71.54, "end_time": 71.86 },
+        { "text": "the", "start_time": 71.919, "end_time": 72.0 },
+        { "text": "money", "start_time": 72.059, "end_time": 72.359 },
+        { "text": "I", "start_time": 72.439, "end_time": 72.599 },
+        { "text": "saved", "start_time": 72.68, "end_time": 72.979 },
+        { "text": "from", "start_time": 73.019, "end_time": 73.179 },
+        { "text": "mowing", "start_time": 73.22, "end_time": 73.539 },
+        { "text": "people's", "start_time": 73.599, "end_time": 73.919 },
+        { "text": "lawns", "start_time": 73.979, "end_time": 74.279 },
+        { "text": "last", "start_time": 74.36, "end_time": 74.76 },
+        { "text": "summer?", "start_time": 74.819, "end_time": 75.119 }
+      ]
+    },
+    {
+      "text": "Yes. Did you get a new bike with it?",
+      "start_time": 76.119,
+      "end_time": 78.199,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Yes.", "start_time": 76.119, "end_time": 76.419 },
+        { "text": "Did", "start_time": 76.879, "end_time": 77.019 },
+        { "text": "you", "start_time": 77.059, "end_time": 77.139 },
+        { "text": "get", "start_time": 77.18, "end_time": 77.279 },
+        { "text": "a", "start_time": 77.319, "end_time": 77.379 },
+        { "text": "new", "start_time": 77.419, "end_time": 77.559 },
+        { "text": "bike", "start_time": 77.619, "end_time": 77.819 },
+        { "text": "with", "start_time": 77.86, "end_time": 77.999 },
+        { "text": "it?", "start_time": 78.059, "end_time": 78.199 }
+      ]
+    },
+    {
+      "text": "Yes. If you're not busy, I will ride it over to show you later.",
+      "start_time": 79.139,
+      "end_time": 83.0,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Yes.", "start_time": 79.139, "end_time": 79.919 },
+        { "text": "If", "start_time": 80.0, "end_time": 80.119 },
+        { "text": "you're", "start_time": 80.139, "end_time": 80.259 },
+        { "text": "not", "start_time": 80.299, "end_time": 80.519 },
+        { "text": "busy,", "start_time": 80.58, "end_time": 81.08 },
+        { "text": "I", "start_time": 81.18, "end_time": 81.199 },
+        { "text": "will", "start_time": 81.259, "end_time": 81.439 },
+        { "text": "ride", "start_time": 81.5, "end_time": 81.619 },
+        { "text": "it", "start_time": 81.659, "end_time": 81.779 },
+        { "text": "over", "start_time": 81.86, "end_time": 82.039 },
+        { "text": "to", "start_time": 82.099, "end_time": 82.239 },
+        { "text": "show", "start_time": 82.279, "end_time": 82.459 },
+        { "text": "you", "start_time": 82.5, "end_time": 82.639 },
+        { "text": "later.", "start_time": 82.68, "end_time": 83.0 }
+      ]
+    },
+    {
+      "text": "Could you ride your bike to the stadium for soccer? We'd love to have you play a game with us.",
+      "start_time": 83.939,
+      "end_time": 88.639,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        { "text": "Could", "start_time": 83.939, "end_time": 84.059 },
+        { "text": "you", "start_time": 84.08, "end_time": 84.199 },
+        { "text": "ride", "start_time": 84.239, "end_time": 84.419 },
+        { "text": "your", "start_time": 84.439, "end_time": 84.559 },
+        { "text": "bike", "start_time": 84.599, "end_time": 84.819 },
+        { "text": "to", "start_time": 84.839, "end_time": 84.939 },
+        { "text": "the", "start_time": 84.959, "end_time": 85.099 },
+        { "text": "stadium", "start_time": 85.159, "end_time": 85.499 },
+        { "text": "for", "start_time": 85.599, "end_time": 85.739 },
+        { "text": "soccer?", "start_time": 85.799, "end_time": 86.139 },
+        { "text": "We'd", "start_time": 86.599, "end_time": 86.759 },
+        { "text": "love", "start_time": 86.879, "end_time": 87.039 },
+        { "text": "to", "start_time": 87.059, "end_time": 87.139 },
+        { "text": "have", "start_time": 87.279, "end_time": 87.439 },
+        { "text": "you", "start_time": 87.479, "end_time": 87.599 },
+        { "text": "play", "start_time": 87.639, "end_time": 87.839 },
+        { "text": "a", "start_time": 87.879, "end_time": 87.939 },
+        { "text": "game", "start_time": 88.0, "end_time": 88.179 },
+        { "text": "with", "start_time": 88.199, "end_time": 88.339 },
+        { "text": "us.", "start_time": 88.419, "end_time": 88.639 }
+      ]
+    }
+  ]
+}

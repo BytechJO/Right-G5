@@ -25,30 +25,33 @@ const CriticalThinking = ({ title }) => {
           marginTop: "20px",
         }}
       >
-        <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
+        <img
+          src={Rabbit}
+          style={{ height: "50px", width: "auto", marginRight: 10 }}
+        />
         <h5 className="header-title-page8">{title}</h5>
       </div>
 
       {/* input */}
-      <input
-        type="text"
+      <textarea
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
         placeholder="Write your answer here..."
         style={{
           marginTop: "20px",
-          width: "60%",
+          width: "70%",
           padding: "10px",
           borderRadius: "8px",
           border: "1px solid #ccc",
-          fontSize: "14px",
+          fontSize: "18px",
+          minHeight: "120px",
+          resize: "vertical",
         }}
       />
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
-        
       </div>
     </div>
   );

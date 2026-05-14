@@ -15,7 +15,7 @@ const GrammarA = () => {
 
       {/* السؤال 1 */}
       <div className="mb-12">
-        <div className="flex items-start gap-2">
+        <div className="flex items-start gap-5">
           <img
             src={img}
             alt=""
@@ -23,7 +23,7 @@ const GrammarA = () => {
           />
 
           <div >
-            <p className="font-medium text-[18px]">
+            <p className="text-[18px]">
               How <span className="text-[#12C8F9]">far</span> can you{" "}
               <span className="text-[#12C8F9]">walk</span>?
             </p>
@@ -45,7 +45,7 @@ const GrammarA = () => {
 
       {/* السؤال 2 */}
       <div>
-        <div className="flex items-start gap-2 mt-7">
+        <div className="flex items-start gap-5 mt-7">
           <img
             src={img}
             alt=""
@@ -53,7 +53,7 @@ const GrammarA = () => {
           />
 
           <div>
-            <p className="font-medium text-[18px]">
+            <p className=" text-[18px]">
               I can <span className="text-[#12C8F9]">jump</span>{" "}
               <span className="text-[#12C8F9]">three meters</span>.
             </p>

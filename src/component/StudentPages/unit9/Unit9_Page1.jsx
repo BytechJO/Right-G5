@@ -1,232 +1,458 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 76.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 76.png";
 import "./Unit9_Page1.css";
-import Unit5_Page1_Read from "./Unit9_Pag1_Read";
-import Unit5_Page1_Vocab from "./Unit9_Page1_Vocab";
-import Unit5_Page1_find from "./Unit9_Page1_find";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U9/PG 76/cd41pg76-conversation.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import allunit3 from "../../../assets/audio/ClassBook/Unit 9/P 76/unit9-pg76-unitall.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound14.mp3";
-import sound15 from "../../../assets/audio/ClassBook/Unit 9/P 76/sound15.mp3";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U9/PG 76/cd42pg76-vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U9/PG 76/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U9/PG 76/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U9/PG 76/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U9/PG 76/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U9/PG 76/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U9/PG 76/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U9/PG 76/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U9/PG 76/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U9/PG 76/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U9/PG 76/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U9/PG 76/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U9/PG 76/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U9/PG 76/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U9/PG 76/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U9/PG 76/sound15.mp3";
+import sound16 from "../../../assets/audio/ClassBook/U9/PG 76/sound16.mp3";
+import sound17 from "../../../assets/audio/ClassBook/U9/PG 76/sound17.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 76/SVG/1.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 76/SVG/2.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 76/SVG/3.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 76/SVG/4.svg";
+import wordJson from "../../../assets/json/cd41pg76-conversation_eng.json";
+import video from "../../../assets/videos/grade 5 unit 9 page 76 .mp4";
 
 const Unit9_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Paul",
+          text: "Hello?",
+        },
+        {
+          speaker: "Victor",
+          text: "Hi, Paul. This is Victor. I’m bored today. If you finish studying, will you play soccer with me this afternoon?",
+        },
+        {
+          speaker: "Paul",
+          text: "I would love to go if there’s a game today. Is the soccer club meeting at the school?",
+        },
+        {
+          speaker: "Victor",
+          text: "Exactly. If I come to get you, will you be ready by 3:00?",
+        },
+        {
+          speaker: "Paul",
+          text: "Yes, that’ll work. Why don’t we call Mark and Joe as well? Could you give Mark a ring and I’ll ring Joe?",
+        },
+      ],
+    },
+
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "Victor",
+          text: "Hi, Mark. What’s up?",
+        },
+        {
+          speaker: "Mark",
+          text: "Not much. My family and I are relaxing at the pool today.",
+        },
+        {
+          speaker: "Victor",
+          text: "Ah, that sounds nice. Hey, if Paul and I get a game going today at 3:00, will you join us?",
+        },
+      ],
+    },
+
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Mark",
+          text: "I’d love to, but I have an appointment. I will get my braces off today!",
+        },
+        {
+          speaker: "Victor",
+          text: "Hey, that’s great news! Congratulations! If you finish in time, will you come to the stadium?",
+        },
+        {
+          speaker: "Mark",
+          text: "I’ll see how it goes. If I can, I’ll rush right over.",
+        },
+        {
+          speaker: "Victor",
+          text: "Okay. Look for the team with the red shirts.",
+        },
+      ],
+    },
+
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Paul",
+          text: "Hello, Joe. What’s new with you?",
+        },
+        {
+          speaker: "Joe",
+          text: "A bike! Remember the money I saved from mowing people’s lawns last summer?",
+        },
+        {
+          speaker: "Paul",
+          text: "Yes. Did you get a new bike with it?",
+        },
+        {
+          speaker: "Joe",
+          text: "Yes. If you’re not busy, I will ride it over to show you later.",
+        },
+        {
+          speaker: "Paul",
+          text: "Could you ride your bike to the stadium for soccer? We’d love to have you play a game with us!",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
     {
-      start: 0.92,
-      end: 7.91,
-      text: "Page 76, unit 9. Where's Dad? Page 76, unit 9, vocabulary.",
+      start: 0.179,
+      end: 6.139,
+      text: "Page 76, Conversation. Listen and read, then say.",
+    },
+
+    // Conversation 1
+    {
+      start: 6.139,
+      end: 6.46,
+      text: "Hello?",
     },
     {
-      start: 9.06,
-      end: 28.44,
-      text: "One: clinic. Two: post office. Three: restaurant. Four: swimming pool. Five: hospital. Six: car wash. Seven: zoo. Eight: airport.",
+      start: 7.44,
+      end: 14.659,
+      text: "Hi, Paul. This is Victor. I’m bored today. If you finish studying, will you play soccer with me this afternoon?",
     },
     {
-      start: 29.5,
-      end: 36.42,
-      text: "Nine: bus stop. Ten: gym. Eleven: bakery.",
+      start: 15.539,
+      end: 20.119,
+      text: "I would love to go if there’s a game today. Is the soccer club meeting at the school?",
     },
     {
-      start: 37.6,
-      end: 51.64,
-      text: "Twelve: theater. Thirteen: playground. Fourteen: toy shop. Fifteen: bank. Page 76, listen and read along.",
+      start: 21.159,
+      end: 25.219,
+      text: "Exactly. If I come to get you, will you be ready by 3:00?",
     },
     {
-      start: 53.0,
-      end: 53.32,
-      text: "S.",
+      start: 26.159,
+      end: 32.04,
+      text: "Yes, that’ll work. Why don’t we call Mark and Joe as well? Could you give Mark a ring and I’ll ring Joe?",
+    },
+
+    // Conversation 2
+    {
+      start: 32.939,
+      end: 33.979,
+      text: "Hi, Mark. What’s up?",
     },
     {
-      start: 54.34,
-      end: 64.12,
-      text: "Caps, cats, ducks. Page 77, reading. Listen and read along. A brave mouse.",
+      start: 34.939,
+      end: 38.779,
+      text: "Not much. My family and I are relaxing at the pool today.",
     },
     {
-      start: 64.12,
-      end: 112.0,
-      text: "I'm a brave mouse. I visit many places every day. I was at school today. I got a full mark. In the afternoon, I was in the park. There is a big, fat cat in the park. What? A cat? I'm scared of cats. I was at the bus stop. My friend was there. We took a bus and went to a restaurant. We had two glasses of orange juice. I've just returned home. There was cheese in my house. Mm, I like cheese. There was a trap in the house. What? A trap? I'm scared of traps. I'm a brave mouse, but I'm scared. Scared of traps. Squeak, snap. Squeak, snap.",
+      start: 39.7,
+      end: 45.839,
+      text: "Ah, that sounds nice. Hey, if Paul and I get a game going today at 3:00, will you join us?",
+    },
+
+    // Conversation 3
+    {
+      start: 46.879,
+      end: 51.219,
+      text: "I’d love to, but I have an appointment. I will get my braces off today!",
     },
     {
-      start: 112.0,
-      end: 116.26,
-      text: "Page 77. Listen, read, and repeat.",
+      start: 52.059,
+      end: 57.399,
+      text: "Hey, that’s great news! Congratulations! If you finish in time, will you come to the stadium?",
     },
     {
-      start: 116.26,
-      end: 117.28,
-      text: "Let's meet tomorrow.",
+      start: 58.319,
+      end: 61.539,
+      text: "I’ll see how it goes. If I can, I’ll rush right over.",
     },
     {
-      start: 118.36,
-      end: 120.039,
-      text: "Okay, sounds good.",
+      start: 62.52,
+      end: 65.659,
+      text: "Okay. Look for the team with the red shirts.",
+    },
+
+    // Conversation 4
+    {
+      start: 66.76,
+      end: 68.76,
+      text: "Hello, Joe. What’s new with you?",
     },
     {
-      start: 120.04,
-      end: 126.94,
-      text: "Page 77. Listen and read along. S. Bags, girls, peas.",
+      start: 69.819,
+      end: 75.119,
+      text: "A bike! Remember the money I saved from mowing people’s lawns last summer?",
+    },
+    {
+      start: 76.119,
+      end: 78.199,
+      text: "Yes. Did you get a new bike with it?",
+    },
+    {
+      start: 79.139,
+      end: 83.0,
+      text: "Yes. If you’re not busy, I will ride it over to show you later.",
+    },
+    {
+      start: 83.939,
+      end: 88.639,
+      text: "Could you ride your bike to the stadium for soccer? We’d love to have you play a game with us!",
     },
   ];
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 86.21, y1: 22.05, sound: 1, isPrimary: true },
-    { x1: 76.73, y1: 15.95, x2: 86.21, y2: 22.05, sound: 1, isPrimary: false },
+  const captionTimings = [
+    [
+      captionsExample[1],
+      captionsExample[2],
+      captionsExample[3],
+      captionsExample[4],
+      captionsExample[5],
+    ],
 
-    { x1: 66.7, y1: 17.5, sound: 2, isPrimary: true },
-    { x1: 58.85, y1: 13.07, x2: 66.7, y2: 17.5, sound: 2, isPrimary: false },
+    [captionsExample[6], captionsExample[7], captionsExample[8]],
 
-    { x1: 43.5, y1: 15.9, sound: 3, isPrimary: true },
-    { x1: 43.55, y1: 13.41, x2: 55.4, y2: 20.18, sound: 3, isPrimary: false },
+    [
+      captionsExample[9],
+      captionsExample[10],
+      captionsExample[11],
+      captionsExample[12],
+    ],
 
-    { x1: 29.5, y1: 13.8, sound: 4, isPrimary: true },
-    { x1: 28.0, y1: 17.47, x2: 40.96, y2: 21.87, sound: 4, isPrimary: false },
-
-    { x1: 91.3, y1: 33.3, sound: 5, isPrimary: true },
-    { x1: 79.75, y1: 26.27, x2: 90.95, y2: 32.26, sound: 5, isPrimary: false },
-
-    { x1: 61, y1: 41.2, sound: 6, isPrimary: true },
-    { x1: 56.91, y1: 38.12, x2: 65.31, y2: 41.33, sound: 6, isPrimary: false },
-
-    { x1: 39.2, y1: 59.4, sound: 7, isPrimary: true },
-    { x1: 32.35, y1: 56.06, x2: 54.54, y2: 62.15, sound: 7, isPrimary: false },
-
-    { x1: 44, y1: 48.9, sound: 8, isPrimary: true },
-    { x1: 39.03, y1: 46.24, x2: 55.62, y2: 52.67, sound: 8, isPrimary: false },
-
-    { x1: 75.3, y1: 55.4, sound: 9, isPrimary: true },
-    { x1: 71.99, y1: 50.13, x2: 81.47, y2: 55.72, sound: 9, isPrimary: false },
-
-    { x1: 71.6, y1: 36.6, sound: 10, isPrimary: true },
-    { x1: 70.05, y1: 33.72, x2: 82.33, y2: 38.97, sound: 10, isPrimary: false },
-
-    { x1: 65.7, y1: 47.4, sound: 11, isPrimary: true },
-    { x1: 57.77, y1: 44.72, x2: 65.7, y2: 47.4, sound: 11, isPrimary: false },
-
-    { x1: 60.3, y1: 27.4, sound: 12, isPrimary: true },
-    { x1: 53.68, y1: 23.9, x2: 62.3, y2: 29.4, sound: 12, isPrimary: false },
-
-    { x1: 63.1, y1: 54.14, sound: 13, isPrimary: true },
-    { x1: 60.14, y1: 51.32, x2: 69.19, y2: 54, sound: 13, isPrimary: false },
-
-    { x1: 69, y1: 27.4, sound: 14, isPrimary: true },
-    { x1: 66.17, y1: 22.21, x2: 74.79, y2: 28.98, sound: 14, isPrimary: false },
-
-    { x1: 40.5, y1: 33.4, sound: 15, isPrimary: true },
-    { x1: 40.53, y1: 31.01, x2: 54.75, y2: 36.43, sound: 15, isPrimary: false },
+    [
+      captionsExample[13],
+      captionsExample[14],
+      captionsExample[15],
+      captionsExample[16],
+      captionsExample[17],
+    ],
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-    13: sound13,
-    14: sound14,
-    15: sound15,
-  };
+  const filteredSegments = wordJson.segments.slice(1);
 
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+      filteredSegments[3]?.words || [],
+      filteredSegments[4]?.words || [],
+    ],
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
+    [
+      filteredSegments[5]?.words || [],
+      filteredSegments[6]?.words || [],
+      filteredSegments[7]?.words || [],
+    ],
+
+    [
+      filteredSegments[8]?.words || [],
+      filteredSegments[9]?.words || [],
+      filteredSegments[10]?.words || [],
+      filteredSegments[11]?.words || [],
+    ],
+
+    [
+      filteredSegments[12]?.words || [],
+      filteredSegments[13]?.words || [],
+      filteredSegments[14]?.words || [],
+      filteredSegments[15]?.words || [],
+      filteredSegments[16]?.words || [],
+    ],
+  ];
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+    sound16,
+    sound17,
+  ];
+  const captionVoc = [
+    {
+      start: 0.179,
+      end: 4.039,
+      text: "Page 76, unit nine, vocabulary. Listen and repeat.",
+    },
+
+    {
+      start: 4.4,
+      end: 7.139,
+      text: "Find the words and expressions in the conversation above.",
+    },
+
+    {
+      start: 7.98,
+      end: 9.46,
+      text: "1. club.",
+    },
+
+    {
+      start: 10.42,
+      end: 12.239,
+      text: "2. exactly.",
+    },
+
+    {
+      start: 13.179,
+      end: 14.899,
+      text: "3. ring.",
+    },
+
+    {
+      start: 15.96,
+      end: 17.76,
+      text: "4. appointment.",
+    },
+
+    {
+      start: 18.619,
+      end: 20.419,
+      text: "5. braces.",
+    },
+
+    {
+      start: 21.359,
+      end: 23.659,
+      text: "6. congratulations.",
+    },
+
+    {
+      start: 24.68,
+      end: 26.599,
+      text: "7. stadium.",
+    },
+
+    {
+      start: 27.439,
+      end: 29.139,
+      text: "8. rush.",
+    },
+
+    {
+      start: 30.179,
+      end: 32.02,
+      text: "9. mowing.",
+    },
+
+    {
+      start: 34.439,
+      end: 35.119,
+      text: "10. lawns.",
+    },
+
+    {
+      start: 35.899,
+      end: 37.939,
+      text: "11. that'll work.",
+    },
+
+    {
+      start: 38.84,
+      end: 41.759,
+      text: "12. join (noun).",
+    },
+
+    {
+      start: 42.659,
+      end: 46.2,
+      text: "13. great/good news.",
+    },
+
+    {
+      start: 47.18,
+      end: 49.659,
+      text: "14. see how it goes.",
+    },
+
+    {
+      start: 50.659,
+      end: 52.84,
+      text: "15. right over.",
+    },
+
+    {
+      start: 53.879,
+      end: 56.86,
+      text: "16. get a (noun).",
+    },
+
+    {
+      start: 57.719,
+      end: 60.359,
+      text: "17. we'd love to have you.",
+    },
+  ];
+
+  const wordTimingsVoc = [
+    { start: 7.98, end: 9.46 },
+    { start: 10.42, end: 12.239 },
+    { start: 13.179, end: 14.899 },
+    { start: 15.96, end: 17.76 },
+    { start: 18.619, end: 20.419 },
+
+    { start: 21.359, end: 23.659 },
+    { start: 24.68, end: 26.599 },
+    { start: 27.439, end: 29.139 },
+    { start: 30.179, end: 32.02 },
+    { start: 34.439, end: 35.119 },
+
+    { start: 35.899, end: 37.939 },
+    { start: 38.84, end: 41.759 },
+    { start: 42.659, end: 46.2 },
+    { start: 47.18, end: 49.659 },
+    { start: 50.659, end: 52.84 },
+
+    { start: 53.879, end: 56.86 },
+    { start: 57.719, end: 60.359 },
+  ];
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit9-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -235,7 +461,7 @@ const Unit9_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -243,7 +469,18 @@ const Unit9_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allunit3} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={5}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                  video={video}
+                  imageWidth="300px"
+                />
               </div>,
             )
           }
@@ -254,14 +491,14 @@ const Unit9_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit9-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -271,25 +508,59 @@ const Unit9_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={7.1}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "club",
+                    "exactly",
+                    "ring",
+                    "appointment",
+                    "braces",
+                    "congratulations",
+                    "stadium",
+                    "rush",
+                    "mowing",
+                    "lawns",
+                    "that’ll work",
+                    "join (noun)",
+                    "great/good news",
+                    "see how it goes",
+                    "right over",
+                    "get a (noun)",
+                    "we’d love to have you",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit9-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -299,9 +570,11 @@ const Unit9_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_Vocab />
-              </>,
+              <CriticalThinking
+                title={
+                  "If Joe goes to the game, how will he probably get there?"
+                }
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -311,36 +584,9 @@ const Unit9_Page1 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit9-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit5_Page1_Read />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>

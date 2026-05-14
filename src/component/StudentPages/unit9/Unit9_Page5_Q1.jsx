@@ -1,225 +1,316 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from "react";
-import "./Unit9_Page5_Q1.css";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Ex A 6.svg";
 
 const Unit9_Page5_Q1 = () => {
-  const [locked, setLocked] = useState(false);
-
-  const questions = [
+  const categories = [
     {
-      id: 1,
-      image1: img1,
-      image2: img2,
-      label1: "ducks",
-      label2: "girls",
-      correct: "✗",
+      title: "one syllable",
+      answers: ["club", "lawns", "ring", "rush"],
     },
     {
-      id: 2,
-      image1: img3,
-      image2: img4,
-      label1: "cats",
-      label2: "cups",
-      correct: "✓",
+      title: "two syllables",
+      answers: ["mowing", "braces"],
     },
     {
-      id: 3,
-      image1: img5,
-      image2: img6,
-      label1: "trees",
-      label2: "bees",
-      correct: "✓",
+      title: "three syllables",
+      answers: ["exactly", "appointments", "stadium"],
+    },
+    {
+      title: "four syllables",
+      answers: [],
+    },
+    {
+      title: "five syllables",
+      answers: ["congratulations"],
     },
   ];
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState([]);
 
-  const selectAnswer = (id, value) => {
+  const words = [
+    "exactly",
+    "stadium",
+    "ring",
+    "rush",
+    "braces",
+    "mowing",
+    "club",
+    "lawns",
+    "congratulations",
+    "appointments",
+  ];
+
+  const [inputs, setInputs] = useState([
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+  ]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) => str.toLowerCase().replace(/\s+/g, " ").trim();
+
+  const handleChange = (boxIndex, inputIndex, value) => {
     if (locked) return;
-    setAnswers({ ...answers, [id]: value });
-    setShowResult(false);
-  };
 
-  const showAnswers = () => {
-    const corrects = {};
-    questions.forEach((q) => {
-      corrects[q.id] = q.correct;
+    const updated = [...inputs];
+
+    updated[boxIndex][inputIndex] = value;
+
+    setInputs(updated);
+
+    // reset result for edited input
+    setResult((prev) => {
+      const copy = [...prev];
+
+      if (copy[boxIndex]) {
+        copy[boxIndex][inputIndex] = undefined;
+      }
+
+      return copy;
     });
-    setAnswers(corrects);
-    setShowResult([]);
-    setLocked(true);
   };
 
   const checkAnswers = () => {
     if (locked) return;
-    const isEmpty = questions.some((q) => !answers[q.id]);
-    if (isEmpty) {
-      ValidationAlert.info("Please choose ✓ or ✗ for all questions!");
+    const filledCount = inputs
+      .flat()
+      .filter((item) => item.trim() !== "").length;
+
+    if (filledCount < 10) {
+      ValidationAlert.info();
       return;
     }
 
-    const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong",
-    );
-    setShowResult(results);
-    setLocked(true);
+    let totalCorrect = 0;
 
-    const correctCount = results.filter((r) => r === "correct").length;
-    const total = questions.length;
-    const scoreMsg = `${correctCount} / ${total}`;
+    const newResults = inputs.map((box, boxIndex) => {
+      // كلمات البوكس الصح
+      const correctWords = categories[boxIndex].answers.map((w) =>
+        normalize(w),
+      );
 
-    let color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+      const usedWords = [];
 
-    const resultHTML = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
+      return box.map((value) => {
+        const v = normalize(value);
+
+        // الفراغ → بدون إكس
+        if (!v) return undefined;
+
+        // الكلمة موجودة بالبكس ولسه ما انستخدمت
+        const isCorrect = correctWords.includes(v) && !usedWords.includes(v);
+
+        if (isCorrect) {
+          totalCorrect++;
+          usedWords.push(v);
+
+          return true;
+        }
+
+        // 🔥 إذا مكررة لا تعتبر غلط ولا صح
+        if (correctWords.includes(v) && usedWords.includes(v)) {
+          return undefined;
+        }
+
+        // كلمة غلط
+        return false;
+      });
+    });
+
+    setResult(newResults);
+
+    const total = words.length;
+
+    const color =
+      totalCorrect === total ? "green" : totalCorrect === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
         <span style="color:${color}; font-weight:bold;">
-          Score: ${scoreMsg}
+          Score: ${totalCorrect} / ${total}
         </span>
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(resultHTML);
-    else if (correctCount === 0) ValidationAlert.error(resultHTML);
-    else ValidationAlert.warning(resultHTML);
+    if (totalCorrect === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (totalCorrect === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const resetAnswers = () => {
-    setAnswers({});
-    setShowResult([]);
+  const showAnswers = () => {
+    setInputs([
+      ["club", "lawns", "ring", "rush"],
+      ["mowing", "braces", "", ""],
+      ["exactly", "appointments", "stadium", ""],
+      ["", "", "", ""],
+      ["congratulations", "", "", ""],
+    ]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setInputs([
+      ["", "", "", ""],
+      ["", "", "", ""],
+      ["", "", "", ""],
+      ["", "", "", ""],
+      ["", "", "", ""],
+    ]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
+  const getResult = (boxIndex, inputIndex) => {
+    return result[boxIndex]?.[inputIndex];
+  };
+
+  const renderInput = (boxIndex, inputIndex) => {
+    const currentResult = getResult(boxIndex, inputIndex);
+
+    return (
+      <div key={inputIndex} className="relative mb-1">
+        <input
+          type="text"
+          value={inputs[boxIndex][inputIndex]}
+          disabled={locked || currentResult === true}
+          onChange={(e) => handleChange(boxIndex, inputIndex, e.target.value)}
+          className={`
+          w-full
+          bg-transparent
+          border-0
+          border-b
+          border-[#E5D9EC]
+          outline-none
+          text-[18px]
+          font-semibold
+          pb-1
+
+          ${currentResult === false ? "text-[#D1232A]" : "text-[#6D2980]"}
+        `}
+        />
+
+        {currentResult === false && (
+          <span
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "-8px",
+              transform: "translateY(-50%)",
+              width: "22px",
+              height: "22px",
+              background: "#ef4444",
+              color: "white",
+              borderRadius: "50%",
+              fontSize: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              border: "2px solid white",
+              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            }}
+          >
+            ✕
+          </span>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div className="div-forall">
-          <h5 className="header-title-page8">
-            <span className="ex-A mr-3">A</span>
-            Do they both have the same final{" "}
-            <span style={{ color: "#2e3192" }}>-s sound </span>? Write
-            <span style={{ color: "#D52328" }}>✓</span> or{" "}
-            <span style={{ color: "#D52328" }}>✗</span>.
-          </h5>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-20">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Put the vocabulary words into the right groups. One box will be blank.
+        </h5>
 
-          <div className="grid grid-cols-3 gap-[30px] u8p5-grid">
-            {questions.map((q, index) => (
+        {/* BOXES */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12 justify-items-center">
+          {" "}
+          {categories.map((cat, boxIndex) => (
+            <div key={boxIndex} className="flex flex-col items-center">
+              {/* LABEL */}
               <div
-                key={q.id}
-                className="u8p5-card p-4 bg-white flex flex-col items-center gap-3 relative"
+                style={{
+                  background: "#E9E1EC",
+                  borderRadius: "10px",
+                  padding: "8px 18px",
+                  marginBottom: "10px",
+                  fontSize: "18px",
+                }}
               >
-                {/* رقم السؤال */}
-                <p className="w-full text-left text-[20px] u8p5-card-num">
-                  <span className="text-[darkblue] font-bold">{q.id}.</span>
-                </p>
-
-                <div className="flex flex-col items-center gap-3.5">
-                  {/* الصور */}
-                  <div className="u8p5-images-box border-2 border-[#ff6b57] rounded-xl p-4 w-[250px]">
-                    <div className="flex">
-                      {/* الديف الأول */}
-                      <div className="u8p5-img-cell w-1/2 border-r-2 border-[#ff6b57] flex items-center justify-center h-[150px]">
-                        <img
-                          src={q.image1}
-                          alt=""
-                          style={{ height: "120px", objectFit: "contain" }}
-                        />
-                      </div>
-
-                      {/* الديف الثاني */}
-                      <div className="u8p5-img-cell w-1/2 flex items-center justify-center h-[150px]">
-                        <img
-                          src={q.image2}
-                          alt=""
-                          style={{ height: "120px", objectFit: "contain" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex w-full justify-between mt-2 px-4 text-[16px]">
-                    <span>{q.label1}</span>
-                    <span>{q.label2}</span>
-                  </div>
-                  {/* الخيارات */}
-                  <div className="u8p5-opts-row flex gap-5">
-                    {/* ✓ */}
-                    <div className="relative">
-                      <div
-                        className={`u8p5-opt-btn w-[45px] h-[45px] border-2 border-[#ff6b57] rounded-md flex items-center justify-center cursor-pointer text-[22px] font-bold transition-all duration-150 hover:bg-[#ffe3df] ${
-                          answers[q.id] === "✓"
-                            ? "bg-[#2c5287] text-white"
-                            : "bg-white"
-                        }`}
-                        onClick={() => selectAnswer(q.id, "✓")}
-                      >
-                        ✓
-                      </div>
-
-                      {showResult[index] === "wrong" &&
-                        answers[q.id] === "✓" && (
-                          <div className="u8p5-wrong-badge absolute -top-2.5 -right-2.5 w-[22px] h-[22px] rounded-full bg-red-500 text-white flex items-center justify-center text-[14px] font-bold border-2 border-white z-3">
-                            ✕
-                          </div>
-                        )}
-                    </div>
-
-                    {/* ✗ */}
-                    <div className="relative">
-                      <div
-                        className={`u8p5-opt-btn w-[45px] h-[45px] border-2 border-[#ff6b57] rounded-md flex items-center justify-center cursor-pointer text-[22px] font-bold transition-all duration-150 ${
-                          answers[q.id] === "✗"
-                            ? "bg-[#2c5287] text-white"
-                            : "bg-white hover:bg-[#ffe3df]"
-                        }`}
-                        onClick={() => selectAnswer(q.id, "✗")}
-                      >
-                        ✗
-                      </div>
-
-                      {showResult[index] === "wrong" &&
-                        answers[q.id] === "✗" && (
-                          <div className="u8p5-wrong-badge absolute -top-2.5 -right-2.5 w-[22px] h-[22px] rounded-full bg-red-500 text-white flex items-center justify-center text-[14px] font-bold border-2 border-white z-3">
-                            ✕
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
+                {cat.title}
               </div>
-            ))}
-          </div>
 
-          <div className="action-buttons-container">
-            <button onClick={resetAnswers} className="try-again-button">
-              Start Again ↻
-            </button>
-            <button
-              onClick={showAnswers}
-              className="show-answer-btn swal-continue"
-            >
-              Show Answer
-            </button>
-            <button onClick={checkAnswers} className="check-button2">
-              Check Answer ✓
-            </button>
-          </div>
+              {/* BOX */}
+              <div
+                style={{
+                  width: "150px",
+                  minHeight: "195px",
+                  border: "2px solid #8D3DAF",
+                  borderRadius: "18px",
+                  padding: "12px",
+                }}
+              >
+                {Array.from({ length: 4 }).map((_, inputIndex) =>
+                  renderInput(boxIndex, inputIndex),
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* WORD BANK */}
+        <div
+          className="grid grid-cols-5 gap-y-5 gap-x-10 text-[18px]"
+          style={{
+            width: "760px",
+            margin: "0 auto",
+          }}
+        >
+          {words.map((word, index) => (
+            <div key={index}>{word}</div>
+          ))}
         </div>
       </div>
-    </>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

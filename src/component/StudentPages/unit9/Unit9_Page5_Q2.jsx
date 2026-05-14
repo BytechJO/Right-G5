@@ -1,211 +1,221 @@
 import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Unit9_Page5_Q2.css";
-
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Asset 51.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Asset 52.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Asset 53.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 80/Asset 54.svg";
-import sound1 from "../../../assets/audio/ClassBook/Unit 9/P 80/unit9-pg80-EXB.mp3";
-
+import grammer_u1 from "../../../assets/audio/ClassBook/U9/PG 80/cd45pg80-instruction.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit9_Page5_Q2 = () => {
-  const items = [
+  const questions = [
+    "Congratulations",
+    "stadium",
+    "rush",
+    "appointments",
+    "exactly",
+  ];
+  const captions = [
     {
-      img: img1,
-      options: ["dogs", "rocks", "bumps"],
-      correct: ["rocks"],
+      start: 0.28,
+      end: 7.5,
+      text: "Page 80, right activities. Exercise B. Listen and write the missing vocabulary words in the blanks.",
     },
+
     {
-      img: img2,
-      options: ["frogs", "racks", "books"],
-      correct: ["racks", "books"],
-    },
-    {
-      img: img3,
-      options: ["shoulders", "bats", "tacos"],
-      correct: ["shoulders"],
-    },
-    {
-      img: img4,
-      options: ["sacks", "maps", "chairs"],
-      correct: ["maps"],
+      start: 8.68,
+      end: 26.739,
+      text: "Congratulations, many people yelled as the winning team in their bright blue shirts left the stadium. It had been a great game. There was a rush of people leaving as some raced to get to the appointments they had for that afternoon. The game had started exactly at noon, so some people still had to return to work.",
     },
   ];
+  const [answers, setAnswers] = useState(["", "", "", "", ""]);
 
-  const [selected, setSelected] = useState(Array(items.length).fill([]));
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-   const captions = [
-    {
-      start: 0.119,
-      end: 11.699,
-      text: "Page 80. Write activities. Exercise B. Listen and circle the words with the same final S sound. One, socks,",
-    },
-    { start: 12.859, end: 17.739, text: "dogs, rocks, bumps. Two, spoons," },
-    { start: 18.979, end: 24.6, text: "frogs, racks, books. Three, folders," },
-    { start: 25.76, end: 31.679, text: "shoulders, bats, tacos. Four, caps," },
-    { start: 32.919, end: 35.399, text: "sacks, maps, chairs" },
-  ];
-  const chooseOption = (i, value) => {
-    if (locked) return;
 
-    const newSelected = [...selected];
-    const current = newSelected[i];
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    if (current.includes(value)) {
-      // remove
-      newSelected[i] = current.filter((v) => v !== value);
-    } else {
-      // add
-      newSelected[i] = [...current, value];
-    }
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-    setSelected(newSelected);
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
-  const resetAll = () => {
-    setSelected(Array(items.length).fill(""));
-    setLocked(false);
-    setShowResult(false);
-  };
-  const showAnswers = () => {
-    setSelected(items.map((i) => i.correct));
-    setLocked(true);
-  };
+
   const checkAnswers = () => {
     if (locked) return;
 
-    if (selected.includes("")) {
-      ValidationAlert.info();
+    if (answers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    let total = 0;
 
-    items.forEach((item, i) => {
-      total += item.correct.length;
+    let correctCount = 0;
 
-      // ✅ الصح
-      item.correct.forEach((correctAns) => {
-        if (selected[i]?.includes(correctAns)) {
-          score++;
-        }
-      });
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
 
-      // ❌ الغلط
-      selected[i]?.forEach((ans) => {
-        if (!item.correct.includes(ans)) {
-          score--;
-        }
-      });
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    // ❗ ما نخليه ينزل تحت الصفر
-    if (score < 0) score = 0;
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      "Congratulations",
+      "stadium",
+      "rush",
+      "appointments",
+      "exactly",
+    ]);
+
+    setResult([true, true, true, true, true]);
 
     setLocked(true);
-    setShowResult(true);
   };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          leading-none
+          align-middle
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-5">
-          <span className="ex-A mr-3">B</span>
-          Listen and circle the words with the same final
-          <span style={{ color: "#2e3192" }}>-s sound </span>?
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            B
+          </span>
+          Listen and write the missing vocabulary words in the blanks.
         </h5>
         <QuestionAudioPlayer
-          src={sound1}
+          src={grammer_u1}
           captions={captions}
-          stopAtSecond={9.5}
+          stopAtSecond={8.1}
         />
-        <div className="flex w-full">
-          <div className="flex justify-center w-full">
-            <div className="grid grid-cols-2 gap-y-10 gap-x-64 mt-1 mb-12">
-              {items.map((item, i) => (
-                <div key={i} className="flex flex-col justify-center h-50">
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="text-[20px] font-bold text-[#2a4e7c]">
-                      {i + 1}
-                    </span>
-
-                    <img
-                      src={item.img}
-                      alt=""
-                      style={{
-                        width: "150px",
-                        height: "auto",
-                      }}
-                    />
-
-                    {/* OPTIONS تحت الصورة وبالعرض */}
-                    <div className="flex gap-3 text-[18px] mt-2">
-                      {item.options.map((opt, idx) => (
-                        <span
-                          key={idx}
-                          onClick={() => chooseOption(i, opt)}
-                          className={`relative cursor-pointer px-3 py-1 rounded-full border-2 ${
-                            selected[i]?.includes(opt)
-                              ? showResult
-                                ? items[i].correct.includes(opt)
-                                  ? "border-[#1C398E] bg-blue-50"
-                                  : "border-red-500"
-                                : "border-[#1C398E] bg-blue-50"
-                              : "border-transparent hover:bg-gray-100"
-                          }`}
-                        >
-                          {opt}
-
-                          {/* ❌ على الخيار الغلط */}
-                          {showResult &&
-                            selected[i]?.includes(opt) &&
-                            !items[i].correct.includes(opt) && (
-                              <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow">
-                                ✕
-                              </span>
-                            )}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* PARAGRAPH */}
+        <div className="text-[20px] leading-[3.1]">
+          “{inputField(0, "w-[220px]")}!” many people yelled as the winning
+          team, in their bright blue shirts, left the{" "}
+          {inputField(1, "w-[250px]")}. It had been a great game.
+          <br />
+          There was a {inputField(2, "w-[220px]")} of people leaving as some
+          raced to get to the {inputField(3, "w-[250px]")} they had for that
+          afternoon. The game had started {inputField(4, "w-[240px]")} at noon,
+          so some people still had to return to work.
         </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

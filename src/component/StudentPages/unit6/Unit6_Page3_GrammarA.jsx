@@ -15,7 +15,7 @@ const GrammarA = () => {
 
       {/* السؤال 1 */}
       <div className="mb-12">
-        <div className="flex items-start gap-2 mt-7">
+        <div className="flex items-start gap-5 mt-7">
           <img
             src={img}
             alt=""
@@ -55,7 +55,7 @@ const GrammarA = () => {
           <div>
             <p className=" text-[18px]">
               Shall we go to the
-              <span className="text-[#12C8F9]">art gallery</span>?
+              <span className="text-[#12C8F9]"> art gallery</span>?
             </p>
 
             <div className="grid grid-cols-3 gap-10 mt-5 text-[17px] w-[900px]">

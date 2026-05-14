@@ -1,389 +1,379 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex D 1.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex D 3.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Ex D 4.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 9 Where Dad Folder/Page 81/Asset 63.svg";
 
 const Unit9_Page6_Q1 = () => {
-  const [userAnswers, setUserAnswers] = useState({});
+  const matchingAnswers = ["b", "d", "c", "a"];
+
+  const sentenceAnswers = [
+    "If someone invents a tire that won’t go flat, everyone will probably buy it.",
+    "If William knows how to build a tree house, he can build one this summer.",
+    "When Bryan gets his pilot’s license, he will fly us to Toledo.",
+    "If that team plays just a little harder, they might win the game.",
+  ];
+
+  const [matchingInputs, setMatchingInputs] = useState(["", "", "", ""]);
+
+  const [sentenceInputs, setSentenceInputs] = useState(["", "", "", ""]);
+
+  const [matchingResult, setMatchingResult] = useState([]);
+
+  const [sentenceResult, setSentenceResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
 
-  const [checked, setChecked] = useState(false);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const questions = [
-    {
-      id: 1,
-      image: img1,
-      sentence: "Where were they yesterday?",
-      word1: ["the train stop", "the airport"],
-      word2: ["are at", "were at", "are in", "were in"],
-    },
-    {
-      id: 2,
-      image: img2,
-      sentence: "Where are they now?",
-      word1: ["work", "the clinic"],
-      word2: ["are at", "were at", "are in", "were in"],
-    },
-    {
-      id: 3,
-      image: img3,
-      sentence: "Where are they now?",
-      word1: ["the library", "the bus stop"],
-      word2: ["are at", "were at", "are in", "were in"],
-    },
-    {
-      id: 4,
-      image: img4,
-      sentence: "Where were they yesterday?",
-      word1: ["the theater", "the bakery"],
-      word2: ["are at", "were at", "are in", "were in"],
-    },
-  ];
-  const correctAnswers = {
-    1: { word1: "the train stop", word2: "were at" },
-    2: { word1: "the clinic", word2: "are at" },
-    3: { word1: "the bus stop", word2: "are at" },
-    4: { word1: "the theater", word2: "were at" },
-  };
-  const handleChange = (id, field, value) => {
-    if (locked) return;
+  const handleMatchingChange = (i, value) => {
+    if (locked || matchingResult[i] === true) return;
 
-    setUserAnswers((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [field]: value,
-      },
-    }));
+    const updated = [...matchingInputs];
+
+    updated[i] = value;
+
+    setMatchingInputs(updated);
+
+    setMatchingResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
-  const showAnswer = () => {
-    setUserAnswers(correctAnswers);
-    setLocked(true);
-    setChecked(true);
+
+  const handleSentenceChange = (i, value) => {
+    if (locked || sentenceResult[i] === true) return;
+
+    const updated = [...sentenceInputs];
+
+    updated[i] = value;
+
+    setSentenceInputs(updated);
+
+    setSentenceResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
+
   const checkAnswers = () => {
     if (locked) return;
 
-    // ✅ التحقق إذا في فراغ
-    const empty = questions.some(
-      (q) => !userAnswers[q.id]?.word1 || !userAnswers[q.id]?.word2,
-    );
+    const hasEmptyMatching = matchingInputs.some((a) => !a.trim());
 
-    if (empty) {
-      ValidationAlert.info();
+    const hasEmptySentences = sentenceInputs.some((a) => !a.trim());
+
+    if (hasEmptyMatching || hasEmptySentences) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    Object.keys(correctAnswers).forEach((id) => {
-      // ✅ أول select
-      if (userAnswers[id]?.word2 === correctAnswers[id].word2) {
-        score += 1;
-      }
+    const newMatchingResults = matchingInputs.map((a, i) => {
+      const ok = normalize(a) === normalize(matchingAnswers[i]);
 
-      // ✅ ثاني select
-      if (userAnswers[id]?.word1 === correctAnswers[id].word1) {
-        score += 1;
-      }
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = Object.keys(correctAnswers).length * 2; // = 8
+    const newSentenceResults = sentenceInputs.map((a, i) => {
+      const ok = normalize(a) === normalize(sentenceAnswers[i]);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setMatchingResult(newMatchingResults);
+
+    setSentenceResult(newSentenceResults);
+
+    const total = matchingAnswers.length + sentenceAnswers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    setChecked(true);
-    setLocked(true);
+    if (correctCount === total) {
+      setLocked(true);
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
-  const handleStartAgain = () => {
-    setUserAnswers({});
-    setChecked(false);
+
+  const showAnswers = () => {
+    setMatchingInputs(["b", "d", "c", "a"]);
+
+    setSentenceInputs([
+      "If someone invents a tire that won’t go flat, everyone will probably buy it.",
+      "If William knows how to build a tree house, he can build one this summer.",
+      "When Bryan gets his pilot’s license, he will fly us to Toledo.",
+      "If that team plays just a little harder, they will win the game.",
+    ]);
+
+    setMatchingResult([true, true, true, true]);
+
+    setSentenceResult([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setMatchingInputs(["", "", "", ""]);
+
+    setSentenceInputs(["", "", "", ""]);
+
+    setMatchingResult([]);
+
+    setSentenceResult([]);
+
     setLocked(false);
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="ex-A" style={{ marginRight: "10px" }}>
-            D
-          </span>
-          Read and answer the questions.
-        </h5>
-        <div
+  const matchingInput = (i) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        maxLength={1}
+        value={matchingInputs[i]}
+        disabled={locked || matchingResult[i] === true}
+        onChange={(e) => handleMatchingChange(i, e.target.value)}
+        className={`
+          w-[55px]
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-center
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+
+          ${matchingResult[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {matchingResult[i] === false && (
+        <span
           style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
+            alignItems: "center",
             justifyContent: "center",
-            padding: "20px",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <div
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  const sentenceInput = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={sentenceInputs[i]}
+        disabled={locked || sentenceResult[i] === true}
+        onChange={(e) => handleSentenceChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${sentenceResult[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {sentenceResult[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
             style={{
-              width: "100%",
-              maxWidth: "900px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
+              marginRight: "10px",
             }}
           >
-            {/* الأسئلة بالصور */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "12px",
-              }}
-            >
-              {questions.map((q) => (
-                <div
-                  key={q.id}
-                  style={{
-                    padding: "12px",
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "0px",
-                      left: "0px",
-                      color: "black",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      zIndex: 2,
-                    }}
-                  >
-                    {q.id}
-                  </div>
+            D
+          </span>
+          Match the two sentence parts, and then write the whole sentence below.
+        </h5>
 
-                  <img
-                    src={q.image}
-                    alt={`q${q.id}`}
-                    style={{
-                      width: "70%",
-                      height: "auto",
-                      objectFit: "cover",
-                      marginTop: "10px",
-                    }}
-                  />
+        {/* MATCHING */}
+        <div className="flex justify-between mb-10">
+          {/* LEFT */}
+          <div className="flex flex-col gap-8">
+            <div className="flex items-start gap-4">
+              {matchingInput(0)}
 
-                  <div
-                    style={{
-                      marginTop: "8px",
-                      fontWeight: "500",
-                      marginBottom: 15,
-                    }}
-                  >
-                    {q.sentence}
-                  </div>
+              <div className="flex gap-4">
+                <span className="font-bold text-[18px]">1</span>
 
-                  <div
-                    style={{
-                      marginTop: "5px",
-                      borderBottom: "2px solid black",
-                      paddingBottom: "3px",
-                      minWidth: "220px",
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "6px",
-                      fontSize: "16px",
-                    }}
-                  >
-                    They
-                    <div
-                      style={{ position: "relative", display: "inline-block" }}
-                    >
-                      <select
-                        value={userAnswers[q.id]?.word2 || ""}
-                        onChange={(e) =>
-                          handleChange(q.id, "word2", e.target.value)
-                        }
-                        disabled={locked}
-                        style={{
-                          appearance: "none",
-                          WebkitAppearance: "none",
-                          MozAppearance: "none",
-
-                          border: "none",
-                          borderBottom: "1px dashed #aaa",
-                          backgroundColor: "transparent",
-
-                          fontSize: "inherit",
-                          fontWeight: "600",
-                          color: userAnswers[q.id]?.word2 ? "#1e3a8a" : "#aaa",
-
-                          padding: "2px 18px 2px 4px",
-                          minWidth: "90px",
-
-                          cursor: locked ? "not-allowed" : "pointer",
-                        }}
-                      >
-                        <option value="" disabled hidden>
-                          Select
-                        </option>
-                        {q.word2.map((w, i) => (
-                          <option key={i} value={w}>
-                            {w}
-                          </option>
-                        ))}
-                      </select>
-                      {checked &&
-                        userAnswers[q.id]?.word2 &&
-                        userAnswers[q.id]?.word2 !== correctAnswers[q.id].word2 && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "-6px",
-                              right: "-6px",
-                              transform: "translateY(-50%)",
-                              width: "22px",
-                              height: "22px",
-                              background: "#ef4444",
-                              color: "white",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontWeight: "bold",
-                              border: "2px solid white",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                              pointerEvents: "none",
-                            }}
-                          >
-                            ✕
-                          </div>
-                        )}
-                      <span
-                        style={{
-                          position: "absolute",
-                          right: "4px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          pointerEvents: "none",
-                          fontSize: "10px",
-                          color: "#666",
-                        }}
-                      >
-                        ▾
-                      </span>
-                    </div>
-                    <div
-                      style={{ position: "relative", display: "inline-block" }}
-                    >
-                      <select
-                        value={userAnswers[q.id]?.word1 || ""}
-                        onChange={(e) =>
-                          handleChange(q.id, "word1", e.target.value)
-                        }
-                        disabled={locked}
-                        style={{
-                          appearance: "none",
-                          WebkitAppearance: "none",
-                          MozAppearance: "none",
-
-                          border: "none",
-                          borderBottom: "1px dashed #aaa",
-                          backgroundColor: "transparent",
-
-                          fontSize: "inherit",
-                          fontWeight: "600",
-                          color: userAnswers[q.id]?.word1 ? "#1e3a8a" : "#aaa",
-
-                          padding: "2px 18px 2px 4px",
-                          minWidth: "90px",
-
-                          cursor: locked ? "not-allowed" : "pointer",
-                        }}
-                      >
-                        <option value="" disabled hidden>
-                          Select
-                        </option>
-                        {q.word1.map((w, i) => (
-                          <option key={i} value={w}>
-                            {w}
-                          </option>
-                        ))}
-                      </select>
-                      {checked &&
-                        userAnswers[q.id]?.word1 &&
-                        userAnswers[q.id]?.word1 !== correctAnswers[q.id].word1 && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "-6px",
-                              right: "-6px",
-                              transform: "translateY(-50%)",
-                              width: "22px",
-                              height: "22px",
-                              background: "#ef4444",
-                              color: "white",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontWeight: "bold",
-                              border: "2px solid white",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                              pointerEvents: "none",
-                            }}
-                          >
-                            ✕
-                          </div>
-                        )}
-                      <span
-                        style={{
-                          position: "absolute",
-                          right: "4px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          pointerEvents: "none",
-                          fontSize: "10px",
-                          color: "#666",
-                        }}
-                      >
-                        ▾
-                      </span>
-                    </div>
-                    .
-                  </div>
-                </div>
-              ))}
+                <span className="text-[18px] leading-normal ">
+                  If someone invents a tire that won’t go flat,
+                </span>
+              </div>
             </div>
-            <Button
-              handleShowAnswer={showAnswer}
-              handleStartAgain={handleStartAgain}
-              checkAnswers={checkAnswers}
-            />
+
+            <div className="flex items-start gap-4">
+              {matchingInput(1)}
+
+              <div className="flex gap-4">
+                <span className="font-bold text-[18px]">2</span>
+
+                <span className="text-[18px] leading-normal">
+                  If William knows how to build a tree house,
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              {matchingInput(2)}
+
+              <div className="flex gap-4">
+                <span className="font-bold text-[18px]">3</span>
+
+                <span className="text-[18px] leading-normal">
+                  When Bryan gets his pilot’s license,
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              {matchingInput(3)}
+
+              <div className="flex gap-4">
+                <span className="font-bold text-[18px]">4</span>
+
+                <span className="text-[18px] leading-normal">
+                  If that team plays just a little harder,
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT */}
+          <div className="flex flex-col gap-8 mr-[60px]">
+            <div className="flex gap-4">
+              <span className="font-bold text-[18px]">a</span>
+
+              <span className="text-[18px]">they might win the game.</span>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="font-bold text-[18px]">b</span>
+
+              <span className="text-[18px]">
+                everyone will probably buy it.
+              </span>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="font-bold text-[18px]">c</span>
+
+              <span className="text-[18px]">he will fly us to Toledo.</span>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="font-bold text-[18px]">d</span>
+
+              <span className="text-[18px]">he can build one this summer.</span>
+            </div>
           </div>
         </div>
+
+        {/* SENTENCES */}
+        <div className="flex flex-col gap-8">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center gap-4">
+              <span className="font-bold text-[18px]">{i + 1}</span>
+
+              {sentenceInput(i, "w-[780px]")}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

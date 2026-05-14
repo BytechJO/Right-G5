@@ -24,19 +24,20 @@ const GrammarA = () => {
 
           <div>
             <p className=" text-[18px]">
-              <span className="text-[#12C8F9]">Everyone </span>
-              cheered when Hannah made a goal.
+              If Jeremy <span className="text-[#12C8F9]">shoots a basket </span>
+              , he <span className="text-[#12C8F9]"> will make it </span>.
             </p>
 
             <div className="grid grid-cols-3 gap-10 mt-5 text-[17px] w-[900px]">
               <span>
-                <b className="mr-2">1</b>someone
+                <b className="mr-2">1</b>cooks some eggs, will give us some
               </span>
               <span>
-                <b className="mr-2">2</b>somebody
+                <b className="mr-2">2</b>goes swimming, will practice diving
               </span>
               <span>
-                <b className="mr-2">3</b>no one
+                <b className="mr-2">3</b>gets an A on his test, would be so
+                happy
               </span>
             </div>
           </div>
@@ -54,20 +55,21 @@ const GrammarA = () => {
 
           <div>
             <p className=" text-[18px]">
-              Did you see
-              <span className="text-[#12C8F9]"> anyone </span>
-              at practice?
+              Nancy{" "}
+              <span className="text-[#12C8F9]"> will arrive shortly </span>
+              if <span className="text-[#12C8F9]"> her plane is on time </span>.
             </p>
 
             <div className="grid grid-cols-3 gap-10 mt-5 text-[17px] w-[900px]">
               <span>
-                <b className="mr-2">1</b>anybody
+                <b className="mr-2">1</b>would call us she’s going to be late
               </span>
               <span>
-                <b className="mr-2">2</b>something
+                <b className="mr-2">2</b>will jog, it’s not too hot
               </span>
               <span>
-                <b className="mr-2">3</b>everybody
+                <b className="mr-2">3</b>will know three languages, she learns
+                English well
               </span>
             </div>
           </div>
