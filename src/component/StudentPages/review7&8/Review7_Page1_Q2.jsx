@@ -172,7 +172,7 @@ const Review7_Page1_Q2 = () => {
         <div className="grid grid-cols-2 gap-y-14 gap-x-24">
           {/* 1 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start mt-5">1</span>
+            <span className="font-bold text-[18px] self-start">1</span>
 
             <img
               src={img1}
@@ -183,16 +183,16 @@ const Review7_Page1_Q2 = () => {
               }}
             />
 
-            <div className="text-[18px] leading-[2.5] mt-3">
-              <div>He is keeping busy.</div>
+            <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
+              <div className="leading-[2]">He is keeping busy.</div>
 
-              {inputField(0, "w-[150px]")}
+              <div>{inputField(0, "w-[150px]")}</div>
             </div>
           </div>
 
           {/* 2 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start mt-5">2</span>
+            <span className="font-bold text-[18px] self-start">2</span>
 
             <img
               src={img2}
@@ -203,18 +203,18 @@ const Review7_Page1_Q2 = () => {
               }}
             />
 
-            <div className="text-[18px] leading-[2.5] mt-3">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span>They are jotting down some information.</span>
-
-                {inputField(1, "w-[150px]")}
+            <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
+              <div className="leading-[2]">
+                They are jotting down some information.
               </div>
+
+              <div>{inputField(1, "w-[150px]")}</div>
             </div>
           </div>
 
           {/* 3 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start mt-5">3</span>
+            <span className="font-bold text-[18px] self-start ">3</span>
 
             <img
               src={img3}
@@ -225,16 +225,16 @@ const Review7_Page1_Q2 = () => {
               }}
             />
 
-            <div className="text-[18px] leading-[2.5] mt-3">
-              <div>He is limping stiffly.</div>
+            <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
+              <div className="leading-[2]">He is limping stiffly.</div>
 
-              {inputField(2, "w-[150px]")}
+              <div>{inputField(2, "w-[150px]")}</div>
             </div>
           </div>
 
           {/* 4 */}
           <div className="flex items-end gap-5">
-           <span className="font-bold text-[18px] self-start mt-5">4</span>
+            <span className="font-bold text-[18px] self-start ">4</span>
 
             <img
               src={img4}
@@ -245,10 +245,10 @@ const Review7_Page1_Q2 = () => {
               }}
             />
 
-            <div className="text-[18px] leading-[2.5] mt-3">
-              <div>She is looking at photo albums.</div>
+            <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
+              <div className="leading-[2]">She is looking at photo albums.</div>
 
-              {inputField(3, "w-[150px]")}
+              <div>{inputField(3, "w-[150px]")}</div>
             </div>
           </div>
         </div>

@@ -263,7 +263,7 @@ const Review10_Page1_Q2 = () => {
     <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall ">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-20">
+        <h5 className="header-title-page8 mb-25">
           <span
             style={{
               marginRight: "10px",

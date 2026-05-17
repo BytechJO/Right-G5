@@ -149,9 +149,17 @@ const Unit10_Page5_Q3 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+      <div
+        className="div-forall"
+        style={{
+          minHeight: "67vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
+        <h5 className="header-title-page8 ">
           <span
             className="ex-A"
             style={{
@@ -173,7 +181,7 @@ const Unit10_Page5_Q3 = () => {
             justifyContent: "space-around",
             alignItems: "center",
             width: "760px",
-            marginBottom: "40px",
+            marginBottom: "10px",
             fontSize: "18px",
           }}
         >
@@ -185,7 +193,7 @@ const Unit10_Page5_Q3 = () => {
         </div>
 
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-15">
           {/* 1 */}
           <div className="flex items-center gap-4">
             <span className="font-bold text-[18px]">1</span>

@@ -139,7 +139,9 @@ const Review5_Page2_Q1 = () => {
           >
             D
           </span>
-          Read the chart and write sentences using prefer and like.
+          Read the chart and write sentences using{" "}
+          <span className="text-[#1DA1F2]">prefer</span> and{" "}
+          <span className="text-[#1DA1F2]">like</span>.
         </h5>
 
         <div className="flex justify-center mb-10">

@@ -159,9 +159,17 @@ const Review9_Page2_Q3 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall ">
+      <div
+        className="div-forall "
+        style={{
+          minHeight: "64vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-25">
+        <h5 className="header-title-page8">
           <span
             className="ex-F"
             style={{

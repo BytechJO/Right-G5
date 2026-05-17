@@ -37,7 +37,15 @@ const Unit10_Page6_Q2 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+      <div
+        className="div-forall"
+        style={{
+          minHeight: "65vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {/* TITLE */}
         <h5 className="header-title-page8 mb-20">
           <span

@@ -116,9 +116,17 @@ const Unit10_Page5_Q2 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+      <div
+        className="div-forall"
+        style={{
+          minHeight: "62vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-25 ">
+        <h5 className="header-title-page8 ">
           <span
             className="ex-A"
             style={{
@@ -128,7 +136,7 @@ const Unit10_Page5_Q2 = () => {
             B
           </span>
           Which vocabulary words have you not written yet? Write them here in
-          the order <br/> they are on the list.
+          the order <br /> they are on the list.
         </h5>
 
         {/* QUESTIONS */}

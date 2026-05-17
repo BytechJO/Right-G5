@@ -162,7 +162,7 @@ const Review1_Page1_Q3 = () => {
       <div className="div-forall">
         <h5 className="header-title-page8  mb-6">
           <span className=" mr-3">C</span>
-          Look, read, and match.{" "}
+         Read, look, and match.{" "}
         </h5>
 
         <div className="w-full flex flex-col items-center gap-50">

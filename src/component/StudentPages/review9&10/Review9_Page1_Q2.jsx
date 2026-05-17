@@ -163,9 +163,17 @@ const Review9_Page1_Q2 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+      <div
+        className="div-forall"
+        style={{
+          minHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-12">
+        <h5 className="header-title-page8">
           <span
             style={{
               marginRight: "10px",
@@ -185,7 +193,7 @@ const Review9_Page1_Q2 = () => {
             padding: "10px 30px",
             display: "grid",
             gridTemplateColumns: "repeat(3, auto)",
-            margin: "0 auto", 
+            margin: "0 auto",
             gap: "18px 40px",
             width: "690px",
             marginBottom: "30px",

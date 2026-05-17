@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U2/Page 10/Asset 7.svg";
 const WB_Unit2_Page10_Q1 = () => {
   const questions = [
     "carnival",
@@ -14,16 +14,7 @@ const WB_Unit2_Page10_Q1 = () => {
     "merry-go-round",
   ];
 
-  const [answers, setAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [answers, setAnswers] = useState(["", "", "", "", "", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -68,8 +59,7 @@ const WB_Unit2_Page10_Q1 = () => {
     let correctCount = 0;
 
     const newResults = answers.map((a, i) => {
-      const ok =
-        normalize(a) === normalize(questions[i]);
+      const ok = normalize(a) === normalize(questions[i]);
 
       if (ok) correctCount++;
 
@@ -81,11 +71,7 @@ const WB_Unit2_Page10_Q1 = () => {
     const total = questions.length;
 
     const color =
-      correctCount === total
-        ? "green"
-        : correctCount === 0
-        ? "red"
-        : "orange";
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:18px;text-align:center;">
@@ -118,31 +104,13 @@ const WB_Unit2_Page10_Q1 = () => {
       "merry-go-round",
     ]);
 
-    setResult([
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-    ]);
+    setResult([true, true, true, true, true, true, true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers([
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ]);
+    setAnswers(["", "", "", "", "", "", "", ""]);
 
     setResult([]);
 
@@ -155,9 +123,7 @@ const WB_Unit2_Page10_Q1 = () => {
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
-        onChange={(e) =>
-          handleChange(i, e.target.value)
-        }
+        onChange={(e) => handleChange(i, e.target.value)}
         className={`
           ${width}
           border-0
@@ -169,11 +135,7 @@ const WB_Unit2_Page10_Q1 = () => {
           font-semibold
           px-1
 
-          ${
-            result[i] === false
-              ? "border-[#D1232A]"
-              : "border-black"
-          }
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
         `}
       />
 
@@ -209,7 +171,7 @@ const WB_Unit2_Page10_Q1 = () => {
         border: "2px solid #7D3C98",
         borderRadius: "12px",
         padding: "8px 22px",
-        fontSize: "18px",
+        fontSize: "17px",
         minWidth: "150px",
         textAlign: "center",
       }}
@@ -220,12 +182,7 @@ const WB_Unit2_Page10_Q1 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div
-        className="div-forall text-[18px]"
-        style={{
-          lineHeight: "1.8",
-        }}
-      >
+      <div className="div-forall ">
         {/* TITLE */}
         <h5 className="header-title-page8 mb-8">
           <span
@@ -252,29 +209,21 @@ const WB_Unit2_Page10_Q1 = () => {
         </div>
 
         {/* DIALOG */}
-        <div>
+        <div className="relative text-[17px] mb-15">
           {/* JACK */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="font-bold">
-              Jack:
-            </span>
+            <span className="font-bold">Jack:</span>
 
-            <span>
-              Dad, can we go to the
-            </span>
+            <span>Dad, can we go to the</span>
 
             {inputField(0, "w-[170px]")}
 
-            <span>
-              ? I want to play on the rides there.
-            </span>
+            <span>? I want to play on the rides there.</span>
           </div>
 
           {/* DAD */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="font-bold">
-              Dad:
-            </span>
+            <span className="font-bold">Dad:</span>
 
             <span>Hmmm.</span>
 
@@ -285,23 +234,16 @@ const WB_Unit2_Page10_Q1 = () => {
 
           {/* JACK */}
           <div className="mb-5">
-            <span className="font-bold">
-              Jack:
-            </span>{" "}
-            Great! Let’s go.
+            <span className="font-bold">Jack:</span> Great! Let’s go.
           </div>
 
           {/* DAD */}
           <div className="flex flex-wrap items-center gap-2 mb-1">
-            <span className="font-bold">
-              Dad:
-            </span>
+            <span className="font-bold">Dad:</span>
 
             {inputField(2, "w-[170px]")}
 
-            <span>
-              , son. I am the one who to
-            </span>
+            <span>, son. I am the one who to</span>
 
             {inputField(3, "w-[140px]")}
           </div>
@@ -316,21 +258,14 @@ const WB_Unit2_Page10_Q1 = () => {
 
           {/* JACK */}
           <div className="mb-3">
-            <span className="font-bold">
-              Jack:
-            </span>{" "}
-            How long will it take you?
+            <span className="font-bold">Jack:</span> How long will it take you?
           </div>
 
           {/* DAD */}
           <div className="flex flex-wrap items-center gap-2 mb-5">
-            <span className="font-bold">
-              Dad:
-            </span>
+            <span className="font-bold">Dad:</span>
 
-            <span>
-              I’m not sure. It may be a
-            </span>
+            <span>I’m not sure. It may be a</span>
 
             {inputField(5, "w-[120px]")}
 
@@ -339,47 +274,31 @@ const WB_Unit2_Page10_Q1 = () => {
 
           {/* JACK */}
           <div className="mb-3">
-            <span className="font-bold">
-              Jack:
-            </span>{" "}
-            How many minutes will it take you
-            exactly?
+            <span className="font-bold">Jack:</span> How many minutes will it
+            take you exactly?
           </div>
 
           {/* DAD */}
           <div className="mb-5">
-            <span className="font-bold">
-              Dad:
-            </span>{" "}
-            Well, it may be 30 minutes.
+            <span className="font-bold">Dad:</span> Well, it may be 30 minutes.
           </div>
 
           {/* JACK */}
           <div className="mb-3">
-            <span className="font-bold">
-              Jack:
-            </span>{" "}
-            I don’t like to wait a long time.
-            I’ll get bored.
+            <span className="font-bold">Jack:</span> I don’t like to wait a long
+            time. I’ll get bored.
           </div>
 
           {/* DAD */}
           <div className="mb-5">
-            <span className="font-bold">
-              Dad:
-            </span>{" "}
-            That’s not a long time!
+            <span className="font-bold">Dad:</span> That’s not a long time!
           </div>
 
           {/* JACK */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="font-bold">
-              Jack:
-            </span>
+            <span className="font-bold">Jack:</span>
 
-            <span>
-              I’m going to go on all the
-            </span>
+            <span>I’m going to go on all the</span>
 
             {inputField(6, "w-[140px]")}
 
@@ -389,55 +308,41 @@ const WB_Unit2_Page10_Q1 = () => {
           {/* DAD + IMAGE */}
           <div className="flex justify-between items-end gap-8">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold">
-                Dad:
-              </span>
+              <span className="font-bold">Dad:</span>
 
-              <span>
-                Not me! I will settle for the
-                simple rides, like the
-              </span>
+              <span>Not me! I will settle for the simple rides, like the</span>
 
               {inputField(7, "w-[220px]")}
 
               <span>.</span>
             </div>
-
-            <img
-              src="/images/dad-jack.png"
-              alt="dad-jack"
-              style={{
-                width: "220px",
-                height: "140px",
-                objectFit: "cover",
-                borderRadius: "10px",
-                border: "2px solid #7D3C98",
-              }}
-            />
           </div>
+          <img
+            src={img}
+            alt="dad-jack"
+            style={{
+              position: "absolute",
+              width: "300px",
+              height: "auto",
+              objectFit: "contain",
+              top:"50%",
+              right:"0%"
+            }}
+          />
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={handleReset}
-        >
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button
-          className="show-answer-btn"
-          onClick={showAnswers}
-        >
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button
-          className="check-button2"
-          onClick={checkAnswers}
-        >
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

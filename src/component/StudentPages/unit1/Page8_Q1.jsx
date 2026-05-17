@@ -28,7 +28,12 @@ const Page8_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall">
+      <div
+        className="div-forall"
+        style={{
+          width: "clamp(850px, 72%, 1200px)",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -39,7 +44,7 @@ const Page8_Q1 = () => {
           <h5 className="header-title-page8">
             <span
               className="ex-A"
-              style={{ marginRight: "10px", marginBottom: "13%" }}
+              style={{ marginRight: "10px", marginBottom: 75 }}
             >
               A
             </span>
