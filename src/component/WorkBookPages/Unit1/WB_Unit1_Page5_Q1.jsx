@@ -1,463 +1,302 @@
-import React, { useState } from "react";
-import Button from "../Button";
+import React, { useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1a from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 1.svg";
-import img1b from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 2.svg";
-import img2a from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 3.svg";
-import img2b from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 4.svg";
-import img3a from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 5.svg";
-import img3b from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 6.svg";
-import img4a from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 7.svg";
-import img4b from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5/SVG/Asset 8.svg";
+const WB_Unit1_Page5_Q1 = () => {
+  const inputsRef = useRef({});
+  const questions = [
+    ["t", "a", "l"],
+    ["n", "e", "o", "o"],
+    ["s", "r", "n"],
+    ["i", "l", "o"],
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    leftImg: img1a,
-    rightImg: img1b,
-    question: "Which one is lighter, the tiger or the cat?",
-    middleText: "is lighter than",
-    firstOptions: ["The tiger", "The cat"],
-    lastOptions: ["the tiger", "the cat"],
-    correctFirst: "The cat",
-    correctLast: "the tiger",
-  },
-  {
-    id: 2,
-    leftImg: img2a,
-    rightImg: img2b,
-    question: "Which one is taller, the man or the boy?",
-    middleText: "is taller than",
-    firstOptions: ["The man", "The boy"],
-    lastOptions: ["the man", "the boy"],
-    correctFirst: "The man",
-    correctLast: "the boy",
-  },
-  {
-    id: 3,
-    leftImg: img3a,
-    rightImg: img3b,
-    question: "Which one is faster, the skateboard or the car?",
-    middleText: "is faster than",
-    firstOptions: ["The skateboard", "The car"],
-    lastOptions: ["the skateboard", "the car"],
-    correctFirst: "The car",
-    correctLast: "the skateboard",
-  },
-  {
-    id: 4,
-    leftImg: img4a,
-    rightImg: img4b,
-    question: "Which one is thinner, the tree or the flower?",
-    middleText: "is thinner than",
-    firstOptions: ["The tree", "The flower"],
-    lastOptions: ["the tree", "the flower"],
-    correctFirst: "The flower",
-    correctLast: "the tree",
-  },
-];
+  const [answers, setAnswers] = useState([
+    ["", "", ""],
+    ["", "", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ]);
 
-export default function WB_Unit3_Page19_QE() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const [result, setResult] = useState([]);
 
-  const handleSelect = (id, field, value) => {
-    if (showAns) return;
-    setAnswers((prev) => ({
+  const [locked, setLocked] = useState(false);
+
+  const handleChange = (wordIndex, letterIndex, value) => {
+    if (locked || result[`${wordIndex}-${letterIndex}`] === true) return;
+
+    const updated = [...answers];
+
+    updated[wordIndex][letterIndex] = value.slice(-1);
+
+    setAnswers(updated);
+
+    setResult((prev) => ({
       ...prev,
-      [id]: { ...prev[id], [field]: value },
+      [`${wordIndex}-${letterIndex}`]: undefined,
     }));
-    setChecked(false);
+
+    // auto move
+    if (value) {
+      const next = inputsRef.current[`${wordIndex}-${letterIndex + 1}`];
+
+      if (next) {
+        next.focus();
+        next.select();
+      }
+    }
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every(
-      (item) => answers[item.id]?.first && answers[item.id]?.last
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = answers.some((group) =>
+      group.some((letter) => !letter.trim()),
     );
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((item) => {
-      const isCorrect =
-        answers[item.id]?.first === item.correctFirst &&
-        answers[item.id]?.last === item.correctLast;
-      if (isCorrect) score += 1;
+
+    let correctCount = 0;
+
+    const newResults = {};
+
+    answers.forEach((group, wordIndex) => {
+      group.forEach((letter, letterIndex) => {
+        const ok =
+          letter.toLowerCase() ===
+          questions[wordIndex][letterIndex].toLowerCase();
+
+        newResults[`${wordIndex}-${letterIndex}`] = ok;
+
+        if (ok) correctCount++;
+      });
     });
-    setChecked(true);
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+
+    setResult(newResults);
+
+    const total = questions.flat().length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filledAnswers = {};
-    ITEMS.forEach((item) => {
-      filledAnswers[item.id] = {
-        first: item.correctFirst,
-        last: item.correctLast,
-      };
+  const showAnswers = () => {
+    setAnswers([
+      ["t", "a", "l"],
+      ["n", "e", "o", "o"],
+      ["s", "r", "n"],
+      ["i", "l", "o"],
+    ]);
+
+    const solved = {};
+
+    questions.forEach((group, wordIndex) => {
+      group.forEach((_, letterIndex) => {
+        solved[`${wordIndex}-${letterIndex}`] = true;
+      });
     });
-    setAnswers(filledAnswers);
-    setChecked(true);
-    setShowAns(true);
+
+    setResult(solved);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setAnswers([
+      ["", "", ""],
+      ["", "", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (item, field) => {
-    if (!checked || showAns) return false;
-    if (field === "first") return answers[item.id]?.first !== item.correctFirst;
-    return answers[item.id]?.last !== item.correctLast;
-  };
+  const letterBox = (wordIndex, letterIndex) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        ref={(el) => (inputsRef.current[`${wordIndex}-${letterIndex}`] = el)}
+        maxLength={1}
+        onFocus={(e) => e.target.select()}
+        maxLength={1}
+        value={answers[wordIndex][letterIndex]}
+        disabled={locked || result[`${wordIndex}-${letterIndex}`] === true}
+        onChange={(e) => handleChange(wordIndex, letterIndex, e.target.value)}
+        className={`
+          w-6
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-center
+          text-[20px]
+          text-[#6d2980]
+          font-semibold
 
-  return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-e-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          column-gap: clamp(18px, 4vw, 54px);
-          row-gap: clamp(18px, 3vw, 34px);
-          align-items: start;
-          width: 100%;
-        }
-
-        .wb-e-item {
-          display: flex;
-          flex-direction: column;
-          gap: clamp(8px, 1.4vw, 14px);
-          min-width: 0;
-          width: 100%;
-        }
-
-        .wb-e-top {
-          display: flex;
-          gap: clamp(8px, 1vw, 14px);
-          align-items: flex-start;
-          min-width: 0;
-          width: 100%;
-        }
-
-        .wb-e-num {
-          min-width: clamp(16px, 2vw, 24px);
-          font-size: clamp(16px, 1.8vw, 24px);
-          font-weight: 700;
-          color: #222;
-          line-height: 1;
-          padding-top: clamp(4px, 1vw, 8px);
-          flex-shrink: 0;
-        }
-
-        .wb-e-content {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: clamp(8px, 1.2vw, 12px);
-          min-width: 0;
-        }
-
-        .wb-e-images {
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          gap: clamp(8px, 2vw, 22px);
-          min-height: clamp(56px, 12vw, 120px);
-          width: 100%;
-        }
-
-        .wb-e-img-box {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-height: clamp(56px, 12vw, 120px);
-          min-width: 0;
-        }
-
-        .wb-e-img {
-          max-width: 100%;
-          max-height: clamp(56px, 12vw, 120px);
-          width: auto;
-          height: auto;
-          object-fit: contain;
-          display: block;
-        }
-
-        .wb-e-question {
-          font-size: clamp(13px, 1.7vw, 20px);
-          line-height: 1.3;
-          color: #222;
-          font-weight: 500;
-          word-break: break-word;
-        }
-
-        .wb-e-answer-block {
-          display: flex;
-          flex-direction: column;
-          gap: clamp(8px, 1vw, 10px);
-          width: 100%;
-          min-width: 0;
-        }
-
-        .wb-e-answer-line {
-          border-bottom: 3px solid #4a4a4a;
-          padding-bottom: clamp(4px, 0.8vw, 6px);
-          min-height: clamp(34px, 6vw, 54px);
-          display: flex;
-          align-items: center;
-          flex-wrap: nowrap;
-          gap: clamp(4px, 0.8vw, 8px);
-          width: 100%;
-          min-width: 0;
-          overflow: hidden;
-        }
-
-        .wb-e-select-wrap {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          flex: 1 1 0;
-          min-width: 0;
-        }
-
-        .wb-e-select {
-          width: 100%;
-          height: clamp(32px, 3.2vw, 42px);
-          min-width: 0;
-          border: 2px solid #c9c9c9;
-          border-radius: clamp(7px, 1vw, 10px);
-          background: #fff;
-          padding: 0 clamp(20px, 2.2vw, 32px) 0 clamp(6px, 0.8vw, 10px);
-          font-size: clamp(10px, 1.2vw, 16px);
-          font-weight: 500;
-          color: #333;
-          outline: none;
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          cursor: pointer;
-          box-sizing: border-box;
-          line-height: 1.1;
-          text-align: center;
-          text-align-last: center;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .wb-e-select.has-value {
-          color: #000000ff;
-        }
-
-        .wb-e-select.wrong {
-          border-color: #e53935;
-        }
-
-        .wb-e-select:disabled {
-          cursor: default;
-        }
-
-        .wb-e-arrow {
-          position: absolute;
-          right: clamp(5px, 0.7vw, 10px);
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: clamp(8px, 0.9vw, 11px);
-          color: #666;
-          pointer-events: none;
-        }
-
-        .wb-e-middle {
-          font-size: clamp(10px, 1.2vw, 16px);
-          font-weight: 500;
-          color: #222;
-          line-height: 1.2;
-          flex-shrink: 0;
-          white-space: nowrap;
-        }
-
-        .wb-e-buttons {
-          display: flex;
-          justify-content: center;
-          margin-top: 4px;
-        }
-
-        @media (max-width: 900px) {
-          .wb-e-grid {
-            grid-template-columns: 1fr;
+          ${
+            result[`${wordIndex}-${letterIndex}`] === false
+              ? "border-[#D1232A]"
+              : "border-black"
           }
+        `}
+      />
 
-          .wb-e-answer-line {
-            flex-wrap: nowrap;
-          }
-
-          .wb-e-middle {
-            font-size: clamp(12px, 2vw, 18px);
-          }
-
-          .wb-e-select {
-            font-size: clamp(12px, 2vw, 16px);
-          }
-        }
-
-        @media (max-width: 600px) {
-          .wb-e-answer-line {
-            flex-wrap: wrap;
-          }
-
-          .wb-e-select-wrap {
-            flex: 1 1 40%;
-          }
-
-          .wb-e-middle {
-            width: 100%;
-            text-align: center;
-            font-size: 15px;
-          }
-
-          .wb-e-select {
-            font-size: 13px;
-            height: 36px;
-          }
-        }
-
-        @media (max-width: 420px) {
-          .wb-e-answer-line {
-            flex-direction: column;
-            align-items: stretch;
-          }
-
-          .wb-e-select-wrap {
-            width: 100%;
-            flex: 1 1 auto;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
+      {result[`${wordIndex}-${letterIndex}`] === false && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "18px",
+            height: "18px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
+            justifyContent: "center",
+            fontSize: "12px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            zIndex: 5,
           }}
         >
-          <span className="WB-ex-A">E</span>
-          Look and read. Answer the questions.
-        </h1>
+          ✕
+        </span>
+      )}
+    </span>
+  );
 
-        <div className="wb-e-grid">
-          {ITEMS.map((item) => (
-            <div key={item.id} className="wb-e-item">
-              <div className="wb-e-top">
-                <div className="wb-e-num">{item.id}</div>
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-22">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            E
+          </span>
+          Write the missing letters.
+        </h5>
 
-                <div className="wb-e-content">
-                  <div className="wb-e-images">
-                    <div className="wb-e-img-box">
-                      <img
-                        src={item.leftImg}
-                        alt={`left-${item.id}`}
-                        className="wb-e-img"
-                      />
-                    </div>
-                    <div className="wb-e-img-box">
-                      <img
-                        src={item.rightImg}
-                        alt={`right-${item.id}`}
-                        className="wb-e-img"
-                      />
-                    </div>
-                  </div>
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15 text-[20px]">
+          {/* 1 */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold mr-3">1</span>
 
-                  <div className="wb-e-question">{item.question}</div>
+            <span>a c</span>
 
-                  <div className="wb-e-answer-block">
-                    <div className="wb-e-answer-line">
-                      <div className="wb-e-select-wrap">
-                        <select
-                          value={answers[item.id]?.first || ""}
-                          disabled={showAns}
-                          onChange={(e) =>
-                            handleSelect(item.id, "first", e.target.value)
-                          }
-                          className={`wb-e-select ${isWrong(item, "first") ? "wrong" : ""} ${answers[item.id]?.first ? "has-value" : ""}`}
-                        >
-                          <option value="" disabled hidden>
-                            Select
-                          </option>
-                          {item.firstOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        {!showAns && <span className="wb-e-arrow">▼</span>}
-                      </div>
+            {letterBox(0, 0)}
 
-                      <span className="wb-e-middle">{item.middleText}</span>
+            <span>u</span>
 
-                      <div className="wb-e-select-wrap">
-                        <select
-                          value={answers[item.id]?.last || ""}
-                          disabled={showAns}
-                          onChange={(e) =>
-                            handleSelect(item.id, "last", e.target.value)
-                          }
-                          className={`wb-e-select ${isWrong(item, "last") ? "wrong" : ""} ${answers[item.id]?.last ? "has-value" : ""}`}
-                        >
-                          <option value="" disabled hidden>
-                            Select
-                          </option>
-                          {item.lastOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        {!showAns && <span className="wb-e-arrow">▼</span>}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+            {letterBox(0, 1)}
+
+
+            {letterBox(0, 2)}
+
+            <span>l y</span>
+          </div>
+
+          {/* 2 */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold mr-3">2</span>
+
+            {letterBox(1, 0)}
+
+            <span>o t</span>
+
+            {letterBox(1, 1)}
+
+            <span>b</span>
+
+            {letterBox(1, 2)}
+            {letterBox(1, 3)}
+            <span>k</span>
+          </div>
+
+          {/* 3 */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold mr-3">3</span>
+
+            {letterBox(2, 0)}
+
+            <span>t a</span>
+
+            {letterBox(2, 1)}
+
+            <span>v i</span>
+
+            {letterBox(2, 2)}
+
+            <span>g</span>
+          </div>
+
+          {/* 4 */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold mr-3">4</span>
+
+            <span>p</span>
+
+            {letterBox(3, 0)}
+
+            {letterBox(3, 1)}
+            <span>l</span>
+
+            {letterBox(3, 2)}
+            <span>w</span>
+
+          </div>
         </div>
+      </div>
 
-        <div className="wb-e-buttons">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit1_Page5_Q1;

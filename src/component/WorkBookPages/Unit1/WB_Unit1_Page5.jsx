@@ -1,13 +1,14 @@
 import React from "react";
-import page from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 5.png";
+import page from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 5.png";
 import "./WB_unit5.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
 const WB_Unit1_Page5 = ({ openPopup }) => {
   return (
-    <div className="page1-img-wrapper"
-            
-              style={{ backgroundImage: `url(${page})` }}>
+    <div
+      className="page1-img-wrapper"
+      style={{ backgroundImage: `url(${page})` }}
+    >
       {/* <img src={page} /> */}
       <div
         className="q5-1 hover:scale-110 transition"
@@ -21,7 +22,8 @@ const WB_Unit1_Page5 = ({ openPopup }) => {
           // className="click-icon-page8-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
             x="0"
             y="0"
@@ -39,11 +41,12 @@ const WB_Unit1_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 5})}
+          onClick={() => openPopup("exercise", { startIndex: 5 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
             x="0"
             y="0"
@@ -53,8 +56,52 @@ const WB_Unit1_Page5 = ({ openPopup }) => {
           />
         </svg>
       </div>
-
- 
+      <div
+        className="q7-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 6 })}
+          style={{ overflow: "visible" }}
+          // className="click-icon-page8-2 hover:scale-110 transition"
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+      <div
+        className="q8-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 7 })}
+          style={{ overflow: "visible" }}
+          // className="click-icon-page8-2 hover:scale-110 transition"
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
     </div>
   );
 };

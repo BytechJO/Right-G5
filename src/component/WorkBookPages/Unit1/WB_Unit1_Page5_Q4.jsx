@@ -2,10 +2,22 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit1_Page3_Q1 = () => {
-  const questions = ["Uh-oh!", "alarm", "mirror", "right away", "counting"];
+const WB_Unit1_Page5_Q4 = () => {
+  const questions = [
+    "How late am I?",
+    "How deep is this ocean?",
+    "How far is your house?",
+    "How long is your hair?",
+  ];
 
-  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+  const scrambled = [
+    ["am", "late", "I", "How?"],
+    ["ocean", "deep", "is", "How", "an?"],
+    ["How", "your", "is", "far", "house?"],
+    ["long", "is", "How", "hair", "your?"],
+  ];
+
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -84,30 +96,35 @@ const WB_Unit1_Page3_Q1 = () => {
   };
 
   const showAnswers = () => {
-    setAnswers(["Uh-oh!", "alarm", "mirror", "right away", "counting"]);
+    setAnswers([
+      "How late am I?",
+      "How deep is this ocean?",
+      "How far is your house?",
+      "How long is your hair?",
+    ]);
 
-    setResult([true, true, true, true, true]);
+    setResult([true, true, true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers(["", "", "", "", ""]);
+    setAnswers(["", "", "", ""]);
 
     setResult([]);
 
     setLocked(false);
   };
 
-  const inputField = (i, width) => (
-    <span className="relative inline-block">
+  const inputField = (i) => (
+    <div className="relative flex-1">
       <input
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`
-          ${width}
+          w-full
           border-0
           border-b
           outline-none
@@ -144,103 +161,40 @@ const WB_Unit1_Page3_Q1 = () => {
           ✕
         </span>
       )}
-    </span>
-  );
-
-  const wordBox = (word) => (
-    <div
-      style={{
-        border: "2px solid #7D3C98",
-        borderRadius: "12px",
-        padding: "8px 22px",
-        fontSize: "18px",
-        minWidth: "120px",
-        textAlign: "center",
-      }}
-    >
-      {word}
     </div>
   );
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px]">
+      <div className="div-forall ">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-17">
+        <h5 className="header-title-page8 mb-25">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            A
+            H
           </span>
-          Read and write.
+          Unscramble and write.
         </h5>
 
-        {/* WORD BOXES */}
-        <div className="flex gap-5 mb-12 flex-wrap">
-          {wordBox("mirror")}
-          {wordBox("alarm")}
-          {wordBox("counting")}
-          {wordBox("right away")}
-          {wordBox("Uh-oh!")}
-        </div>
-
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-10">
-          {/* 1 */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-bold">1</span>
+        <div className="flex flex-col gap-15 text-[18px]">
+          {scrambled.map((words, i) => (
+            <div key={i} className="flex items-center gap-6">
+              <span className="font-bold">{i + 1}</span>
 
-            {inputField(0, "w-[180px]")}
+              <div className="flex items-center gap-8 min-w-[380px]">
+                {words.map((word, index) => (
+                  <span key={index}>{word}</span>
+                ))}
+              </div>
 
-            <span>I dropped my papers on the floor.</span>
-          </div>
-
-          {/* 2 */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-bold">2</span>
-
-            <span>I did not hear the</span>
-
-            {inputField(1, "w-[180px]")}
-
-            <span>go off at 7:00 a.m.</span>
-          </div>
-
-          {/* 3 */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-bold">3</span>
-
-            <span>Look at your face in the</span>
-
-            {inputField(2, "w-[170px]")}
-
-            <span>.</span>
-          </div>
-
-          {/* 4 */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-bold">4</span>
-
-            <span>I know you need it fast, so I will do it</span>
-
-            {inputField(3, "w-[180px]")}
-
-            <span>.</span>
-          </div>
-
-          {/* 5 */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-bold">5</span>
-
-            <span>He was</span>
-
-            {inputField(4, "w-[180px]")}
-
-            <span>the number of apples in the basket.</span>
-          </div>
+              {inputField(i)}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -262,4 +216,4 @@ const WB_Unit1_Page3_Q1 = () => {
   );
 };
 
-export default WB_Unit1_Page3_Q1;
+export default WB_Unit1_Page5_Q4;

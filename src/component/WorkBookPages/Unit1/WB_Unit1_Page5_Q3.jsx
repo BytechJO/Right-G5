@@ -2,14 +2,15 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit1_Page8_Q1 = () => {
-  const questions = ["b", "d", "c", "e", "a"];
+const WB_Unit1_Page5_Q3 = () => {
+  const questions = ["b", "a", "c", "d"];
 
-  const [answers, setAnswers] = useState(["", "", "", "", ""]);
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
   const [locked, setLocked] = useState(false);
+
 
   const handleSelect = (i, value) => {
     if (locked || result[i] === true) return;
@@ -76,7 +77,7 @@ const WB_Unit1_Page8_Q1 = () => {
   };
 
   const showAnswers = () => {
-    setAnswers(["b", "d", "c", "e", "a"]);
+    setAnswers(["b", "a", "c", "d"]);
 
     setResult([true, true, true, true]);
 
@@ -84,7 +85,7 @@ const WB_Unit1_Page8_Q1 = () => {
   };
 
   const handleReset = () => {
-    setAnswers(["", "", "", "", ""]);
+    setAnswers(["", "", "", ""]);
 
     setResult([]);
 
@@ -144,14 +145,14 @@ const WB_Unit1_Page8_Q1 = () => {
     <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall ">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-15">
+        <h5 className="header-title-page8 mb-25">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            L
+            G
           </span>
           Match.
         </h5>
@@ -165,38 +166,34 @@ const WB_Unit1_Page8_Q1 = () => {
 
               <span className="font-bold">1</span>
 
-              <span>How much does a loaf of bread cost?</span>
+              <span>How many friends do you have?</span>
             </div>
+
             {/* 2 */}
             <div className="flex items-center gap-4">
               {selectLetter(1)}
 
               <span className="font-bold">2</span>
 
-              <span>How does a bird fly?</span>
+              <span>How long is the table?</span>
             </div>
+
             {/* 3 */}
             <div className="flex items-center gap-4">
               {selectLetter(2)}
 
               <span className="font-bold">3</span>
 
-              <span>How many pancakes would you like?</span>
+              <span>How wide is that TV?</span>
             </div>
+
             {/* 4 */}
             <div className="flex items-center gap-4">
               {selectLetter(3)}
 
               <span className="font-bold">4</span>
 
-              <span> How do you learn how to draw better?</span>
-            </div>{" "}
-            <div className="flex items-center gap-4">
-              {selectLetter(4)}
-
-              <span className="font-bold">5</span>
-
-              <span>How far away is your house? </span>
+              <span>How far is it to your school?</span>
             </div>
           </div>
 
@@ -205,30 +202,25 @@ const WB_Unit1_Page8_Q1 = () => {
             <div className="flex gap-4">
               <span className="font-bold">a</span>
 
-              <span>It is two kilometers from the school.</span>
+              <span>It is two meters long.</span>
             </div>
 
             <div className="flex gap-4">
               <span className="font-bold">b</span>
 
-              <span>It’s about $1.00.</span>
+              <span>I have seven friends.</span>
             </div>
 
             <div className="flex gap-4">
               <span className="font-bold">c</span>
 
-              <span>Usually I can eat three.</span>
+              <span>It is 60 centimeters wide.</span>
             </div>
 
             <div className="flex gap-4">
               <span className="font-bold">d</span>
 
-              <span>It has hollow bones and strong chest muscles.</span>
-            </div>
-            <div className="flex gap-4">
-              <span className="font-bold">e</span>
-
-              <span>I took an art class.</span>
+              <span>It is 30 minutes from here.</span>
             </div>
           </div>
         </div>
@@ -252,4 +244,4 @@ const WB_Unit1_Page8_Q1 = () => {
   );
 };
 
-export default WB_Unit1_Page8_Q1;
+export default WB_Unit1_Page5_Q3;

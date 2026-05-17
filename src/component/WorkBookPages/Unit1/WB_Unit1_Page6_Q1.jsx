@@ -1,355 +1,239 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 4.svg";
-import img5 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 5.svg";
-import img6 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 6.svg";
+import trueImg from "../../../assets/imgs/true.svg";
+import flaseImg from "../../../assets/imgs/false.svg";
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 13 (2).svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 11.svg";
+import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 12.svg";
 
-const ACTIVE_COLOR = "#f39b42";
-const WRONG_COLOR = "#ef4444";
+const WB_Unit1_Page6_Q1 = () => {
+  const questions = [
+    {
+      image: img1,
+      text: "How many apples do you have?",
+      answer: "false",
+    },
+    {
+      image: img2,
+      text: "How tall are you?",
+      answer: "false",
+    },
+    {
+      image: img3,
+      text: "How old are you?",
+      answer: "true",
+    },
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    img: img1,
-    options: ["giraffe", "bear"],
-    correct: "giraffe",
-  },
-  {
-    id: 2,
-    img: img2,
-    options: ["basketball", "football"],
-    correct: "basketball",
-  },
-  {
-    id: 3,
-    img: img3,
-    options: ["snake", "elephant"],
-    correct: "snake",
-  },
-  {
-    id: 4,
-    img: img4,
-    options: ["big", "small"],
-    correct: "big",
-  },
-  {
-    id: 5,
-    img: img5,
-    options: ["light", "heavy"],
-    correct: "light",
-  },
-  {
-    id: 6,
-    img: img6,
-    options: ["slow", "fast"],
-    correct: "fast",
-  },
-];
+  const [answers, setAnswers] = useState(["", "", ""]);
 
-export default function WB_Unit3_Page6_QG() {
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const [result, setResult] = useState([]);
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
+  const [locked, setLocked] = useState(false);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const handleSelect = (i, value) => {
+    if (locked || result[i] === true) return;
 
-    setShowResults(false);
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  const checkAnswers = () => {
+    if (locked) return;
 
-    const allAnswered = ITEMS.every((item) => answers[item.id]);
+    const hasEmpty = answers.some((a) => !a);
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) {
-        score++;
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = a === questions[i].answer;
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((item) => {
-      filled[item.id] = item.correct;
-    });
+  const showAnswers = () => {
+    setAnswers(["false", "false", "true"]);
 
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
+    setResult([true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+  const handleReset = () => {
+    setAnswers(["", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (item) => {
-    if (!showResults || showAns) return false;
-    return answers[item.id] && answers[item.id] !== item.correct;
-  };
+  const errorBadge = () => (
+    <span
+      style={{
+        position: "absolute",
+        top: "40px",
+        right: "25px",
+        width: "20px",
+        height: "20px",
+        background: "#ef4444",
+        color: "white",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "11px",
+        fontWeight: "bold",
+        border: "2px solid white",
+        boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+      }}
+    >
+      ✕
+    </span>
+  );
 
-  const renderOption = (item, option) => {
-    const selected = answers[item.id] === option;
-    const wrong = isWrong(item) && selected;
-    const showCorrectAsSelected = showAns && item.correct === option;
-
-    return (
-      <div
-        onClick={() => handleSelect(item.id, option)}
-        className={`wb-g6-option ${
-          selected || showCorrectAsSelected ? "selected" : ""
-        } ${wrong ? "wrong" : ""} ${showAns ? "disabled" : ""}`}
-      >
-        {option}
-
-        {wrong && <div className="wb-g6-wrong-badge">✕</div>}
-      </div>
-    );
-  };
+  const markBox = (i, value, img) => (
+    <button
+      type="button"
+      disabled={locked || result[i] === true}
+      onClick={() => handleSelect(i, value)}
+      className="relative flex items-center justify-center"
+      style={{
+        width: "34px",
+        height: "34px",
+        border: "2px solid #6D2980",
+        borderRadius: "6px",
+        background: "transparent",
+        cursor: locked || result[i] === true ? "default" : "pointer",
+      }}
+    >
+      {answers[i] === value && (
+        <img
+          src={img}
+          alt={value}
+          style={{
+            width: "24px",
+            height: "24px",
+          }}
+        />
+      )}
+    </button>
+  );
 
   return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-g6-wrap {
-          display: flex;
-          flex-direction: column;
-          gap: clamp(20px, 2.4vw, 28px);
-          width: 100%;
-        }
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-39">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            I
+          </span>
+          Look, read, and write{" "}
+          <span className="font-bold text-[#D1252B]"> ✓</span> or
+          <span className="font-bold text-[#D1252B]">✕</span> .
+        </h5>
 
-        .wb-g6-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          column-gap: clamp(28px, 4vw, 46px);
-          row-gap: clamp(18px, 2.4vw, 28px);
-          width: 100%;
-          align-items: start;
-        }
+        {/* QUESTIONS */}
+        <div className="grid grid-cols-3 gap-10 text-[18px]">
+          {questions.map((q, i) => (
+            <div key={i} className="flex flex-col">
+              <div className="flex items-start gap-2 mb-2">
+                <span className="font-bold">{i + 1}</span>
 
-        .wb-g6-item {
-          display: grid;
-          grid-template-columns: clamp(20px, 2.4vw, 28px) clamp(70px, 11vw, 115px) minmax(0, 1fr);
-          gap: clamp(10px, 1.6vw, 18px);
-          align-items: center;
-          width: 100%;
-        }
+                <img
+                  src={q.image}
+                  alt={`question-${i + 1}`}
+                  style={{
+                    width: "250px",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
 
-        .wb-g6-number {
-          font-size: clamp(18px, 2vw, 22px);
-          font-weight: 700;
-          color: #222;
-          line-height: 1;
-        }
+              <div className="flex items-center gap-6 ml-6">
+                <p className="leading-[1.2] w-[150px]">{q.text}</p>
 
-        .wb-g6-image-wrap {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-height: clamp(72px, 11vw, 120px);
-        }
+                <div className="relative flex items-center gap-2">
+                  {markBox(i, "true", trueImg)}
 
-        .wb-g6-image {
-          max-width: 100%;
-          max-height: clamp(72px, 11vw, 120px);
-          width: auto;
-          height: auto;
-          object-fit: contain;
-          display: block;
-        }
+                  {markBox(i, "false", flaseImg)}
 
-        .wb-g6-options {
-          display: flex;
-          flex-direction: column;
-          gap: clamp(8px, 1vw, 12px);
-          min-width: 0;
-        }
-
-        .wb-g6-option {
-          position: relative;
-          width: fit-content;
-          max-width: 100%;
-          padding: clamp(4px, 0.6vw, 6px) clamp(16px, 2vw, 26px);
-          border: 3px solid transparent;
-          border-radius: 999px;
-          background: transparent;
-          color: #222;
-          font-size: clamp(16px, 2vw, 20px);
-          font-weight: 500;
-          line-height: 1.2;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          user-select: none;
-          box-sizing: border-box;
-          white-space: normal;
-          word-break: break-word;
-        }
-
-        .wb-g6-option.selected {
-          border-color: ${ACTIVE_COLOR};
-        }
-
-        .wb-g6-option.wrong {
-          border-color: ${WRONG_COLOR};
-        }
-
-        .wb-g6-option.disabled {
-          cursor: default;
-        }
-
-        .wb-g6-wrong-badge {
-          position: absolute;
-          top: clamp(-8px, -0.8vw, -6px);
-          right: clamp(-8px, -0.8vw, -6px);
-          width: clamp(18px, 2vw, 22px);
-          height: clamp(18px, 2vw, 22px);
-          border-radius: 50%;
-          background: ${WRONG_COLOR};
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: clamp(10px, 1vw, 12px);
-          font-weight: 700;
-          border: 2px solid #fff;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-          box-sizing: border-box;
-        }
-
-        .wb-g6-buttons {
-          display: flex;
-          justify-content: center;
-          margin-top: clamp(2px, 0.8vw, 6px);
-        }
-
-        @media (max-width: 900px) {
-          .wb-g6-grid {
-            column-gap: 22px;
-            row-gap: 20px;
-          }
-
-          .wb-g6-item {
-            grid-template-columns: 22px clamp(62px, 10vw, 90px) minmax(0, 1fr);
-            gap: 10px;
-          }
-
-          .wb-g6-option {
-            font-size: clamp(14px, 1.8vw, 18px);
-          }
-        }
-
-        @media (max-width: 650px) {
-          .wb-g6-grid {
-            grid-template-columns: 1fr;
-            row-gap: 18px;
-          }
-
-          .wb-g6-item {
-            grid-template-columns: 22px clamp(70px, 16vw, 90px) minmax(0, 1fr);
-          }
-
-          .wb-g6-image-wrap {
-            min-height: 76px;
-          }
-
-          .wb-g6-image {
-            max-height: 76px;
-          }
-        }
-
-        @media (max-width: 430px) {
-          .wb-g6-item {
-            grid-template-columns: 18px 58px minmax(0, 1fr);
-            gap: 8px;
-          }
-
-          .wb-g6-option {
-            font-size: 14px;
-            padding: 4px 14px;
-            border-width: 2px;
-          }
-
-          .wb-g6-number {
-            font-size: 17px;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1 className="WB-header-title-page8" style={{ margin: 0 }}>
-          <span className="WB-ex-A">G</span> Look, read, and circle.
-        </h1>
-
-        <div className="wb-g6-wrap">
-          <div className="wb-g6-grid">
-            {ITEMS.map((item) => (
-              <div key={item.id} className="wb-g6-item">
-                <div className="wb-g6-number">{item.id}</div>
-
-                <div className="wb-g6-image-wrap">
-                  <img
-                    src={item.img}
-                    alt={`question-${item.id}`}
-                    className="wb-g6-image"
-                  />
-                </div>
-
-                <div className="wb-g6-options">
-                  {item.options.map((option) => (
-                    <div key={option}>{renderOption(item, option)}</div>
-                  ))}
+                  {result[i] === false && errorBadge()}
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className="wb-g6-buttons">
-            <Button
-              checkAnswers={handleCheck}
-              handleShowAnswer={handleShowAnswer}
-              handleStartAgain={handleStartAgain}
-            />
-          </div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit1_Page6_Q1;

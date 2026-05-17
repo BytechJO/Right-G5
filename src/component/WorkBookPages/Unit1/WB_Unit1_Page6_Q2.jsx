@@ -1,637 +1,356 @@
-import React, { useMemo, useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 7.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 8.svg";
+import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 9.svg";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/00.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/0000.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/00000.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 6/SVG/Asset 12.svg";
+const WB_Unit1_Page6_Q2 = () => {
+  const questions = [
+    {
+      q: "How far ",
+      a: "five miles",
+      image: img1,
+    },
+    {
+      q: "How much are the chips?",
+      a: "It is one dollar.",
+      image: img2,
+    },
+    {
+      q: "How deep is the pool?",
+      a: "It is four feet deep.",
+      image: img3,
+    },
+  ];
 
-const WORDS = [
-  { id: 1, text: "scoreboard" },
-  { id: 2, text: "referee" },
-  { id: 3, text: "whistle" },
-  { id: 4, text: "bike" },
-];
+  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
 
-const IMAGES = [
-  { id: 3, img: img3, alt: "whistle" },
-  { id: 1, img: img1, alt: "scoreboard" },
-  { id: 2, img: img2, alt: "referee" },
-  { id: 4, img: img4, alt: "bike" },
-];
+  const [result, setResult] = useState([]);
 
-const CORRECT_ANSWERS = {
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-};
+  const [locked, setLocked] = useState(false);
 
-const DRAG_NUMBERS = [1, 2, 3, 4];
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-export default function WB_Vocabulary_Page213_H() {
-  const [imageAnswers, setImageAnswers] = useState({});
-  const [draggedNumber, setDraggedNumber] = useState(null);
-  const [touchItem, setTouchItem] = useState(null);
-  const [touchPos, setTouchPos] = useState({ x: 0, y: 0 });
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-  const dropRefs = useRef({});
+    const updated = [...answers];
 
-  const usedNumbers = useMemo(() => Object.values(imageAnswers), [imageAnswers]);
+    updated[i] = value;
 
-  const applyDrop = (imageId, num) => {
-    const updated = { ...imageAnswers };
+    setAnswers(updated);
 
-    Object.keys(updated).forEach((key) => {
-      if (updated[key] === num) {
-        delete updated[key];
-      }
-    });
+    setResult((prev) => {
+      const copy = [...prev];
 
-    updated[imageId] = num;
-    setImageAnswers(updated);
-    setDraggedNumber(null);
-  };
+      copy[i] = undefined;
 
-  const handleDragStart = (num) => {
-    if (showAns || usedNumbers.includes(num)) return;
-    setDraggedNumber(num);
-  };
-
-  const handleDrop = (imageId) => {
-    if (showAns || draggedNumber === null) return;
-    applyDrop(imageId, draggedNumber);
-  };
-
-  const handleTouchStart = (e, num) => {
-    if (showAns || usedNumbers.includes(num)) return;
-
-    const touch = e.touches[0];
-    setTouchItem(num);
-    setDraggedNumber(num);
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchMove = (e) => {
-    if (touchItem === null) return;
-
-    const touch = e.touches[0];
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchEnd = () => {
-    if (touchItem === null) return;
-
-    Object.entries(dropRefs.current).forEach(([key, ref]) => {
-      if (!ref) return;
-
-      const rect = ref.getBoundingClientRect();
-
-      if (
-        touchPos.x >= rect.left &&
-        touchPos.x <= rect.right &&
-        touchPos.y >= rect.top &&
-        touchPos.y <= rect.bottom
-      ) {
-        applyDrop(Number(key), touchItem);
-      }
-    });
-
-    setTouchItem(null);
-    setDraggedNumber(null);
-  };
-
-  const handleRemoveNumber = (imageId) => {
-    if (showAns) return;
-
-    setImageAnswers((prev) => {
-      const updated = { ...prev };
-      delete updated[imageId];
-      return updated;
+      return copy;
     });
   };
 
-  const getScore = () => {
-    let score = 0;
+  const checkAnswers = () => {
+    if (locked) return;
 
-    Object.keys(CORRECT_ANSWERS).forEach((imageId) => {
-      if (imageAnswers[imageId] === CORRECT_ANSWERS[imageId]) {
-        score += 1;
-      }
-    });
+    const hasEmpty = answers.some((a) => !a.trim());
 
-    return score;
-  };
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
 
-  const handleCheck = () => {
-    if (showAns) return;
-
-    const allAnswered = Object.keys(CORRECT_ANSWERS).every(
-      (itemId) => imageAnswers[itemId]
-    );
-
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
       return;
     }
 
-    const total = Object.keys(CORRECT_ANSWERS).length;
-    const score = getScore();
+    let correctCount = 0;
 
-    setChecked(true);
+    const newResults = answers.map((a, i) => {
+      const qIndex = Math.floor(i / 2);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+      const expected = i % 2 === 0 ? questions[qIndex].q : questions[qIndex].a;
+
+      const ok = normalize(a) === normalize(expected);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    setImageAnswers(CORRECT_ANSWERS);
-    setChecked(true);
-    setShowAns(true);
-    setDraggedNumber(null);
-    setTouchItem(null);
+  const showAnswers = () => {
+    setAnswers([
+      "How far ",
+      "five miles",
+
+      "How much are the chips",
+      "It is one dollar",
+
+      "How deep is the pool",
+      "It is four feet deep",
+    ]);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setImageAnswers({});
-    setDraggedNumber(null);
-    setTouchItem(null);
-    setChecked(false);
-    setShowAns(false);
+    setAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isImageWrong = (imageId) => {
-    if (!checked) return false;
-    return imageAnswers[imageId] !== CORRECT_ANSWERS[imageId];
-  };
+  const inputField = (i, width) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <span className="WB-ex-A">H</span>
-          Read, look, and number.
-        </h1>
+          ✕
+        </span>
+      )}
+    </div>
+  );
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            J
+          </span>
+          Look, and then write “<span className="text-[#19B6F0]">How</span>”
+          questions and answer them.Use the adjectives in the word box.
+        </h5>
 
-        <div className="wb-content-grid">
-          <div className="wb-words-list">
-            {WORDS.map((word) => (
-              <div key={word.id} className="wb-word-row">
-                <div className="wb-word-box">
-                  <span className="wb-word-number-inline">{word.id}</span>
-                  <span className="wb-word-text">{word.text}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* WORD BOXES */}
+        <div
+          style={{
+            border: "2px solid #7D3C98",
+            borderRadius: "12px",
+            padding: "8px 24px",
+            display: "flex",
+            justifyContent: "center",
+            gap: "40px",
+            width: "fit-content",
+            margin: "0 auto 48px auto",
+            fontSize: "18px",
+          }}
+        >
+          <span>deep</span>
 
-          <div className="wb-images-grid">
-            {IMAGES.map((item) => (
-              <div
-                key={item.id}
-                ref={(el) => (dropRefs.current[item.id] = el)}
-                className={`wb-image-card ${
-                  isImageWrong(item.id) ? "wb-image-card--wrong" : ""
-                } ${draggedNumber !== null ? "wb-image-card--active" : ""}`}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => handleDrop(item.id)}
-              >
-                <img
-                  src={item.img}
-                  alt={item.alt}
-                  className="wb-image"
-                  draggable={false}
-                />
+          <span>much</span>
 
-                <button
-                  type="button"
-                  className={`wb-corner-number ${
-                    imageAnswers[item.id] ? "wb-corner-number--filled" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveNumber(item.id);
-                  }}
-                  disabled={!imageAnswers[item.id] || showAns}
-                >
-                  {imageAnswers[item.id] || ""}
-
-                  {isImageWrong(item.id) && (
-                    <span className="wb-wrong-badge">✕</span>
-                  )}
-                </button>
-              </div>
-            ))}
-          </div>
+          <span>far</span>
         </div>
 
-        <div className="wb-drag-numbers">
-          {DRAG_NUMBERS.map((num) => {
-            const disabled = usedNumbers.includes(num);
-            const selected = draggedNumber === num || touchItem === num;
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-10 text-[18px] mb-15">
+          {/* 1 */}
+          <div className="flex gap-12 items-start">
+            {/* LEFT */}
+            <div className="flex items-start gap-4 w-60">
+              <span className="font-bold mt-3">1</span>
 
-            return (
-              <div
-                key={num}
-                draggable={!disabled && !showAns}
-                onDragStart={() => handleDragStart(num)}
-                onTouchStart={(e) => handleTouchStart(e, num)}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                className={`wb-drag-circle ${
-                  disabled || showAns ? "wb-drag-circle--disabled" : ""
-                } ${selected ? "wb-drag-circle--selected" : ""}`}
-              >
-                {num}
+              <img
+                src={questions[0].image}
+                alt="home"
+                style={{
+                  width: "180px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+
+            {/* RIGHT */}
+            <div className="flex flex-col gap-6 w-[520px] mt-1">
+              <span>five kilometers</span>
+
+              <div className="flex items-center gap-2">
+                <span>Q:</span>
+
+                {inputField(0, "w-[300px]")}
+
+                <span>is it to your home?</span>
               </div>
-            );
-          })}
-        </div>
 
-        <div className="wb-buttons-wrap">
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-            checkAnswers={handleCheck}
-          />
+              <div className="flex items-center gap-2">
+                <span>A:</span>
+
+                <span>It is</span>
+
+                {inputField(1, "w-[300px]")}
+
+                <span>away.</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 2 */}
+          <div className="flex gap-12 items-start">
+            {/* LEFT */}
+            <div className="flex items-start gap-4 w-60">
+              <span className="font-bold mt-3">2</span>
+
+              <img
+                src={questions[1].image}
+                alt="chips"
+                style={{
+                  width: "140px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+
+            {/* RIGHT */}
+            <div className="flex flex-col gap-6 w-[520px] mt-1">
+              <span>one dollar</span>
+
+              <div className="flex items-center gap-2">
+                <span>Q:</span>
+
+                {inputField(2, "w-[400px]")}
+
+                <span>?</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span>A:</span>
+
+                {inputField(3, "w-[400px]")}
+              </div>
+            </div>
+          </div>
+
+          {/* 3 */}
+          <div className="flex gap-12 items-start">
+            {/* LEFT */}
+            <div className="flex items-start gap-4 w-60">
+              <span className="font-bold mt-3">3</span>
+
+              <img
+                src={questions[2].image}
+                alt="pool"
+                style={{
+                  width: "180px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+
+            {/* RIGHT */}
+            <div className="flex flex-col gap-6 w-[520px] mt-1">
+              <span>three meters deep</span>
+
+              <div className="flex items-center gap-2">
+                <span>Q:</span>
+
+                {inputField(4, "w-[400px]")}
+
+                <span>?</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span>A:</span>
+
+                {inputField(5, "w-[400px]")}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {touchItem !== null && (
-        <div
-          className="wb-touch-preview"
-          style={{
-            left: touchPos.x - 24,
-            top: touchPos.y - 24,
-          }}
-        >
-          {touchItem}
-        </div>
-      )}
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-      <style jsx>{`
-        .wb-content-grid {
-          display: grid;
-          grid-template-columns: minmax(250px, 320px) 1fr;
-          gap: 30px;
-          align-items: start;
-        }
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-        .wb-words-list {
-          display: flex;
-          flex-direction: column;
-          gap: 56px;
-          padding-top: 10px;
-        }
-
-        .wb-word-row {
-          display: flex;
-          align-items: center;
-        }
-
-        .wb-word-box {
-          min-height: 44px;
-          padding: 0 12px;
-          border: 2px solid #f39b42;
-          border-radius: 12px;
-          background: #fff;
-          display: inline-flex;
-          align-items: center;
-          box-sizing: border-box;
-          width: 170px;
-          gap: 10px;
-        }
-
-        .wb-word-number-inline {
-          font-size: 18px;
-          font-weight: 700;
-          color: #111;
-          line-height: 1;
-          flex-shrink: 0;
-        }
-
-        .wb-word-text {
-          font-size: 18px;
-          font-weight: 500;
-          line-height: 1.1;
-          color: #222;
-          text-transform: lowercase;
-        }
-
-        .wb-images-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(190px, 1fr));
-          gap: 18px 28px;
-          align-items: start;
-        }
-
-        .wb-image-card {
-          position: relative;
-          min-height: 154px;
-          border: 2px solid #ec9b32;
-          border-radius: 14px;
-          background: #fff;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 10px;
-          box-sizing: border-box;
-          transition: 0.2s ease;
-        }
-
-        .wb-image-card--active {
-          box-shadow: 0 0 0 3px rgba(141, 141, 147, 0.12);
-        }
-
-        .wb-image-card--wrong {
-          border-color: #d63b3b;
-        }
-
-        .wb-image {
-          width: 100%;
-          height: 100%;
-          max-height: 130px;
-          object-fit: contain;
-          display: block;
-          user-select: none;
-          pointer-events: none;
-        }
-
-        .wb-corner-number {
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 38px;
-          height: 38px;
-          border: none;
-          border-left: 2px solid #ec9b32;
-          border-bottom: 2px solid #ec9b32;
-          border-bottom-left-radius: 10px;
-          background: #fff;
-          color: #000000;
-          font-size: 22px;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          line-height: 1;
-        }
-
-        .wb-corner-number:disabled {
-          cursor: default;
-          opacity: 1;
-        }
-
-        .wb-wrong-badge {
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          width: 22px;
-          height: 22px;
-          border-radius: 50%;
-          background-color: #ef4444;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          border: 2px solid #fff;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-          z-index: 11111;
-          pointer-events: none;
-        }
-
-        .wb-drag-numbers {
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 14px;
-          margin-top: 8px;
-        }
-
-        .wb-drag-circle {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: #ec9b32;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 22px;
-          font-weight: 700;
-          cursor: grab;
-          user-select: none;
-          transition: 0.2s ease;
-          -webkit-tap-highlight-color: transparent;
-          touch-action: none;
-        }
-
-        .wb-drag-circle--selected {
-          transform: scale(1.08);
-          box-shadow: 0 0 0 3px rgba(141, 141, 147, 0.2);
-        }
-
-        .wb-drag-circle--disabled {
-          background: #cfcfd4;
-          cursor: not-allowed;
-          opacity: 0.6;
-        }
-
-        .wb-buttons-wrap {
-          display: flex;
-          justify-content: center;
-          margin-top: 4px;
-        }
-
-        .wb-touch-preview {
-          position: fixed;
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: #8d8d93;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 22px;
-          font-weight: 700;
-          pointer-events: none;
-          z-index: 9999;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (min-width: 768px) and (max-width: 1024px) {
-          .ipad-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 56px;
-            background: #232323;
-            color: #fff;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-          }
-
-          .WB-header-title-page8 {
-            font-size: 26px;
-          }
-
-          .wb-content-grid {
-            grid-template-columns: minmax(220px, 290px) 1fr;
-            gap: 24px;
-          }
-
-          .wb-words-list {
-            gap: 42px;
-          }
-
-          .wb-word-box {
-            width: 160px;
-            min-height: 42px;
-          }
-
-          .wb-word-text,
-          .wb-word-number-inline {
-            font-size: 17px;
-          }
-
-          .wb-images-grid {
-            grid-template-columns: repeat(2, minmax(160px, 1fr));
-            gap: 18px 22px;
-          }
-
-          .wb-image-card {
-            min-height: 140px;
-          }
-
-          .wb-image {
-            max-height: 118px;
-          }
-
-          .wb-corner-number {
-            width: 36px;
-            height: 36px;
-            font-size: 20px;
-          }
-
-          .wb-drag-circle,
-          .wb-touch-preview {
-            width: 46px;
-            height: 46px;
-            font-size: 20px;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .WB-header-title-page8 {
-            font-size: 23px;
-          }
-
-          .WB-ex-A {
-            width: 32px;
-            height: 32px;
-            min-width: 32px;
-            font-size: 20px;
-          }
-
-          .wb-content-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-          }
-
-          .wb-words-list {
-            gap: 16px;
-            padding-top: 0;
-          }
-
-          .wb-word-box {
-            width: 100%;
-            max-width: 220px;
-            min-height: 42px;
-          }
-
-          .wb-word-number-inline,
-          .wb-word-text {
-            font-size: 16px;
-          }
-
-          .wb-images-grid {
-            grid-template-columns: repeat(2, minmax(130px, 1fr));
-            gap: 14px;
-          }
-
-          .wb-image-card {
-            min-height: 125px;
-            padding: 8px;
-          }
-
-          .wb-image {
-            max-height: 100px;
-          }
-
-          .wb-corner-number {
-            width: 32px;
-            height: 32px;
-            font-size: 18px;
-          }
-
-          .wb-drag-circle,
-          .wb-touch-preview {
-            width: 42px;
-            height: 42px;
-            font-size: 19px;
-          }
-        }
-
-        @media (max-width: 520px) {
-          .wb-images-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .wb-word-box {
-            max-width: 100%;
-          }
-
-          .wb-image-card {
-            min-height: 150px;
-          }
-
-          .wb-image {
-            max-height: 120px;
-          }
-        }
-      `}</style>
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default WB_Unit1_Page6_Q2;

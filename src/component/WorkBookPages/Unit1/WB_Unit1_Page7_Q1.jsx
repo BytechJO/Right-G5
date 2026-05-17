@@ -1,417 +1,291 @@
-import React, { useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import exerciseImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 7/SVG/Asset 1.svg";
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 7/Asset 10.svg";
 
-const ACTIVE_COLOR = "#f39b42";
-const SOFT_COLOR = "#ffca94";
-const BORDER_COLOR = "#d9d9d9";
+const WB_Unit1_Page7_Q1 = () => {
+  const questions = [
+    "He only had 10 minutes to study.",
+    "John got 70% on his math exam.",
+    "He should study as soon as he gets home.",
+  ];
 
-const ANSWERS = [
-  { id: 1, correct: "tall" },
-  { id: 2, correct: "short" },
-  { id: 3, correct: "fast" },
-  { id: 4, correct: "slow" },
-  { id: 5, correct: "old" },
-  { id: 6, correct: "young" },
-];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-const DRAG_ITEMS = [
-  { id: 1, value: "tall" },
-  { id: 2, value: "short" },
-  { id: 3, value: "fast" },
-  { id: 4, value: "slow" },
-  { id: 5, value: "old" },
-  { id: 6, value: "young" },
+  const [result, setResult] = useState([]);
 
-  // distractors
-  { id: 7, value: "big" },
-  { id: 8, value: "small" },
-  { id: 9, value: "happy" },
-];
+  const [locked, setLocked] = useState(false);
 
-export default function WB_Vocabulary_Page214_QI() {
-  const [answers, setAnswers] = useState({});
-  const [draggedItem, setDraggedItem] = useState(null);
-  const [touchItem, setTouchItem] = useState(null);
-  const [touchPos, setTouchPos] = useState({ x: 0, y: 0 });
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’'%]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const dropRefs = useRef({});
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true || (i === 3 && locked)) return;
 
-  const usedDragIds = Object.values(answers)
-    .filter(Boolean)
-    .map((entry) => entry.dragId);
+    const updated = [...answers];
 
-  const applyDrop = (boxKey, item) => {
-    const newAnswers = { ...answers };
+    updated[i] = value;
 
-    Object.keys(newAnswers).forEach((key) => {
-      if (newAnswers[key]?.dragId === item.id) {
-        delete newAnswers[key];
-      }
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-
-    newAnswers[boxKey] = {
-      dragId: item.id,
-      value: item.value,
-    };
-
-    setAnswers(newAnswers);
-    setShowResults(false);
   };
 
-  // desktop drag
-  const handleDragStart = (item) => {
-    if (showAns || usedDragIds.includes(item.id)) return;
-    setDraggedItem(item);
-  };
+  const checkAnswers = () => {
+    if (locked) return;
 
-  const handleDrop = (boxKey) => {
-    if (showAns || !draggedItem) return;
-    applyDrop(boxKey, draggedItem);
-    setDraggedItem(null);
-  };
+    // كل الحقول لازم تكون معبية
+    const hasEmpty = answers.some((a) => !a.trim());
 
-  // touch for ipad/tablet
-  const handleTouchStart = (e, item) => {
-    if (showAns || usedDragIds.includes(item.id)) return;
-
-    const touch = e.touches[0];
-    setTouchItem(item);
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchItem) return;
-    const touch = e.touches[0];
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchItem) return;
-
-    Object.entries(dropRefs.current).forEach(([key, ref]) => {
-      if (!ref) return;
-
-      const rect = ref.getBoundingClientRect();
-
-      if (
-        touchPos.x >= rect.left &&
-        touchPos.x <= rect.right &&
-        touchPos.y >= rect.top &&
-        touchPos.y <= rect.bottom
-      ) {
-        applyDrop(key, touchItem);
-      }
-    });
-
-    setTouchItem(null);
-  };
-
-  const handleRemoveAnswer = (boxKey) => {
-    if (showAns) return;
-
-    setAnswers((prev) => {
-      const updated = { ...prev };
-      delete updated[boxKey];
-      return updated;
-    });
-
-    setShowResults(false);
-  };
-
-  const handleCheck = () => {
-    if (showAns) return;
-
-    const allAnswered = ANSWERS.every((item) => answers[`a-${item.id}`]?.value);
-
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
       return;
     }
 
-    let score = 0;
-    const total = ANSWERS.length;
+    let correctCount = 0;
 
-    ANSWERS.forEach((item) => {
-      if (answers[`a-${item.id}`]?.value === item.correct) {
-        score++;
+    const newResults = answers.map((a, i) => {
+      // السؤال الرابع ما ينحسب
+      if (i === 3) {
+        return undefined;
       }
+
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+    // السكور فقط لأول 3
+    const total = 3;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
+  const showAnswers = () => {
+    setAnswers([
+      "He only had 10 minutes to study.",
+      "John got 70% on his math exam.",
+      "He should study as soon as he gets home.",
+    ]);
 
-    ANSWERS.forEach((item) => {
-      const matched = DRAG_ITEMS.find((d) => d.value === item.correct);
+    setResult([true, true, true, true]);
 
-      filled[`a-${item.id}`] = {
-        dragId: matched?.id ?? item.id,
-        value: item.correct,
-      };
-    });
-
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setDraggedItem(null);
-    setTouchItem(null);
-    setShowResults(false);
-    setShowAns(false);
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (item) => {
-    if (!showResults) return false;
-    return answers[`a-${item.id}`]?.value !== item.correct;
-  };
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+          placeholder:text-[#999]
 
-  const renderDropBox = (boxKey, wrong) => {
-    const value = answers[boxKey]?.value || "";
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-    return (
-      <div
-        ref={(el) => (dropRefs.current[boxKey] = el)}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={() => handleDrop(boxKey)}
-        onClick={() => handleRemoveAnswer(boxKey)}
-        style={{
-          minWidth: "180px",
-          width: "100%",
-          maxWidth: "320px",
-          height: "42px",
-          borderBottom: "3px solid #3f3f3f",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          fontSize: "24px",
-          lineHeight: "1",
-          color: showAns ? "#d62828" : "#111",
-          padding: "0 4px 2px",
-          boxSizing: "border-box",
-          position: "relative",
-          fontWeight: 500,
-          cursor: value && !showAns ? "pointer" : "default",
-          userSelect: "none",
-        }}
-      >
-        {value}
-
-        {wrong && (
-          <div
-            style={{
-              position: "absolute",
-              top: "-10px",
-              right: "-10px",
-              width: "20px",
-              height: "20px",
-              borderRadius: "50%",
-              backgroundColor: "#ef4444",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              fontWeight: 700,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            }}
-          >
-            ✕
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="main-container-component">
-  <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
+      {result[i] === false && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span className="WB-ex-A">I</span>Look and write a vocabulary word.
-        </h1>
-
-        {/* main image */}
-        <div
-          style={{
-            display: "flex",
             justifyContent: "center",
-            width: "100%",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1000px",
-            }}
-          >
-            <img
-              src={exerciseImg}
-              alt="exercise"
-              style={{
-                width: "100%",
-                height: "auto",
-                display: "block",
-                objectFit: "contain",
-                borderRadius: "12px",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* drag items */}
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {DRAG_ITEMS.map((item) => {
-            const isUsed = usedDragIds.includes(item.id);
-
-            return (
-              <div
-                key={item.id}
-                draggable={!isUsed && !showAns}
-                onDragStart={() => handleDragStart(item)}
-                onTouchStart={(e) => handleTouchStart(e, item)}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                style={{
-                  padding: "10px 16px",
-                  borderRadius: "14px",
-                  border: `1.5px solid ${isUsed ? BORDER_COLOR : ACTIVE_COLOR}`,
-                  backgroundColor: isUsed ? "#eeeeee" : SOFT_COLOR,
-                  color: isUsed ? "#999" : "#222",
-                  cursor: isUsed || showAns ? "not-allowed" : "grab",
-                  opacity: isUsed ? 0.6 : 1,
-                  userSelect: "none",
-                  fontSize: "18px",
-                  fontWeight: 500,
-                  boxShadow: isUsed ? "none" : "0 2px 8px rgba(0,0,0,0.06)",
-                  transition: "0.2s ease",
-                  touchAction: "none",
-                }}
-              >
-                {item.value}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* answer lines */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, minmax(280px, 1fr))",
-            gap: "24px 40px",
-            width: "100%",
-            maxWidth: "1000px",
-            margin: "0 auto",
-          }}
-        >
-          {ANSWERS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                minWidth: 0,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "22px",
-                  fontWeight: 700,
-                  color: "#111",
-                  minWidth: "28px",
-                }}
-              >
-                {item.id}
-              </span>
-
-              <div style={{ flex: 1 }}>
-                {renderDropBox(`a-${item.id}`, isWrong(item))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* buttons */}
-        <div
-          style={{
-            marginTop: "6px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
-        </div>
-      </div>
-
-      {/* floating preview on touch */}
-      {touchItem && (
-        <div
-          style={{
-            position: "fixed",
-            left: touchPos.x - 40,
-            top: touchPos.y - 20,
-            background: "#fff",
-            padding: "8px 12px",
-            borderRadius: "10px",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-            pointerEvents: "none",
-            zIndex: 9999,
-            fontSize: "18px",
-            fontWeight: 600,
-            color: "#222",
-          }}
-        >
-          {touchItem.value}
-        </div>
+          ✕
+        </span>
       )}
-
     </div>
   );
-}
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div
+        className="div-forall "
+        style={{
+          lineHeight: "1.5",
+        }}
+      >
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            K
+          </span>
+          Read and write.
+        </h5>
+
+        {/* READING */}
+        <div className="flex gap-8 items-start mb-12 text-[17px]">
+          <div className="flex-1">
+            <p className="mb-5">
+              How many hours do you spend studying for an exam? How many times
+              have you fallen asleep while doing your homework or studying? Did
+              you ever sleep on your books? This happens to almost every
+              student. Studying takes up a lot of time. Sometimes, there just
+              isn’t enough time to study!
+            </p>
+
+            <p>
+              That’s what happened to John, a fifth grade student. He was
+              studying for a math exam when he fell asleep at his desk. In the
+              morning, his alarm went off. Uh-oh! It was already time to go to
+              school! John didn’t finish studying. He didn’t know what to do.
+              When he went to school, he tried to study, but there wasn’t enough
+              time. He only had 10 minutes to review before the math exam. When
+              it was time for the exam, John was not ready. He took the exam but
+              couldn’t figure out many of the answers. Sadly, John got 70% on
+              his math exam. “Next time, I will study as soon as I go home,” he
+              thought.
+            </p>
+          </div>
+
+          {/* IMAGE */}
+          <img
+            src={img1}
+            alt="sleeping-boy"
+            style={{
+              width: "260px",
+              height: "auto",
+              objectFit: "contain",
+              marginTop: "90px",
+            }}
+          />
+        </div>
+
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-12 mb-10">
+          {/* 1 */}
+          <div>
+            <div className="flex gap-3 mb-4">
+              <span className="font-bold">1</span>
+
+              <span>How many minutes did John have to study at school?</span>
+            </div>
+
+            <div className="pl-7">{inputField(0)}</div>
+          </div>
+
+          {/* 2 */}
+          <div>
+            <div className="flex gap-3 mb-4">
+              <span className="font-bold">2</span>
+
+              <span>What mark did John get on his exam?</span>
+            </div>
+
+            <div className="pl-7">{inputField(1)}</div>
+          </div>
+
+          {/* 3 */}
+          <div>
+            <div className="flex gap-3 mb-4">
+              <span className="font-bold">3</span>
+
+              <span>What should John do next time before an exam?</span>
+            </div>
+
+            <div className="pl-7">{inputField(2)}</div>
+          </div>
+
+          {/* 4 */}
+          <div>
+            <div className="flex gap-3 mb-4">
+              <span className="font-bold">4</span>
+
+              <span>How long does it take you to study?</span>
+            </div>
+
+            <div className="pl-7">{inputField(3, "Answers will vary")}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default WB_Unit1_Page7_Q1;

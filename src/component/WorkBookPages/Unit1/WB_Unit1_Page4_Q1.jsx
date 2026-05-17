@@ -1,389 +1,318 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 4/SVG/Asset 1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 4/SVG/Asset 2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 4/SVG/Asset 3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 4/SVG/Asset 4.svg";
+const WB_Unit1_Page4_Q1 = () => {
+  const questions = [
+    "pillow",
+    "fell asleep",
+    "on one side",
+    "face",
+    "reviewing",
+    "figure",
+    "mirror",
+    "Uh-oh",
+    "actually",
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    img: img1,
-    pairs: ["slow fast", "young old"],
-    correct: "slow fast",
-  },
-  {
-    id: 2,
-    img: img2,
-    pairs: ["old young", "big small"],
-    correct: "big small",
-  },
-  {
-    id: 3,
-    img: img3,
-    pairs: ["fast slow", "short tall"],
-    correct: "short tall",
-  },
-  {
-    id: 4,
-    img: img4,
-    pairs: ["short tall", "heavy light"],
-    correct: "heavy light",
-  },
-];
+  const [answers, setAnswers] = useState(["", "", "", "", "", "", "", "", ""]);
 
-export default function WB_Unit3_Page6_QC() {
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const [result, setResult] = useState([]);
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
+  const [locked, setLocked] = useState(false);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    setShowResults(false);
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  const checkAnswers = () => {
+    if (locked) return;
 
-    const allAnswered = ITEMS.every((item) => answers[item.id]);
+    const hasEmpty = answers.some((a) => !a.trim());
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) {
-        score++;
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctMap = {};
+  const showAnswers = () => {
+    setAnswers([
+      "pillow",
+      "fell asleep",
+      "on one side",
+      "face",
+      "reviewing",
+      "figure",
+      "mirror",
+      "Uh-oh",
+      "actually",
+    ]);
 
-    ITEMS.forEach((item) => {
-      correctMap[item.id] = item.correct;
-    });
+    setResult([true, true, true, true, true, true, true, true, true]);
 
-    setAnswers(correctMap);
-    setShowResults(true);
-    setShowAns(true);
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+    setAnswers(["", "", "", "", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const renderPair = (item, pair) => {
-    const selected = answers[item.id] === pair;
-    const isCorrect = pair === item.correct;
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[17px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-    let borderStyle = "2px solid transparent";
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-    if (selected && !showResults) {
-      borderStyle = "4px solid #f39d66";
-    }
-
-    if (showResults) {
-      if (selected && isCorrect) {
-        borderStyle = "4px solid #f39d66";
-      } else if (selected && !isCorrect) {
-        borderStyle = "4px solid #ef4444";
-      }
-    }
-
-    return (
-      <div
-        onClick={() => handleSelect(item.id, pair)}
-        style={{
-          position: "relative",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minWidth: "180px",
-          minHeight: "52px",
-          padding: "8px 18px",
-          border: borderStyle,
-          borderRadius: "999px",
-          background: "#fff",
-          color: "#222",
-          fontSize: "20px",
-          fontWeight: "500",
-          lineHeight: "1.2",
-          cursor: showAns ? "default" : "pointer",
-          boxSizing: "border-box",
-          userSelect: "none",
-          transition: "all 0.25s ease",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {pair}
-
-        {showResults && selected && !isCorrect && (
-          <div
-            style={{
-              position: "absolute",
-              top: "-8px",
-              right: "-8px",
-              width: "22px",
-              height: "22px",
-              borderRadius: "50%",
-              backgroundColor: "#ef4444",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "700",
-              border: "2px solid #fff",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-            }}
-          >
-            ✕
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  return (
- <div className="main-container-component">
-<div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-     
-        <style>{`
-          .wb-c6-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 32px 36px;
-            width: 100%;
-            align-items: start;
-          }
-
-          .wb-c6-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            min-width: 0;
-          }
-
-          .wb-c6-num {
-            font-size: 22px;
-            font-weight: 700;
-            color: #222;
-            line-height: 1;
-            min-width: 18px;
-            margin-top: 10px;
-            flex-shrink: 0;
-          }
-
-          .wb-c6-body {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 14px;
-            width: 100%;
-            min-width: 0;
-          }
-
-          .wb-c6-img-frame {
-            width: 100%;
-            max-width: 470px;
-            height: 185px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-sizing: border-box;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            box-shadow: none;
-          }
-
-          .wb-c6-img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            display: block;
-            border: none;
-            box-shadow: none;
-          }
-
-          .wb-c6-pairs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 16px;
-            width: 100%;
-            padding-left: 0;
-          }
-
-          .wb-c6-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 6px;
-            width: 100%;
-          }
-
-          @media (max-width: 950px) {
-            .wb-c6-grid {
-              grid-template-columns: 1fr;
-              gap: 28px;
-            }
-
-            .wb-c6-img-frame {
-              max-width: 100%;
-              height: 170px;
-            }
-          }
-
-          @media (max-width: 768px) {
-            .div-forall {
-              padding: 0 20px;
-            }
-
-            .wb-c6-item {
-              gap: 10px;
-            }
-
-            .wb-c6-num {
-              font-size: 20px;
-              margin-top: 8px;
-            }
-
-            .wb-c6-img-frame {
-              height: 155px;
-            }
-
-            .wb-c6-pairs {
-              gap: 10px 12px;
-            }
-          }
-
-          @media (max-width: 600px) {
-            .div-forall {
-              padding: 0 16px;
-            }
-
-            .wb-c6-item {
-              gap: 8px;
-            }
-
-            .wb-c6-body {
-              gap: 12px;
-            }
-
-            .wb-c6-img-frame {
-              height: 145px;
-            }
-
-            .wb-c6-pairs {
-              flex-direction: column;
-              align-items: stretch;
-              gap: 10px;
-            }
-
-            .wb-c6-pairs > * {
-              width: 100%;
-            }
-          }
-
-          @media (max-width: 420px) {
-            .div-forall {
-              padding: 0 12px;
-            }
-
-            .wb-c6-num {
-              font-size: 18px;
-              min-width: 14px;
-            }
-
-            .wb-c6-img-frame {
-              height: 125px;
-            }
-          }
-        `}</style>
-
- <h1
-          className="WB-header-title-page8"
+      {result[i] === false && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
-        >          <span className="WB-ex-A">C</span>
-          Look and read. Circle the correct pair.
-        </h1>
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
 
-        <div className="wb-c6-grid">
-          {ITEMS.map((item) => (
-            <div key={item.id} className="wb-c6-item">
-              <div className="wb-c6-num">{item.id}</div>
+  const wordBox = (word) => (
+    <div
+      style={{
+        border: "2px solid #7D3C98",
+        borderRadius: "12px",
+        padding: "8px 20px",
+        fontSize: "17px",
+        minWidth: "120px",
+        textAlign: "center",
+      }}
+    >
+      {word}
+    </div>
+  );
 
-              <div className="wb-c6-body">
-                <div className="wb-c6-img-frame">
-                  <img
-                    src={item.img}
-                    alt={`question-${item.id}`}
-                    className="wb-c6-img"
-                  />
-                </div>
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            C
+          </span>
+          Read and write.
+        </h5>
 
-                <div className="wb-c6-pairs">
-                  {item.pairs.map((pair) => (
-                    <React.Fragment key={pair}>
-                      {renderPair(item, pair)}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* WORD BOXES */}
+        <div className="flex flex-wrap justify-center gap-4 mb-7">
+          {wordBox("face")}
+          {wordBox("actually")}
+          {wordBox("on one side")}
+          {wordBox("mirror")}
+          {wordBox("reviewing")}
+          {wordBox("uh-oh")}
+          {wordBox("fell asleep")}
+          {wordBox("pillow")}
+          {wordBox("figure")}
         </div>
 
-        <div className="wb-c6-buttons">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
+        {/* STORY */}
+        <div className=" text-[17px] leading-[2.2] mb-7">
+          <div className="flex flex-wrap items-center gap-2 ">
+            <span>I rested my head on my fluffy</span>
+
+            {inputField(0, "w-[170px]")}
+
+            <span>and</span>
+
+            {inputField(1, "w-[170px]")}
+
+            <span>,</span>
+          </div>
+
+          <div>Only to wake up to a voice so deep,</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>It was a man with a scar</span>
+
+            {inputField(2, "w-[170px]")}
+
+            <span>of his</span>
+
+            {inputField(3, "w-[140px]")}
+
+            <span>,</span>
+          </div>
+
+          <div>The other side was covered with lace.</div>
+
+          <div>“Who are you?” I asked with fear.</div>
+
+          <div>He replied, “I came to help you here.</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>I saw you</span>
+
+            {inputField(4, "w-[170px]")}
+
+            <span>your textbook in school.</span>
+          </div>
+
+          <div>I came to give you the right tool,</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>To</span>
+
+            {inputField(5, "w-[150px]")}
+
+            <span>the answers to the questions,</span>
+          </div>
+
+          <div>That might be on your examinations.”</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>I said, “But look at your face in the</span>
+
+            {inputField(6, "w-[170px]")}
+
+            <span>.</span>
+          </div>
+
+          <div>That’s not a face of a teacher.”</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>He said, “</span>
+
+            {inputField(7, "w-[140px]")}
+
+            <span>! I was at a monster party last night.</span>
+          </div>
+
+          <div>I’m sorry if I had given you a fright.</div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span>I</span>
+
+            {inputField(8, "w-[170px]")}
+
+            <span>thought I was prepared,</span>
+          </div>
+
+          <div>I did not mean to make you scared!”</div>
         </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit1_Page4_Q1;

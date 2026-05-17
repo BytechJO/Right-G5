@@ -1,5 +1,5 @@
 import React from "react";
-import page_3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U1 Folder/Page 7.png";
+import page_3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 7.png";
 import "./WB_unit5.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -10,14 +10,14 @@ const WB_Unit1_Page7 = ({ openPopup }) => {
               style={{ backgroundImage: `url(${page_3})` }}>
       {/* <img src={page_3} /> */}
       <div
-        className="q9-1 hover:scale-110 transition"
+        className="q11-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 8 })}
+          onClick={() => openPopup("exercise", { startIndex: 10 })}
           // className="click-icon-page8-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
@@ -31,30 +31,6 @@ const WB_Unit1_Page7 = ({ openPopup }) => {
           />
         </svg>
       </div>
-
-      <div
-        className="q10-1 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 9 })}
-          // className="click-icon-page8-1 hover:scale-110 transition"
-          style={{ overflow: "visible" }}
-        >
-          <image className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid meet"
-          />
-        </svg>
-      </div>
-    
     </div>
   );
 };
