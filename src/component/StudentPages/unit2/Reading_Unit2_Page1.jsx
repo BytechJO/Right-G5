@@ -9,7 +9,7 @@ import sound5 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.4_Adult Lady
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
-// import video from "../../../assets/videos/reading/grade 3 unit 2 page 20-21 reading.mp4";
+import video from "../../../assets/videos/grade 5 unit 2 reading page 20-21.mp4";
 
 const Reading_Unit2_Page1 = ({
   openPopup,
@@ -217,7 +217,7 @@ const Reading_Unit2_Page1 = ({
                     borderRadius: "20px",
                   }}
                 >
-                  {/* <source src={video} type="video/mp4" /> */}
+                  <source src={video} type="video/mp4" />
                 </video>
               </div>,
             );

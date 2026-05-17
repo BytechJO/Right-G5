@@ -1,22 +1,9 @@
-import React , {useRef} from "react";
-import page_4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 10.png";
+import React  from "react";
+import page_4 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U2/Page 10.png";
 import "./WB_unit1.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
 const WB_Unit1_Page4 = ({ openPopup }) => {
-  const audioRef = useRef(null);
-  const captionsExample = [
-    { start: 0, end: 2.29, text: " Page 9, exercise F." },
-    { start: 2.32, end: 4.11, text: "Let's sing." },
-    { start: 4.15, end: 6.0, text: "Good morning, good morning." },
-    {
-      start: 6.04,
-      end: 10.02,
-      text: " How are you? How are you? How are you?",
-    },
-    { start: 10.06, end: 11.19, text: " Good morning, good morning." },
-    { start: 11.23, end: 15.19, text: "You are well? I am too." },
-  ];
 
   return (
     <div className="page1-img-wrapper"
@@ -69,7 +56,6 @@ const WB_Unit1_Page4 = ({ openPopup }) => {
         </svg>
       </div>
 
-      <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
 };
