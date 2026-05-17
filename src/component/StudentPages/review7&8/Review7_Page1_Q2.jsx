@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 14.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 15.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 16.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 16.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 15.svg";
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 70/SVG/Asset 17.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -172,7 +172,7 @@ const Review7_Page1_Q2 = () => {
         <div className="grid grid-cols-2 gap-y-14 gap-x-24">
           {/* 1 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start">1</span>
+            <span className="font-bold text-[18px] self-start mt-5">1</span>
 
             <img
               src={img1}
@@ -192,7 +192,7 @@ const Review7_Page1_Q2 = () => {
 
           {/* 2 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start">2</span>
+            <span className="font-bold text-[18px] self-start mt-5">2</span>
 
             <img
               src={img2}
@@ -214,7 +214,7 @@ const Review7_Page1_Q2 = () => {
 
           {/* 3 */}
           <div className="flex items-end gap-5">
-            <span className="font-bold text-[18px] self-start">3</span>
+            <span className="font-bold text-[18px] self-start mt-5">3</span>
 
             <img
               src={img3}
@@ -234,7 +234,7 @@ const Review7_Page1_Q2 = () => {
 
           {/* 4 */}
           <div className="flex items-end gap-5">
-           <span className="font-bold text-[18px] self-start">4</span>
+           <span className="font-bold text-[18px] self-start mt-5">4</span>
 
             <img
               src={img4}

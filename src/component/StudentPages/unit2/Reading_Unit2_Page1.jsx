@@ -1,5 +1,5 @@
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 20.png";
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./Reading_Unit2_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/U2/PG 20/reading.mp3";
 import sound2 from "../../../assets/audio/ClassBook/U2/PG 20/Pg20_1.1_Adult Lady.mp3";
@@ -11,11 +11,17 @@ import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
 // import video from "../../../assets/videos/reading/grade 3 unit 2 page 20-21 reading.mp4";
 
-const Reading_Unit2_Page1 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+const Reading_Unit2_Page1 = ({
+  openPopup,
+  audioRef,
+  activeAudio,
+  setActiveAudio,
+}) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  useEffect(() => {
+    setActiveAudio(null);
+  }, [setActiveAudio]);
   const captionsExample = [
     {
       start: 0.38,
@@ -70,7 +76,7 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
   ];
   const clickableAreas = [
     { x1: 15.11, y1: 34.06, x2: 52.38, y2: 49.29, sound: sound2 },
-    { x1: 55.40, y1: 34.23, x2: 93.81, y2: 50.29, sound: sound3 },
+    { x1: 55.4, y1: 34.23, x2: 93.81, y2: 50.29, sound: sound3 },
     { x1: 16.0, y1: 84.0, x2: 52.9, y2: 95.5, sound: sound4 },
     { x1: 56.0, y1: 83.5, x2: 93.7, y2: 95.9, sound: sound5 },
   ];
@@ -90,7 +96,7 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
       audioRef.current.onended = () => {
         setIsPlaying(false);
         setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+        setActiveAudio(null);
       };
     }
   };
@@ -111,7 +117,7 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            hoveredAreaIndex === index || activeAudio === `page1-${index}`
               ? "highlight"
               : ""
           }`}
@@ -123,7 +129,7 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            setActiveAudio(`page1-${index}`);
             playSound(area.sound);
           }}
           onMouseEnter={() => {
@@ -143,7 +149,12 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            setActiveAudio(null);
             openPopup(
               "audio",
               <div
@@ -155,8 +166,8 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
               >
                 <AudioWithCaption src={sound1} captions={captionsExample} />
               </div>,
-            )
-          }
+            );
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -178,7 +189,12 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            setActiveAudio(null);
             openPopup(
               "video",
               <div
@@ -204,8 +220,8 @@ const Reading_Unit2_Page1 = ({ openPopup }) => {
                   {/* <source src={video} type="video/mp4" /> */}
                 </video>
               </div>,
-            )
-          }
+            );
+          }}
           style={{ overflow: "visible" }}
         >
           <image

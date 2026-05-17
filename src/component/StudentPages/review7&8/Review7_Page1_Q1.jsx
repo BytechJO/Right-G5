@@ -214,34 +214,38 @@ const Review7_Page1_Q1 = () => {
         </div>
 
         {/* STORY */}
-        <div className="text-[17px] leading-[3.1] mb-10">
-          Today, as my sister and I were looking through some photo{" "}
-          {inputField(0, "w-[180px]")}, a worker from the local{" "}
-          {inputField(1, "w-[190px]")} came to our door. He looked at us{" "}
-          {inputField(2, "w-[170px]")} because he wasn’t sure how to begin, and
-          then he told us why he had come by.
-          <br />
-          <br />
-          He wanted to know if we knew of anyone who was missing a small{" "}
-          {inputField(3, "w-[180px]")} box full of gold coins. Some workers at
-          the orphanage had found one sitting outside the back door last week,
-          and they brought it into the house. They thought someone might{" "}
-          {inputField(4, "w-[180px]")} it and then come looking for it, so they
-          put it in a safe place, {inputField(5, "w-[220px]")} the amount that
-          was found inside it. It had been more than a week, though, and there
-          was no sign of anyone, except for an ice cream man selling some{" "}
-          {inputField(6, "w-[170px]")} ice cream because it was the best they
-          had ever tasted.
-          <br />
-          <br />
-          Anyway, now the workers are starting to wonder if maybe this was a
-          donation. As the older man walked away, {inputField(
-            7,
-            "w-[180px]",
-          )}{" "}
-          and {inputField(8, "w-[160px]")}, I thought to myself that I hoped the
-          treasure box really was a donation and that the orphanage could keep
-          the money.
+        <div className="text-[17px] leading-[2.5] mb-10">
+          {/* Paragraph 1 */}
+          <p className="mb-5">
+            Today, as my sister and I were looking through some photo{" "}
+            {inputField(0, "w-[180px]")}, a worker from the local{" "}
+            {inputField(1, "w-[190px]")} came to our door. He looked at us{" "}
+            {inputField(2, "w-[170px]")} because he wasn’t sure how to begin,
+            and then he told us why he had come by.
+          </p>
+
+          {/* Paragraph 2 */}
+          <p className="mb-5">
+            He wanted to know if we knew of anyone who was missing a small{" "}
+            {inputField(3, "w-[180px]")} box full of gold coins. Some workers at
+            the orphanage had found one sitting outside the back door last week,
+            and they brought it into the house. They thought someone might{" "}
+            {inputField(4, "w-[180px]")} it and then come looking for it, so
+            they put it in a safe place, {inputField(5, "w-[220px]")} the amount
+            that was found inside it. It had been more than a week, though, and
+            there was no sign of anyone, except for an ice cream man selling
+            some {inputField(6, "w-[170px]")} ice cream because it was the best
+            they had ever tasted.
+          </p>
+
+          {/* Paragraph 3 */}
+          <p>
+            Anyway, now the workers are starting to wonder if maybe this was a
+            donation. As the older man walked away, {inputField(7, "w-[180px]")}{" "}
+            and {inputField(8, "w-[160px]")}, I thought to myself that I hoped
+            the treasure box really was a donation and that the orphanage could
+            keep the money.
+          </p>
         </div>
       </div>
 

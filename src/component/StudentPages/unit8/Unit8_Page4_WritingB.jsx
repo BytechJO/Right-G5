@@ -33,7 +33,7 @@ const Unit8_Page4_WritingB = () => {
       </h5>
 
       {/* CONTENT */}
-      <div className="space-y-8 text-[18px]">
+      <div className="space-y-8 text-[18px] mt-10">
         {/* MAIN CHARACTERS */}
         <div>
           <div className="flex items-center gap-2 flex-wrap mb-4">

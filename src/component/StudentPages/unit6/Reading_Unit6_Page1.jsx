@@ -1,5 +1,5 @@
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 56.png";
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./Reading_Unit6_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/U6/PG 56/cd3pg56-story.mp3";
 import sound2 from "../../../assets/audio/ClassBook/U6/PG 56/Pg56_1.1_Adult Lady.mp3";
@@ -11,11 +11,17 @@ import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
 import video3 from "../../../assets/videos/grade 5 unit 6 reading page 56-57.mp4";
 
-const Reading_Unit6_Page1 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+const Reading_Unit6_Page1 = ({
+  openPopup,
+  audioRef,
+  activeAudio,
+  setActiveAudio,
+}) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  useEffect(() => {
+    setActiveAudio(null);
+  }, [setActiveAudio]);
   const captions = [
     {
       start: 0.16,
@@ -63,7 +69,7 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
       audioRef.current.onended = () => {
         setIsPlaying(false);
         setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+        setActiveAudio(null);
       };
     }
   };
@@ -84,7 +90,7 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            hoveredAreaIndex === index || activeAudio === `page1-${index}`
               ? "highlight"
               : ""
           }`}
@@ -96,7 +102,7 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            setActiveAudio(`page1-${index}`);
             playSound(area.sound);
           }}
           onMouseEnter={() => {
@@ -116,7 +122,12 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            setActiveAudio(null);
             openPopup(
               "audio",
               <div
@@ -128,8 +139,8 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
               >
                 <AudioWithCaption src={sound1} captions={captions} />
               </div>,
-            )
-          }
+            );
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -151,7 +162,12 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
+          onClick={() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            setActiveAudio(null);
             openPopup(
               "video",
               <div
@@ -177,8 +193,8 @@ const Reading_Unit6_Page1 = ({ openPopup }) => {
                   <source src={video3} type="video/mp4" />
                 </video>
               </div>,
-            )
-          }
+            );
+          }}
           style={{ overflow: "visible" }}
         >
           <image

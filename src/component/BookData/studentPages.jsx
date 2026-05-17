@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+
 //===================== unit 1 pages
 import Page1 from "../StudentPages/unit1/Page1";
 import Page2 from "../StudentPages/unit1/Page2";
@@ -135,137 +137,185 @@ import Song_Page1 from "../StudentPages/song/Song_Page1";
 import Song_Page2 from "../StudentPages/song/Song_Page2";
 import Song_Page3 from "../StudentPages/song/Song_Page3";
 
-export const studentPages = (openPopup, goToUnit) => [
+export const studentPages = (openPopup, goToUnit) => {
+  const sharedAudioRef = useRef(null);
+  const [activeAudio, setActiveAudio] = useState(null);
   //===================== unit 1 pages
+  return [
+    <Page1 />,
+    <Page2 goToUnit={goToUnit} />,
+    <Page3 goToUnit={goToUnit} />,
+    <Page4 openPopup={openPopup} />,
+    <Page5 openPopup={openPopup} />,
+    <Page6 openPopup={openPopup} />,
+    <Page7 openPopup={openPopup} />,
+    <Page8 openPopup={openPopup} />,
+    <Page9 openPopup={openPopup} />,
+    //===================== unit 2 pages
 
-  <Page1 />,
-  <Page2 goToUnit={goToUnit} />,
-  <Page3 goToUnit={goToUnit} />,
-  <Page4 openPopup={openPopup} />,
-  <Page5 openPopup={openPopup} />,
-  <Page6 openPopup={openPopup} />,
-  <Page7 openPopup={openPopup} />,
-  <Page8 openPopup={openPopup} />,
-  <Page9 openPopup={openPopup} />,
-  //===================== unit 2 pages
+    <Unit2_Page1 openPopup={openPopup} />,
+    <Unit2_Page2 openPopup={openPopup} />,
+    <Unit2_Page3 openPopup={openPopup} />,
+    <Unit2_Page4 openPopup={openPopup} />,
+    <Unit2_Page5 openPopup={openPopup} />,
+    <Unit2_Page6 openPopup={openPopup} />,
+    //===================== unit Review1,2 pages
 
-  <Unit2_Page1 openPopup={openPopup} />,
-  <Unit2_Page2 openPopup={openPopup} />,
-  <Unit2_Page3 openPopup={openPopup} />,
-  <Unit2_Page4 openPopup={openPopup} />,
-  <Unit2_Page5 openPopup={openPopup} />,
-  <Unit2_Page6 openPopup={openPopup} />,
-  //===================== unit Review1,2 pages
+    <Review1_Page1 openPopup={openPopup} />,
+    <Review1_Page2 openPopup={openPopup} />,
+    <Review2_Page1 openPopup={openPopup} />,
+    <Review2_Page2 openPopup={openPopup} />,
 
-  <Review1_Page1 openPopup={openPopup} />,
-  <Review1_Page2 openPopup={openPopup} />,
-  <Review2_Page1 openPopup={openPopup} />,
-  <Review2_Page2 openPopup={openPopup} />,
+    <Reading_Unit2_Page1
+      openPopup={openPopup}
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    <Reading_Unit2_Page2
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    //===================== unit 3 pages
 
-  <Reading_Unit2_Page1 openPopup={openPopup} />,
-  <Reading_Unit2_Page2 />,
-  //===================== unit 3 pages
+    <Unit3_Page1 openPopup={openPopup} />,
+    <Unit3_Page2 openPopup={openPopup} />,
+    <Unit3_Page3 openPopup={openPopup} />,
+    <Unit3_Page4 openPopup={openPopup} />,
+    <Unit3_Page5 openPopup={openPopup} />,
+    <Unit3_Page6 openPopup={openPopup} />,
+    //===================== unit 4 pages
 
-  <Unit3_Page1 openPopup={openPopup} />,
-  <Unit3_Page2 openPopup={openPopup} />,
-  <Unit3_Page3 openPopup={openPopup} />,
-  <Unit3_Page4 openPopup={openPopup} />,
-  <Unit3_Page5 openPopup={openPopup} />,
-  <Unit3_Page6 openPopup={openPopup} />,
-  //===================== unit 4 pages
+    <Unit4_Page1 openPopup={openPopup} />,
+    <Unit4_Page2 openPopup={openPopup} />,
+    <Unit4_Page3 openPopup={openPopup} />,
+    <Unit4_Page4 openPopup={openPopup} />,
+    <Unit4_Page5 openPopup={openPopup} />,
+    <Unit4_Page6 openPopup={openPopup} />,
+    //===================== unit Review3,4 pages
 
-  <Unit4_Page1 openPopup={openPopup} />,
-  <Unit4_Page2 openPopup={openPopup} />,
-  <Unit4_Page3 openPopup={openPopup} />,
-  <Unit4_Page4 openPopup={openPopup} />,
-  <Unit4_Page5 openPopup={openPopup} />,
-  <Unit4_Page6 openPopup={openPopup} />,
-  //===================== unit Review3,4 pages
+    <Review3_Page1 openPopup={openPopup} />,
+    <Review3_Page2 openPopup={openPopup} />,
+    <Review4_Page1 openPopup={openPopup} />,
+    <Review4_Page2 openPopup={openPopup} />,
+    <Reading_Unit4_Page1
+      openPopup={openPopup}
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    <Reading_Unit4_Page2
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    //===================== unit 5 pages
 
-  <Review3_Page1 openPopup={openPopup} />,
-  <Review3_Page2 openPopup={openPopup} />,
-  <Review4_Page1 openPopup={openPopup} />,
-  <Review4_Page2 openPopup={openPopup} />,
-  <Reading_Unit4_Page1 openPopup={openPopup} />,
-  <Reading_Unit4_Page2 />,
-  //===================== unit 5 pages
+    <Unit5_Page1 openPopup={openPopup} />,
+    <Unit5_Page2 openPopup={openPopup} />,
+    <Unit5_Page3 openPopup={openPopup} />,
+    <Unit5_Page4 openPopup={openPopup} />,
+    <Unit5_Page5 openPopup={openPopup} />,
+    <Unit5_Page6 openPopup={openPopup} />,
+    //===================== unit 6 pages
 
-  <Unit5_Page1 openPopup={openPopup} />,
-  <Unit5_Page2 openPopup={openPopup} />,
-  <Unit5_Page3 openPopup={openPopup} />,
-  <Unit5_Page4 openPopup={openPopup} />,
-  <Unit5_Page5 openPopup={openPopup} />,
-  <Unit5_Page6 openPopup={openPopup} />,
-  //===================== unit 6 pages
+    <Unit6_Page1 openPopup={openPopup} />,
+    <Unit6_Page2 openPopup={openPopup} />,
+    <Unit6_Page3 openPopup={openPopup} />,
+    <Unit6_Page4 openPopup={openPopup} />,
+    <Unit6_Page5 openPopup={openPopup} />,
+    <Unit6_Page6 openPopup={openPopup} />,
+    //===================== unit Review5,6 pages
 
-  <Unit6_Page1 openPopup={openPopup} />,
-  <Unit6_Page2 openPopup={openPopup} />,
-  <Unit6_Page3 openPopup={openPopup} />,
-  <Unit6_Page4 openPopup={openPopup} />,
-  <Unit6_Page5 openPopup={openPopup} />,
-  <Unit6_Page6 openPopup={openPopup} />,
-  //===================== unit Review5,6 pages
+    <Review5_Page1 openPopup={openPopup} />,
+    <Review5_Page2 openPopup={openPopup} />,
+    <Review6_Page1 openPopup={openPopup} />,
+    <Review6_Page2 openPopup={openPopup} />,
 
-  <Review5_Page1 openPopup={openPopup} />,
-  <Review5_Page2 openPopup={openPopup} />,
-  <Review6_Page1 openPopup={openPopup} />,
-  <Review6_Page2 openPopup={openPopup} />,
+    <Reading_Unit6_Page1
+      openPopup={openPopup}
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    <Reading_Unit6_Page2
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    //===================== unit 7 pages
 
-  <Reading_Unit6_Page1 openPopup={openPopup} />,
-  <Reading_Unit6_Page2 />,
-  //===================== unit 7 pages
+    <Unit7_Page1 openPopup={openPopup} />,
+    <Unit7_Page2 openPopup={openPopup} />,
+    <Unit7_Page3 openPopup={openPopup} />,
+    <Unit7_Page4 openPopup={openPopup} />,
+    <Unit7_Page5 openPopup={openPopup} />,
+    <Unit7_Page6 openPopup={openPopup} />,
+    //===================== unit 8 pages
 
-  <Unit7_Page1 openPopup={openPopup} />,
-  <Unit7_Page2 openPopup={openPopup} />,
-  <Unit7_Page3 openPopup={openPopup} />,
-  <Unit7_Page4 openPopup={openPopup} />,
-  <Unit7_Page5 openPopup={openPopup} />,
-  <Unit7_Page6 openPopup={openPopup} />,
-  //===================== unit 8 pages
+    <Unit8_Page1 openPopup={openPopup} />,
+    <Unit8_Page2 openPopup={openPopup} />,
+    <Unit8_Page3 openPopup={openPopup} />,
+    <Unit8_Page4 openPopup={openPopup} />,
+    <Unit8_Page5 openPopup={openPopup} />,
+    <Unit8_Page6 openPopup={openPopup} />,
+    //===================== unit Review7,8 pages
 
-  <Unit8_Page1 openPopup={openPopup} />,
-  <Unit8_Page2 openPopup={openPopup} />,
-  <Unit8_Page3 openPopup={openPopup} />,
-  <Unit8_Page4 openPopup={openPopup} />,
-  <Unit8_Page5 openPopup={openPopup} />,
-  <Unit8_Page6 openPopup={openPopup} />,
-  //===================== unit Review7,8 pages
+    <Review7_Page1 openPopup={openPopup} />,
+    <Review7_Page2 openPopup={openPopup} />,
+    <Review8_Page1 openPopup={openPopup} />,
+    <Review8_Page2 openPopup={openPopup} />,
+    <Reading_Unit8_Page1
+      openPopup={openPopup}
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    <Reading_Unit8_Page2
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    //===================== unit 9 pages
 
-  <Review7_Page1 openPopup={openPopup} />,
-  <Review7_Page2 openPopup={openPopup} />,
-  <Review8_Page1 openPopup={openPopup} />,
-  <Review8_Page2 openPopup={openPopup} />,
-  <Reading_Unit8_Page1 openPopup={openPopup} />,
-  <Reading_Unit8_Page2 />,
-  //===================== unit 9 pages
+    <Unit9_Page1 openPopup={openPopup} />,
+    <Unit9_Page2 openPopup={openPopup} />,
+    <Unit9_Page3 openPopup={openPopup} />,
+    <Unit9_Page4 openPopup={openPopup} />,
+    <Unit9_Page5 openPopup={openPopup} />,
+    <Unit9_Page6 openPopup={openPopup} />,
+    //===================== unit 10 pages
 
-  <Unit9_Page1 openPopup={openPopup} />,
-  <Unit9_Page2 openPopup={openPopup} />,
-  <Unit9_Page3 openPopup={openPopup} />,
-  <Unit9_Page4 openPopup={openPopup} />,
-  <Unit9_Page5 openPopup={openPopup} />,
-  <Unit9_Page6 openPopup={openPopup} />,
-  //===================== unit 10 pages
+    <Unit10_Page1 openPopup={openPopup} />,
+    <Unit10_Page2 openPopup={openPopup} />,
+    <Unit10_Page3 openPopup={openPopup} />,
+    <Unit10_Page4 openPopup={openPopup} />,
+    <Unit10_Page5 openPopup={openPopup} />,
+    <Unit10_Page6 openPopup={openPopup} />,
+    //===================== unit Review9,10 pages
 
-  <Unit10_Page1 openPopup={openPopup} />,
-  <Unit10_Page2 openPopup={openPopup} />,
-  <Unit10_Page3 openPopup={openPopup} />,
-  <Unit10_Page4 openPopup={openPopup} />,
-  <Unit10_Page5 openPopup={openPopup} />,
-  <Unit10_Page6 openPopup={openPopup} />,
-  //===================== unit Review9,10 pages
+    <Review9_Page1 openPopup={openPopup} />,
+    <Review9_Page2 openPopup={openPopup} />,
+    <Review10_Page1 openPopup={openPopup} />,
+    <Review10_Page2 openPopup={openPopup} />,
+    <Reading_Unit10_Page1
+      openPopup={openPopup}
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    <Reading_Unit10_Page2
+      audioRef={sharedAudioRef}
+      activeAudio={activeAudio}
+      setActiveAudio={setActiveAudio}
+    />,
+    //===================== song pages
 
-  <Review9_Page1 openPopup={openPopup} />,
-  <Review9_Page2 openPopup={openPopup} />,
-  <Review10_Page1 openPopup={openPopup} />,
-  <Review10_Page2 openPopup={openPopup} />,
-  <Reading_Unit10_Page1 openPopup={openPopup} />,
-  <Reading_Unit10_Page2 />,
-  //===================== song pages
+    <Song_Page1 />,
+    <Song_Page2 />,
+    <Song_Page3 />,
 
-  <Song_Page1 />,
-  <Song_Page2 />,
-  <Song_Page3 />,
-
-  <Page1 />,
-];
+    <Page1 />,
+  ];
+};

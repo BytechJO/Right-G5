@@ -1,14 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import page25 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 57.png";
 import "./Reading_Unit6_Page1.css";
 import sound1 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.5_Adult Lady.mp3";
 import sound2 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.6_Adult Lady.mp3";
 import sound3 from "../../../assets/audio/ClassBook/U6/PG 57/Pg57_1.8_Adult Lady.mp3";
-const Reading_Unit6_Page2 = () => {
-  const audioRef = useRef(null);
+const Reading_Unit6_Page2 = ({ audioRef, activeAudio, setActiveAudio }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  useEffect(() => {
+    setActiveAudio(null);
+  }, [setActiveAudio]);
   const clickableAreas = [
     { x1: 6.12, y1: 31.35, x2: 43.82, y2: 50.13, sound: sound1 },
     { x1: 50.72, y1: 23.73, x2: 88.86, y2: 49.97, sound: sound2 },
@@ -30,7 +31,7 @@ const Reading_Unit6_Page2 = () => {
       audioRef.current.onended = () => {
         setIsPlaying(false);
         setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+        setActiveAudio(null);
       };
     }
   };
@@ -51,7 +52,7 @@ const Reading_Unit6_Page2 = () => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            hoveredAreaIndex === index || activeAudio === `page2-${index}`
               ? "highlight"
               : ""
           }`}
@@ -63,7 +64,7 @@ const Reading_Unit6_Page2 = () => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            setActiveAudio(`page2-${index}`);
             playSound(area.sound);
           }}
           onMouseEnter={() => {

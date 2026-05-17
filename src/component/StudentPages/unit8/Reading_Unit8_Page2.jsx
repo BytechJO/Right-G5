@@ -1,18 +1,16 @@
-import React, { useRef,useState } from "react";
+import React, { useState } from "react";
 import page25 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 75.png";
 import "./Reading_Unit8_Page1.css";
 import { FaHeadphones } from "react-icons/fa";
 import sound1 from "../../../assets/audio/ClassBook/U8/PG 75/Pg75_1.5_Adult Lady.mp3";
 import sound2 from "../../../assets/audio/ClassBook/U8/PG 75/Pg75_1.6_Adult Lady.mp3";
 import sound3 from "../../../assets/audio/ClassBook/U8/PG 75/Pg75_1.8_Adult Lady.mp3";
-const Reading_Unit8_Page2 = () => {
-  const audioRef = useRef(null);
+const Reading_Unit8_Page2 = ({ audioRef, activeAudio, setActiveAudio }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const clickableAreas = [
     { x1: 8.27, y1: 27.63, x2: 45.76, y2: 50.47, sound: sound1 },
-    { x1: 52.87, y1: 37.10, x2: 91.44, y2: 50.13, sound: sound2 },
+    { x1: 52.87, y1: 37.1, x2: 91.44, y2: 50.13, sound: sound2 },
     { x1: 53.52, y1: 56, x2: 90.58, y2: 73.5, sound: sound3 },
   ];
   const handleImageClick = (e) => {
@@ -31,15 +29,17 @@ const Reading_Unit8_Page2 = () => {
       audioRef.current.onended = () => {
         setIsPlaying(false);
         setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+        setActiveAudio(null);
       };
     }
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page25})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page25})` }}
+    >
       {/* <img
         src={page25}
         style={{ display: "block" }}
@@ -50,7 +50,7 @@ const Reading_Unit8_Page2 = () => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            hoveredAreaIndex === index || activeAudio === `page2-${index}`
               ? "highlight"
               : ""
           }`}
@@ -62,7 +62,7 @@ const Reading_Unit8_Page2 = () => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            setActiveAudio(`page2-${index}`);
             playSound(area.sound);
           }}
           onMouseEnter={() => {
