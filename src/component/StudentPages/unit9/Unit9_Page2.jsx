@@ -2,7 +2,7 @@ import React from "react";
 import page_5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 77.png";
 import "./Unit9_Page2.css";
 
-import ReadingSection_U9 from "./Unit9_Page2_ReadingSection_U8";
+import ReadingSection_U9 from "./Unit9_Page2_ReadingSection_U9";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 
 const Unit9_Page2 = ({ openPopup }) => {

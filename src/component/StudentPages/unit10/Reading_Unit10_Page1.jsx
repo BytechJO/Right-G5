@@ -1,11 +1,11 @@
-import page24 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 92.png";
+import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 92.png";
 import React, { useState, useRef } from "react";
 import "./Reading_Unit10_Page2.css";
-import sound1 from "../../../assets/audio/ClassBook/Unit 10/P 92/unit10-pg92-reading.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 10/P 92/Pg92_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 10/P 92/Pg92_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 10/P 92/Pg92_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 10/P 92/Pg92_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U10/PG 92/cd5pg92-story.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U10/PG 92/Pg92_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U10/PG 92/Pg92_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U10/PG 92/Pg92_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U10/PG 92/Pg92_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
@@ -16,33 +16,72 @@ const Reading_Unit10_Page1 = ({ openPopup }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const captionsExample = [
+  const captions = [
     {
-      start: 0.2,
-      end: 82.98,
-      text: "Page 92 reading. Helen learns a lesson. It was winter. Everyone was outside. Stella and the boys had a snowball fight. Helen and her friend made a snowman. While Helen and her friend were making a snowman, Helen's cat, Mimi, walked into the woods. Helen couldn't find her cat anywhere. Helen was feeling sad. There was a man walking near the bridge. He called to Helen. Are you looking for something? Yes, I'm looking for my brown cat. Have you seen it? No, I haven't, the man answered. Helen saw her classmate, Lana. Hi, Helen. How are you? asked Lana. I'm okay, but I've lost my cat, Mimi. I've been looking everywhere for her. I'm sorry. I haven't seen your cat, but I'll help you look for her, said Lana. Helen and Lana saw cat tracks. They went up the hill. The snow was deep. They walked on and on. Hey, that's my grandma's house, shouted Helen excitedly. That's great, replied Lana. I can't wait to see my grandma, said Helen happily. Grandma said, Hello, Helen and Lana. It's good to see you both. Come inside. It's very cold outside.",
+      start: 0.3,
+      end: 21.26,
+      text: "Page 92, A Perfect Pet for Aunt Jessie. Brent, Sue, and Natasha were taking care of their neighbor’s cats. Every morning, they would feed the cats and make sure there was clean water to drink. They were getting paid for helping the neighbors, and it was a fun job as well. One day, the friends were planning what to do with their money.",
     },
+
     {
-      start: 84.1,
-      end: 101.7,
-      text: "Grandma, it's good to see you, too. I've lost Mimi. What should I do? I have some good news. Mimi is right here with me. Come and see her, said Grandma. Helen said, Thanks so much, Grandma. I'm so happy to see Mimi.",
+      start: 22.3,
+      end: 37.5,
+      text: "“If I get paid on Monday, I might use some of my money to get a bike,” said Sue. “I think if I get paid, I will save my money,” said Brent. “I really want to get a skateboard, but I will have to save for a while. What about you, Natasha?”",
     },
+
     {
-      start: 102.77,
-      end: 112.399,
-      text: "How was your day? Grandma asked. It was fun, Grandma. We played in the snow and made a snowman. Then we lost Mimi, said Helen.",
+      start: 37.5,
+      end: 55.0,
+      text: "“If she wants one, I would like to get my Aunt Jessie a pet for her apartment. She lives by herself, so I think she would want one,” said Natasha. “That’s a great idea,” agreed Sue.",
     },
+
     {
-      start: 113.94,
-      end: 125.22,
-      text: "It's good that you had your friend to help you, said Grandma. We learned to help each other, said Lana. I learned to take better care of my cat, added Helen.",
+      start: 55.0,
+      end: 74.0,
+      text: "“If we have time after we finish feeding the cats, I will go to her apartment. You two can come with me if you like,” offered Natasha. Aunt Jessie was happy to see Natasha and her friends. She invited them in for milk and cookies.",
+    },
+
+    {
+      start: 74.0,
+      end: 94.35,
+      text: "Natasha told Aunt Jessie about her plans to buy her a pet. Aunt Jessie thought it was a good idea. On their way home, the friends talked about what kind of pet would be good for Aunt Jessie.",
+    },
+
+    {
+      start: 75.95,
+      end: 88.0,
+      text: "“If she gets a hamster, she can watch it run on its wheel and climb in the cage tunnels,” said Brent. “She might enjoy the beautiful music if she gets a parakeet,” added Sue.",
+    },
+
+    {
+      start: 88.0,
+      end: 94.75,
+      text: "Natasha said, “Maybe she will enjoy a cat sitting on her lap.” The friends were still talking about the pet possibilities when they got to their houses.",
+    },
+
+    {
+      start: 95.78,
+      end: 112.0,
+      text: "Natasha decided she would think about it and then get one next week. The next week, Natasha went with her mom to find a pet for Aunt Jessie. They looked at several pet stores, and finally they found just the right pet for Aunt Jessie.",
+    },
+
+    {
+      start: 112.0,
+      end: 126.0,
+      text: "“Surprise, Aunt Jessie!” Natasha exclaimed as Aunt Jessie opened the door. “We have a pet for you.” “Oh, I can’t wait to see it. So what kind of animal did you get?” Aunt Jessie questioned.",
+    },
+
+    {
+      start: 126.0,
+      end: 147.16,
+      text: "“It’s a mouse,” Natasha told her, holding the box open for her to see. “It’s very fun to watch, and you can hold it too if you want to.” “A mouse? I’ve been trying to get rid of one in my closet for a week now. Oh, it is very cute, isn’t it?” Natasha replied, “I think you’ll like it a lot, Aunt Jessie. It just takes getting used to, to having a mouse as a pet instead of trying to get rid of it.”",
     },
   ];
   const clickableAreas = [
-    { x1: 15.11, y1: 38.8, x2: 53.03, y2: 49.46, sound: sound2 },
-    { x1: 55.62, y1: 39.13, x2: 92.46, y2: 49.29, sound: sound3 },
-    { x1: 15.32, y1: 79.24, x2: 52.17, y2: 96, sound: sound4 },
-    { x1: 55.62, y1: 84.32, x2: 93.11, y2: 96.9, sound: sound5 },
+    { x1: 15.76, y1: 30.5, x2: 53.03, y2: 49.46, sound: sound2 },
+    { x1: 55.62, y1: 41.13, x2: 92.46, y2: 49.29, sound: sound3 },
+    { x1: 15.97, y1: 65.53, x2: 52.17, y2: 85, sound: sound4 },
+    { x1: 55.62, y1: 85.32, x2: 93.11, y2: 96.9, sound: sound5 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -123,7 +162,7 @@ const Reading_Unit10_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captionsExample} />
+                <AudioWithCaption src={sound1} captions={captions} />
               </div>,
             )
           }

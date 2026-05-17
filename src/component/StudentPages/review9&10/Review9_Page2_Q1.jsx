@@ -1,332 +1,262 @@
-import React, { useState, useRef } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review9_Page2_Q1.css";
+import React, { useState } from "react";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex C 6.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Review9_Page2_Q1 = () => {
-  const [selectedImg, setSelectedImg] = useState(null);
-  const [matches, setMatches] = useState({});
-  const [showResult, setShowResult] = useState(false);
+  const questions = [
+    "3",
+    "1",
+    "2",
+    "4",
+    "If we go to the stadium tomorrow, maybe we can sit in the front row to watch the game.",
+    "If Alex calls before dinnertime, I’ll ask him to come over for dinner.",
+    "If it rains tomorrow, we won’t have to water the plants.",
+    "When school finishes early on Thursday, we could go bike riding in the afternoon.",
+  ];
+
+  const [answers, setAnswers] = useState(["", "", "", "", "", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
-  const [selectedSentence, setSelectedSentence] = useState(null);
 
-  const imageRefs = useRef([]);
-  const sentenceRefs = useRef([]);
-  const containerRef = useRef(null);
- 
-  const images = [
-    { id: 0, img: img1 },
-    { id: 1, img: img2 },
-    { id: 2, img: img3 },
-    { id: 3, img: img4 },
-    { id: 4, img: img5 },
-    { id: 5, img: img6 },
-  ];
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const sentences = [
-    { id: 0, text: "girls" },
-    { id: 1, text: "ducks" },
-    { id: 2, text: "caps" },
-    { id: 3, text: "cats" },
-    { id: 4, text: "bags" },
-    { id: 5, text: "peas" },
-  ];
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-  const correct = {
-    0: 2,
-    1: 4,
-    2: 0,
-    3: 5,
-    4: 1,
-    5: 3,
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const selectImage = (id) => {
-    if (locked || showResult) return;
-
-    // إذا اختار جملة → اربط
-    if (selectedSentence !== null) {
-      setMatches((prev) => {
-        const updated = { ...prev };
-
-        Object.keys(updated).forEach((imgKey) => {
-          if (updated[imgKey] === selectedSentence) {
-            delete updated[imgKey];
-          }
-        });
-
-        updated[id] = selectedSentence;
-        return updated;
-      });
-
-      setSelectedSentence(null);
-      return;
-    }
-
-    // السلوك القديم (اختيار صورة)
-    setSelectedImg(id);
-  };
-
-  const selectSentence = (id) => {
-    if (locked || showResult) return;
-
-    // إذا في صورة مختارة → اربط
-    if (selectedImg !== null) {
-      setMatches((prev) => {
-        const updated = { ...prev };
-
-        Object.keys(updated).forEach((imgKey) => {
-          if (updated[imgKey] === id) {
-            delete updated[imgKey];
-          }
-        });
-
-        updated[selectedImg] = id;
-        return updated;
-      });
-
-      setSelectedImg(null);
-      return;
-    }
-    setSelectedSentence(id);
-  };
   const checkAnswers = () => {
-    if (locked || showResult) return;
+    if (locked) return;
 
-    if (Object.keys(matches).length !== images.length) {
-      ValidationAlert.info("Please match all.");
+    const hasEmpty = answers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
     let correctCount = 0;
 
-    Object.entries(matches).forEach(([imgId, sentId]) => {
-      if (correct[imgId] === sentId) correctCount++;
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = images.length;
+    setResult(newResults);
 
-    const message = `
-        Score: ${correctCount} / ${total}
-  `;
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
     if (correctCount === total) {
-      ValidationAlert.success(message);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(message);
-    } else {
-      ValidationAlert.warning(message);
-    }
+      setLocked(true);
 
-    setShowResult(true);
-    setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
   const showAnswers = () => {
-    setMatches(correct);
+    setAnswers([
+      "3",
+      "1",
+      "2",
+      "4",
+      "If we go to the stadium tomorrow, maybe we can sit in the front row to watch the game.",
+      "If Alex calls before dinnertime, I’ll ask him to come over for dinner.",
+      "If it rains tomorrow, we won’t have to water the plants.",
+      "When school finishes early on Thursday, we could go bike riding in the afternoon.",
+    ]);
+
+    setResult([true, true, true, true, true, true, true, true]);
+
     setLocked(true);
-    setShowResult(true);
   };
 
-  const reset = () => {
-    setSelectedSentence(null);
-    setSelectedImg(null);
-    setMatches({});
-    setShowResult(false);
+  const handleReset = () => {
+    setAnswers(["", "", "", "", "", "", "", ""]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        maxLength={i < 4 ? 1 : undefined}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+  ${width}
+
+   ${
+     i < 4
+       ? "border border-[#3A3A3A] rounded-md h-[34px] text-center"
+       : "border-0 border-b border-black"
+   }
+
+  outline-none
+  bg-transparent
+  text-[18px]
+  text-[#6D2980]
+  font-semibold
+  px-1
+
+  ${result[i] === false ? "border-[#D1232A]" : ""}
+`}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
   return (
-    <div
-      ref={containerRef}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-        position: "relative",
-      }}
-    >
-      <div
-        className="div-forall"
-      >
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall">
+        {/* TITLE */}
         <h5 className="header-title-page8 mb-10">
-          <span style={{  marginRight: "10px" }}>C</span>
-          Look, read, and match.
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            D
+          </span>
+          Match the two sentence parts, and then write the whole sentence below.
         </h5>
 
-        <div className="w-full flex flex-col items-center gap-16">
-          {/* 🔥 الصور فوق */}
-          <div className="grid grid-cols-6 gap-10 w-full justify-items-center">
-            {images.map((img, i) => (
-              <div
-                key={i}
-                onClick={() => selectImage(i)}
-                className="relative flex flex-col items-center gap-2 cursor-pointer transition"
-              >
-                 <span
-                style={{
-                  position: "absolute",
-                  top: "-10px",
-                  left: "-15px",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                }}
-              >
-                {i + 1}
-              </span>
-                <img
-                  src={img.img}
-                  style={{
-                    width: "85px",
-                    height: "85px",
-                    objectFit: "contain",
-                    border:
-                      selectedImg === i
-                        ? "3px solid #f97316"
-                        : "3px solid transparent",
-                    borderRadius: "12px",
-                    padding: "4px",
-                    backgroundColor:
-                      selectedImg === i ? "#ffedd5" : "transparent",
-                  }}
-                />
+        {/* QUESTIONS */}
+        <div className="text-[18px]">
+          <div className="grid grid-cols-[360px_40px_360px] gap-x-10 gap-y-6 items-center mb-10">
+            <div className="flex gap-4">
+              <span className="font-bold">1</span>
+              <span>If we go to the stadium tomorrow,</span>
+            </div>
 
-                <div
-                  ref={(el) => (imageRefs.current[i] = el)} // 🔥 الريف هون على الدوت
-                  className="w-3 h-3 rounded-full mt-2 transition"
-                  style={{
-                    backgroundColor: selectedImg === i ? "#f97316" : "#fb923c",
-                    transform: selectedImg === i ? "scale(1.4)" : "scale(1)",
-                    boxShadow:
-                      selectedImg === i
-                        ? "0 0 0 4px rgba(249,115,22,0.2)"
-                        : "none",
-                  }}
-                ></div>
-              </div>
-            ))}
+            {inputField(0, "w-[40px] text-center")}
+
+            <span>we won’t have to water the plants.</span>
+
+            <div className="flex gap-4">
+              <span className="font-bold">2</span>
+              <span>If Alex calls before dinnertime,</span>
+            </div>
+
+            {inputField(1, "w-[40px] text-center")}
+
+            <span>maybe we can sit in the front row to watch the game.</span>
+
+            <div className="flex gap-4">
+              <span className="font-bold">3</span>
+              <span>If it rains tomorrow,</span>
+            </div>
+
+            {inputField(2, "w-[40px] text-center")}
+
+            <span>I’ll ask him to come over for dinner.</span>
+
+            <div className="flex gap-4">
+              <span className="font-bold">4</span>
+              <span>When school finishes early on Thursday,</span>
+            </div>
+
+            {inputField(3, "w-[40px] text-center")}
+
+            <span>we could go bike riding in the afternoon.</span>
           </div>
 
-          {/* 🔥 الجمل تحت */}
-          <div className="grid grid-cols-6 gap-8 w-full justify-items-center mt-10">
-            {sentences.map((sent, i) => (
-              <div
-                key={i}
-                onClick={() => selectSentence(i)}
-                className="relative flex flex-col items-center cursor-pointer"
-              >
-                {/* 🔥 الدوت */}
-                <div
-                  ref={(el) => (sentenceRefs.current[i] = el)} // 🔥 هون كمان
-                  className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full z-10 transition"
-                  style={{
-                    width: "12px",
-                    height: "12px",
-                    backgroundColor: "#f97316",
-                    transform:
-                      selectedSentence === i ? "scale(1.4)" : "scale(1)",
-                    boxShadow:
-                      selectedSentence === i
-                        ? "0 0 0 4px rgba(249,115,22,0.2)"
-                        : "none",
-                  }}
-                ></div>
+          <div className="flex flex-col gap-8">
+            <div className="flex items-center gap-5">
+              <span className="font-bold">1</span>
+              {inputField(4, "w-[890px]")}
+            </div>
 
-                {/* 🔥 البوكس */}
-                <div
-                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition"
-                  style={{
-                    backgroundColor:
-                      selectedSentence === i ? "#fed7aa" : "#ffedd5",
-                    border:
-                      selectedSentence === i
-                        ? "2px solid #f97316"
-                        : "2px solid transparent",
-                  }}
-                >
-                  {sent.text}
-                  {showResult &&
-                    Object.entries(matches).some(
-                      ([imgId, sentId]) =>
-                        sentId == i && correct[imgId] !== sentId,
-                    ) && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: "-10px",
-                          right: "-10px",
-                          transform: "translateY(-50%)",
-                          width: "20px",
-                          height: "20px",
-                          background: "#ef4444",
-                          color: "white",
-                          borderRadius: "50%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                          border: "2px solid white",
-                          boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
-                          pointerEvents: "none",
-                          zIndex: 3,
-                        }}
-                      >
-                        ✕
-                      </span>
-                    )}
-                </div>
-              </div>
-            ))}
+            <div className="flex items-center gap-5">
+              <span className="font-bold">2</span>
+              {inputField(5, "w-[890px]")}
+            </div>
+
+            <div className="flex items-center gap-5">
+              <span className="font-bold">3</span>
+              {inputField(6, "w-[890px]")}
+            </div>
+
+            <div className="flex items-center gap-5">
+              <span className="font-bold">4</span>
+              {inputField(7, "w-[890px]")}
+            </div>
           </div>
         </div>
       </div>
 
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        {Object.entries(matches).map(([imgId, sentId], i) => {
-          const imgDot = imageRefs.current[imgId];
-          const sentDot = sentenceRefs.current[sentId];
-
-          if (!imgDot || !sentDot || !containerRef.current) return null;
-
-          const imgRect = imgDot.getBoundingClientRect();
-          const sentRect = sentDot.getBoundingClientRect();
-          const containerRect = containerRef.current.getBoundingClientRect();
-
-          const x1 = sentRect.left + sentRect.width / 2 - containerRect.left;
-          const y1 = sentRect.top + sentRect.height / 2 - containerRect.top;
-
-          const x2 = imgRect.left + imgRect.width / 2 - containerRect.left;
-          const y2 = imgRect.top + imgRect.height / 2 - containerRect.top;
-          return (
-            <g key={i}>
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke="orange"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </g>
-          );
-        })}
-      </svg>
-
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 

@@ -1,0 +1,2183 @@
+{
+  "language_code": "eng",
+  "segments": [
+    {
+      "text": "Page 82, conversation. Listen and read, then say ",
+      "start_time": 0.099,
+      "end_time": 5.519,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.099,
+          "end_time": 0.399
+        },
+        {
+          "text": " ",
+          "start_time": 0.399,
+          "end_time": 0.559
+        },
+        {
+          "text": "82,",
+          "start_time": 0.56,
+          "end_time": 1.1
+        },
+        {
+          "text": " ",
+          "start_time": 1.1,
+          "end_time": 1.279
+        },
+        {
+          "text": "conversation.",
+          "start_time": 1.279,
+          "end_time": 2.039
+        },
+        {
+          "text": " ",
+          "start_time": 2.039,
+          "end_time": 2.579
+        },
+        {
+          "text": "Listen",
+          "start_time": 2.579,
+          "end_time": 2.939
+        },
+        {
+          "text": " ",
+          "start_time": 2.939,
+          "end_time": 3.099
+        },
+        {
+          "text": "and",
+          "start_time": 3.099,
+          "end_time": 3.24
+        },
+        {
+          "text": " ",
+          "start_time": 3.24,
+          "end_time": 3.359
+        },
+        {
+          "text": "read,",
+          "start_time": 3.359,
+          "end_time": 3.679
+        },
+        {
+          "text": " ",
+          "start_time": 3.679,
+          "end_time": 4.099
+        },
+        {
+          "text": "then",
+          "start_time": 4.099,
+          "end_time": 4.38
+        },
+        {
+          "text": " ",
+          "start_time": 4.38,
+          "end_time": 4.579
+        },
+        {
+          "text": "say",
+          "start_time": 4.579,
+          "end_time": 4.88
+        },
+        {
+          "text": " ",
+          "start_time": 4.88,
+          "end_time": 5.519
+        }
+      ]
+    },
+    {
+      "text": "What were you doing last night, Jen and Jeremy? There was a great symphony. ",
+      "start_time": 5.519,
+      "end_time": 9.88,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "What",
+          "start_time": 5.519,
+          "end_time": 5.619
+        },
+        {
+          "text": " ",
+          "start_time": 5.619,
+          "end_time": 5.659
+        },
+        {
+          "text": "were",
+          "start_time": 5.659,
+          "end_time": 5.779
+        },
+        {
+          "text": " ",
+          "start_time": 5.779,
+          "end_time": 5.819
+        },
+        {
+          "text": "you",
+          "start_time": 5.819,
+          "end_time": 5.879
+        },
+        {
+          "text": " ",
+          "start_time": 5.879,
+          "end_time": 5.959
+        },
+        {
+          "text": "doing",
+          "start_time": 5.96,
+          "end_time": 6.159
+        },
+        {
+          "text": " ",
+          "start_time": 6.159,
+          "end_time": 6.219
+        },
+        {
+          "text": "last",
+          "start_time": 6.219,
+          "end_time": 6.399
+        },
+        {
+          "text": " ",
+          "start_time": 6.399,
+          "end_time": 6.459
+        },
+        {
+          "text": "night,",
+          "start_time": 6.46,
+          "end_time": 6.619
+        },
+        {
+          "text": " ",
+          "start_time": 6.619,
+          "end_time": 6.719
+        },
+        {
+          "text": "Jen",
+          "start_time": 6.719,
+          "end_time": 6.879
+        },
+        {
+          "text": " ",
+          "start_time": 6.879,
+          "end_time": 6.899
+        },
+        {
+          "text": "and",
+          "start_time": 6.899,
+          "end_time": 7.0
+        },
+        {
+          "text": " ",
+          "start_time": 7.0,
+          "end_time": 7.079
+        },
+        {
+          "text": "Jeremy?",
+          "start_time": 7.079,
+          "end_time": 7.48
+        },
+        {
+          "text": " ",
+          "start_time": 7.48,
+          "end_time": 8.38
+        },
+        {
+          "text": "There",
+          "start_time": 8.38,
+          "end_time": 8.539
+        },
+        {
+          "text": " ",
+          "start_time": 8.539,
+          "end_time": 8.579
+        },
+        {
+          "text": "was",
+          "start_time": 8.579,
+          "end_time": 8.699
+        },
+        {
+          "text": " ",
+          "start_time": 8.699,
+          "end_time": 8.759
+        },
+        {
+          "text": "a",
+          "start_time": 8.76,
+          "end_time": 8.78
+        },
+        {
+          "text": " ",
+          "start_time": 8.78,
+          "end_time": 8.939
+        },
+        {
+          "text": "great",
+          "start_time": 8.939,
+          "end_time": 9.279
+        },
+        {
+          "text": " ",
+          "start_time": 9.279,
+          "end_time": 9.42
+        },
+        {
+          "text": "symphony.",
+          "start_time": 9.42,
+          "end_time": 9.88
+        },
+        {
+          "text": " ",
+          "start_time": 9.88,
+          "end_time": 9.88
+        }
+      ]
+    },
+    {
+      "text": "Our family was visiting my uncle's house. We were harvesting lettuce there. It was the best day. ",
+      "start_time": 10.899,
+      "end_time": 17.92,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Our",
+          "start_time": 10.899,
+          "end_time": 11.019
+        },
+        {
+          "text": " ",
+          "start_time": 11.019,
+          "end_time": 11.099
+        },
+        {
+          "text": "family",
+          "start_time": 11.099,
+          "end_time": 11.539
+        },
+        {
+          "text": " ",
+          "start_time": 11.539,
+          "end_time": 11.599
+        },
+        {
+          "text": "was",
+          "start_time": 11.599,
+          "end_time": 11.759
+        },
+        {
+          "text": " ",
+          "start_time": 11.759,
+          "end_time": 11.859
+        },
+        {
+          "text": "visiting",
+          "start_time": 11.859,
+          "end_time": 12.559
+        },
+        {
+          "text": " ",
+          "start_time": 12.559,
+          "end_time": 12.639
+        },
+        {
+          "text": "my",
+          "start_time": 12.639,
+          "end_time": 12.859
+        },
+        {
+          "text": " ",
+          "start_time": 12.859,
+          "end_time": 13.0
+        },
+        {
+          "text": "uncle's",
+          "start_time": 13.0,
+          "end_time": 13.399
+        },
+        {
+          "text": " ",
+          "start_time": 13.399,
+          "end_time": 13.439
+        },
+        {
+          "text": "house.",
+          "start_time": 13.439,
+          "end_time": 13.859
+        },
+        {
+          "text": " ",
+          "start_time": 13.859,
+          "end_time": 14.119
+        },
+        {
+          "text": "We",
+          "start_time": 14.119,
+          "end_time": 14.179
+        },
+        {
+          "text": " ",
+          "start_time": 14.179,
+          "end_time": 14.259
+        },
+        {
+          "text": "were",
+          "start_time": 14.259,
+          "end_time": 14.46
+        },
+        {
+          "text": " ",
+          "start_time": 14.46,
+          "end_time": 14.519
+        },
+        {
+          "text": "harvesting",
+          "start_time": 14.519,
+          "end_time": 15.179
+        },
+        {
+          "text": " ",
+          "start_time": 15.179,
+          "end_time": 15.279
+        },
+        {
+          "text": "lettuce",
+          "start_time": 15.279,
+          "end_time": 15.699
+        },
+        {
+          "text": " ",
+          "start_time": 15.699,
+          "end_time": 15.759
+        },
+        {
+          "text": "there.",
+          "start_time": 15.759,
+          "end_time": 16.02
+        },
+        {
+          "text": " ",
+          "start_time": 16.02,
+          "end_time": 16.34
+        },
+        {
+          "text": "It",
+          "start_time": 16.34,
+          "end_time": 16.5
+        },
+        {
+          "text": " ",
+          "start_time": 16.5,
+          "end_time": 16.579
+        },
+        {
+          "text": "was",
+          "start_time": 16.579,
+          "end_time": 16.819
+        },
+        {
+          "text": " ",
+          "start_time": 16.819,
+          "end_time": 16.92
+        },
+        {
+          "text": "the",
+          "start_time": 16.92,
+          "end_time": 17.079
+        },
+        {
+          "text": " ",
+          "start_time": 17.079,
+          "end_time": 17.279
+        },
+        {
+          "text": "best",
+          "start_time": 17.279,
+          "end_time": 17.579
+        },
+        {
+          "text": " ",
+          "start_time": 17.579,
+          "end_time": 17.719
+        },
+        {
+          "text": "day.",
+          "start_time": 17.719,
+          "end_time": 17.92
+        },
+        {
+          "text": " ",
+          "start_time": 17.92,
+          "end_time": 17.92
+        }
+      ]
+    },
+    {
+      "text": "Nice. Your uncle must have several acres, huh? ",
+      "start_time": 18.979,
+      "end_time": 22.159,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Nice.",
+          "start_time": 18.979,
+          "end_time": 19.359
+        },
+        {
+          "text": " ",
+          "start_time": 19.359,
+          "end_time": 19.76
+        },
+        {
+          "text": "Your",
+          "start_time": 19.76,
+          "end_time": 19.899
+        },
+        {
+          "text": " ",
+          "start_time": 19.899,
+          "end_time": 20.0
+        },
+        {
+          "text": "uncle",
+          "start_time": 20.0,
+          "end_time": 20.279
+        },
+        {
+          "text": " ",
+          "start_time": 20.279,
+          "end_time": 20.379
+        },
+        {
+          "text": "must",
+          "start_time": 20.379,
+          "end_time": 20.559
+        },
+        {
+          "text": " ",
+          "start_time": 20.559,
+          "end_time": 20.639
+        },
+        {
+          "text": "have",
+          "start_time": 20.639,
+          "end_time": 20.819
+        },
+        {
+          "text": " ",
+          "start_time": 20.819,
+          "end_time": 20.899
+        },
+        {
+          "text": "several",
+          "start_time": 20.899,
+          "end_time": 21.319
+        },
+        {
+          "text": " ",
+          "start_time": 21.319,
+          "end_time": 21.42
+        },
+        {
+          "text": "acres,",
+          "start_time": 21.42,
+          "end_time": 21.819
+        },
+        {
+          "text": " ",
+          "start_time": 21.819,
+          "end_time": 21.939
+        },
+        {
+          "text": "huh?",
+          "start_time": 21.939,
+          "end_time": 22.159
+        },
+        {
+          "text": " ",
+          "start_time": 22.159,
+          "end_time": 22.159
+        }
+      ]
+    },
+    {
+      "text": "Yes, he has a large ranch of 40 acres. He raises cattle there, and he has an enormous garden near his house. ",
+      "start_time": 23.239,
+      "end_time": 34.699,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Yes,",
+          "start_time": 23.239,
+          "end_time": 23.639
+        },
+        {
+          "text": " ",
+          "start_time": 23.639,
+          "end_time": 23.959
+        },
+        {
+          "text": "he",
+          "start_time": 23.959,
+          "end_time": 24.079
+        },
+        {
+          "text": " ",
+          "start_time": 24.079,
+          "end_time": 24.159
+        },
+        {
+          "text": "has",
+          "start_time": 24.159,
+          "end_time": 24.319
+        },
+        {
+          "text": " ",
+          "start_time": 24.319,
+          "end_time": 24.439
+        },
+        {
+          "text": "a",
+          "start_time": 24.439,
+          "end_time": 24.539
+        },
+        {
+          "text": " ",
+          "start_time": 24.539,
+          "end_time": 24.639
+        },
+        {
+          "text": "large",
+          "start_time": 24.639,
+          "end_time": 25.0
+        },
+        {
+          "text": " ",
+          "start_time": 25.0,
+          "end_time": 25.079
+        },
+        {
+          "text": "ranch",
+          "start_time": 25.079,
+          "end_time": 25.639
+        },
+        {
+          "text": " ",
+          "start_time": 25.639,
+          "end_time": 25.939
+        },
+        {
+          "text": "of",
+          "start_time": 25.939,
+          "end_time": 26.099
+        },
+        {
+          "text": " ",
+          "start_time": 26.099,
+          "end_time": 26.359
+        },
+        {
+          "text": "40",
+          "start_time": 26.359,
+          "end_time": 26.559
+        },
+        {
+          "text": " ",
+          "start_time": 26.559,
+          "end_time": 26.68
+        },
+        {
+          "text": "acres.",
+          "start_time": 26.68,
+          "end_time": 27.299
+        },
+        {
+          "text": " ",
+          "start_time": 27.299,
+          "end_time": 27.739
+        },
+        {
+          "text": "He",
+          "start_time": 27.739,
+          "end_time": 27.84
+        },
+        {
+          "text": " ",
+          "start_time": 27.84,
+          "end_time": 27.959
+        },
+        {
+          "text": "raises",
+          "start_time": 27.959,
+          "end_time": 28.379
+        },
+        {
+          "text": " ",
+          "start_time": 28.379,
+          "end_time": 28.459
+        },
+        {
+          "text": "cattle",
+          "start_time": 28.459,
+          "end_time": 28.879
+        },
+        {
+          "text": " ",
+          "start_time": 28.879,
+          "end_time": 28.92
+        },
+        {
+          "text": "there,",
+          "start_time": 28.92,
+          "end_time": 29.279
+        },
+        {
+          "text": " ",
+          "start_time": 29.279,
+          "end_time": 29.559
+        },
+        {
+          "text": "and",
+          "start_time": 29.559,
+          "end_time": 29.76
+        },
+        {
+          "text": " ",
+          "start_time": 29.76,
+          "end_time": 29.84
+        },
+        {
+          "text": "he",
+          "start_time": 29.84,
+          "end_time": 30.019
+        },
+        {
+          "text": " ",
+          "start_time": 30.019,
+          "end_time": 30.079
+        },
+        {
+          "text": "has",
+          "start_time": 30.079,
+          "end_time": 30.5
+        },
+        {
+          "text": " ",
+          "start_time": 30.5,
+          "end_time": 30.619
+        },
+        {
+          "text": "an",
+          "start_time": 30.619,
+          "end_time": 31.139
+        },
+        {
+          "text": " ",
+          "start_time": 31.139,
+          "end_time": 31.319
+        },
+        {
+          "text": "enormous",
+          "start_time": 31.319,
+          "end_time": 32.059
+        },
+        {
+          "text": " ",
+          "start_time": 32.059,
+          "end_time": 32.179
+        },
+        {
+          "text": "garden",
+          "start_time": 32.18,
+          "end_time": 32.599
+        },
+        {
+          "text": " ",
+          "start_time": 32.599,
+          "end_time": 32.779
+        },
+        {
+          "text": "near",
+          "start_time": 32.779,
+          "end_time": 32.979
+        },
+        {
+          "text": " ",
+          "start_time": 32.979,
+          "end_time": 33.04
+        },
+        {
+          "text": "his",
+          "start_time": 33.04,
+          "end_time": 33.239
+        },
+        {
+          "text": " ",
+          "start_time": 33.239,
+          "end_time": 33.299
+        },
+        {
+          "text": "house.",
+          "start_time": 33.299,
+          "end_time": 33.719
+        },
+        {
+          "text": " ",
+          "start_time": 33.719,
+          "end_time": 34.699
+        }
+      ]
+    },
+    {
+      "text": "It's your turn, Eric. Were you playing in the symphony or listening to it last night? ",
+      "start_time": 34.7,
+      "end_time": 39.899,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "It's",
+          "start_time": 34.7,
+          "end_time": 34.86
+        },
+        {
+          "text": " ",
+          "start_time": 34.86,
+          "end_time": 34.899
+        },
+        {
+          "text": "your",
+          "start_time": 34.899,
+          "end_time": 35.059
+        },
+        {
+          "text": " ",
+          "start_time": 35.059,
+          "end_time": 35.139
+        },
+        {
+          "text": "turn,",
+          "start_time": 35.139,
+          "end_time": 35.299
+        },
+        {
+          "text": " ",
+          "start_time": 35.299,
+          "end_time": 35.419
+        },
+        {
+          "text": "Eric.",
+          "start_time": 35.419,
+          "end_time": 35.759
+        },
+        {
+          "text": " ",
+          "start_time": 35.759,
+          "end_time": 36.18
+        },
+        {
+          "text": "Were",
+          "start_time": 36.18,
+          "end_time": 36.319
+        },
+        {
+          "text": " ",
+          "start_time": 36.319,
+          "end_time": 36.399
+        },
+        {
+          "text": "you",
+          "start_time": 36.399,
+          "end_time": 36.52
+        },
+        {
+          "text": " ",
+          "start_time": 36.52,
+          "end_time": 36.599
+        },
+        {
+          "text": "playing",
+          "start_time": 36.599,
+          "end_time": 36.86
+        },
+        {
+          "text": " ",
+          "start_time": 36.86,
+          "end_time": 36.899
+        },
+        {
+          "text": "in",
+          "start_time": 36.899,
+          "end_time": 36.979
+        },
+        {
+          "text": " ",
+          "start_time": 36.979,
+          "end_time": 37.02
+        },
+        {
+          "text": "the",
+          "start_time": 37.02,
+          "end_time": 37.119
+        },
+        {
+          "text": " ",
+          "start_time": 37.119,
+          "end_time": 37.18
+        },
+        {
+          "text": "symphony",
+          "start_time": 37.18,
+          "end_time": 37.68
+        },
+        {
+          "text": " ",
+          "start_time": 37.68,
+          "end_time": 37.739
+        },
+        {
+          "text": "or",
+          "start_time": 37.739,
+          "end_time": 37.86
+        },
+        {
+          "text": " ",
+          "start_time": 37.86,
+          "end_time": 37.899
+        },
+        {
+          "text": "listening",
+          "start_time": 37.899,
+          "end_time": 38.259
+        },
+        {
+          "text": " ",
+          "start_time": 38.259,
+          "end_time": 38.319
+        },
+        {
+          "text": "to",
+          "start_time": 38.319,
+          "end_time": 38.379
+        },
+        {
+          "text": " ",
+          "start_time": 38.379,
+          "end_time": 38.439
+        },
+        {
+          "text": "it",
+          "start_time": 38.439,
+          "end_time": 38.52
+        },
+        {
+          "text": " ",
+          "start_time": 38.52,
+          "end_time": 38.579
+        },
+        {
+          "text": "last",
+          "start_time": 38.579,
+          "end_time": 38.779
+        },
+        {
+          "text": " ",
+          "start_time": 38.779,
+          "end_time": 38.86
+        },
+        {
+          "text": "night?",
+          "start_time": 38.86,
+          "end_time": 39.059
+        },
+        {
+          "text": " ",
+          "start_time": 39.059,
+          "end_time": 39.899
+        }
+      ]
+    },
+    {
+      "text": "I was listening to it. I play the violin, but I've got a long way to go before I'm ready for the symphony. ",
+      "start_time": 39.899,
+      "end_time": 46.939,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "I",
+          "start_time": 39.899,
+          "end_time": 39.939
+        },
+        {
+          "text": " ",
+          "start_time": 39.939,
+          "end_time": 40.0
+        },
+        {
+          "text": "was",
+          "start_time": 40.0,
+          "end_time": 40.139
+        },
+        {
+          "text": " ",
+          "start_time": 40.139,
+          "end_time": 40.219
+        },
+        {
+          "text": "listening",
+          "start_time": 40.219,
+          "end_time": 40.599
+        },
+        {
+          "text": " ",
+          "start_time": 40.599,
+          "end_time": 40.639
+        },
+        {
+          "text": "to",
+          "start_time": 40.639,
+          "end_time": 40.739
+        },
+        {
+          "text": " ",
+          "start_time": 40.739,
+          "end_time": 40.799
+        },
+        {
+          "text": "it.",
+          "start_time": 40.799,
+          "end_time": 40.919
+        },
+        {
+          "text": " ",
+          "start_time": 40.919,
+          "end_time": 41.639
+        },
+        {
+          "text": "I",
+          "start_time": 41.639,
+          "end_time": 41.739
+        },
+        {
+          "text": " ",
+          "start_time": 41.739,
+          "end_time": 41.799
+        },
+        {
+          "text": "play",
+          "start_time": 41.799,
+          "end_time": 41.959
+        },
+        {
+          "text": " ",
+          "start_time": 41.959,
+          "end_time": 42.02
+        },
+        {
+          "text": "the",
+          "start_time": 42.02,
+          "end_time": 42.099
+        },
+        {
+          "text": " ",
+          "start_time": 42.099,
+          "end_time": 42.18
+        },
+        {
+          "text": "violin,",
+          "start_time": 42.18,
+          "end_time": 42.659
+        },
+        {
+          "text": " ",
+          "start_time": 42.659,
+          "end_time": 42.84
+        },
+        {
+          "text": "but",
+          "start_time": 42.84,
+          "end_time": 42.919
+        },
+        {
+          "text": " ",
+          "start_time": 42.919,
+          "end_time": 43.0
+        },
+        {
+          "text": "I've",
+          "start_time": 43.0,
+          "end_time": 43.159
+        },
+        {
+          "text": " ",
+          "start_time": 43.159,
+          "end_time": 43.2
+        },
+        {
+          "text": "got",
+          "start_time": 43.2,
+          "end_time": 43.34
+        },
+        {
+          "text": " ",
+          "start_time": 43.34,
+          "end_time": 43.399
+        },
+        {
+          "text": "a",
+          "start_time": 43.399,
+          "end_time": 43.479
+        },
+        {
+          "text": " ",
+          "start_time": 43.479,
+          "end_time": 43.52
+        },
+        {
+          "text": "long",
+          "start_time": 43.52,
+          "end_time": 43.819
+        },
+        {
+          "text": " ",
+          "start_time": 43.819,
+          "end_time": 43.899
+        },
+        {
+          "text": "way",
+          "start_time": 43.899,
+          "end_time": 44.079
+        },
+        {
+          "text": " ",
+          "start_time": 44.079,
+          "end_time": 44.119
+        },
+        {
+          "text": "to",
+          "start_time": 44.119,
+          "end_time": 44.2
+        },
+        {
+          "text": " ",
+          "start_time": 44.2,
+          "end_time": 44.259
+        },
+        {
+          "text": "go",
+          "start_time": 44.259,
+          "end_time": 44.439
+        },
+        {
+          "text": " ",
+          "start_time": 44.439,
+          "end_time": 44.479
+        },
+        {
+          "text": "before",
+          "start_time": 44.479,
+          "end_time": 44.779
+        },
+        {
+          "text": " ",
+          "start_time": 44.779,
+          "end_time": 44.86
+        },
+        {
+          "text": "I'm",
+          "start_time": 44.86,
+          "end_time": 44.979
+        },
+        {
+          "text": " ",
+          "start_time": 44.979,
+          "end_time": 45.039
+        },
+        {
+          "text": "ready",
+          "start_time": 45.039,
+          "end_time": 45.239
+        },
+        {
+          "text": " ",
+          "start_time": 45.239,
+          "end_time": 45.279
+        },
+        {
+          "text": "for",
+          "start_time": 45.279,
+          "end_time": 45.379
+        },
+        {
+          "text": " ",
+          "start_time": 45.379,
+          "end_time": 45.419
+        },
+        {
+          "text": "the",
+          "start_time": 45.419,
+          "end_time": 45.52
+        },
+        {
+          "text": " ",
+          "start_time": 45.52,
+          "end_time": 45.599
+        },
+        {
+          "text": "symphony.",
+          "start_time": 45.599,
+          "end_time": 46.059
+        },
+        {
+          "text": " ",
+          "start_time": 46.059,
+          "end_time": 46.939
+        }
+      ]
+    },
+    {
+      "text": "Were they playing anything lively? I don't like lots of slow symphony music. It makes me sad. ",
+      "start_time": 46.939,
+      "end_time": 53.419,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "Were",
+          "start_time": 46.939,
+          "end_time": 47.039
+        },
+        {
+          "text": " ",
+          "start_time": 47.039,
+          "end_time": 47.079
+        },
+        {
+          "text": "they",
+          "start_time": 47.079,
+          "end_time": 47.2
+        },
+        {
+          "text": " ",
+          "start_time": 47.2,
+          "end_time": 47.279
+        },
+        {
+          "text": "playing",
+          "start_time": 47.279,
+          "end_time": 47.559
+        },
+        {
+          "text": " ",
+          "start_time": 47.559,
+          "end_time": 47.619
+        },
+        {
+          "text": "anything",
+          "start_time": 47.619,
+          "end_time": 47.979
+        },
+        {
+          "text": " ",
+          "start_time": 47.979,
+          "end_time": 48.099
+        },
+        {
+          "text": "lively?",
+          "start_time": 48.099,
+          "end_time": 48.559
+        },
+        {
+          "text": " ",
+          "start_time": 48.559,
+          "end_time": 48.999
+        },
+        {
+          "text": "I",
+          "start_time": 49.0,
+          "end_time": 49.079
+        },
+        {
+          "text": " ",
+          "start_time": 49.079,
+          "end_time": 49.119
+        },
+        {
+          "text": "don't",
+          "start_time": 49.119,
+          "end_time": 49.299
+        },
+        {
+          "text": " ",
+          "start_time": 49.299,
+          "end_time": 49.36
+        },
+        {
+          "text": "like",
+          "start_time": 49.36,
+          "end_time": 49.52
+        },
+        {
+          "text": " ",
+          "start_time": 49.52,
+          "end_time": 49.639
+        },
+        {
+          "text": "lots",
+          "start_time": 49.639,
+          "end_time": 49.84
+        },
+        {
+          "text": " ",
+          "start_time": 49.84,
+          "end_time": 49.879
+        },
+        {
+          "text": "of",
+          "start_time": 49.879,
+          "end_time": 50.019
+        },
+        {
+          "text": " ",
+          "start_time": 50.019,
+          "end_time": 50.079
+        },
+        {
+          "text": "slow",
+          "start_time": 50.079,
+          "end_time": 50.359
+        },
+        {
+          "text": " ",
+          "start_time": 50.359,
+          "end_time": 50.419
+        },
+        {
+          "text": "symphony",
+          "start_time": 50.419,
+          "end_time": 50.819
+        },
+        {
+          "text": " ",
+          "start_time": 50.819,
+          "end_time": 50.899
+        },
+        {
+          "text": "music.",
+          "start_time": 50.899,
+          "end_time": 51.319
+        },
+        {
+          "text": " ",
+          "start_time": 51.319,
+          "end_time": 51.599
+        },
+        {
+          "text": "It",
+          "start_time": 51.599,
+          "end_time": 51.699
+        },
+        {
+          "text": " ",
+          "start_time": 51.699,
+          "end_time": 51.759
+        },
+        {
+          "text": "makes",
+          "start_time": 51.759,
+          "end_time": 51.979
+        },
+        {
+          "text": " ",
+          "start_time": 51.979,
+          "end_time": 52.039
+        },
+        {
+          "text": "me",
+          "start_time": 52.039,
+          "end_time": 52.159
+        },
+        {
+          "text": " ",
+          "start_time": 52.159,
+          "end_time": 52.239
+        },
+        {
+          "text": "sad.",
+          "start_time": 52.239,
+          "end_time": 52.639
+        },
+        {
+          "text": " ",
+          "start_time": 52.639,
+          "end_time": 53.419
+        }
+      ]
+    },
+    {
+      "text": "Actually, symphony music can be very lively. During Mozart and Beethoven's time, composers were writing very beautiful music. Often, it depended on the composer and the times. ",
+      "start_time": 53.419,
+      "end_time": 65.779,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "Actually,",
+          "start_time": 53.419,
+          "end_time": 53.86
+        },
+        {
+          "text": " ",
+          "start_time": 53.86,
+          "end_time": 54.0
+        },
+        {
+          "text": "symphony",
+          "start_time": 54.0,
+          "end_time": 54.36
+        },
+        {
+          "text": " ",
+          "start_time": 54.36,
+          "end_time": 54.419
+        },
+        {
+          "text": "music",
+          "start_time": 54.419,
+          "end_time": 54.719
+        },
+        {
+          "text": " ",
+          "start_time": 54.719,
+          "end_time": 54.779
+        },
+        {
+          "text": "can",
+          "start_time": 54.779,
+          "end_time": 54.879
+        },
+        {
+          "text": " ",
+          "start_time": 54.879,
+          "end_time": 54.919
+        },
+        {
+          "text": "be",
+          "start_time": 54.919,
+          "end_time": 55.02
+        },
+        {
+          "text": " ",
+          "start_time": 55.02,
+          "end_time": 55.099
+        },
+        {
+          "text": "very",
+          "start_time": 55.099,
+          "end_time": 55.299
+        },
+        {
+          "text": " ",
+          "start_time": 55.299,
+          "end_time": 55.419
+        },
+        {
+          "text": "lively.",
+          "start_time": 55.419,
+          "end_time": 55.759
+        },
+        {
+          "text": " ",
+          "start_time": 55.759,
+          "end_time": 56.159
+        },
+        {
+          "text": "During",
+          "start_time": 56.159,
+          "end_time": 56.399
+        },
+        {
+          "text": " ",
+          "start_time": 56.399,
+          "end_time": 56.499
+        },
+        {
+          "text": "Mozart",
+          "start_time": 56.5,
+          "end_time": 56.979
+        },
+        {
+          "text": " ",
+          "start_time": 56.979,
+          "end_time": 57.059
+        },
+        {
+          "text": "and",
+          "start_time": 57.059,
+          "end_time": 57.139
+        },
+        {
+          "text": " ",
+          "start_time": 57.139,
+          "end_time": 57.259
+        },
+        {
+          "text": "Beethoven's",
+          "start_time": 57.259,
+          "end_time": 57.979
+        },
+        {
+          "text": " ",
+          "start_time": 57.979,
+          "end_time": 58.039
+        },
+        {
+          "text": "time,",
+          "start_time": 58.039,
+          "end_time": 58.399
+        },
+        {
+          "text": " ",
+          "start_time": 58.399,
+          "end_time": 58.539
+        },
+        {
+          "text": "composers",
+          "start_time": 58.539,
+          "end_time": 59.099
+        },
+        {
+          "text": " ",
+          "start_time": 59.099,
+          "end_time": 59.18
+        },
+        {
+          "text": "were",
+          "start_time": 59.18,
+          "end_time": 59.319
+        },
+        {
+          "text": " ",
+          "start_time": 59.319,
+          "end_time": 59.379
+        },
+        {
+          "text": "writing",
+          "start_time": 59.379,
+          "end_time": 59.68
+        },
+        {
+          "text": " ",
+          "start_time": 59.68,
+          "end_time": 59.84
+        },
+        {
+          "text": "very",
+          "start_time": 59.84,
+          "end_time": 60.119
+        },
+        {
+          "text": " ",
+          "start_time": 60.119,
+          "end_time": 60.199
+        },
+        {
+          "text": "beautiful",
+          "start_time": 60.199,
+          "end_time": 60.699
+        },
+        {
+          "text": " ",
+          "start_time": 60.699,
+          "end_time": 60.759
+        },
+        {
+          "text": "music.",
+          "start_time": 60.759,
+          "end_time": 61.139
+        },
+        {
+          "text": " ",
+          "start_time": 61.139,
+          "end_time": 61.539
+        },
+        {
+          "text": "Often,",
+          "start_time": 61.539,
+          "end_time": 62.019
+        },
+        {
+          "text": " ",
+          "start_time": 62.019,
+          "end_time": 62.18
+        },
+        {
+          "text": "it",
+          "start_time": 62.18,
+          "end_time": 62.319
+        },
+        {
+          "text": " ",
+          "start_time": 62.319,
+          "end_time": 62.379
+        },
+        {
+          "text": "depended",
+          "start_time": 62.379,
+          "end_time": 62.919
+        },
+        {
+          "text": " ",
+          "start_time": 62.919,
+          "end_time": 63.0
+        },
+        {
+          "text": "on",
+          "start_time": 63.0,
+          "end_time": 63.099
+        },
+        {
+          "text": " ",
+          "start_time": 63.099,
+          "end_time": 63.119
+        },
+        {
+          "text": "the",
+          "start_time": 63.119,
+          "end_time": 63.219
+        },
+        {
+          "text": " ",
+          "start_time": 63.219,
+          "end_time": 63.279
+        },
+        {
+          "text": "composer",
+          "start_time": 63.279,
+          "end_time": 63.919
+        },
+        {
+          "text": " ",
+          "start_time": 63.919,
+          "end_time": 64.019
+        },
+        {
+          "text": "and",
+          "start_time": 64.019,
+          "end_time": 64.159
+        },
+        {
+          "text": " ",
+          "start_time": 64.159,
+          "end_time": 64.199
+        },
+        {
+          "text": "the",
+          "start_time": 64.199,
+          "end_time": 64.279
+        },
+        {
+          "text": " ",
+          "start_time": 64.279,
+          "end_time": 64.36
+        },
+        {
+          "text": "times.",
+          "start_time": 64.36,
+          "end_time": 64.859
+        },
+        {
+          "text": " ",
+          "start_time": 64.859,
+          "end_time": 65.779
+        }
+      ]
+    },
+    {
+      "text": "Which type of music do you play on your violin? ",
+      "start_time": 65.779,
+      "end_time": 69.76,
+      "speaker": {
+        "id": "speaker_2",
+        "name": "Speaker 2"
+      },
+      "words": [
+        {
+          "text": "Which",
+          "start_time": 65.779,
+          "end_time": 66.019
+        },
+        {
+          "text": " ",
+          "start_time": 66.019,
+          "end_time": 66.139
+        },
+        {
+          "text": "type",
+          "start_time": 66.139,
+          "end_time": 66.339
+        },
+        {
+          "text": " ",
+          "start_time": 66.339,
+          "end_time": 66.379
+        },
+        {
+          "text": "of",
+          "start_time": 66.379,
+          "end_time": 66.5
+        },
+        {
+          "text": " ",
+          "start_time": 66.5,
+          "end_time": 66.619
+        },
+        {
+          "text": "music",
+          "start_time": 66.619,
+          "end_time": 67.019
+        },
+        {
+          "text": " ",
+          "start_time": 67.019,
+          "end_time": 67.079
+        },
+        {
+          "text": "do",
+          "start_time": 67.08,
+          "end_time": 67.219
+        },
+        {
+          "text": " ",
+          "start_time": 67.219,
+          "end_time": 67.279
+        },
+        {
+          "text": "you",
+          "start_time": 67.279,
+          "end_time": 67.419
+        },
+        {
+          "text": " ",
+          "start_time": 67.419,
+          "end_time": 67.5
+        },
+        {
+          "text": "play",
+          "start_time": 67.5,
+          "end_time": 67.699
+        },
+        {
+          "text": " ",
+          "start_time": 67.699,
+          "end_time": 67.779
+        },
+        {
+          "text": "on",
+          "start_time": 67.779,
+          "end_time": 67.939
+        },
+        {
+          "text": " ",
+          "start_time": 67.939,
+          "end_time": 67.979
+        },
+        {
+          "text": "your",
+          "start_time": 67.979,
+          "end_time": 68.139
+        },
+        {
+          "text": " ",
+          "start_time": 68.139,
+          "end_time": 68.22
+        },
+        {
+          "text": "violin?",
+          "start_time": 68.22,
+          "end_time": 68.76
+        },
+        {
+          "text": " ",
+          "start_time": 68.76,
+          "end_time": 69.76
+        }
+      ]
+    },
+    {
+      "text": "I like to play music with a variety of moods. ",
+      "start_time": 69.76,
+      "end_time": 72.819,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "I",
+          "start_time": 69.76,
+          "end_time": 69.819
+        },
+        {
+          "text": " ",
+          "start_time": 69.819,
+          "end_time": 69.879
+        },
+        {
+          "text": "like",
+          "start_time": 69.879,
+          "end_time": 70.04
+        },
+        {
+          "text": " ",
+          "start_time": 70.04,
+          "end_time": 70.099
+        },
+        {
+          "text": "to",
+          "start_time": 70.099,
+          "end_time": 70.239
+        },
+        {
+          "text": " ",
+          "start_time": 70.239,
+          "end_time": 70.339
+        },
+        {
+          "text": "play",
+          "start_time": 70.339,
+          "end_time": 70.68
+        },
+        {
+          "text": " ",
+          "start_time": 70.68,
+          "end_time": 70.76
+        },
+        {
+          "text": "music",
+          "start_time": 70.76,
+          "end_time": 71.159
+        },
+        {
+          "text": " ",
+          "start_time": 71.159,
+          "end_time": 71.239
+        },
+        {
+          "text": "with",
+          "start_time": 71.239,
+          "end_time": 71.36
+        },
+        {
+          "text": " ",
+          "start_time": 71.36,
+          "end_time": 71.4
+        },
+        {
+          "text": "a",
+          "start_time": 71.4,
+          "end_time": 71.459
+        },
+        {
+          "text": " ",
+          "start_time": 71.459,
+          "end_time": 71.5
+        },
+        {
+          "text": "variety",
+          "start_time": 71.5,
+          "end_time": 72.019
+        },
+        {
+          "text": " ",
+          "start_time": 72.019,
+          "end_time": 72.059
+        },
+        {
+          "text": "of",
+          "start_time": 72.059,
+          "end_time": 72.239
+        },
+        {
+          "text": " ",
+          "start_time": 72.239,
+          "end_time": 72.319
+        },
+        {
+          "text": "moods.",
+          "start_time": 72.319,
+          "end_time": 72.819
+        },
+        {
+          "text": " ",
+          "start_time": 72.819,
+          "end_time": 72.819
+        }
+      ]
+    },
+    {
+      "text": "There are even some rock and roll songs that use the violin. It's a very flexible instrument. ",
+      "start_time": 73.879,
+      "end_time": 80.4,
+      "speaker": {
+        "id": "speaker_3",
+        "name": "Speaker 3"
+      },
+      "words": [
+        {
+          "text": "There",
+          "start_time": 73.879,
+          "end_time": 74.0
+        },
+        {
+          "text": " ",
+          "start_time": 74.0,
+          "end_time": 74.059
+        },
+        {
+          "text": "are",
+          "start_time": 74.059,
+          "end_time": 74.199
+        },
+        {
+          "text": " ",
+          "start_time": 74.199,
+          "end_time": 74.279
+        },
+        {
+          "text": "even",
+          "start_time": 74.279,
+          "end_time": 74.519
+        },
+        {
+          "text": " ",
+          "start_time": 74.519,
+          "end_time": 74.579
+        },
+        {
+          "text": "some",
+          "start_time": 74.58,
+          "end_time": 74.72
+        },
+        {
+          "text": " ",
+          "start_time": 74.72,
+          "end_time": 74.819
+        },
+        {
+          "text": "rock",
+          "start_time": 74.819,
+          "end_time": 74.979
+        },
+        {
+          "text": " ",
+          "start_time": 74.979,
+          "end_time": 75.019
+        },
+        {
+          "text": "and",
+          "start_time": 75.019,
+          "end_time": 75.139
+        },
+        {
+          "text": " ",
+          "start_time": 75.139,
+          "end_time": 75.199
+        },
+        {
+          "text": "roll",
+          "start_time": 75.199,
+          "end_time": 75.459
+        },
+        {
+          "text": " ",
+          "start_time": 75.459,
+          "end_time": 75.54
+        },
+        {
+          "text": "songs",
+          "start_time": 75.54,
+          "end_time": 75.919
+        },
+        {
+          "text": " ",
+          "start_time": 75.919,
+          "end_time": 75.959
+        },
+        {
+          "text": "that",
+          "start_time": 75.959,
+          "end_time": 76.099
+        },
+        {
+          "text": " ",
+          "start_time": 76.099,
+          "end_time": 76.22
+        },
+        {
+          "text": "use",
+          "start_time": 76.22,
+          "end_time": 76.379
+        },
+        {
+          "text": " ",
+          "start_time": 76.379,
+          "end_time": 76.439
+        },
+        {
+          "text": "the",
+          "start_time": 76.439,
+          "end_time": 76.5
+        },
+        {
+          "text": " ",
+          "start_time": 76.5,
+          "end_time": 76.559
+        },
+        {
+          "text": "violin.",
+          "start_time": 76.559,
+          "end_time": 77.079
+        },
+        {
+          "text": " ",
+          "start_time": 77.079,
+          "end_time": 77.459
+        },
+        {
+          "text": "It's",
+          "start_time": 77.459,
+          "end_time": 77.599
+        },
+        {
+          "text": " ",
+          "start_time": 77.599,
+          "end_time": 77.639
+        },
+        {
+          "text": "a",
+          "start_time": 77.639,
+          "end_time": 77.699
+        },
+        {
+          "text": " ",
+          "start_time": 77.699,
+          "end_time": 77.759
+        },
+        {
+          "text": "very",
+          "start_time": 77.759,
+          "end_time": 78.08
+        },
+        {
+          "text": " ",
+          "start_time": 78.08,
+          "end_time": 78.159
+        },
+        {
+          "text": "flexible",
+          "start_time": 78.159,
+          "end_time": 78.679
+        },
+        {
+          "text": " ",
+          "start_time": 78.679,
+          "end_time": 78.759
+        },
+        {
+          "text": "instrument.",
+          "start_time": 78.759,
+          "end_time": 79.4
+        },
+        {
+          "text": " ",
+          "start_time": 79.4,
+          "end_time": 80.4
+        }
+      ]
+    },
+    {
+      "text": "That's a good point. That's one reason that makes the violin so appealing to me",
+      "start_time": 80.4,
+      "end_time": 84.479,
+      "speaker": {
+        "id": "speaker_1",
+        "name": "Speaker 1"
+      },
+      "words": [
+        {
+          "text": "That's",
+          "start_time": 80.4,
+          "end_time": 80.58
+        },
+        {
+          "text": " ",
+          "start_time": 80.58,
+          "end_time": 80.619
+        },
+        {
+          "text": "a",
+          "start_time": 80.619,
+          "end_time": 80.659
+        },
+        {
+          "text": " ",
+          "start_time": 80.659,
+          "end_time": 80.699
+        },
+        {
+          "text": "good",
+          "start_time": 80.699,
+          "end_time": 80.879
+        },
+        {
+          "text": " ",
+          "start_time": 80.879,
+          "end_time": 80.959
+        },
+        {
+          "text": "point.",
+          "start_time": 80.959,
+          "end_time": 81.259
+        },
+        {
+          "text": " ",
+          "start_time": 81.259,
+          "end_time": 81.739
+        },
+        {
+          "text": "That's",
+          "start_time": 81.739,
+          "end_time": 81.959
+        },
+        {
+          "text": " ",
+          "start_time": 81.959,
+          "end_time": 82.04
+        },
+        {
+          "text": "one",
+          "start_time": 82.04,
+          "end_time": 82.199
+        },
+        {
+          "text": " ",
+          "start_time": 82.199,
+          "end_time": 82.279
+        },
+        {
+          "text": "reason",
+          "start_time": 82.279,
+          "end_time": 82.559
+        },
+        {
+          "text": " ",
+          "start_time": 82.559,
+          "end_time": 82.599
+        },
+        {
+          "text": "that",
+          "start_time": 82.599,
+          "end_time": 82.719
+        },
+        {
+          "text": " ",
+          "start_time": 82.719,
+          "end_time": 82.759
+        },
+        {
+          "text": "makes",
+          "start_time": 82.759,
+          "end_time": 82.939
+        },
+        {
+          "text": " ",
+          "start_time": 82.939,
+          "end_time": 82.979
+        },
+        {
+          "text": "the",
+          "start_time": 82.979,
+          "end_time": 83.039
+        },
+        {
+          "text": " ",
+          "start_time": 83.039,
+          "end_time": 83.119
+        },
+        {
+          "text": "violin",
+          "start_time": 83.119,
+          "end_time": 83.599
+        },
+        {
+          "text": " ",
+          "start_time": 83.599,
+          "end_time": 83.659
+        },
+        {
+          "text": "so",
+          "start_time": 83.659,
+          "end_time": 83.739
+        },
+        {
+          "text": " ",
+          "start_time": 83.739,
+          "end_time": 83.779
+        },
+        {
+          "text": "appealing",
+          "start_time": 83.779,
+          "end_time": 84.179
+        },
+        {
+          "text": " ",
+          "start_time": 84.179,
+          "end_time": 84.259
+        },
+        {
+          "text": "to",
+          "start_time": 84.259,
+          "end_time": 84.339
+        },
+        {
+          "text": " ",
+          "start_time": 84.339,
+          "end_time": 84.399
+        },
+        {
+          "text": "me",
+          "start_time": 84.4,
+          "end_time": 84.479
+        }
+      ]
+    }
+  ]
+}

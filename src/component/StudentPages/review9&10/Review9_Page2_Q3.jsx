@@ -1,329 +1,235 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 4.svg";
-import img5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 5.svg";
-import img6 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 89/Ex E 6.svg";
 
 const Review9_Page2_Q3 = () => {
-  const [userAnswers, setUserAnswers] = useState({
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-    5: "",
-    6: "",
-  });
-  const [locked, setLocked] = useState(false);
-
-  const [checked, setChecked] = useState(false);
-
-  const words = ["ducks", "cats", "caps", "peas", "girls", "bags"];
-
-  const correctAnswers = {
-    1: "cats",
-    2: "bags",
-    3: "caps",
-    4: "girls",
-    5: "peas",
-    6: "ducks",
-  };
-
   const questions = [
-    { id: 1, image: img1 },
-    { id: 2, image: img2 },
-    { id: 3, image: img3 },
-    { id: 4, image: img4 },
-    { id: 5, image: img5 },
-    { id: 6, image: img6 },
+    "we will buy three pairs of sneakers",
+    "Janet will come over to my house",
+    "everyone will be sure to come",
+    "make sure to pack everything that you need",
   ];
 
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination) return;
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-    setUserAnswers((prev) => ({
-      ...prev,
-      [destination.droppableId]: draggableId.split("-")[0],
-    }));
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
-  const showAnswer = () => {
-    setUserAnswers(correctAnswers);
-    setLocked(true);
-  };
+
   const checkAnswers = () => {
     if (locked) return;
 
-    const empty = Object.values(userAnswers).some((v) => !v?.trim());
-    if (empty) {
-      ValidationAlert.info();
+    const hasEmpty = answers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    Object.keys(correctAnswers).forEach((id) => {
-      if (
-        userAnswers[id]?.toLowerCase().trim() ===
-        correctAnswers[id].toLowerCase()
-      ) {
-        score++;
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = Object.keys(correctAnswers).length;
+    setResult(newResults);
 
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    setChecked(true);
-    setLocked(true);
+    if (correctCount === total) {
+      setLocked(true);
 
-    if (score === total) ValidationAlert.success(msg);
-    else if (score === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleStartAgain = () => {
-    setUserAnswers({
-      1: "",
-      2: "",
-      3: "",
-      4: "",
-      5: "",
-      6: "",
-    });
-    setChecked(false);
+  const showAnswers = () => {
+    setAnswers([
+      "we will buy three pairs of sneakers",
+      "Janet will come over to my house",
+      "everyone will be sure to come",
+      "make sure to pack everything that you need",
+    ]);
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div
-          className="div-forall"
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[20px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
           style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
-            flexDirection: "column",
-            position: "relative",
-            width: "60%",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <div>
-            <h5 className="header-title-page8">
-              <span style={{ marginRight: "10px" }}>E</span> Look and write.
-            </h5>
-          </div>
-          <div
+          ✕
+        </span>
+      )}
+    </span>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-25">
+          <span
+            className="ex-F"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
+              marginRight: "10px",
             }}
           >
-            <div
-              style={{
-                width: "100%",
-                maxWidth: "900px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              {/* الكلمات */}
-              <Droppable droppableId="words" direction="horizontal">
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      display: "flex",
-                      gap: "12px",
-                      padding: "10px",
-                      border: "2px dashed #ccc",
-                      borderRadius: "10px",
-                      justifyContent: "center",
-                      width: "100%",
-                      marginBottom: "10px",
-                      // justifyContent: "center",
-                    }}
-                  >
-                    {words.map((word, index) => {
-                      const usedCount = Object.values(userAnswers).filter(
-                        (v) => v === word,
-                      ).length;
+            F
+          </span>
+          Given the <span className="text-[#1ea7ff]">if</span> or{" "}
+          <span className="text-[#1ea7ff]">when</span> clause, write the rest of
+          the sentence.
+        </h5>
 
-                      const totalCount = words.filter((w) => w === word).length;
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15 text-[20px]">
+          {/* 1 */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="font-bold">1</span>
 
-                      const isUsed = usedCount >= totalCount;
-                      return (
-                        <Draggable
-                          key={`${word}-${index}`}
-                          draggableId={`${word}-${index}`}
-                          index={index}
-                          isDragDisabled={checked || isUsed}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                padding: "7px 14px",
-                                border: "2px solid #2c5287",
-                                borderRadius: "8px",
-                                background: "white",
-                                fontWeight: "bold",
-                                cursor: isUsed ? "not-allowed" : "grab",
-                                fontSize: "16px",
-                                opacity: isUsed ? 0.4 : 1, // 🔥 تخفيف اللون
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              {word}
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+            <span>If the store has discounts on shoes,</span>
 
-              {/* الأسئلة بالصور */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "12px",
-                }}
-              >
-                {questions.map((q) => (
-                  <div
-                    key={q.id}
-                    style={{
-                      padding: "6px",
-                      textAlign: "center",
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "0px",
-                        left: "0px",
-                        color: "black",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        zIndex: 2,
-                      }}
-                    >
-                      {q.id}
-                    </div>
-                    <img
-                      src={q.image}
-                      alt={`q${q.id}`}
-                      style={{
-                        width: "100%",
-                        height: "90px",
-                        objectFit: "contain",
-                      }}
-                    />
+            {inputField(0, "w-[360px]")}
+          </div>
 
-                    <Droppable droppableId={String(q.id)}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          style={{
-                            position: "relative",
-                            marginTop: "6px",
-                            borderBottom: `2px solid ${
-                              checked &&
-                              userAnswers[q.id] !== correctAnswers[q.id]
-                                ? "red"
-                                : "#000"
-                            }`,
-                            minHeight: "28px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            fontSize: "20px",
-                            color: "#1C398E",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {userAnswers[q.id]}
+          {/* 2 */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="font-bold">2</span>
 
-                          {checked &&
-                            userAnswers[q.id] !== correctAnswers[q.id] && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  left: "25%",
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  width: "20px",
-                                  height: "20px",
-                                  background: "#ef4444",
-                                  color: "white",
-                                  borderRadius: "50%",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  fontSize: "12px",
-                                  fontWeight: "bold",
-                                  border: "2px solid white",
-                                  boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
-                                  pointerEvents: "none",
-                                  zIndex: 3,
-                                }}
-                              >
-                                ✕
-                              </span>
-                            )}
+            {inputField(1, "w-[460px]")}
 
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                ))}
-              </div>
+            <span>when we bake cookies.</span>
+          </div>
 
-              <Button
-                handleShowAnswer={showAnswer}
-                handleStartAgain={handleStartAgain}
-                checkAnswers={checkAnswers}
-              />
-            </div>
+          {/* 3 */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="font-bold">3</span>
+
+            <span>If Mom makes a special dinner,</span>
+
+            {inputField(2, "w-[350px]")}
+          </div>
+
+          {/* 4 */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="font-bold">4</span>
+
+            <span>When we go to the park,</span>
+
+            {inputField(3, "w-[430px]")}
           </div>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
   );
 };
 

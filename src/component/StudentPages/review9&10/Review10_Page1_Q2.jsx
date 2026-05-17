@@ -1,345 +1,319 @@
 import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 90/Ex B 1.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 90/Ex B 2.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 90/Ex B 3.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 90/Ex B 4.svg";
-import "./Review10_Page1_Q2.css";
+
+import trueImg from "../../../assets/imgs/true.svg";
+import flaseImg from "../../../assets/imgs/false.svg";
+
 const Review10_Page1_Q2 = () => {
   const questions = [
     {
-      img: img1,
-      q: "What will she do on the weekend?",
-      type: "fixed",
-      answer: "She will read a book.",
+      phrase: "It’s your twist.",
+      mark: "false",
+      correction: "It’s your turn.",
     },
     {
-      img: img2,
-      q: "What will they do on the weekend?",
-      type: "input",
-      blank: ["will", "They", "eat", "at", "restaurant", "a"],
-      correct: "They will eat at a restaurant",
+      phrase: "a long wait to go",
+      mark: "false",
+      correction: "a long way to go",
     },
     {
-      img: img3,
-      type: "reverse",
-      answer: "He will build a sandcastle.",
-      blank: ["he", "What", "do", "will", "weekend", "the", "on"],
-      correct: "What will he do on the weekend",
+      phrase: "huh?",
+      mark: "true",
+      correction: "",
     },
     {
-      img: img4,
-      q: "What will she do on the weekend?",
-      type: "input",
-      blank: ["do", "She", "homework", "will", "her"],
-      correct: "She will do her homework",
+      phrase: "That’s a bad point!",
+      mark: "false",
+      correction: "That’s a good point!",
     },
   ];
 
-  const correct = {};
-  questions.forEach((q, i) => {
-    if (q.type === "input" || q.type === "reverse") {
-      correct[i] = q.correct;
-    }
-  });
+  const [marks, setMarks] = useState(["", "", "", ""]);
 
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
 
-  const addWord = (qIndex, word) => {
-    if (locked) return;
-    setAnswers((prev) => ({
-      ...prev,
-      [qIndex]: prev[qIndex] ? [...prev[qIndex], word] : [word],
-    }));
-  };
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const removeWord = (qIndex, index) => {
-    if (locked) return;
-    setAnswers((prev) => {
-      const updated = [...prev[qIndex]];
-      updated.splice(index, 1);
-      return { ...prev, [qIndex]: updated };
+  const handleMark = (i, value) => {
+    if (locked || result[i]?.row === true) return;
+
+    const updatedMarks = [...marks];
+    updatedMarks[i] = value;
+    setMarks(updatedMarks);
+
+    if (value === "true") {
+      const updatedAnswers = [...answers];
+      updatedAnswers[i] = "";
+      setAnswers(updatedAnswers);
+    }
+
+    setResult((prev) => {
+      const copy = [...prev];
+      copy[i] = undefined;
+      return copy;
     });
   };
 
-  const reset = () => {
-    setAnswers({});
-    setLocked(false);
-  };
+  const handleChange = (i, value) => {
+    if (locked || result[i]?.row === true || marks[i] === "true") return;
 
-  const showAnswers = () => {
-    const formatted = {};
-    questions.forEach((q, i) => {
-      if (q.type === "input" || q.type === "reverse") {
-        formatted[i] = q.correct.split(" ");
-      }
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-    setAnswers(formatted);
-    setLocked(true);
   };
 
   const checkAnswers = () => {
     if (locked) return;
-    let score = 0;
 
-    const empty = questions.some(
-      (q, i) => (q.type === "input" || q.type === "reverse") && !answers[i],
+    const hasEmptyMark = marks.some((m) => !m);
+
+    const hasEmptyCorrection = marks.some(
+      (m, i) => m === "false" && !answers[i].trim(),
     );
-    if (empty) {
-      ValidationAlert.info();
+
+    if (hasEmptyMark || hasEmptyCorrection) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    Object.keys(correct).forEach((key) => {
-      const userAnswer = answers[key]?.join(" ");
-      if (userAnswer === correct[key]) score++;
+    let correctCount = 0;
+
+    const newResults = questions.map((q, i) => {
+      const markOk = marks[i] === q.mark;
+
+      const correctionOk =
+        q.mark === "true"
+          ? true
+          : marks[i] === "true"
+            ? false
+            : normalize(answers[i]) === normalize(q.correction);
+
+      const rowOk = markOk && correctionOk;
+
+      if (rowOk) correctCount++;
+
+      return {
+        mark: markOk,
+        correction: correctionOk,
+        row: rowOk,
+      };
     });
 
-    const total = Object.keys(correct).length;
-    if (score < total) {
-      ValidationAlert.warning(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:orange;">Score: ${score} / ${total}</b>
-        </div>
-      `);
+    setResult(newResults);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.success(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:green;">Score: ${score} / ${total}</b>
-        </div>
-      `);
+      ValidationAlert.warning(msg);
     }
+  };
+
+  const showAnswers = () => {
+    setMarks(["false", "false", "true", "false"]);
+
+    setAnswers([
+      "It’s your turn.",
+      "a long way to go",
+      "",
+      "That’s a good point!",
+    ]);
+
+    setResult([
+      { mark: true, correction: true, row: true },
+      { mark: true, correction: true, row: true },
+      { mark: true, correction: true, row: true },
+      { mark: true, correction: true, row: true },
+    ]);
+
     setLocked(true);
   };
 
-  const isWrong = (index) => {
-    if (!locked) return false;
-    const userAnswer = answers[index]?.join(" ");
-    return userAnswer !== questions[index].correct;
+  const handleReset = () => {
+    setMarks(["", "", "", ""]);
+
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  return (
-    <div
+  const errorBadge = () => (
+    <span
       style={{
+        position: "absolute",
+        top: "-8px",
+        right: "-8px",
+        width: "20px",
+        height: "20px",
+        background: "#ef4444",
+        color: "white",
+        borderRadius: "50%",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
-        padding: "30px",
+        justifyContent: "center",
+        fontSize: "11px",
+        fontWeight: "bold",
+        border: "2px solid white",
+        boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
       }}
     >
-      <div className="div-forall">
-        <h5 className="header-title-page8 mb-7">
-          <span className="mr-3">B</span>Look, read, and write the questions or
-          answers.
+      ✕
+    </span>
+  );
+
+  const markBox = (i, value, img) => (
+    <button
+      type="button"
+      disabled={locked || result[i]?.row === true}
+      onClick={() => handleMark(i, value)}
+      className="flex items-center justify-center"
+      style={{
+        width: "34px",
+        height: "34px",
+        border: "2px solid #6D2980",
+        borderRadius: "6px",
+        background: "transparent",
+        cursor: locked || result[i]?.row === true ? "default" : "pointer",
+      }}
+    >
+      {marks[i] === value && (
+        <img
+          src={img}
+          alt={value}
+          style={{
+            width: "24px",
+            height: "24px",
+          }}
+        />
+      )}
+    </button>
+  );
+
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i]?.row === true || marks[i] === "true"}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+         ${
+           marks[i] === "false" && result[i]?.correction === false
+             ? "border-[#D1232A]"
+             : "border-black"
+         }
+        `}
+      />
+      {marks[i] === "false" &&
+        result[i]?.correction === false &&
+        errorBadge()}{" "}
+    </span>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-20">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            B
+          </span>
+          Write a <span className="text-[#D1232A] font-bold">✓</span> or{" "}
+          <span className="text-[#D1232A] font-bold">✗</span> to show if the
+          phrase is correct or not. Correct the{" "}
+          <span className="text-[#D1232A] font-bold">✗</span> phrases.
         </h5>
 
-        <div className="questions-grid mb-20">
-          {questions.map((item, i) => (
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15 text-[18px]">
+          {questions.map((q, i) => (
             <div
               key={i}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "12px",
-                height: "300px",
-              }}
+              className="grid grid-cols-[120px_30px_210px_360px] items-center gap-x-6"
             >
-              {/* الرقم - جزء من الـ flex بدل absolute */}
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  minWidth: "24px",
-                  paddingTop: "4px",
-                  flexShrink: 0,
-                }}
-              >
-                {i + 1}
-              </span>
+              <div className="relative flex items-center justify-center gap-3 border-b border-black pb-2">
+                {markBox(i, "true", trueImg)}
+                {markBox(i, "false", flaseImg)}
 
-              {/* محتوى السؤال */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-
-                  flex: 1,
-                  height: "100%", // 🔥 مهم
-                  justifyContent: "space-between",
-                }}
-              >
-                {/* الصورة */}
-                <img
-                  src={item.img}
-                  alt="question"
-                  style={{
-                    width: "200px",
-                    height: "auto",
-                    objectFit: "cover",
-                  }}
-                />
-
-                {/* نص السؤال */}
-                {item.q && (
-                  <p style={{ margin: 0, fontWeight: "500" }}>{item.q}</p>
-                )}
-
-                {/* نوع fixed */}
-                {item.type === "fixed" && (
-                  <div
-                    style={{
-                      borderBottom: "2px solid black",
-                      padding: "5px 0",
-                      fontWeight: "bold",
-                      width: "250px",
-                      color: "#000",
-                    }}
-                  >
-                    {item.answer}
-                  </div>
-                )}
-
-                {/* أنواع input و reverse */}
-                {(item.type === "input" || item.type === "reverse") && (
-                  <>
-                    {/* حبات الكلمات */}
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "8px",
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {item.blank.map((word, index) => {
-                        const isUsed = answers[i]?.includes(word);
-                        return (
-                          <div
-                            key={index}
-                            onClick={() => !isUsed && addWord(i, word)}
-                            style={{
-                              padding: "6px 12px",
-                              border: "2px solid orange",
-                              borderRadius: "8px",
-                              cursor: isUsed ? "not-allowed" : "pointer",
-                              opacity: isUsed ? 0.4 : 1,
-                              fontSize: "14px",
-                              userSelect: "none",
-                              transition: "opacity 0.2s",
-                            }}
-                          >
-                            {word}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* خط الإجابة */}
-                    <div
-                      style={{
-                        minHeight: "40px",
-                        borderBottom: isWrong(i)
-                          ? "2px solid red"
-                          : "2px solid black",
-                        padding: "5px 0",
-                        fontWeight: "bold",
-                        width: "250px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        alignItems: "center",
-                        gap: "4px",
-                        position: "relative",
-                      }}
-                    >
-                      {answers[i]?.map((word, idx) => (
-                        <span
-                          key={idx}
-                          onClick={() => removeWord(i, idx)}
-                          style={{
-                            cursor: locked ? "default" : "pointer",
-                            color: "#1e3a8a",
-                          }}
-                        >
-                          {word}
-                        </span>
-                      ))}
-                      <span
-                        style={{
-                          position: "absolute",
-                          right: "0",
-                          bottom: "-2px", // 🔥 على الخط نفسه
-                          fontWeight: "bold",
-                          color: "#000",
-                        }}
-                      >
-                        {item.type === "reverse" ? "?" : "."}
-                      </span>
-                      {isWrong(i) && (
-                        <div
-                          style={{
-                            position: "absolute",
-                            right: "-30px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            width: "22px",
-                            height: "22px",
-                            background: "#ef4444",
-                            color: "white",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            border: "2px solid white",
-                            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: "13px",
-                              lineHeight: "1",
-                              transform: "translateY(-1px)",
-                            }}
-                          >
-                            ✕
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* الجواب النهائي يظهر فقط لنوع reverse */}
-                    {item.type === "reverse" && (
-                      <div
-                        style={{
-                          padding: "5px 0",
-                          fontWeight: "bold",
-                          width: "250px",
-                        }}
-                      >
-                        {item.answer}
-                      </div>
-                    )}
-                  </>
-                )}
+                {result[i]?.mark === false && errorBadge()}
               </div>
+
+              <span className="font-bold">{i + 1}</span>
+
+              <span>{q.phrase}</span>
+
+              {inputField(i, "w-[360px]")}
             </div>
           ))}
         </div>
+      </div>
 
-        {/* الأزرار */}
-        <div className="action-buttons-container">
-          <button onClick={reset} className="try-again-button">
-            Start Again ↻
-          </button>
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );

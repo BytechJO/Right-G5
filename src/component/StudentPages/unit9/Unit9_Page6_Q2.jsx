@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 
-import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 8.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 10.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 17.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 18.svg";
+import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 17.svg";
+import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 8.svg";
+import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 18.svg";
+import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 10.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
@@ -205,7 +205,7 @@ const Unit9_Page6_Q2 = () => {
         </h5>
 
         {/* TOP ROW */}
-        <div className="flex gap-10 mb-12">
+        <div className="flex gap-20 mb-12">
           {/* IMAGE 1 */}
           <div>
             <img
@@ -252,7 +252,7 @@ const Unit9_Page6_Q2 = () => {
         </div>
 
         {/* BOTTOM ROW */}
-        <div className="flex gap-10 mb-10">
+        <div className="flex gap-20 mb-10">
           {/* IMAGE 3 */}
           <div>
             <img

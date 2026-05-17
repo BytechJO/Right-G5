@@ -1,72 +1,76 @@
 import React, { useState } from "react";
-import "./Review9_Page2_Q2.css";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import blue from "../../../assets/audio/ClassBook/Unit 10/P 89/full.mp3";
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-
+import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 89/SVG/Asset 13.svg";
 const Review9_Page2_Q2 = () => {
-  const captions = [
-    {
-      start: 0.399,
-      end: 3.859,
-      text: "Page 89, review nine, exercise D.",
-    },
-    {
-      start: 5.119,
-      end: 27.559,
-      text: "Do both words have the same final S sound? Listen and write check or X. One, trees, vets. Two, keys, bees. Three, rabbits, maps. Four, ducks, tools",
-    },
+  const questions = [
+    "If we finish our homework",
+    "If he pushes himself hard enough",
+    "when I complete this report",
+    "with us when she buys a swimming suit",
   ];
 
-  const groups = [
-    { id: 1, word1: "trees", word2: "vets", answer: "no" },
-    { id: 2, word1: "keys", word2: "bees", answer: "yes" },
-    { id: 3, word1: "rabbits", word2: "maps", answer: "yes" },
-    { id: 4, word1: "ducks", word2: "tools", answer: "no" },
-  ];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-  const [selected, setSelected] = useState(Array(groups.length).fill(null));
-  const [showResult2, setShowResult2] = useState(false);
+  const [result, setResult] = useState([]);
+
   const [locked, setLocked] = useState(false);
 
-  const handleSelect = (groupIndex, value) => {
-    if (locked || showResult2) return;
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    const updated = [...selected];
-    updated[groupIndex] = value;
-    setSelected(updated);
-  };
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-  const showAnswers = () => {
-    const correctSelections = groups.map((g) => g.answer);
-    setSelected(correctSelections);
-    setShowResult2(true);
-    setLocked(true);
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
   const checkAnswers = () => {
-    if (locked || showResult2) return;
+    if (locked) return;
 
-    if (selected.some((val) => val === null)) {
-      ValidationAlert.info("Please choose ✓ or ✗ for all items!");
+    const hasEmpty = answers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
     let correctCount = 0;
 
-    groups.forEach((group, index) => {
-      if (selected[index] === group.answer) {
-        correctCount++;
-      }
+    const newResults = answers.map((a, i) => {
+      const ok = normalize(a) === normalize(questions[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const total = groups.length;
+    setResult(newResults);
+
+    const total = questions.length;
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
         <span style="color:${color}; font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
@@ -74,167 +78,167 @@ const Review9_Page2_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+      setLocked(true);
 
-    setShowResult2(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  const showAnswers = () => {
+    setAnswers([
+      "If we finish our homework",
+      "If he pushes himself hard enough",
+      "when I complete this report",
+      "with us when she buys a swimming suit",
+    ]);
+
+    setResult([true, true, true, true]);
+
     setLocked(true);
   };
 
-  const reset = () => {
-    setSelected(Array(groups.length).fill(null));
-    setShowResult2(false);
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
     setLocked(false);
   };
 
-  const renderChoiceBox = (index, value, symbol) => {
-    const isSelected = selected[index] === value;
-    const isWrong =
-      showResult2 &&
-      selected[index] === value &&
-      groups[index].answer !== value;
+  const inputField = (i, width) => (
+    <span className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-    return (
-      <div
-        onClick={() => handleSelect(index, value)}
-        style={{
-          width: "34px",
-          height: "34px",
-          border: "2px solid #F79530",
-          borderRadius: "9px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: locked ? "default" : "pointer",
-          background: isSelected ? "#fff" : "#fff",
-          position: "relative",
-          fontSize: "22px",
-          fontWeight: "700",
-          color: isSelected ? "#2c5287" : "transparent",
-          lineHeight: 1,
-          userSelect: "none",
-        }}
-      >
-        {isSelected ? symbol : ""}
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-        {isWrong && (
-          <span
-            style={{
-              position: "absolute",
-              right: "-14px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "20px",
-              height: "20px",
-              background: "#ef4444",
-              color: "white",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "bold",
-              border: "2px solid white",
-              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
-              pointerEvents: "none",
-              zIndex: 3,
-            }}
-          >
-            ✕
-          </span>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span style={{ marginRight: "10px" }}>D</span> Do both words have the
-          same final <span style={{ color: "#2e3192" }}> -s sound</span>? Listen
-          and write <span style={{ color: "#D52328" }}>✓</span> or{" "}
-          <span style={{ color: "#D52328" }}>✗</span>.
-        </h5>
-
-        <QuestionAudioPlayer src={blue} captions={captions} stopAtSecond={11.22} />
-
-        <div
+      {result[i] === false && (
+        <span
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(1, 1fr)",
-            columnGap: "70px",
-            rowGap: "34px",
-            marginTop: "10px",
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {groups.map((group, index) => (
-            <div
-              key={group.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                columnGap: "14px",
-                minHeight: "52px",
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: "700",
-                  fontSize: "18px",
-                  color: "#1f1f1f",
-                }}
-              >
-                {group.id}
-              </span>
+          ✕
+        </span>
+      )}
+    </span>
+  );
 
-              <span
-                style={{
-                  fontSize: "18px",
-                  color: "#2b2b2b",
-                  width: "120px", // 🔥 ثابت
-                  display: "inline-block",
-                }}
-              >
-                {group.word1}
-              </span>
-              <span
-                style={{
-                  fontSize: "18px",
-                  color: "#2b2b2b",
-                  width: "120px",
-                  display: "inline-block",
-                }}
-              >
-                {group.word2}
-              </span>
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall ">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-28">
+          <span
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            E
+          </span>
+          Write an <span className="text-[#1ea7ff]">if</span> or{" "}
+          <span className="text-[#1ea7ff]">when</span> clause for the sentences
+          below.
+        </h5>
 
-              {renderChoiceBox(index, "yes", "✓")}
-              {renderChoiceBox(index, "no", "✗")}
+        {/* QUESTIONS + IMAGE */}
+        <div className="flex flex-row gap-3 text-[18px] ">
+          {/* LEFT SIDE */}
+          <div className="flex flex-col gap-15">
+            {/* 1 */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="font-bold">1</span>
+
+              {inputField(0, "w-[330px]")}
+
+              <span>, we can play soccer at the field.</span>
             </div>
-          ))}
+
+            {/* 2 */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="font-bold">2</span>
+
+              {inputField(1, "w-[340px]")}
+
+              <span>, Victor will be in first place.</span>
+            </div>
+
+            {/* 3 */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="font-bold">3</span>
+
+              <span>I’ll go with you tomorrow</span>
+
+              {inputField(2, "w-[260px]")}
+            </div>
+
+            {/* 4 */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="font-bold">4</span>
+
+              <span>Susan can go swimming</span>
+
+              {inputField(3, "w-[360px]")}
+            </div>
+          </div>
+
+          {/* IMAGE */}
+          <img
+            src={img}
+            alt="soccer"
+            style={{
+              width: "250px",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
         </div>
       </div>
 
+      {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+
+        <button className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
-        <button onClick={checkAnswers} className="check-button2">
+
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -1,253 +1,107 @@
 import React, { useState } from "react";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 87/Asset 110.svg";
-import img2 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 87/Asset 111.svg";
-import img3 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 87/Asset 112.svg";
-import img4 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 87/Asset 113.svg";
 
 const Unit10_Page6_Q2 = () => {
-  const questions = [
-    {
-      img: img1,
-      q: "Where will Tom go?",
-      blank: ["go", "He’ll", "the", "to", "park"],
-      correct: "He’ll go to the park",
-    },
-    {
-      img: img2,
-      q: "Where will Helen go?",
-      blank: ["the", "go", "restaurant", "She’ll", "to"],
-      correct: "She’ll go to the restaurant",
-    },
-    {
-      img: img3,
-      q: "Where will Harley go?",
-      blank: ["to", "go", "the", "store", "He’ll", "toy"],
-      correct: "He’ll go to the toy store",
-    },
-    {
-      img: img4,
-      q: "Where will Stella go?",
-      blank: ["to", "go", "office", "She’ll", "the", "post"],
-      correct: "She’ll go to the post office",
-    },
-  ];
-  const correct = {};
-  questions.forEach((q, i) => {
-    correct[i] = q.correct;
-  });
-  const [answers, setAnswers] = useState({});
-  const [locked, setLocked] = useState(false);
-  const addWord = (qIndex, word) => {
-    if (locked) return;
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [qIndex]: prev[qIndex] ? [...prev[qIndex], word] : [word],
-    }));
-  };
-  const removeWord = (qIndex, index) => {
-    if (locked) return;
+  const handleChange = (i, value) => {
+    const updated = [...answers];
 
-    setAnswers((prev) => {
-      const updated = [...prev[qIndex]];
-      updated.splice(index, 1);
+    updated[i] = value;
 
-      return {
-        ...prev,
-        [qIndex]: updated,
-      };
-    });
-  };
-  const reset = () => {
-    setAnswers({});
-    setLocked(false);
+    setAnswers(updated);
   };
 
-  const showAnswers = () => {
-    const formatted = {};
-
-    questions.forEach((q, i) => {
-      formatted[i] = q.correct.split(" "); // 🔥 أهم سطر
-    });
-
-    setAnswers(formatted);
-    setLocked(true);
+  const handleReset = () => {
+    setAnswers(["", "", "", ""]);
   };
-  const checkAnswers = () => {
-    if (locked) return;
-    let score = 0;
 
-    Object.keys(correct).forEach((key) => {
-      const userAnswer = answers[key]?.join(" ");
-      if (userAnswer === correct[key]) score++;
-    });
-    const empty = questions.some((_, i) => !answers[i]);
+  const inputField = (i, width) => (
+    <input
+      type="text"
+      value={answers[i]}
+      onChange={(e) => handleChange(i, e.target.value)}
+      className={`
+        ${width}
+        border-0
+        border-b
+        border-black
+        outline-none
+        bg-transparent
+        text-[18px]
+        text-[#6D2980]
+        font-semibold
+        px-1
+      `}
+    />
+  );
 
-    if (empty) {
-      ValidationAlert.info();
-      return;
-    }
-    const total = questions.length;
-    if (score < total) {
-      ValidationAlert.warning(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:orange;">Score: ${score} / ${total}</b>
-        </div>
-      `);
-    } else {
-      ValidationAlert.success(`
-        <div style="font-size:20px;text-align:center;">
-          <b style="color:green;">Score: ${score} / ${total}</b>
-        </div>
-      `);
-    }
-
-    setLocked(true);
-  };
-  const isWrong = (index) => {
-    if (!locked) return false;
-
-    const userAnswer = answers[index]?.join(" ");
-    return userAnswer !== questions[index].correct;
-  };
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-7">
-          <span className="ex-A mr-5">E</span>Write.
-        </h5>
-        {questions.map((item, i) => (
-          <div
-            key={i}
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-20">
+          <span
+            className="ex-A"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "30px",
+              marginRight: "10px",
             }}
           >
-            {/* اليسار: السؤال + الكلمات */}
-            <div>
-              {/* رقم + السؤال */}
-              <div
-                style={{ display: "flex", gap: "10px", marginBottom: "10px" }}
-              >
-                <span style={{ fontWeight: "bold" }}>{i + 1}</span>
-                <p style={{ margin: 0 }}>{item.q}</p>
-              </div>
+            E
+          </span>
+          Finish the sentences, using the past progressive tense.
+        </h5>
 
-              {/* الكلمات */}
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                {item.blank.map((word, index) => {
-                  const isUsed = answers[i]?.includes(word);
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-20">
+          {/* 1 */}
+          <div className="flex items-center gap-4">
+            <span className="font-bold text-[18px]">1</span>
 
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => !isUsed && addWord(i, word)}
-                      style={{
-                        padding: "6px 12px",
-                        border: "2px solid orange",
-                        borderRadius: "8px",
-                        cursor: isUsed ? "not-allowed" : "pointer",
-                        opacity: isUsed ? 0.4 : 1,
-                      }}
-                    >
-                      {word}
-                    </div>
-                  );
-                })}
-              </div>
-              <div
-                style={{
-                  minHeight: "40px",
-                  borderBottom: isWrong(i)
-                    ? "2px solid red"
-                    : "2px solid black",
-                  marginBottom: "10px",
-                  padding: "5px",
-                  fontWeight: "bold",
-                  width: "350px",
-                  fontSize: "18px",
-                  position: "relative", // 🔥 مهم
-                }}
-              >
-                {answers[i]?.map((word, idx) => (
-                  <span
-                    key={idx}
-                    onClick={() => removeWord(i, idx)}
-                    style={{
-                      marginRight: "8px",
-                      cursor: "pointer",
-                      color: "#1e3a8a",
-                    }}
-                  >
-                    {word}
-                  </span>
-                ))}
-                {isWrong(i) && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: "-5px",
-                      right: "-40px",
-                      transform: "translateY(-50%)",
-                      width: "22px",
-                      height: "22px",
-                      background: "#ef4444",
-                      color: "white",
-                      borderRadius: "50%",
-                      fontSize: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                      border: "2px solid white",
-                      boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
-                      pointerEvents: "none",
-                    }}
-                  >
-                    ✕
-                  </span>
-                )}
-              </div>
-            </div>
+            <span className="text-[18px]">After the game,</span>
 
-            {/* اليمين: الصورة */}
-            <img
-              src={item.img}
-              alt="question"
-              style={{
-                width: "180px",
-                height: "auto",
-                objectFit: "contain",
-                marginLeft: "10px",
-              }}
-            />
+            {inputField(0, "w-[620px]")}
           </div>
-        ))}
-        {/* BUTTONS */}
-        <div className="action-buttons-container">
-          <button onClick={reset} className="try-again-button">
-            Start Again ↻
-          </button>
 
-          <button onClick={showAnswers} className="show-answer-btn">
-            Show Answer
-          </button>
+          {/* 2 */}
+          <div className="flex items-center gap-4">
+            <span className="font-bold text-[18px]">2</span>
 
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+            <span className="text-[18px]">
+              In addition to playing the guitar,
+            </span>
+
+            {inputField(1, "w-[520px]")}
+          </div>
+
+          {/* 3 */}
+          <div className="flex items-center gap-4">
+            <span className="font-bold text-[18px]">3</span>
+
+            <span className="text-[18px]">Was</span>
+
+            {inputField(2, "w-[500px]")}
+
+            <span className="text-[18px]">while the band played?</span>
+          </div>
+
+          {/* 4 */}
+          <div className="flex items-center gap-4">
+            <span className="font-bold text-[18px]">4</span>
+
+            <span className="text-[18px]">Were</span>
+
+            {inputField(3, "w-[500px]")}
+
+            <span className="text-[18px]">when school ended?</span>
+          </div>
         </div>
+      </div>
+
+      {/* BUTTON */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
       </div>
     </div>
   );

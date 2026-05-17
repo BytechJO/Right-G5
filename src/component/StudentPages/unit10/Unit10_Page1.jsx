@@ -1,173 +1,370 @@
-import { useState, useRef } from "react";
-import page_1 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 82.png";
+import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 82.png";
 import "./Unit10_Page1.css";
-import Unit5_Page1_Read from "./Unit10_Pag1_Read";
-import Unit5_Page1_Vocab from "./Unit10_Page1_Vocab";
-import Unit5_Page1_find from "./Unit10_Page1_find";
-import AudioWithCaption from "../../AudioWithCaption";
+import longAudio from "../../../assets/audio/ClassBook/U10/PG 82/cd46pg82-conversation.mp3";
 import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
-import allunit3 from "../../../assets/audio/ClassBook/Unit 10/P 82/unit10-pg82-unitall.mp3";
-import sound1 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound1.mp3";
-import sound2 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound2.mp3";
-import sound3 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound3.mp3";
-import sound4 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound4.mp3";
-import sound5 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound5.mp3";
-import sound6 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound6.mp3";
-import sound7 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound7.mp3";
-import sound8 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound8.mp3";
-import sound9 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound9.mp3";
-import sound10 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound10.mp3";
-import sound11 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound11.mp3";
-import sound12 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound12.mp3";
-import sound13 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound13.mp3";
-import sound14 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound14.mp3";
-import sound15 from "../../../assets/audio/ClassBook/Unit 10/P 82/sound15.mp3";
+import Conversation from "../../Conversation";
+import Vocabulary from "../../Vocabulary";
+import VocabularAudio from "../../../assets/audio/ClassBook/U10/PG 82/cd47pg82-vocab.mp3";
+import sound1 from "../../../assets/audio/ClassBook/U10/PG 82/sound1.mp3";
+import sound2 from "../../../assets/audio/ClassBook/U10/PG 82/sound2.mp3";
+import sound3 from "../../../assets/audio/ClassBook/U10/PG 82/sound3.mp3";
+import sound4 from "../../../assets/audio/ClassBook/U10/PG 82/sound4.mp3";
+import sound5 from "../../../assets/audio/ClassBook/U10/PG 82/sound5.mp3";
+import sound6 from "../../../assets/audio/ClassBook/U10/PG 82/sound6.mp3";
+import sound7 from "../../../assets/audio/ClassBook/U10/PG 82/sound7.mp3";
+import sound8 from "../../../assets/audio/ClassBook/U10/PG 82/sound8.mp3";
+import sound9 from "../../../assets/audio/ClassBook/U10/PG 82/sound9.mp3";
+import sound10 from "../../../assets/audio/ClassBook/U10/PG 82/sound10.mp3";
+import sound11 from "../../../assets/audio/ClassBook/U10/PG 82/sound11.mp3";
+import sound12 from "../../../assets/audio/ClassBook/U10/PG 82/sound12.mp3";
+import sound13 from "../../../assets/audio/ClassBook/U10/PG 82/sound13.mp3";
+import sound14 from "../../../assets/audio/ClassBook/U10/PG 82/sound14.mp3";
+import sound15 from "../../../assets/audio/ClassBook/U10/PG 82/sound15.mp3";
+import CriticalThinking from "../../CriticalThinking";
+import imgConversation1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 82/SVG/3.svg";
+import imgConversation2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 82/SVG/1.svg";
+import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 82/SVG/2.svg";
+import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 82/SVG/4.svg";
+import wordJson from "../../../assets/json/cd46pg82-conversation_eng.json";
+import video from "../../../assets/videos/grade 5 unit 10 page 82.mp4";
 
 const Unit10_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  // ==================== conversation data ==================== //
+  const data = [
+    {
+      number: 1,
+      image: imgConversation1,
+      dialogues: [
+        {
+          speaker: "Eric",
+          text: "What were you doing last night, Jen and Jeremy? There was a great symphony.",
+        },
+        {
+          speaker: "Jen",
+          text: "Our family was visiting my uncle’s house. We were harvesting lettuce there. It was the best day!",
+        },
+        {
+          speaker: "Eric",
+          text: "Nice! Your uncle must have several acres, huh?",
+        },
+        {
+          speaker: "Jen",
+          text: "Yes, he has a large ranch of 40 acres. He raises cattle there, and he has an enormous garden near his house.",
+        },
+      ],
+    },
+
+    {
+      number: 2,
+      image: imgConversation2,
+      dialogues: [
+        {
+          speaker: "Jeremy",
+          text: "It’s your turn, Eric. Were you playing in the symphony or listening to it last night?",
+        },
+        {
+          speaker: "Eric",
+          text: "I was listening to it. I play the violin, but I’ve got a long way to go before I’m ready for the symphony!",
+        },
+      ],
+    },
+
+    {
+      number: 3,
+      image: imgConversation3,
+      dialogues: [
+        {
+          speaker: "Jeremy",
+          text: "Were they playing anything lively? I don’t like lots of slow symphony music. It makes me sad.",
+        },
+        {
+          speaker: "Eric",
+          text: "Actually, symphony music can be very lively. During Mozart’s and Beethoven’s time, composers were writing very beautiful music. Often it depended on the composer and the times.",
+        },
+      ],
+    },
+
+    {
+      number: 4,
+      image: imgConversation4,
+      dialogues: [
+        {
+          speaker: "Jen",
+          text: "Which type of music do you play on your violin?",
+        },
+        {
+          speaker: "Eric",
+          text: "I like to play music with a variety of moods.",
+        },
+        {
+          speaker: "Jeremy",
+          text: "There are even some rock and roll songs that use the violin. It’s a very flexible instrument.",
+        },
+        {
+          speaker: "Eric",
+          text: "That’s a good point! That’s one reason that makes the violin so appealing to me.",
+        },
+      ],
+    },
+  ];
   const captionsExample = [
-    { start: 0, end: 4.0, text: " Page 58, Unit 7, It’s Boarding Time. " },
+    {
+      start: 0.179,
+      end: 6.139,
+      text: "Page 82, conversation. Listen and read, then say.",
+    },
+
+    // Conversation 1
+    {
+      start: 5.519,
+      end: 9.88,
+      text: "What were you doing last night, Jen and Jeremy? There was a great symphony.",
+    },
+    {
+      start: 10.899,
+      end: 17.92,
+      text: "Our family was visiting my uncle’s house. We were harvesting lettuce there. It was the best day!",
+    },
+    {
+      start: 18.979,
+      end: 22.159,
+      text: "Nice! Your uncle must have several acres, huh?",
+    },
+    {
+      start: 23.239,
+      end: 34.699,
+      text: "Yes, he has a large ranch of 40 acres. He raises cattle there, and he has an enormous garden near his house.",
+    },
+
+    // Conversation 2
+    {
+      start: 34.7,
+      end: 39.899,
+      text: "It’s your turn, Eric. Were you playing in the symphony or listening to it last night?",
+    },
+    {
+      start: 39.899,
+      end: 46.939,
+      text: "I was listening to it. I play the violin, but I’ve got a long way to go before I’m ready for the symphony!",
+    },
+
+    // Conversation 3
+    {
+      start: 46.939,
+      end: 53.419,
+      text: "Were they playing anything lively? I don’t like lots of slow symphony music. It makes me sad.",
+    },
+    {
+      start: 53.419,
+      end: 65.779,
+      text: "Actually, symphony music can be very lively. During Mozart and Beethoven’s time, composers were writing very beautiful music. Often it depended on the composer and the times.",
+    },
+
+    // Conversation 4
+    {
+      start: 65.779,
+      end: 69.76,
+      text: "Which type of music do you play on your violin?",
+    },
+    {
+      start: 69.76,
+      end: 72.819,
+      text: "I like to play music with a variety of moods.",
+    },
+    {
+      start: 73.879,
+      end: 80.4,
+      text: "There are even some rock and roll songs that use the violin. It’s a very flexible instrument.",
+    },
+    {
+      start: 80.4,
+      end: 84.479,
+      text: "That’s a good point! That’s one reason that makes the violin so appealing to me.",
+    },
+  ];
+  const captionTimings = [
+    [
+      captionsExample[1],
+      captionsExample[2],
+      captionsExample[3],
+      captionsExample[4],
+    ],
+
+    [captionsExample[5], captionsExample[6]],
+
+    [captionsExample[7], captionsExample[8]],
+
+    [
+      captionsExample[9],
+      captionsExample[10],
+      captionsExample[11],
+      captionsExample[12],
+    ],
+  ];
+  const filteredSegments = wordJson.segments.slice(1);
+
+  const Voc = [
+    [
+      filteredSegments[0]?.words || [],
+      filteredSegments[1]?.words || [],
+      filteredSegments[2]?.words || [],
+      filteredSegments[3]?.words || [],
+    ],
+
+    [filteredSegments[4]?.words || [], filteredSegments[5]?.words || []],
+
+    [filteredSegments[6]?.words || [], filteredSegments[7]?.words || []],
+
+    [
+      filteredSegments[8]?.words || [],
+      filteredSegments[9]?.words || [],
+      filteredSegments[10]?.words || [],
+      filteredSegments[11]?.words || [],
+    ],
+  ];
+  /////////////////VOCABULARY/////////////////
+  const sounds = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+    sound10,
+    sound11,
+    sound12,
+    sound13,
+    sound14,
+    sound15,
+  ];
+  const captionVoc = [
+    {
+      start: 0.239,
+      end: 2.879,
+      text: "Page 82, unit ten, vocabulary.",
+    },
+
+    {
+      start: 3.659,
+      end: 5.38,
+      text: "1. symphony.",
+    },
+
+    {
+      start: 6.259,
+      end: 8.159,
+      text: "2. harvesting.",
+    },
+
+    {
+      start: 9.039,
+      end: 10.88,
+      text: "3. acres.",
+    },
+
+    {
+      start: 11.819,
+      end: 13.979,
+      text: "4. enormous.",
+    },
+
+    {
+      start: 14.939,
+      end: 16.899,
+      text: "5. lively.",
+    },
+
+    {
+      start: 17.959,
+      end: 20.139,
+      text: "6. composers.",
+    },
+
+    {
+      start: 21.159,
+      end: 23.159,
+      text: "7. variety.",
+    },
+
+    {
+      start: 24.1,
+      end: 25.979,
+      text: "8. moods.",
+    },
+
+    {
+      start: 26.92,
+      end: 28.879,
+      text: "9. flexible.",
+    },
+
+    {
+      start: 29.879,
+      end: 31.859,
+      text: "10. instrument.",
+    },
+
+    {
+      start: 32.84,
+      end: 34.899,
+      text: "11. appealing.",
+    },
+
+    {
+      start: 35.759,
+      end: 37.399,
+      text: "12. ... huh?",
+    },
+
+    {
+      start: 38.459,
+      end: 40.599,
+      text: "13. it’s your turn.",
+    },
+
+    {
+      start: 41.379,
+      end: 43.959,
+      text: "14. a long way to go.",
+    },
+
+    {
+      start: 44.819,
+      end: 47.24,
+      text: "15. that’s a good point!",
+    },
   ];
 
-  const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 28.3, y1: 39.2, sound: 1, isPrimary: true },
+  const wordTimingsVoc = [
+    { start: 3.659, end: 5.38 },
+    { start: 6.259, end: 8.159 },
+    { start: 9.039, end: 10.88 },
+    { start: 11.819, end: 13.979 },
+    { start: 14.939, end: 16.899 },
 
-    { x1: 22.4, y1: 22.4, sound: 2, isPrimary: true },
+    { start: 17.959, end: 20.139 },
+    { start: 21.159, end: 23.159 },
+    { start: 24.1, end: 25.979 },
+    { start: 26.92, end: 28.879 },
+    { start: 29.879, end: 31.859 },
 
-    { x1: 32.4, y1: 24.8, sound: 3, isPrimary: true },
-    { x1: 37.09, y1: 25.26, x2: 46.14, y2: 28.66, sound: 3, isPrimary: false },
-
-    { x1: 56.9, y1: 20, sound: 4, isPrimary: true },
-    { x1: 49.37, y1: 14.77, x2: 77.59, y2: 25.43, sound: 4, isPrimary: false },
-
-    { x1: 32, y1: 31.3, sound: 5, isPrimary: true },
-    { x1: 22.0, y1: 29.49, x2: 32.56, y2: 35.07, sound: 5, isPrimary: false },
-
-    { x1: 72.2, y1: 28.9, sound: 6, isPrimary: true },
-    { x1: 67.25, y1: 32.37, x2: 73.5, y2: 32.7, sound: 6, isPrimary: false },
-
-    { x1: 58.7, y1: 34, sound: 7, isPrimary: true },
-    { x1: 63.37, y1: 35.07, x2: 66.82, y2: 41.84, sound: 7, isPrimary: false },
-
-    { x1: 38.5, y1: 47.5, sound: 8, isPrimary: true },
-
-    { x1: 46, y1: 42.7, sound: 9, isPrimary: true },
-
-    { x1: 48, y1: 58.2, sound: 10, isPrimary: true },
-    { x1: 47.86, y1: 53.69, x2: 62.08, y2: 62.49, sound: 10, isPrimary: false },
-
-    { x1: 28.9, y1: 78.1, sound: 11, isPrimary: true },
-
-    { x1: 38.5, y1: 61.6, sound: 12, isPrimary: true },
-    { x1: 30.41, y1: 61.3, x2: 40.1, y2: 67.9, sound: 12, isPrimary: false },
-
-    { x1: 71.6, y1: 68.7, sound: 13, isPrimary: true },
-    { x1: 65.96, y1: 63.84, x2: 82.98, y2: 75.2, sound: 13, isPrimary: false },
-
-    { x1: 53.9, y1: 66.1, sound: 14, isPrimary: true },
-
-    { x1: 34.3, y1: 56.45, sound: 15, isPrimary: true },
-    { x1: 26.31, y1: 55.21, x2: 33.21, y2: 59.44, sound: 15, isPrimary: false },
+    { start: 32.84, end: 34.899 },
+    { start: 35.759, end: 37.399 },
+    { start: 38.459, end: 40.599 },
+    { start: 41.379, end: 43.959 },
+    { start: 44.819, end: 47.24 },
   ];
-  const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound3,
-    4: sound4,
-    5: sound5,
-    6: sound6,
-    7: sound7,
-    8: sound8,
-    9: sound9,
-    10: sound10,
-    11: sound11,
-    12: sound12,
-    13: sound13,
-    14: sound14,
-    15: sound15,
-  };
-
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-  };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
-
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
-  };
   return (
     <div
       className="page1-img-wrapper"
-      onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_1})` }}
     >
-      <audio ref={audioRef} style={{ display: "none" }} />
-
-      {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        );
-      })}
-
       <div
-        className="headset-icon-CD-unit10-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -176,7 +373,7 @@ const Unit10_Page1 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              "audio",
+              "html",
               <div
                 style={{
                   display: "flex",
@@ -184,7 +381,18 @@ const Unit10_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allunit3} captions={captionsExample} />
+                <Conversation
+                  title="Conversation"
+                  items={data}
+                  sound={longAudio}
+                  captions={captionsExample}
+                  stopAtSecond={5.2}
+                  captionTimings={captionTimings}
+                  wordTimings={Voc}
+                  openPopup={openPopup}
+                  video={video}
+                  imageWidth="300px"
+                />
               </div>,
             )
           }
@@ -195,14 +403,14 @@ const Unit10_Page1 = ({ openPopup }) => {
             href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
-
       <div
-        className="click-icon-unit10-page1-1 hover:scale-110 transition"
+        className="headset-icon-CD-page4-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -212,25 +420,57 @@ const Unit10_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_find />
-              </>,
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Vocabulary
+                  title="VOCABULARY"
+                  subtitle="Listen and repeat. Find the words and expressions in the conversation above."
+                  sound={VocabularAudio}
+                  captions={captionVoc}
+                  stopAtSecond={3}
+                  sounds={sounds}
+                  wordTimings={wordTimingsVoc}
+                  words={[
+                    "symphony",
+                    "harvesting",
+                    "acres",
+                    "enormous",
+                    "lively",
+                    "composers",
+                    "variety",
+                    "moods",
+                    "flexible",
+                    "instrument",
+                    "appealing",
+                    "... huh?",
+                    "it’s your turn",
+                    "a long way to go",
+                    "that’s a good point!",
+                  ]}
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
           <image
             className="svg-img"
-            href={arrowBtn}
+            href={audioBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>
       <div
-        className="headset-icon-CD-unit10-page1-2 hover:scale-110 transition"
+        className="headset-icon-CD-page4-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -240,9 +480,7 @@ const Unit10_Page1 = ({ openPopup }) => {
           onClick={() =>
             openPopup(
               "html",
-              <>
-                <Unit5_Page1_Vocab />
-              </>,
+              <CriticalThinking title={"Why does Eric like his violin?"} />,
             )
           }
           style={{ overflow: "visible" }}
@@ -252,36 +490,9 @@ const Unit10_Page1 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-      <div
-        className="click-icon-unit10-page1-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit5_Page1_Read />
-              </>,
-            )
-          }
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
           />
         </svg>
       </div>

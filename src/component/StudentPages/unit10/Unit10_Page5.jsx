@@ -1,4 +1,4 @@
-import page_5 from "../../../assets/imgs/pages/classbook/Right 3 Unit 10 What Shall We Do on the Weekend Folder/Page 86.png";
+import page_5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 86.png";
 import "./Unit10_Page5.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 const Unit10_Page5 = ({ openPopup }) => {
@@ -17,7 +17,7 @@ const Unit10_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 89 })}
+          onClick={() => openPopup("exercise", { startIndex: 93 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -39,7 +39,7 @@ const Unit10_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 90 })}
+          onClick={() => openPopup("exercise", { startIndex: 94 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -61,7 +61,7 @@ const Unit10_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 91 })}
+          onClick={() => openPopup("exercise", { startIndex: 95 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -75,27 +75,7 @@ const Unit10_Page5 = ({ openPopup }) => {
         </svg>
       </div>
 
-      <div
-        className="click-icon-unit10-page5-4 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 92 })}
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
+     
     </div>
   );
 };
