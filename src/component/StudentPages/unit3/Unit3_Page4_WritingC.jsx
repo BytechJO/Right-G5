@@ -1,44 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaRedo } from "react-icons/fa";
 
 const WritingC = () => {
+  const [text, setText] = useState("");
+
+  // 🔄 reset داخلي
+  const handleReset = () => {
+    setText("");
+  };
+
   return (
     <div className="space-y-4 w-full max-w-[900px] mx-auto">
       {/* العنوان */}
       <div className="header-title-page8-read pb-2.5">
         <span className="ex-A-read mr-2">C</span>
         <div style={{ display: "block" }}>
-          Introduce a friend to one of your parents. Tell about how they look,
-          what they are
+          In your notebook, write a conversation between you and one of your
+          parents about one of your friends.
           <div style={{ marginTop: "4px" }}>
-            good at, and what they are like as a person. Use{" "}
-            <span className="text-[#00AEEF]">he is</span> and{" "}
-            <span className="text-[#00AEEF]">she is</span>. Use the example
+            Use <span className="text-[#00AEEF]">he is</span> and{" "}
+            <span className="text-[#00AEEF]">she is</span> for your description
+            of your friend. Your conversation should be at least 10 lines long.
           </div>
-          <div style={{ marginTop: "4px" }}>below to get started.</div>
         </div>
       </div>
 
-      {/* DIALOG */}
-      <div className="flex flex-col gap-8 text-[18px] mt-8 ml-12">
-        <div>
-          <span className="text-[#00AEEF] font-semibold mr-2">You:</span>
-          Mom, can one of my friends come over today?
-        </div>
+      {/* textarea */}
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="w-full h-[120px] border border-gray-300 p-2 outline-none mt-4 ml-12"
+        placeholder="Write your paragraph here..."
+      />
 
-        <div>
-          <span className="text-[#00AEEF] font-semibold mr-2">Parent:</span>
-          Sure, honey. Who is it?
-        </div>
-
-        <div>
-          <span className="text-[#00AEEF] font-semibold mr-2">You:</span>
-          You haven’t met (him/her) yet. (She/He)’s new at school and loves to
-          play soccer.
-        </div>
-
-        <div>
-          <span className="text-[#00AEEF] font-semibold mr-2">Parent:</span>
-          How nice. You two should have fun playing soccer.
+      {/* 🔄 Reset Button */}
+      <div className="flex justify-center mt-4">
+        <div
+          onClick={handleReset}
+          className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
+        >
+          <div className="bg-white p-3 rounded-full shadow">
+            <FaRedo size={14} className="text-gray-700" />
+          </div>
         </div>
       </div>
     </div>

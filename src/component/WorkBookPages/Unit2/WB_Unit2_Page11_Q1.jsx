@@ -1,515 +1,489 @@
-import React, { useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState, useRef } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
+const WB_Unit2_Page11_Q1 = () => {
+  const words = [
+    "few",
+    "beg",
+    "couple",
+    "twisty",
+    "crazy",
+    "carnival",
+    "not so fast",
+    "still",
+    "trims",
+    "giraffe",
+    "lets see",
+    "works out",
+  ];
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 11/SVG/123/Asset 5.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 11/SVG/123/Asset 6.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 11/SVG/123/Asset 7.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 11/SVG/123/Asset 8.svg";
+  const grid = [
+    ["c", "t", "w", "i", "s", "t", "y", "f", "i"],
 
-const ACTIVE_COLOR = "#f39b42";
-const SOFT_COLOR = "#ffca94";
-const BORDER_COLOR = "#d9d9d9";
-const WRONG_COLOR = "#ef4444";
-const ANSWER_COLOR = "#000000ff";
+    ["o", "a", "g", "i", "r", "a", "f", "f", "e"],
 
-const DRAG_ITEMS = [
-  { id: 1, value: "She usually irons the clothes." },
-  { id: 2, value: "He sometimes reads the newspaper." },
-  { id: 3, value: "They never play chess." },
-  { id: 4, value: "She always goes to bed." },
-];
+    ["u", "c", "r", "a", "z", "y", "b", "e", "g"],
 
-const ANSWERS = [
-  {
-    id: 1,
-    correct: "She usually irons the clothes.",
-    img: img1,
-    frequencyLevel: 3, // usually
-  },
-  {
-    id: 2,
-    correct: "He sometimes reads the newspaper.",
-    img: img2,
-    frequencyLevel: 2, // sometimes
-  },
-  {
-    id: 3,
-    correct: "They never play chess.",
-    img: img3,
-    frequencyLevel: 0, // never
-  },
-  {
-    id: 4,
-    correct: "She always goes to bed.",
-    img: img4,
-    frequencyLevel: 4, // always
-  },
-];
+    ["p", "a", "e", "n", "t", "r", "i", "m", "s"],
 
-export default function WB_LookAndWrite_PageE() {
-  const [answers, setAnswers] = useState({});
-  const [draggedItem, setDraggedItem] = useState(null);
-  const [touchItem, setTouchItem] = useState(null);
-  const [touchPos, setTouchPos] = useState({ x: 0, y: 0 });
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+    ["l", "m", "s", "t", "i", "l", "l", "w", "t"],
 
-  const dropRefs = useRef({});
+    ["e", "t", "a", "y", "a", "v", "f", "e", "w"],
 
-  const usedDragIds = Object.values(answers)
-    .filter(Boolean)
-    .map((entry) => entry.dragId);
+    ["n", "o", "t", "s", "o", "f", "a", "s", "t"],
 
-  const applyDrop = (boxKey, item) => {
-    const newAnswers = { ...answers };
+    ["l", "e", "t", "s", "s", "e", "e", "l", "l"],
 
-    Object.keys(newAnswers).forEach((key) => {
-      if (newAnswers[key]?.dragId === item.id) {
-        delete newAnswers[key];
+    ["w", "o", "r", "k", "s", "o", "u", "t", "t"],
+  ];
+
+  const gridRef = useRef(null);
+
+  const [showedAnswer, setShowedAnswer] = useState(false);
+
+  const [selectedCells, setSelectedCells] = useState([]);
+
+  const [startCell, setStartCell] = useState(null);
+
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  const [foundWords, setFoundWords] = useState([]);
+
+  const [foundSelections, setFoundSelections] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const startSelection = (row, col) => {
+    if (locked || showedAnswer) return;
+
+    setStartCell({ row, col });
+
+    setSelectedCells([{ row, col }]);
+
+    setIsSelecting(true);
+  };
+
+  const addCell = (row, col) => {
+    if (!isSelecting || !startCell) return;
+
+    const dr = row - startCell.row;
+
+    const dc = col - startCell.col;
+
+    const stepRow = Math.sign(dr);
+
+    const stepCol = Math.sign(dc);
+
+    if (!(dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc))) return;
+
+    const length = Math.max(Math.abs(dr), Math.abs(dc));
+
+    const cells = [];
+
+    for (let i = 0; i <= length; i++) {
+      cells.push({
+        row: startCell.row + i * stepRow,
+
+        col: startCell.col + i * stepCol,
+      });
+    }
+
+    setSelectedCells(cells);
+  };
+
+  const getWordFromCells = (cells) => {
+    let word = "";
+
+    cells.forEach((cell) => {
+      word += grid[cell.row][cell.col];
+    });
+
+    return word.toLowerCase();
+  };
+
+  const endSelection = () => {
+    setIsSelecting(false);
+
+    if (selectedCells.length === 0) return;
+
+    const word = getWordFromCells(selectedCells);
+
+    const reversed = word.split("").reverse().join("");
+
+    const normalizedWords = words.map((w) =>
+      w.toLowerCase().replace(/\s/g, "").replace("’", "'"),
+    );
+
+    const normalizedWord = word.replace(/\s/g, "").replace("’", "'");
+
+    const normalizedReversed = reversed.replace(/\s/g, "").replace("’", "'");
+
+    const foundIndex = normalizedWords.indexOf(normalizedWord);
+
+    const reversedIndex = normalizedWords.indexOf(normalizedReversed);
+
+    if (foundIndex !== -1 || reversedIndex !== -1) {
+      const correctWord =
+        foundIndex !== -1 ? words[foundIndex] : words[reversedIndex];
+
+      const cellsToSave =
+        foundIndex !== -1 ? [...selectedCells] : [...selectedCells].reverse();
+
+      if (!foundWords.includes(correctWord)) {
+        setFoundWords((prev) => [...prev, correctWord]);
+
+        setFoundSelections((prev) => [
+          ...prev,
+          {
+            word: correctWord,
+            cells: cellsToSave,
+          },
+        ]);
       }
-    });
+    }
 
-    newAnswers[boxKey] = {
-      dragId: item.id,
-      value: item.value,
-    };
+    setSelectedCells([]);
 
-    setAnswers(newAnswers);
-    setShowResults(false);
+    setStartCell(null);
   };
 
-  const handleDragStart = (item) => {
-    if (showAns || usedDragIds.includes(item.id)) return;
-    setDraggedItem(item);
+  const resetAll = () => {
+    setFoundWords([]);
+    setFoundSelections([]);
+    setSelectedCells([]);
+    setStartCell(null);
+    setIsSelecting(false);
+    setLocked(false);
+    setShowedAnswer(false);
   };
 
-  const handleDrop = (boxKey) => {
-    if (showAns || !draggedItem) return;
-    applyDrop(boxKey, draggedItem);
-    setDraggedItem(null);
+  const showAnswers = () => {
+    const answers = [
+      {
+        word: "twisty",
+        cells: [
+          { row: 0, col: 1 },
+          { row: 0, col: 2 },
+          { row: 0, col: 3 },
+          { row: 0, col: 4 },
+          { row: 0, col: 5 },
+          { row: 0, col: 6 },
+        ],
+      },
+
+      {
+        word: "giraffe",
+        cells: [
+          { row: 1, col: 2 },
+          { row: 1, col: 3 },
+          { row: 1, col: 4 },
+          { row: 1, col: 5 },
+          { row: 1, col: 6 },
+          { row: 1, col: 7 },
+          { row: 1, col: 8 },
+        ],
+      },
+
+      {
+        word: "crazy",
+        cells: [
+          { row: 2, col: 1 },
+          { row: 2, col: 2 },
+          { row: 2, col: 3 },
+          { row: 2, col: 4 },
+          { row: 2, col: 5 },
+        ],
+      },
+
+      {
+        word: "beg",
+        cells: [
+          { row: 2, col: 6 },
+          { row: 2, col: 7 },
+          { row: 2, col: 8 },
+        ],
+      },
+
+      {
+        word: "trims",
+        cells: [
+          { row: 3, col: 4 },
+          { row: 3, col: 5 },
+          { row: 3, col: 6 },
+          { row: 3, col: 7 },
+          { row: 3, col: 8 },
+        ],
+      },
+
+      {
+        word: "still",
+        cells: [
+          { row: 4, col: 2 },
+          { row: 4, col: 3 },
+          { row: 4, col: 4 },
+          { row: 4, col: 5 },
+          { row: 4, col: 6 },
+        ],
+      },
+
+      {
+        word: "few",
+        cells: [
+          { row: 5, col: 6 },
+          { row: 5, col: 7 },
+          { row: 5, col: 8 },
+        ],
+      },
+
+      {
+        word: "not so fast",
+        cells: [
+          { row: 6, col: 0 },
+          { row: 6, col: 1 },
+          { row: 6, col: 2 },
+          { row: 6, col: 3 },
+          { row: 6, col: 4 },
+          { row: 6, col: 5 },
+          { row: 6, col: 6 },
+          { row: 6, col: 7 },
+          { row: 6, col: 8 },
+        ],
+      },
+
+      {
+        word: "let’s see",
+        cells: [
+          { row: 7, col: 0 },
+          { row: 7, col: 1 },
+          { row: 7, col: 2 },
+          { row: 7, col: 3 },
+          { row: 7, col: 4 },
+          { row: 7, col: 5 },
+          { row: 7, col: 6 },
+        ],
+      },
+
+      {
+        word: "works out",
+        cells: [
+          { row: 8, col: 0 },
+          { row: 8, col: 1 },
+          { row: 8, col: 2 },
+          { row: 8, col: 3 },
+          { row: 8, col: 4 },
+          { row: 8, col: 5 },
+          { row: 8, col: 6 },
+          { row: 8, col: 7 },
+        ],
+      },
+
+      {
+        word: "couple",
+        cells: [
+          { row: 0, col: 0 },
+          { row: 1, col: 0 },
+          { row: 2, col: 0 },
+          { row: 3, col: 0 },
+          { row: 4, col: 0 },
+          { row: 5, col: 0 },
+        ],
+      },
+      {
+        word: "carnival",
+        cells: [
+          { row: 0, col: 0 },
+          { row: 1, col: 1 },
+          { row: 2, col: 2 },
+          { row: 3, col: 3 },
+          { row: 4, col: 4 },
+          { row: 5, col: 5 },
+          { row: 6, col: 6 },
+          { row: 7, col: 7 },
+        ],
+      },
+    ];
+
+    setFoundWords(words);
+
+    setFoundSelections(answers);
+
+    setLocked(true);
+
+    setShowedAnswer(true);
   };
 
-  const handleTouchStart = (e, item) => {
-    if (showAns || usedDragIds.includes(item.id)) return;
-
-    const touch = e.touches[0];
-    setTouchItem(item);
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchItem) return;
-    const touch = e.touches[0];
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchItem) return;
-
-    Object.entries(dropRefs.current).forEach(([key, ref]) => {
-      if (!ref) return;
-
-      const rect = ref.getBoundingClientRect();
-
-      if (
-        touchPos.x >= rect.left &&
-        touchPos.x <= rect.right &&
-        touchPos.y >= rect.top &&
-        touchPos.y <= rect.bottom
-      ) {
-        applyDrop(key, touchItem);
-      }
-    });
-
-    setTouchItem(null);
-  };
-
-  const handleRemoveAnswer = (boxKey) => {
-    if (showAns) return;
-
-    setAnswers((prev) => {
-      const updated = { ...prev };
-      delete updated[boxKey];
-      return updated;
-    });
-
-    setShowResults(false);
-  };
-
-  const handleCheck = () => {
-    if (showAns) return;
-
-    const allAnswered = ANSWERS.every((item) => answers[`a-${item.id}`]?.value);
-
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+  const checkAnswers = () => {
+    if (showedAnswer || locked) return;
+    if (foundWords.length < words.length) {
+      ValidationAlert.info("Please find all the words first.");
       return;
     }
+    const score = foundWords.length;
 
-    let score = 0;
-    const total = ANSWERS.length;
+    const total = words.length;
 
-    ANSWERS.forEach((item) => {
-      if (answers[`a-${item.id}`]?.value === item.correct) {
-        score++;
-      }
-    });
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
-    setShowResults(true);
+    const msg = `
+        <div style="font-size:20px;text-align:center;">
+          <span style="color:${color};font-weight:bold">
+            Score: ${score} / ${total}
+          </span>
+        </div>
+      `;
 
     if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+      ValidationAlert.success(msg);
+      setLocked(true);
+    } else if (score === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
+  const renderLine = (cells, key, opacity = 0.6) => {
+    if (!cells || cells.length < 2) return null;
 
-    ANSWERS.forEach((item) => {
-      const matched = DRAG_ITEMS.find((d) => d.value === item.correct);
+    const start = cells[0];
 
-      filled[`a-${item.id}`] = {
-        dragId: matched?.id ?? item.id,
-        value: item.correct,
-      };
-    });
+    const end = cells[cells.length - 1];
 
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
-  };
+    const cellSize = 40;
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setDraggedItem(null);
-    setTouchItem(null);
-    setShowResults(false);
-    setShowAns(false);
-  };
+    const x1 = start.col * cellSize + cellSize / 2;
 
-  const isWrong = (item) => {
-    if (!showResults) return false;
-    return answers[`a-${item.id}`]?.value !== item.correct;
-  };
+    const y1 = start.row * cellSize + cellSize / 2;
 
-  const renderFrequencyBars = (level) => {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: "clamp(6px, 0.8vw, 10px)",
-          right: "clamp(8px, 1vw, 12px)",
-          display: "flex",
-          gap: "2px",
-          zIndex: 2,
-          background: "rgba(255,255,255,0.7)",
-          padding: "2px",
-          borderRadius: "4px",
-        }}
-      >
-        {[1, 2, 3, 4].map((bar) => (
-          <div
-            key={bar}
-            style={{
-              width: "clamp(10px, 1.2vw, 16px)",
-              height: "clamp(8px, 1vw, 12px)",
-              backgroundColor: bar <= level ? "#6d6d6d" : "#efefef",
-              border: "1px solid #8f8f8f",
-              boxSizing: "border-box",
-            }}
-          />
-        ))}
-      </div>
-    );
-  };
+    const x2 = end.col * cellSize + cellSize / 2;
 
-  const renderDropBox = (boxKey, wrong) => {
-    const value = answers[boxKey]?.value || "";
+    const y2 = end.row * cellSize + cellSize / 2;
 
     return (
-      <div
-        ref={(el) => (dropRefs.current[boxKey] = el)}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={() => handleDrop(boxKey)}
-        onClick={() => handleRemoveAnswer(boxKey)}
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          position: "relative",
-          cursor: value && !showAns ? "pointer" : "default",
-          userSelect: "none",
-        }}
-      >
-        <div
-          style={{
-            minHeight: "clamp(34px, 5vw, 46px)",
-            fontSize: "clamp(16px, 2vw, 24px)",
-            lineHeight: "1.35",
-            color: value ? ANSWER_COLOR : "#111",
-            fontWeight: 500,
-            wordBreak: "break-word",
-            textAlign: "left",
-            paddingBottom: "2px",
-          }}
-        >
-          {value}
-        </div>
-
-        <div
-          style={{
-            width: "100%",
-            borderBottom: "3px solid #3a3a3a",
-          }}
-        />
-
-        
-        {wrong && (
-          <div
-            style={{
-              position: "absolute",
-              top: "-10px",
-              right: "-10px",
-              width: "20px",
-              height: "20px",
-              borderRadius: "50%",
-              backgroundColor: WRONG_COLOR,
-                        border:" 1px solid #ffffffff",
-
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              fontWeight: 700,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            }}
-          >
-            ✕
-          </div>
-        )}
-      </div>
+      <line
+        key={key}
+        x1={x1}
+        y1={y1}
+        x2={x2}
+        y2={y2}
+        stroke="#6D2980"
+        strokeWidth="20"
+        strokeLinecap="round"
+        opacity={opacity}
+      />
     );
   };
 
   return (
     <div className="main-container-component">
-    
- <div
+      <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
+          gap: "10px",
         }}
       >
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin: 0,
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span className="WB-ex-A">E</span>  Look and write the            sentences. Use the words from the box.
-
-          
-        </h1>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <div
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-5">
+          <span
+            className="ex-A"
             style={{
-              width: "100%",
-              maxWidth: "980px",
-              border: "2px solid #f39b42",
-              borderRadius: "18px",
-              padding: "10px 14px",
-              boxSizing: "border-box",
-              display: "flex",
-              gap: "10px",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "#fff",
+              marginRight: "20px",
             }}
           >
-            {DRAG_ITEMS.map((item) => {
-              const isUsed = usedDragIds.includes(item.id);
+            E
+          </span>
+          Find and circle the words.
+        </h5>
 
-              return (
-                <div
-                  key={item.id}
-                  draggable={!isUsed && !showAns}
-                  onDragStart={() => handleDragStart(item)}
-                  onTouchStart={(e) => handleTouchStart(e, item)}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "14px",
-                    border: `1.5px solid ${isUsed ? BORDER_COLOR : ACTIVE_COLOR}`,
-                    backgroundColor: isUsed ? "#eeeeee" : SOFT_COLOR,
-                    color: isUsed ? "#999" : "#222",
-                    cursor: isUsed || showAns ? "not-allowed" : "grab",
-                    opacity: isUsed ? 0.6 : 1,
-                    userSelect: "none",
-                    fontSize: "clamp(13px, 1.3vw, 18px)",
-                    fontWeight: 500,
-                    boxShadow: isUsed ? "none" : "0 2px 8px rgba(0,0,0,0.06)",
-                    transition: "0.2s ease",
-                    touchAction: "none",
-                    textAlign: "center",
-                  }}
-                >
-                  {item.value}
-                </div>
-              );
-            })}
+        {/* WORD BOX */}
+        <div
+          style={{
+            border: "2px solid #7D3C98",
+            borderRadius: "14px",
+            padding: "16px 24px",
+            marginBottom: "25px",
+          }}
+        >
+          <div className="grid grid-cols-6 gap-x-10 gap-y-2 text-[17px]">
+            {words.map((word, index) => (
+              <div
+                key={index}
+                className={`text-center ${
+                  foundWords.includes(word)
+                    ? "text-[#D1232A] line-through font-bold"
+                    : ""
+                }`}
+              >
+                {word}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-            gap: "clamp(22px, 3vw, 34px) clamp(18px, 2.5vw, 34px)",
-            width: "100%",
-            maxWidth: "1100px",
-            margin: "0 auto",
-            alignItems: "start",
-          }}
-        >
-          {ANSWERS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                gap: "clamp(10px, 1.3vw, 14px)",
-                minWidth: 0,
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "clamp(8px, 1vw, 14px)",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "clamp(18px, 2vw, 30px)",
-                    fontWeight: 700,
-                    color: "#111",
-                    lineHeight: 1,
-                    paddingTop: "4px",
-                    minWidth: "clamp(16px, 2vw, 24px)",
-                    flexShrink: 0,
-                  }}
-                >
-                  {item.id}
-                </span>
-
-                <div
-                  style={{
-                    flex: 1,
-                    height: "clamp(105px, 17vw, 150px)",
-                    border: "2px solid #f39b42",
-                    borderRadius: "14px",
-                    overflow: "hidden",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "#fff",
-                    boxSizing: "border-box",
-                    position: "relative",
-                    minWidth: 0,
-                  }}
-                >
-                  <img
-                    src={item.img}
-                    alt={`exercise-${item.id}`}
-                    style={{
-
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-
-                </div>
+        {/* GRID */}
+        <div className="flex justify-center">
+          <div
+            ref={gridRef}
+            className="relative select-none"
+            onMouseLeave={endSelection}
+          >
+            {grid.map((row, rowIndex) => (
+              <div key={rowIndex} className="flex">
+                {row.map((letter, colIndex) => (
+                  <span
+                    key={colIndex}
+                    className="
+                          w-10
+                          h-10
+                          border
+                          border-[#7D3C98]
+                          flex
+                          items-center
+                          justify-center
+                          text-[22px]
+                          font-medium
+                          cursor-pointer
+                          relative
+                          z-10
+                        "
+                    onMouseDown={() => startSelection(rowIndex, colIndex)}
+                    onMouseEnter={() => addCell(rowIndex, colIndex)}
+                    onMouseUp={endSelection}
+                  >
+                    {letter}
+                  </span>
+                ))}
               </div>
+            ))}
 
-              <div
-                style={{
-                  width: "100%",
-                  paddingLeft: "clamp(24px, 3vw, 32px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                {renderDropBox(`a-${item.id}`, isWrong(item))}
-              </div>
-            </div>
-          ))}
-        </div>
+            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+              {foundSelections.map((item, index) =>
+                renderLine(item.cells, `found-${index}`, 0.7),
+              )}
 
-        <div
-          style={{
-            marginTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
+              {renderLine(selectedCells, "current", 0.45)}
+            </svg>
+          </div>
         </div>
       </div>
 
-      {touchItem && (
-        <div
-          style={{
-            position: "fixed",
-            left: touchPos.x - 120,
-            top: touchPos.y - 20,
-            background: "#fff",
-            padding: "8px 12px",
-            borderRadius: "10px",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-            pointerEvents: "none",
-            zIndex: 9999,
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#222",
-            maxWidth: "240px",
-            textAlign: "center",
-          }}
-        >
-          {touchItem.value}
-        </div>
-      )}
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button onClick={resetAll} className="try-again-button">
+          Start Again ↻
+        </button>
+
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
+
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default WB_Unit2_Page11_Q1;

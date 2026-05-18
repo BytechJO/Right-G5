@@ -28,8 +28,8 @@ const WritingSection_U1 = () => {
           style={{ width: "auto", height: "100%", objectFit: "contain" }}
         />
         <WritingA />
-        <WritingC />
         <WritingB />
+        <WritingC />
       </div>
     </div>
   );

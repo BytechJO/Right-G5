@@ -1,539 +1,547 @@
-import React, { useMemo, useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U2/Page 13/Asset 8.svg";
 
-import busImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 13/SVG/Asset 1.svg";
-import scooterImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 13/SVG/Asset 2.svg";
-import carImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 13/SVG/Asset 3.svg";
-import motorcycleImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U2 Folder/Page 13/SVG/Asset 4.svg";
+const WB_Unit2_Page13_Q1 = () => {
+  const vocabAnswers = [
+    "begs",
+    "carnival",
+    "merry-go-round",
+    "crazy",
+    "twisty",
+    "couple",
+  ];
 
-const SENTENCES = [
-  {
-    id: 1,
-    text: "She usually takes a bus to work.",
-  },
-  {
-    id: 2,
-    text: "She usually drives a car to the library.",
-  },
-  {
-    id: 3,
-    text: "She sometimes rides a scooter to the park.",
-  },
-  {
-    id: 4,
-    text: "She rarely rides a motorcycle to the mall.",
-  },
-];
+  const qaAnswers = [
+    "They go to the carnival near their school.",
+    " They go to the carnival a couple of times a month",
+    "The narrator likes rides that are crazy and twisty.",
+  ];
 
-const IMAGE_CARDS = [
-  {
-    id: 1,
-    img: busImg,
-    alt: "bus",
-    correctNumber: 1,
-  },
-  {
-    id: 2,
-    img: scooterImg,
-    alt: "scooter",
-    correctNumber: 3,
-  },
-  {
-    id: 3,
-    img: carImg,
-    alt: "car",
-    correctNumber: 2,
-  },
-  {
-    id: 4,
-    img: motorcycleImg,
-    alt: "motorcycle",
-    correctNumber: 4,
-  },
-];
+  const storyWords = [
+    "Wendy,",
+    "who",
+    "is",
+    "my",
+    "sister,",
+    "always",
+    "begs",
+    "me",
+    "to",
+    "play",
+    "with",
+    "her.",
+    "She",
+    "loves",
+    "to",
+    "play",
+    "with",
+    "my",
+    "kite.",
+    "She",
+    "loves",
+    "the",
+    "carnival",
+    "that",
+    "is",
+    "near",
+    "our",
+    "school.",
+    "She",
+    "wants",
+    "me",
+    "to",
+    "take",
+    "her",
+    "there",
+    "first",
+    "thing",
+    "after",
+    "school.",
+    "Whenever",
+    "we",
+    "go",
+    "there,",
+    "she",
+    "wants",
+    "to",
+    "ride",
+    "the",
+    "merry-go-round.",
+    "I",
+    "like",
+    "rides",
+    "that",
+    "are",
+    "crazy",
+    "and",
+    "twisty.",
+    "We",
+    "go",
+    "to",
+    "the",
+    "carnival",
+    "a",
+    "couple",
+    "of",
+    "times",
+    "a",
+    "month.",
+    "I",
+    "love",
+    "my",
+    "sister",
+    "who",
+    "is",
+    "so",
+    "cute.",
+  ];
 
-const DRAG_NUMBERS = [1, 2, 3, 4];
+  const [selectedWords, setSelectedWords] = useState([]);
 
-const WRONG_COLOR = "#ef4444";
-const TEXT_COLOR = "#111";
-const NUMBER_COLOR = "#000000ff";
-const DRAG_BG = "#f29a1f";
+  const [vocabAnswersState, setVocabAnswersState] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-const styles = {
-  pageWrap: {
-    width: "100%",
-  },
+  const [qaAnswersState, setQaAnswersState] = useState(["", "", ""]);
 
-  contentWrap: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "clamp(14px, 2vw, 22px)",
-    width: "100%",
-  },
+  const [result, setResult] = useState([]);
 
-  sentencesWrap: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "clamp(12px, 2vw, 24px)",
-    width: "100%",
-  },
+  const [locked, setLocked] = useState(false);
 
-  sentenceRow: {
-    display: "flex",
-    alignItems: "flex-start",
-    gap: "clamp(10px, 1.4vw, 16px)",
-    width: "100%",
-  },
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.,?!’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  sentenceNumber: {
-    fontSize: "clamp(18px, 2vw, 30px)",
-    fontWeight: 700,
-    color: TEXT_COLOR,
-    lineHeight: 1,
-    minWidth: "clamp(18px, 2vw, 28px)",
-    flexShrink: 0,
-    paddingTop: "2px",
-  },
+  const toggleUnderline = (startIndex, clause) => {
+    if (locked) return;
 
-  sentenceText: {
-    fontSize: "clamp(16px, 2.2vw, 28px)",
-    fontWeight: 500,
-    color: TEXT_COLOR,
-    lineHeight: 1.25,
-    wordBreak: "break-word",
-  },
+    let indexes = [];
 
-  cardsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-    gap: "clamp(10px, 1.4vw, 18px)",
-    width: "100%",
-    alignItems: "start",
-  },
+    const words = clause.split(" ");
 
-  cardDropArea: {
-    position: "relative",
-    width: "100%",
-    minWidth: 0,
-    cursor: "pointer",
-    transition: "0.2s ease",
-    borderRadius: "clamp(12px, 1.4vw, 18px)",
-  },
+    for (let i = 0; i < words.length; i++) {
+      indexes.push(startIndex + i);
+    }
 
-  imageWrap: {
-    position: "relative",
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+    const alreadySelected = indexes.every((i) => selectedWords.includes(i));
 
-  image: {
-    width: "100%",
-    height: "auto",
-    display: "block",
-    objectFit: "contain",
-    userSelect: "none",
-    pointerEvents: "none",
-  },
+    if (alreadySelected) {
+      setSelectedWords((prev) => prev.filter((i) => !indexes.includes(i)));
+    } else {
+      setSelectedWords((prev) => [...new Set([...prev, ...indexes])]);
+    }
+  };
 
-  numberOverlay: {
-    position: "absolute",
-    top: "0.01%",
-    right: "1.2%",
-    width: "14%",
-    aspectRatio: "1 / 1",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: NUMBER_COLOR,
-    fontSize: "clamp(22px, 2.5vw, 38px)",
-    fontWeight: 500,
-    lineHeight: 1,
-    background: "transparent",
-    border: "none",
-    boxSizing: "border-box",
-    pointerEvents: "none",
-  },
+  const handleVocabChange = (i, value) => {
+    if (locked || result[i + 3] === true) return;
 
-  wrongBadge: {
-    position: "absolute",
-    top: "-6px",
-    right: "-6px",
-    width: "clamp(18px, 2vw, 24px)",
-    height: "clamp(18px, 2vw, 24px)",
-    borderRadius: "50%",
-    backgroundColor: WRONG_COLOR,
-    color: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "clamp(10px, 1vw, 12px)",
-    fontWeight: 700,
-    border: "2px solid #fff",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-    zIndex: 3,
-    pointerEvents: "none",
-  },
+    const updated = [...vocabAnswersState];
 
-  dragNumbersWrap: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: "clamp(10px, 1.4vw, 16px)",
-    marginTop: "clamp(2px, 0.6vw, 8px)",
-  },
+    updated[i] = value;
 
-  dragCircle: {
-    width: "clamp(40px, 5vw, 52px)",
-    height: "clamp(40px, 5vw, 52px)",
-    borderRadius: "50%",
-    background: DRAG_BG,
-    color: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "clamp(20px, 2.4vw, 28px)",
-    fontWeight: 700,
-    cursor: "grab",
-    userSelect: "none",
-    transition: "0.2s ease",
-    touchAction: "none",
-  },
+    setVocabAnswersState(updated);
 
-  buttonsWrap: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "4px",
-  },
-};
+    setResult((prev) => {
+      const copy = [...prev];
 
-export default function WB_Unit3_Page21_QI() {
-  const [imageAnswers, setImageAnswers] = useState({});
-  const [draggedNumber, setDraggedNumber] = useState(null);
-  const [touchItem, setTouchItem] = useState(null);
-  const [touchPos, setTouchPos] = useState({ x: 0, y: 0 });
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+      copy[i + 3] = undefined;
 
-  const dropRefs = useRef({});
-
-  const usedNumbers = useMemo(() => Object.values(imageAnswers), [imageAnswers]);
-
-  const applyDrop = (cardId, num) => {
-    const updated = { ...imageAnswers };
-
-    Object.keys(updated).forEach((key) => {
-      if (updated[key] === num) {
-        delete updated[key];
-      }
+      return copy;
     });
-
-    updated[cardId] = num;
-    setImageAnswers(updated);
-    setDraggedNumber(null);
-    setChecked(false);
   };
 
-  const handleDragStart = (num) => {
-    if (showAns || usedNumbers.includes(num)) return;
-    setDraggedNumber(num);
-  };
+  const handleQaChange = (i, value) => {
+    if (locked || result[i + 9] === true) return;
 
-  const handleDrop = (cardId) => {
-    if (showAns || draggedNumber === null) return;
-    applyDrop(cardId, draggedNumber);
-  };
+    const updated = [...qaAnswersState];
 
-  const handleTouchStart = (e, num) => {
-    if (showAns || usedNumbers.includes(num)) return;
+    updated[i] = value;
 
-    const touch = e.touches[0];
-    setTouchItem(num);
-    setDraggedNumber(num);
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
+    setQaAnswersState(updated);
 
-  const handleTouchMove = (e) => {
-    if (touchItem === null) return;
+    setResult((prev) => {
+      const copy = [...prev];
 
-    const touch = e.touches[0];
-    setTouchPos({ x: touch.clientX, y: touch.clientY });
-  };
+      copy[i + 9] = undefined;
 
-  const handleTouchEnd = () => {
-    if (touchItem === null) return;
-
-    Object.entries(dropRefs.current).forEach(([key, ref]) => {
-      if (!ref) return;
-
-      const rect = ref.getBoundingClientRect();
-
-      if (
-        touchPos.x >= rect.left &&
-        touchPos.x <= rect.right &&
-        touchPos.y >= rect.top &&
-        touchPos.y <= rect.bottom
-      ) {
-        applyDrop(Number(key), touchItem);
-      }
+      return copy;
     });
-
-    setTouchItem(null);
-    setDraggedNumber(null);
   };
+  const checkAnswers = () => {
+    if (locked) return;
 
-  const handleRemoveNumber = (cardId) => {
-    if (showAns) return;
+    const clauses = [
+      {
+        start: 1,
+        text: "who is my sister",
+      },
 
-    setImageAnswers((prev) => {
-      const updated = { ...prev };
-      delete updated[cardId];
-      return updated;
-    });
+      {
+        start: 23,
+        text: "that is near our school",
+      },
 
-    setChecked(false);
-  };
+      {
+        start: 72,
+        text: "who is so cute",
+      },
+    ];
 
-  const getScore = () => {
-    let score = 0;
+    const hasEmptyVocab = vocabAnswersState.some((a) => !a.trim());
 
-    IMAGE_CARDS.forEach((card) => {
-      if (imageAnswers[card.id] === card.correctNumber) {
-        score += 1;
-      }
-    });
+    const hasEmptyQa = !qaAnswersState[0].trim() || !qaAnswersState[1].trim();
 
-    return score;
-  };
+    if (selectedWords.length === 0) {
+      ValidationAlert.info("Underline at least one clause.");
 
-  const handleCheck = () => {
-    if (showAns) return;
-
-    const allAnswered = IMAGE_CARDS.every((card) => imageAnswers[card.id]);
-
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
       return;
     }
 
-    const total = IMAGE_CARDS.length;
-    const score = getScore();
+    if (hasEmptyVocab) {
+      ValidationAlert.info("Please complete all vocabulary answers.");
 
-    setChecked(true);
+      return;
+    }
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+    if (hasEmptyQa) {
+      ValidationAlert.info("Please answer all questions.");
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const newResults = [];
+
+    // UNDERLINE RESULTS
+    const underlineResults = clauses.map((clause) => {
+      const words = clause.text.split(" ");
+
+      let indexes = [];
+
+      for (let i = 0; i < words.length; i++) {
+        indexes.push(clause.start + i);
+      }
+
+      const ok = indexes.every((idx) => selectedWords.includes(idx));
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    newResults.push(...underlineResults);
+
+    // VOCAB RESULTS
+    const usedAnswers = [];
+
+    vocabAnswersState.forEach((userAnswer) => {
+      const normalizedUser = normalize(userAnswer);
+
+      const matchedIndex = vocabAnswers.findIndex(
+        (correctAnswer, idx) =>
+          normalize(correctAnswer) === normalizedUser &&
+          !usedAnswers.includes(idx),
+      );
+
+      const ok = matchedIndex !== -1;
+
+      newResults.push(ok);
+
+      if (ok) {
+        correctCount++;
+
+        usedAnswers.push(matchedIndex);
+      }
+    });
+
+    // Q5 ONLY
+    const q5ok = normalize(qaAnswersState[2]) === normalize(qaAnswers[2]);
+
+    newResults.push(q5ok);
+
+    if (q5ok) correctCount++;
+
+    setResult(newResults);
+
+    const total = 10;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctMap = {};
+  const showAnswers = () => {
+    setSelectedWords([1, 2, 3, 4, 23, 24, 25, 26, 27, 72, 73, 74, 75]);
 
-    IMAGE_CARDS.forEach((card) => {
-      correctMap[card.id] = card.correctNumber;
-    });
+    setVocabAnswersState(vocabAnswers);
+    setResult([]);
 
-    setImageAnswers(correctMap);
-    setChecked(true);
-    setShowAns(true);
-    setDraggedNumber(null);
-    setTouchItem(null);
+    setQaAnswersState(qaAnswers);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setImageAnswers({});
-    setDraggedNumber(null);
-    setTouchItem(null);
-    setChecked(false);
-    setShowAns(false);
+    setSelectedWords([]);
+
+    setVocabAnswersState(["", "", "", "", "", ""]);
+
+    setQaAnswersState(["", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isCardWrong = (cardId) => {
-    if (!checked || showAns) return false;
-    const card = IMAGE_CARDS.find((item) => item.id === cardId);
-    return imageAnswers[cardId] !== card.correctNumber;
-  };
+  const inputField = (value, onChange, isWrong) => (
+    <div className="relative inline-block w-full">
+      <input
+        type="text"
+        value={value}
+        disabled={locked}
+        onChange={onChange}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-i-cards-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: clamp(10px, 1.6vw, 18px);
-          width: 100%;
-          align-items: start;
-        }
+          ${isWrong ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-        .wb-i-card-active {
-          transform: translateY(-1px);
-          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
-        }
-
-        .wb-i-card-wrong {
-          filter: drop-shadow(0 0 0 rgba(0,0,0,0));
-        }
-
-        .wb-i-drag-selected {
-          transform: scale(1.08);
-          box-shadow: 0 0 0 3px rgba(141, 141, 147, 0.2);
-        }
-
-        .wb-i-drag-disabled {
-          background: #cfcfd4 !important;
-          cursor: not-allowed !important;
-          opacity: 0.6;
-        }
-
-        .wb-i-touch-preview {
-          position: fixed;
-          width: clamp(40px, 5vw, 52px);
-          height: clamp(40px, 5vw, 52px);
-          border-radius: 50%;
-          background: #8d8d93;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: clamp(20px, 2.4vw, 28px);
-          font-weight: 700;
-          pointer-events: none;
-          z-index: 9999;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 900px) {
-          .wb-i-cards-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-        }
-
-        @media (max-width: 560px) {
-          .wb-i-cards-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
+      {isWrong && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <span className="WB-ex-A">I</span>
-          Read, look, and number.
-        </h1>
-
-        <div style={styles.pageWrap}>
-          <div style={styles.contentWrap}>
-            <div style={styles.sentencesWrap}>
-              {SENTENCES.map((item) => (
-                <div key={item.id} style={styles.sentenceRow}>
-                  <div style={styles.sentenceNumber}>{item.id}</div>
-                  <div style={styles.sentenceText}>{item.text}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="wb-i-cards-grid">
-              {IMAGE_CARDS.map((item) => (
-                <div
-                  key={item.id}
-                  ref={(el) => (dropRefs.current[item.id] = el)}
-                  style={styles.cardDropArea}
-                  className={`${draggedNumber !== null ? "wb-i-card-active" : ""} ${
-                    isCardWrong(item.id) ? "wb-i-card-wrong" : ""
-                  }`}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => handleDrop(item.id)}
-                  onClick={() => handleRemoveNumber(item.id)}
-                >
-                  <div style={styles.imageWrap}>
-                    <img
-                      src={item.img}
-                      alt={item.alt}
-                      style={styles.image}
-                      draggable={false}
-                    />
-
-                    <div style={styles.numberOverlay}>
-                      {imageAnswers[item.id] || ""}
-                      {isCardWrong(item.id) && (
-                        <span style={styles.wrongBadge}>✕</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={styles.dragNumbersWrap}>
-              {DRAG_NUMBERS.map((num) => {
-                const disabled = usedNumbers.includes(num);
-                const selected = draggedNumber === num || touchItem === num;
-
-                return (
-                  <div
-                    key={num}
-                    draggable={!disabled && !showAns}
-                    onDragStart={() => handleDragStart(num)}
-                    onTouchStart={(e) => handleTouchStart(e, num)}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    style={styles.dragCircle}
-                    className={`${disabled || showAns ? "wb-i-drag-disabled" : ""} ${
-                      selected ? "wb-i-drag-selected" : ""
-                    }`}
-                  >
-                    {num}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div style={styles.buttonsWrap}>
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-            checkAnswers={handleCheck}
-          />
-        </div>
-      </div>
-
-      {touchItem !== null && (
-        <div
-          className="wb-i-touch-preview"
-          style={{
-            left: touchPos.x - 24,
-            top: touchPos.y - 24,
-          }}
-        >
-          {touchItem}
-        </div>
+          ✕
+        </span>
       )}
     </div>
   );
-}
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div
+        className="div-forall text-[18px]"
+        style={{
+          lineHeight: "1.8",
+        }}
+      >
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            J
+          </span>
+          Read and write.
+        </h5>
+
+        {/* STORY */}
+        <div className="flex gap-8 items-start mb-12">
+          <div className="flex-1 leading-[1.9]">
+            {storyWords.map((word, index) => {
+              const clauses = [
+                {
+                  start: 1,
+                  text: "who is my sister",
+                },
+
+                {
+                  start: 23,
+                  text: "that is near our school",
+                },
+
+                {
+                  start: 72,
+                  text: "who is so cute",
+                },
+              ];
+
+              const clause = clauses.find((c) => c.start === index);
+
+              const isUnderlined = selectedWords.includes(index);
+
+              return (
+                <React.Fragment key={index}>
+                  {clause ? (
+                    <button
+                      type="button"
+                      disabled={locked}
+                      onClick={() => toggleUnderline(clause.start, clause.text)}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: locked ? "default" : "pointer",
+                        borderBottom: isUnderlined
+                          ? "3px solid #6D2980"
+                          : "3px solid transparent",
+                        padding: "0 2px",
+                        fontSize: "18px",
+                        position: "relative",
+                      }}
+                    >
+                      {word}
+                    </button>
+                  ) : (
+                    <span>{word}</span>
+                  )}{" "}
+                </React.Fragment>
+              );
+            })}
+          </div>
+
+          <img
+            src={img}
+            alt=""
+            style={{
+              width: "260px",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
+        </div>
+
+        {/* Q1 */}
+        <div className="mb-10">
+          <div className="mb-4">
+            <span className="font-bold mr-2">1</span> Underline the relative
+            clauses in the story.
+          </div>
+        </div>
+
+        {/* Q2 */}
+        <div className="mb-10">
+          <div className="mb-6">
+            <span className="font-bold mr-2">2</span> Write all the vocabulary
+            words and expressions used in the story.
+          </div>
+
+          <div className="grid grid-cols-3 gap-8">
+            {vocabAnswersState.map((answer, i) => (
+              <div key={i}>
+                {inputField(
+                  answer,
+                  (e) => handleVocabChange(i, e.target.value),
+                  result[i + 3] === false,
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Q3 */}
+        <div className="mb-10">
+          <div className="mb-4">
+            <span className="font-bold mr-2">3</span> Where is the carnival that
+            the narrator and her sister go to?
+          </div>
+
+          {inputField(
+            qaAnswersState[0],
+            (e) => handleQaChange(0, e.target.value),
+            false,
+          )}
+        </div>
+
+        {/* Q4 */}
+        <div className="mb-10">
+          <div className="mb-4">
+            <span className="font-bold mr-2">4</span> How often do they go to
+            this carnival?
+          </div>
+
+          {inputField(
+            qaAnswersState[1],
+            (e) => handleQaChange(1, e.target.value),
+            false,
+          )}
+        </div>
+
+        {/* Q5 */}
+        <div className="mb-10">
+          <div className="mb-4">
+            <span className="font-bold mr-2">5</span> What kinds of rides does
+            the narrator like?
+          </div>
+
+          {inputField(
+            qaAnswersState[2],
+            (e) => handleQaChange(2, e.target.value),
+            result[9] === false,
+          )}
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default WB_Unit2_Page13_Q1;
