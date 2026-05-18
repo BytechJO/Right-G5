@@ -2,33 +2,28 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit3_Page20_Q1 = () => {
+const WB_Unit3_Page17_Q3 = () => {
   const answers = [
-    "rye bread",
-    "peanut butter",
-    "help yourself",
-    "try some",
-    "top off",
-    "marshmallows",
+    "The music sounds good.",
+
+    "Jane looks pretty.",
+
+    "The house feels warm.",
+
+    "The sardines taste salty.",
   ];
 
-  const scrambledWords = [
-    "rey erbda",
-    "eptnau brtuet",
-    "hpel uforyels",
-    "rty mose",
-    "pto fof",
-    "asmrhlwaloms",
+  const questions = [
+    "music/sound/good",
+
+    "Jane/look/pretty",
+
+    "house/feel/warm",
+
+    "sardines/taste/salty",
   ];
 
-  const [studentAnswers, setStudentAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -109,13 +104,13 @@ const WB_Unit3_Page20_Q1 = () => {
   const showAnswers = () => {
     setStudentAnswers(answers);
 
-    setResult([true, true, true, true, true, true]);
+    setResult([true, true, true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setStudentAnswers(["", "", "", "", "", ""]);
+    setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
 
@@ -172,35 +167,27 @@ const WB_Unit3_Page20_Q1 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div
-        className="div-forall text-[18px] w-full"
-      >
+      <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-[8vh]">
+        <h5 className="header-title-page8 mb-[15vh]">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            J
+            F
           </span>
-          Unscramble and write.
+          Read and write sentences.
         </h5>
 
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-12">
-          {scrambledWords.map((word, index) => (
-            <div key={index} className="flex items-center gap-4">
+        <div className="flex flex-col gap-17">
+          {questions.map((q, index) => (
+            <div key={index} className="flex items-center gap-3">
               <span className="font-bold w-5">{index + 1}</span>
 
-              <span
-                style={{
-                  letterSpacing: "3px",
-                }}
-              >
-                {word}
-              </span>
+              <span>{q}</span>
 
               {inputField(index)}
             </div>
@@ -226,4 +213,4 @@ const WB_Unit3_Page20_Q1 = () => {
   );
 };
 
-export default WB_Unit3_Page20_Q1;
+export default WB_Unit3_Page17_Q3;

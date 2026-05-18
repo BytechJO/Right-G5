@@ -1,284 +1,246 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 1.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 4.svg";
+import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 5.svg";
+import img4 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 6.svg";
+import img5 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 14.svg";
+import img6 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 15.svg";
 
-const ACTIVE_COLOR = "#f39b42";
-const WRONG_COLOR = "#dc2626";
+const WB_Unit3_Page17_Q2 = () => {
+  const answers = ["b", "a", "e", "c", "d", "f"];
 
-const PASSAGE =
-  "Stella, Helen, and Sarah are at a picnic in the park. Stella has brought fruit like apples and peaches. Helen has peanut butter sandwiches. Sarah has brought cookies and chips.";
+  const questions = [
+    "He is a guitar player. He looks happy when he plays music. He is dark-haired.",
 
-const QUESTIONS = [
-  {
-    id: 1,
-    text: "Does Stella have any ...",
-    options: ["chips?", "fruit?", "cookies?"],
-    correctOption: "fruit?",
-    correctPronoun: "she",
-  },
-  {
-    id: 2,
-    text: "Does Sarah have any ...",
-    options: ["cookies?", "peaches?", "sandwiches?"],
-    correctOption: "cookies?",
-    correctPronoun: "she",
-  },
-  {
-    id: 3,
-    text: "Does Helen have any ...",
-    options: ["apples?", "sandwiches?", "chips?"],
-    correctOption: "sandwiches?",
-    correctPronoun: "she",
-  },
-];
+    "The man is a worker. He has several tools for his work. He is a plumber.",
 
-export default function WB_Unit3_Page17_QF() {
-  const [answers, setAnswers] = useState({});
-  const [pronouns, setPronouns] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+    "They seem very happy. They are a mother and a daughter. They are together.",
 
-  const handleSelectOption = (id, value) => {
-    if (showAns) return;
+    "He seems very hard-working. He is strong. He may be a trash collector.",
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    "He likes his work. He looks cheerful. He is a painter.",
 
-    setShowResults(false);
-  };
+    "He seems happy. He has a hat on. He is a builder.",
+  ];
 
-  const handlePronounChange = (id, value) => {
-    if (showAns) return;
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-    setPronouns((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const [result, setResult] = useState([]);
 
-    setShowResults(false);
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) => str.toLowerCase().trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
   const checkAnswers = () => {
-    if (showAns) return;
+    if (locked) return;
 
-    const allAnswered = QUESTIONS.every(
-      (q) => answers[q.id] && pronouns[q.id]
-    );
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
-    const total = QUESTIONS.length * 2;
+    let correctCount = 0;
 
-    QUESTIONS.forEach((q) => {
-      if (answers[q.id] === q.correctOption) score++;
-      if (pronouns[q.id] === q.correctPronoun) score++;
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctAnswers = {};
-    const correctPronouns = {};
+  const showAnswers = () => {
+    setStudentAnswers(answers);
 
-    QUESTIONS.forEach((q) => {
-      correctAnswers[q.id] = q.correctOption;
-      correctPronouns[q.id] = q.correctPronoun;
-    });
+    setResult([true, true, true, true, true, true]);
 
-    setAnswers(correctAnswers);
-    setPronouns(correctPronouns);
-    setShowResults(true);
-    setShowAns(true);
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setPronouns({});
-    setShowResults(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isRowWrong = (q) => {
-    if (!showResults) return false;
+  const inputField = (i) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        maxLength={1}
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-[100px]
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-center
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
 
-    return (
-      answers[q.id] !== q.correctOption ||
-      pronouns[q.id] !== q.correctPronoun
-    );
-  };
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-  const renderOption = (q, option) => {
-    const selected = answers[q.id] === option;
-    const wrong = showResults && selected && option !== q.correctOption;
-
-    return (
-      <div
-        onClick={() => handleSelectOption(q.id, option)}
-        style={{
-          position: "relative",
-          padding: "6px 16px",
-          borderRadius: "999px",
-          border: selected
-            ? wrong
-              ? `3px solid ${WRONG_COLOR}`
-              : `3px solid ${ACTIVE_COLOR}`
-            : "3px solid transparent",
-          cursor: showAns ? "default" : "pointer",
-          fontSize: "18px",
-          transition: "0.2s ease",
-          userSelect: "none",
-          color: "#222",
-        }}
-      >
-        {option}
-      </div>
-    );
-  };
-
-  return (
-  <div className="main-container-component">
-      <div
-        className="div-forall"
-            style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">F</span> Read, circle, and answer.
-        </h1>
-
-        <div
+      {result[i] === false && (
+        <span
           style={{
-            fontSize: "18px",
-            lineHeight: "1.6",
-            color: "#444",
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {PASSAGE}
-        </div>
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
-        {QUESTIONS.map((q) => (
-          <div
-            key={q.id}
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div
+        className="div-forall text-[18px]"
+      >
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              position: "relative",
-              paddingRight: "30px",
+              marginRight: "10px",
             }}
           >
-            <div
-              style={{
-                fontSize: "20px",
-                color: "#444",
-                fontWeight: "500",
-              }}
-            >
-              {q.id} {q.text}
-            </div>
+            E
+          </span>
+          Look, read, and write.
+        </h5>
 
-            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              {q.options.map((opt) => (
-                <React.Fragment key={opt}>
-                  {renderOption(q, opt)}
-                </React.Fragment>
-              ))}
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                position: "relative",
-                width: "fit-content",
-                minWidth: "340px",
-              }}
-            >
-              <span style={{ fontSize: "22px", color: "#000000ff" }}>
-                Yes,
-              </span>
-
-              <select
-                value={pronouns[q.id] || ""}
-                onChange={(e) => handlePronounChange(q.id, e.target.value)}
+        {/* IMAGES */}
+        <div className="flex gap-4 mb-3">
+          {[img1, img2, img3, img4, img5, img6].map((img, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <img
+                src={img}
+                alt=""
                 style={{
-                  fontSize: "20px",
-                  borderBottom: "2px solid #444",
-                  borderTop: "none",
-                  borderLeft: "none",
-                  borderRight: "none",
-                  outline: "none",
-                  background: "transparent",
-                  color: "#000000ff",
+                  width: "130px",
+                  height: "auto",
+                  objectFit: "contain",
                 }}
-              >
-                <option value=""></option>
-                <option value="he">he</option>
-                <option value="she">she</option>
-              </select>
+              />
 
-              <span style={{ fontSize: "22px", color: "#000000ff" }}>
-                has some.
+              <div className="mt-3 flex items-center gap-2">
+                <span className="font-bold">{index + 1}</span>
+
+                {inputField(index)}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* SENTENCES */}
+        <div className="flex flex-col gap-4 mt-8">
+          {questions.map((q, index) => (
+            <div key={index} className="flex gap-3">
+              <span className="font-bold lowercase">
+                {String.fromCharCode(97 + index)}
               </span>
 
-              {isRowWrong(q) && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "-8px",
-                    right: "-28px",
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "50%",
-                    backgroundColor: WRONG_COLOR,
-                    color: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "11px",
-                    fontWeight: "700",
-                    border: "2px solid #fff",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-                  }}
-                >
-                  ✕
-                </div>
-              )}
+              <p className="flex-1">{q}</p>
             </div>
-
-            <div style={{ borderBottom: "2px solid #444", width: "100%" }} />
-          </div>
-        ))}
-
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            checkAnswers={checkAnswers}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
+          ))}
         </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit3_Page17_Q2;

@@ -167,9 +167,6 @@ const WB_Unit2_Page11_Q2 = () => {
     <div className="flex flex-col items-center p-[30px]">
       <div
         className="div-forall text-[18px]"
-        style={{
-          lineHeight: "1.8",
-        }}
       >
         {/* TITLE */}
         <h5 className="header-title-page8 mb-10">
