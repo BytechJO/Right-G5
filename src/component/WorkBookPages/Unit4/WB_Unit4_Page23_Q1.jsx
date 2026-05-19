@@ -1,473 +1,345 @@
-import React, { useState, useEffect } from "react";
-import Button from "../Button";
+import React, { useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 23//Ex E 1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 23//Ex E 2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 23//Ex E 3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 23//Ex E 4.svg";
+const WB_Unit4_Page23_Q1 = () => {
+  const answers = [
+    ["n", "o", "t", " ", "m", "e"],
+    ["j", "e", "a", "n", "s"],
+    ["a", "r", "c", "a", "d", "e"],
+    ["s", "p", "l", "i", "t", " ", "u", "p"],
+    ["b", "o", "o", "t", "s"],
+    ["f", "o", "o", "d", " ", "c", "o", "u", "r", "t"],
+  ];
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+  const items = [
+    ["1", "6", "16", "", "17", "2"],
 
-const ITEMS = [
-  {
-    id: 1,
-    img: img1,
-    correct: "February",
-    fixed: true,
-  },
-  {
-    id: 2,
-    img: img2,
-    correct: "July",
-    fixed: false,
-  },
-  {
-    id: 3,
-    img: img3,
-    correct: "October",
-    fixed: false,
-  },
-  {
-    id: 4,
-    img: img4,
-    correct: "May",
-    fixed: false,
-  },
-];
+    ["18", "2", "3", "1", "8"],
 
-const styles = {
-  pageWrap: {
-    width: "100%",
-  },
+    ["3", "4", "11", "3", "15", "2"],
 
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: "clamp(26px, 5vw, 48px) clamp(24px, 6vw, 80px)",
-    alignItems: "start",
-    justifyItems: "center",
-    width: "100%",
-  },
+    ["8", "14", "10", "5", "16", "", "9", "14"],
 
-  card: {
-    width: "100%",
-    maxWidth: "clamp(280px, 44vw, 420px)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    gap: "clamp(12px, 2vw, 18px)",
-    minWidth: 0,
-  },
+    ["13", "6", "6", "16", "8"],
 
-  questionRow: {
-    display: "flex",
-    alignItems: "baseline",
-    gap: "clamp(8px, 1.6vw, 16px)",
-    flexWrap: "wrap",
-    width: "100%",
-  },
+    ["7", "6", "6", "15", "", "11", "6", "9", "4", "16"],
+  ];
 
-  qNumber: {
-    fontSize: "clamp(20px, 2.4vw, 28px)",
-    fontWeight: "700",
-    color: "#222",
-    lineHeight: 1,
-    flexShrink: 0,
-  },
+  const codeItems = [
+    [
+      "1 = n",
+      "2 = e",
+      "3 = a",
+      "4 = r",
+      "5 = i",
+      "6 = o",
+      "7 = f",
+      "8 = s",
+      "9 = u",
+    ],
 
-  qText: {
-    fontSize: "clamp(20px, 2.8vw, 30px)",
-    color: "#222",
-    lineHeight: 1.2,
-    fontWeight: "400",
-    wordBreak: "break-word",
-  },
+    [
+      "10 = l",
+      "11 = c",
+      "12 = v",
+      "13 = b",
+      "14 = p",
+      "15 = d",
+      "16 = t",
+      "17 = m",
+      "18 = j",
+    ],
+  ];
 
-  imageWrap: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-  },
+  const [studentAnswers, setStudentAnswers] = useState(
+    answers.map((word) => word.map((char) => (char === " " ? " " : ""))),
+  );
 
-  image: {
-    width: "clamp(150px, 28vw, 220px)",
-    height: "clamp(150px, 28vw, 220px)",
-    objectFit: "contain",
-    display: "block",
-    maxWidth: "100%",
-  },
+  const [results, setResults] = useState([]);
 
-  answerWrap: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "2px",
-  },
+  const [locked, setLocked] = useState(false);
 
-  answerFieldOuter: {
-    position: "relative",
-    width: "100%",
-    maxWidth: "340px",
-    minHeight: "clamp(48px, 7vw, 60px)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  const inputRefs = useRef([]);
 
-  answerLine: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: "8px",
-    borderBottom: "3px solid #333",
-  },
+  const handleChange = (qIndex, inputIndex, value) => {
+    if (locked || results[qIndex] === true) return;
 
-  answerInner: {
-    position: "relative",
-    zIndex: 1,
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "4px",
-    flexWrap: "wrap",
-    width: "100%",
-    textAlign: "center",
-  },
+    const char = value.slice(-1).toLowerCase();
 
-  textStyle: {
-    fontSize: "clamp(20px, 3vw, 34px)",
-    color: "#222",
-    fontWeight: "400",
-    lineHeight: 1.1,
-    display: "flex",
-    alignItems: "center",
-    margin: 0,
-    padding: 0,
-  },
+    const updated = [...studentAnswers];
 
-  selectWrap: {
-    position: "relative",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: "clamp(140px, 22vw, 190px)",
-    width: "fit-content",
-    maxWidth: "100%",
-    height: "clamp(34px, 6vw, 40px)",
-  },
+    updated[qIndex][inputIndex] = char;
 
-  select: {
-    width: "100%",
-    minWidth: "clamp(140px, 22vw, 190px)",
-    maxWidth: "100%",
-    height: "clamp(34px, 6vw, 40px)",
-    border: "none",
-    outline: "none",
-    background: "transparent",
-    appearance: "none",
-    WebkitAppearance: "none",
-    MozAppearance: "none",
-    textAlign: "center",
-    textAlignLast: "center",
-    fontSize: "clamp(20px, 3vw, 34px)",
-    lineHeight: 1.1,
-    color: "#222",
-    fontWeight: "400",
-    cursor: "pointer",
-    padding: "0 28px 0 8px",
-  },
+    setStudentAnswers(updated);
 
-  selectArrow: {
-    position: "absolute",
-    right: "8px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    fontSize: "14px",
-    color: "#666",
-    pointerEvents: "none",
-    lineHeight: 1,
-  },
+    setResults((prev) => {
+      const copy = [...prev];
 
-  wrongBadge: {
-    position: "absolute",
-    top: "-2px",
-    right: "-10px",
-    width: "22px",
-    height: "22px",
-    borderRadius: "50%",
-    background: "#ef4444",
-    color: "#fff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "12px",
-    fontWeight: "700",
-    zIndex: 3,
-  },
+      copy[qIndex] = undefined;
 
-  buttonsWrap: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "6px",
-  },
-};
+      return copy;
+    });
 
-export default function WB_Months_Page230_QE() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+    // move next
+    if (char) {
+      setTimeout(() => {
+        let next = inputIndex + 1;
 
-  useEffect(() => {
-    const updateScreen = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+        while (answers[qIndex][next] === " ") {
+          next++;
+        }
 
-    updateScreen();
-    window.addEventListener("resize", updateScreen);
-
-    return () => window.removeEventListener("resize", updateScreen);
-  }, []);
-
-  const handleChange = (id, value) => {
-    if (showAns) return;
-
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+        inputRefs.current[qIndex]?.[next]?.focus();
+      }, 0);
+    }
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  const handleBackspace = (e, qIndex, inputIndex) => {
+    if (e.key === "Backspace" && !studentAnswers[qIndex][inputIndex]) {
+      let prev = inputIndex - 1;
 
-    const allAnswered = ITEMS.filter((item) => !item.fixed).every(
-      (item) => answers[item.id]
+      while (answers[qIndex][prev] === " ") {
+        prev--;
+      }
+
+      inputRefs.current[qIndex]?.[prev]?.focus();
+    }
+  };
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((word, qIndex) =>
+      word.some((char, i) => answers[qIndex][i] !== " " && !char),
     );
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
-    const total = ITEMS.length;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      const userAnswer = item.fixed ? item.correct : answers[item.id];
-      if (userAnswer === item.correct) {
-        score++;
-      }
+    const newResults = studentAnswers.map((studentWord, qIndex) => {
+      const correct =
+        studentWord.join("").toLowerCase() ===
+        answers[qIndex].join("").toLowerCase();
+
+      if (correct) correctCount++;
+
+      return correct;
     });
 
-    setChecked(true);
+    setResults(newResults);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
+  const showAnswers = () => {
+    setStudentAnswers(answers);
 
-    ITEMS.forEach((item) => {
-      if (!item.fixed) {
-        filled[item.id] = item.correct;
-      }
-    });
+    setResults([true, true, true, true, true, true]);
 
-    setAnswers(filled);
-    setChecked(true);
-    setShowAns(true);
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
-  };
-
-  const isWrong = (item) => {
-    if (!checked || item.fixed) return false;
-    return answers[item.id] !== item.correct;
-  };
-
-  const renderAnswerField = (item) => {
-    if (item.fixed) {
-      return (
-        <div style={styles.answerFieldOuter}>
-          <div style={styles.answerLine} />
-
-          <div
-            style={{
-              ...styles.answerInner,
-              background: "transparent",
-            }}
-          >
-            <span
-              style={{
-                ...styles.textStyle,
-                color: "#222",
-              }}
-            >
-              It’s
-            </span>
-
-            <span
-              style={{
-                ...styles.textStyle,
-                color: "#222",
-                padding: "0 4px",
-              }}
-            >
-              {item.correct}
-            </span>
-
-            <span
-              style={{
-                ...styles.textStyle,
-                color: "#222",
-              }}
-            >
-              .
-            </span>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div style={styles.answerFieldOuter}>
-        <div style={styles.answerLine} />
-
-        <div style={styles.answerInner}>
-          <span
-            style={{
-              ...styles.textStyle,
-              color: showAns || answers[item.id] ? "#000000" : "#222",
-            }}
-          >
-            It’s
-          </span>
-
-          <div style={styles.selectWrap}>
-            <select
-              value={answers[item.id] || ""}
-              disabled={showAns}
-              onChange={(e) => handleChange(item.id, e.target.value)}
-              style={{
-                ...styles.select,
-                color: showAns || answers[item.id] ? "#000000" : "#222",
-                cursor: showAns ? "default" : "pointer",
-              }}
-            >
-              <option value="" disabled>
-                —
-              </option>
-              {MONTHS.map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
-
-            {!showAns && <span style={styles.selectArrow}>▼</span>}
-          </div>
-
-          <span
-            style={{
-              ...styles.textStyle,
-              color: showAns || answers[item.id] ? "#000000" : "#222",
-            }}
-          >
-            .
-          </span>
-        </div>
-
-        {isWrong(item) && <div style={styles.wrongBadge}>✕</div>}
-      </div>
+    setStudentAnswers(
+      answers.map((word) => word.map((char) => (char === " " ? " " : ""))),
     );
+
+    setResults([]);
+
+    setLocked(false);
+
+    setTimeout(() => {
+      inputRefs.current[0]?.[0]?.focus();
+    }, 0);
   };
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin: 0,
-          }}
-        >
-          <span className="WB-ex-A">E</span>
-          Read, look, and write.
-        </h1>
-
-        <div style={styles.pageWrap}>
-          <div
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-[13vh]">
+          <span
+            className="ex-A"
             style={{
-              ...styles.grid,
-              gridTemplateColumns: isMobile
-                ? "1fr"
-                : "repeat(2, minmax(0, 1fr))",
+              marginRight: "10px",
             }}
           >
-            {ITEMS.map((item) => (
-              <div key={item.id} style={styles.card}>
-                <div style={styles.questionRow}>
-                  <span style={styles.qNumber}>{item.id}</span>
+            F
+          </span>
+          Use the code to find the words.
+        </h5>
 
-                  <span style={styles.qText}>What month is it?</span>
+        {/* QUESTIONS */}
+        <div className="grid grid-cols-3 gap-x-10 gap-y-10 mb-15">
+          {answers.map((word, qIndex) => (
+            <div key={qIndex} className="flex items-start gap-3">
+              <span className="font-bold">{qIndex + 1}</span>
+
+              <div>
+                {/* INPUTS */}
+                <div className="flex items-center gap-0.5">
+                  {word.map((char, inputIndex) => {
+                    if (char === " ") {
+                      return (
+                        <div
+                          key={inputIndex}
+                          style={{
+                            width: "18px",
+                          }}
+                        />
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={inputIndex}
+                        className="relative  flex flex-col items-center"
+                      >
+                        <input
+                          ref={(el) => {
+                            if (!inputRefs.current[qIndex]) {
+                              inputRefs.current[qIndex] = [];
+                            }
+
+                            inputRefs.current[qIndex][inputIndex] = el;
+                          }}
+                          type="text"
+                          maxLength={1}
+                          value={studentAnswers[qIndex][inputIndex]}
+                          disabled={locked || results[qIndex] === true}
+                          onFocus={(e) => e.target.select()}
+                          onInput={(e) =>
+                            handleChange(qIndex, inputIndex, e.target.value)
+                          }
+                          onKeyDown={(e) =>
+                            handleBackspace(e, qIndex, inputIndex)
+                          }
+                          className={`
+                              w-6
+                              text-center
+                              border-0
+                              border-b
+                              outline-none
+                              bg-transparent
+                              text-[18px]
+                              text-[#6D2980]
+                              font-semibold
+
+                              ${results[qIndex] === false ? "border-[#D1232A]" : "border-black"}
+                            `}
+                        />
+
+                        <span
+                          style={{
+                            width: "24px",
+                            textAlign: "center",
+                            fontSize: "14px",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {items[qIndex][inputIndex]}
+                        </span>
+                        {results[qIndex] === false && inputIndex === 0 && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: "-8px",
+                              right: "15px",
+                              width: "20px",
+                              background: "#ef4444",
+                              color: "white",
+                              borderRadius: "50%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "11px",
+                              fontWeight: "bold",
+                              border: "2px solid white",
+                              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                <div style={styles.imageWrap}>
-                  <img
-                    src={item.img}
-                    alt={`month-${item.id}`}
-                    style={styles.image}
-                  />
-                </div>
+        {/* CODE BOX */}
+        <div
+          style={{
+            border: "2px solid #7D3C98",
+            borderRadius: "12px",
+            padding: "16px 24px",
+          }}
+        >
+          <div className="text-center font-bold mb-2">Code:</div>
 
-                <div style={styles.answerWrap}>{renderAnswerField(item)}</div>
+          <div className="flex flex-col gap-3">
+            {codeItems.map((row, rowIndex) => (
+              <div
+                key={rowIndex}
+                className="grid grid-cols-9 place-items-center gap-y-3"
+              >
+                {row.map((item, index) => (
+                  <span key={index} className="w-full text-center">
+                    {item}
+                  </span>
+                ))}
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        <div style={styles.buttonsWrap}>
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit4_Page23_Q1;

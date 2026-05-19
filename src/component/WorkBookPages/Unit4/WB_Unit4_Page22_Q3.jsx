@@ -2,53 +2,20 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-// IMAGE
-import familyImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U4/Page 26/Asset 12.svg";
-
-const WB_Unit4_Page26_Q1 = () => {
-  const wordBank = [
-    "Wait a minute",
-    "electronics",
-    "straight ahead",
-    "head over",
-    "check out",
-    "head",
-    "clothes store",
-    "jeans",
-    "bookstore",
-    "split up",
-    "boots",
-    "food court",
-    "grocery store",
-  ];
-
+const WB_Unit4_Page22_Q3 = () => {
   const answers = [
-    "split up",
-    "bookstore",
-    "clothes store",
-    "Wait a minute",
-    "food court",
-    "check out",
-    "straight ahead",
-    "jeans",
-    "boots",
-    "electronics",
-    "head over",
+    "We usually go out on the weekends.",
+    "Does Stella often meet with her friends?",
+    "Do they sometimes play at the arcade?",
   ];
 
-  const [studentAnswers, setStudentAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const sentences = [
+    "go weekends out We on the usually.",
+    "her meet Does with often Stella friends?",
+    "the Do arcade sometimes play they at?",
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState(["", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -129,33 +96,21 @@ const WB_Unit4_Page26_Q1 = () => {
   const showAnswers = () => {
     setStudentAnswers(answers);
 
-    setResult([
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-    ]);
+    setResult([true, true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setStudentAnswers(["", "", "", "", "", "", "", "", "", "", ""]);
+    setStudentAnswers(["", "", ""]);
 
     setResult([]);
 
     setLocked(false);
   };
 
-  const inputField = (i, width = "180px") => (
-    <span className="relative inline-block">
+  const inputField = (i) => (
+    <div className="relative w-full">
       <input
         type="text"
         value={studentAnswers[i]}
@@ -170,12 +125,10 @@ const WB_Unit4_Page26_Q1 = () => {
           text-[#6D2980]
           font-semibold
           px-1
+          w-full
 
           ${result[i] === false ? "border-[#D1232A]" : "border-black"}
         `}
-        style={{
-          width,
-        }}
       />
 
       {result[i] === false && (
@@ -201,91 +154,38 @@ const WB_Unit4_Page26_Q1 = () => {
           ✕
         </span>
       )}
-    </span>
+    </div>
   );
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+      <div className="div-forall text-[18px]">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-6">
+        <h5 className="header-title-page8 mb-[12vh]">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            K
+            E
           </span>
-          Read and write.
+          Unscramble and write.
         </h5>
 
-        {/* WORD BANK */}
-        <div className="border-2 border-[#7D3C98] rounded-xl px-5 py-4 mb-6">
-          <div className="grid grid-cols-5 gap-y-2 gap-x-8">
-            {wordBank.map((word, index) => (
-              <span key={index} className="text-[17px]">
-                {word}
-              </span>
-            ))}
-          </div>
-        </div>
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-18">
+          {sentences.map((sentence, index) => (
+            <div key={index} className="flex flex-col gap-3">
+              <div className="flex items-start gap-3 flex-wrap">
+                <span className="font-bold">{index + 1}</span>
 
-        {/* STORY */}
-        <div className="relative  text-[17px] leading-loose w-[110%] mb-10">
-          {/* IMAGE */}
-          <img
-            src={familyImg}
-            alt=""
-            style={{
-              width: "130px",
-              height: "auto",
-              objectFit: "contain",
-              float: "right",
-              marginLeft: "18px",
-              marginBottom: "10px",
-            }}
-          />
+                <span className="text-[18px]">{sentence}</span>
+              </div>
 
-          <p>We went to the mall next to our place.</p>
-
-          <p>We {inputField(0, "180px")} and each went to a different space.</p>
-
-          <p>I needed books so I went to the {inputField(1, "180px")}, </p>
-
-          <p>Dad needed clothes, so he went to the {inputField(2, "180px")}.</p>
-
-          <p>
-            “{inputField(3, "180px")},” I said, as I saw my mom in the{" "}
-            {inputField(4, "180px")} looking for some food to eat.
-          </p>
-
-          <p>
-            “I’m hungry, too. Let’s {inputField(5, "180px")} a place that sells
-            cooked meat. The one here {inputField(6, "220px")} of us makes the
-            best food.”
-          </p>
-
-          <p>“I don’t want burgers,” said Mom. “I want to eat pizza.”</p>
-
-          <p>My dad came by as we bought pizza and some fruits.</p>
-
-          <p>
-            He had bought blue {inputField(7, "180px")} and black leather{" "}
-            {inputField(8, "180px")}.
-          </p>
-
-          <p>
-            Then, we went to the {inputField(9, "180px")} store to buy a new
-            cell phone.
-          </p>
-
-          <p>We all had fun shopping.</p>
-
-          <p>
-            Then, it was time to {inputField(10, "220px")} to the parking lot,
-            get in the car, and go home.
-          </p>
+              <div className="pl-7">{inputField(index)}</div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -307,4 +207,4 @@ const WB_Unit4_Page26_Q1 = () => {
   );
 };
 
-export default WB_Unit4_Page26_Q1;
+export default WB_Unit4_Page22_Q3;

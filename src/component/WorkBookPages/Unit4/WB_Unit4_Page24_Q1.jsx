@@ -1,451 +1,478 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import left1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 1.svg";
-import right1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 2.svg";
-import left2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 3.svg";
-import right2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 4.svg";
-import left3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 5.svg";
-import right3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U4 Folder/Page 24/Ex G 6.svg";
+const WB_Unit4_Page24_Q1 = () => {
+  const correctWords = [
+    "usually",
+    "daily",
+    "regularly",
+    "sometimes",
+    "always",
+    "occasionally",
+    "usually",
+    "often",
+    "rarely",
+    "frequently",
+    "always",
+    "always",
+    "seldom",
+    "sometimes",
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    leftImg: left1,
-    rightImg: right1,
-    prompt:
-      "The trees don’t have any leaves. There are a lot of leaves on the ground. The weather is very cool, and I need to wear a jacket. What season is it?",
-    correct: "autumn",
-  },
-  {
-    id: 2,
-    leftImg: left2,
-    rightImg: right2,
-    prompt:
-      "The sun is shining in the sky most days. The weather is getting warm. The flowers are blooming, and everything is green. Which season is it?",
-    correct: "spring",
-  },
-  {
-    id: 3,
-    leftImg: left3,
-    rightImg: right3,
-    prompt:
-      "The weather is very hot. We cool off by going to the beach. I have to wear T-shirts. What season is it?",
-    correct: "summer",
-  },
-];
+  const storyWords = [
+    "Fred",
+    "usually",
+    "has",
+    "a",
+    "busy",
+    "week.",
+    "He",
+    "brushes",
+    "his",
+    "teeth",
+    "daily.",
+    "He",
+    "goes",
+    "to",
+    "school",
+    "regularly.",
+    "He",
+    "sometimes",
+    "goes",
+    "to",
+    "school",
+    "with",
+    "his",
+    "friend",
+    "Albert.",
+    "He",
+    "always",
+    "walks",
+    "to",
+    "school.",
+    "He",
+    "never",
+    "goes",
+    "to",
+    "school",
+    "by",
+    "car.",
+    "He",
+    "occasionally",
+    "brings",
+    "along",
+    "his",
+    "little",
+    "sister",
+    "who",
+    "is",
+    "in",
+    "kindergarten.",
+    "However,",
+    "she",
+    "usually",
+    "goes",
+    "later",
+    "than",
+    "he",
+    "does.",
+    "He",
+    "often",
+    "brings",
+    "his",
+    "own",
+    "lunch,",
+    "which",
+    "his",
+    "mom",
+    "prepares.",
+    "He",
+    "rarely",
+    "buys",
+    "lunch",
+    "from",
+    "the",
+    "school",
+    "cafeteria.",
+    "After",
+    "school,",
+    "he",
+    "and",
+    "Albert",
+    "frequently",
+    "head",
+    "over",
+    "to",
+    "the",
+    "grocery",
+    "store",
+    "to",
+    "buy",
+    "some",
+    "snacks.",
+    "He",
+    "always",
+    "comes",
+    "home",
+    "before",
+    "four",
+    "o’clock.",
+    "He",
+    "always",
+    "does",
+    "his",
+    "homework",
+    "after",
+    "dinner.",
+    "He",
+    "seldom",
+    "watches",
+    "TV",
+    "on",
+    "weekdays.",
+    "He",
+    "sometimes",
+    "goes",
+    "out",
+    "with",
+    "his",
+    "family",
+    "on",
+    "weekends.",
+  ];
 
-const OPTIONS = ["spring", "summer", "autumn", "winter"];
+  const questionAnswers = [
+    "He never goes to school by car.",
+    "Fred and his friend frequently head to the grocery store to buy snacks.",
+  ];
 
-export default function WB_Unit3_Page24_QG() {
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const [circledWords, setCircledWords] = useState([]);
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
+  const [studentAnswers, setStudentAnswers] = useState(["", ""]);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-    setShowResults(false);
+  const [results, setResults] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const toggleCircle = (word, index) => {
+    if (locked) return;
+
+    const cleanWord = normalize(word);
+
+    if (!correctWords.includes(cleanWord)) return;
+
+    const exists = circledWords.find((item) => item.index === index);
+
+    if (exists) {
+      setCircledWords(circledWords.filter((item) => item.index !== index));
+    } else {
+      setCircledWords([
+        ...circledWords,
+        {
+          word: cleanWord,
+          index,
+        },
+      ]);
+    }
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  const handleInputChange = (i, value) => {
+    if (locked || results[i] === true) return;
 
-    const allAnswered = ITEMS.every((item) => answers[item.id]);
+    const updated = [...studentAnswers];
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResults((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
+  };
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    if (circledWords.length === 0) {
+      ValidationAlert.info("Please circle at least one adverb.");
+
       return;
     }
 
-    let score = 0;
+    // فقط نتأكد إنهم مش فاضيين
+    if (studentAnswers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please answer all questions.");
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) {
-        score++;
-      }
-    });
+      return;
+    }
 
-    setShowResults(true);
+    let correctCount = 0;
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    // circles
+    const correctCircledCount = circledWords.filter((item) =>
+      correctWords.includes(item.word),
+    ).length;
+
+    correctCount += correctCircledCount;
+
+    // ما في تصحيح للأسئلة الأخيرة
+    setResults([true, true]);
+
+    const total = correctWords.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((item) => {
-      filled[item.id] = item.correct;
+  const showAnswers = () => {
+    const autoCircled = [];
+
+    storyWords.forEach((word, index) => {
+      if (correctWords.includes(normalize(word))) {
+        autoCircled.push({
+          word: normalize(word),
+          index,
+        });
+      }
     });
 
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
+    setCircledWords(autoCircled);
+
+    setStudentAnswers(questionAnswers);
+
+    setResults([true, true]);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+    setCircledWords([]);
+
+    setStudentAnswers(["", ""]);
+
+    setResults([]);
+
+    setLocked(false);
   };
-
-  const isWrong = (item) => {
-    if (!showResults) return false;
-    return answers[item.id] !== item.correct;
-  };
-
-  const bubbleBase = {
-    position: "relative",
-    background: "#fff",
-    border: "2px solid #444",
-    borderRadius: "12px",
-    boxSizing: "border-box",
-  };
-
-  const leftBubbleTail = (
-    <>
-      <span
-        style={{
-          position: "absolute",
-          left: "-34px",
-          bottom: "18px",
-          width: "38px",
-          height: "2px",
-          background: "#444",
-          transform: "rotate(-18deg)",
-          transformOrigin: "right center",
-        }}
-      />
-      <span
-        style={{
-          position: "absolute",
-          left: "-28px",
-          bottom: "24px",
-          width: "30px",
-          height: "2px",
-          background: "#444",
-          transform: "rotate(-6deg)",
-          transformOrigin: "right center",
-        }}
-      />
-    </>
-  );
-
-  const rightBubbleTail = (
-    <>
-      <span
-        style={{
-          position: "absolute",
-          right: "-34px",
-          top: "18px",
-          width: "38px",
-          height: "2px",
-          background: "#444",
-          transform: "rotate(20deg)",
-          transformOrigin: "left center",
-        }}
-      />
-      <span
-        style={{
-          position: "absolute",
-          right: "-28px",
-          top: "24px",
-          width: "30px",
-          height: "2px",
-          background: "#444",
-          transform: "rotate(6deg)",
-          transformOrigin: "left center",
-        }}
-      />
-    </>
-  );
 
   return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-g24-wrapper {
-          display: flex !important;
-          flex-direction: column !important;
-          gap: 28px !important;
-          max-width: 980px !important;
-          margin: 0 auto !important;
-          padding: 8px 14px 20px !important;
-          box-sizing: border-box !important;
-        }
-
-        .wb-g24-title {
-          margin: 0 !important;
-        }
-
-        .wb-g24-list {
-          display: flex !important;
-          flex-direction: column !important;
-          gap: 34px !important;
-          width: 100% !important;
-        }
-
-        .wb-g24-row {
-          display: grid !important;
-          grid-template-columns: 28px 92px 1fr 92px !important;
-          gap: 16px !important;
-          align-items: center !important;
-          width: 100% !important;
-        }
-
-        .wb-g24-num {
-          font-size: 22px !important;
-          font-weight: 700 !important;
-          color: #222 !important;
-          align-self: start !important;
-          padding-top: 34px !important;
-        }
-
-        .wb-g24-side-img {
-          width: 84px !important;
-          height: 110px !important;
-          object-fit: contain !important;
-          display: block !important;
-        }
-
-        .wb-g24-middle {
-          display: flex !important;
-          flex-direction: column !important;
-          gap: 14px !important;
-          width: 100% !important;
-        }
-
-        .wb-g24-prompt {
-          max-width: 390px !important;
-          min-height: 94px !important;
-          padding: 12px 14px !important;
-          font-size: 18px !important;
-          line-height: 1.25 !important;
-          color: #222 !important;
-        }
-
-        .wb-g24-answer-wrap {
-          display: flex !important;
-          justify-content: flex-end !important;
-        }
-
-        .wb-g24-answer-bubble {
-          min-width: 180px !important;
-          height: 56px !important;
-          padding: 8px 14px !important;
-          display: flex !important;
-          align-items: center !important;
-          gap: 8px !important;
-        }
-
-        .wb-g24-answer-text {
-          font-size: 18px !important;
-          color: #222 !important;
-          white-space: nowrap !important;
-        }
-
-        .wb-g24-select {
-          border: none !important;
-          outline: none !important;
-          background: transparent !important;
-          font-size: 18px !important;
-          color: #000000ff !important;
-          border-bottom: 2px dotted #444 !important;
-          padding: 0 20px 2px 2px !important;
-          appearance: none !important;
-          -webkit-appearance: none !important;
-          -moz-appearance: none !important;
-          min-width: 92px !important;
-          cursor: pointer !important;
-          text-transform: lowercase !important;
-        }
-
-        .wb-g24-select:disabled {
-          cursor: default !important;
-          opacity: 1 !important;
-        }
-
-        .wb-g24-select-wrap {
-          position: relative !important;
-          display: inline-flex !important;
-          align-items: center !important;
-        }
-
-        .wb-g24-arrow {
-          position: absolute !important;
-          right: 4px !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          font-size: 12px !important;
-          color: #666 !important;
-          pointer-events: none !important;
-        }
-
-        .wb-g24-wrong {
-          position: absolute !important;
-          top: -10px !important;
-          right: -10px !important;
-          width: 22px !important;
-          height: 22px !important;
-          border-radius: 50% !important;
-          background-color: #ef4444 !important;
-          color: #fff !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 12px !important;
-          font-weight: 700 !important;
-          border: 2px solid #fff !important;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.18) !important;
-        }
-
-        .wb-g24-buttons {
-          display: flex !important;
-          justify-content: center !important;
-          margin-top: 8px !important;
-        }
-
-        @media (max-width: 900px) {
-          .wb-g24-row {
-            grid-template-columns: 1fr !important;
-          }
-
-          .wb-g24-num {
-            padding-top: 0 !important;
-          }
-
-          .wb-g24-middle {
-            order: 2 !important;
-          }
-
-          .wb-g24-side-left {
-            order: 1 !important;
-          }
-
-          .wb-g24-side-right {
-            order: 3 !important;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall"
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-             <h1
-          className="WB-header-title-page8"
+              marginRight: "10px",
+            }}
+          >
+            H
+          </span>
+          Read and write.
+        </h5>
+
+        {/* STORY */}
+        <div
+          className="mb-10 leading-loose"
           style={{
-            margin: 0,
+            maxWidth: "1000px",
           }}
         >
-          <span className="WB-ex-A">G</span>
-          Read and complete the conversations.
-        </h1>
+          {storyWords.map((word, index) => {
+            const cleanWord = normalize(word);
 
-        <div className="wb-g24-list">
-          {ITEMS.map((item) => {
-            const value = answers[item.id] || "";
+            const isCorrect = correctWords.includes(cleanWord);
+
+            const isCircled = circledWords.some((item) => item.index === index);
 
             return (
-              <div key={item.id} className="wb-g24-row">
-                <div className="wb-g24-num">{item.id}</div>
-
-                <div className="wb-g24-side-left">
-                  <img
-                    src={item.leftImg}
-                    alt={`left-${item.id}`}
-                    className="wb-g24-side-img"
-                  />
-                </div>
-
-                <div className="wb-g24-middle">
-                  <div
-                    style={bubbleBase}
-                    className="wb-g24-prompt"
-                  >
-                    {item.prompt}
-                    {leftBubbleTail}
-                  </div>
-
-                  <div className="wb-g24-answer-wrap">
-                    <div
-                      style={bubbleBase}
-                      className="wb-g24-answer-bubble"
-                    >
-                      <span className="wb-g24-answer-text">It’s</span>
-
-                      <div className="wb-g24-select-wrap">
-                        <select
-                          value={value}
-                          disabled={showAns}
-                          onChange={(e) => handleSelect(item.id, e.target.value)}
-                          className="wb-g24-select"
-                        >
-                          <option value="" disabled>
-                            select
-                          </option>
-                          {OPTIONS.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-
-                        {!showAns && <span className="wb-g24-arrow">▼</span>}
-                      </div>
-
-                      <span
-                        style={{
-                          fontSize: "18px",
-                          color: "#000000ff",
-                          lineHeight: 1,
-                        }}
-                      >
-                        .
-                      </span>
-
-                      {rightBubbleTail}
-
-                      {isWrong(item) && <div className="wb-g24-wrong">✕</div>}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="wb-g24-side-right">
-                  <img
-                    src={item.rightImg}
-                    alt={`right-${item.id}`}
-                    className="wb-g24-side-img"
-                  />
-                </div>
-              </div>
+              <span
+                key={index}
+                onClick={() => toggleCircle(word, index)}
+                style={{
+                  marginRight: "6px",
+                  cursor: isCorrect ? "pointer" : "default",
+                  border: isCircled
+                    ? "2px solid #6D2980"
+                    : "2px solid transparent",
+                  borderRadius: "999px",
+                  padding: "1px 6px",
+                  display: "inline-block",
+                  transition: "0.2s",
+                }}
+              >
+                {word}
+              </span>
             );
           })}
         </div>
 
-        <div className="wb-g24-buttons">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
+        {/* QUESTION 1 */}
+        <div className="mb-10">
+          <div className="flex items-start gap-3 mb-5">
+            <span className="font-bold">1</span>
+
+            <span>Circle all the adverbs of frequency in the story.</span>
+          </div>
         </div>
+
+        {/* QUESTION 2 */}
+        <div className="mb-10">
+          <div className="flex items-start gap-3 flex-wrap">
+            <span className="font-bold">2</span>
+
+            <span>How often does Fred go to school by car?</span>
+
+            <div className="relative inline-block">
+              <input
+                type="text"
+                value={studentAnswers[0]}
+                disabled={locked || results[0] === true}
+                onChange={(e) => handleInputChange(0, e.target.value)}
+                className={`
+                  w-[420px]
+                  border-0
+                  border-b
+                  outline-none
+                  bg-transparent
+                  text-[18px]
+                  text-[#6D2980]
+                  font-semibold
+                  px-1
+
+                  ${results[0] === false ? "border-[#D1232A]" : "border-black"}
+                `}
+              />
+
+              {results[0] === false && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-8px",
+                    width: "20px",
+                    height: "20px",
+                    background: "#ef4444",
+                    color: "white",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "11px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                  }}
+                >
+                  ✕
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* QUESTION 3 */}
+        <div className="mb-10">
+          <div className="flex items-start gap-3 flex-wrap">
+            <span className="font-bold">3</span>
+
+            <span>
+              How often do Fred and his friend go to the grocery store?
+            </span>
+
+            <div className="relative inline-block">
+              <input
+                type="text"
+                value={studentAnswers[1]}
+                disabled={locked || results[1] === true}
+                onChange={(e) => handleInputChange(1, e.target.value)}
+                className={`
+                  w-[520px]
+                  border-0
+                  border-b
+                  outline-none
+                  bg-transparent
+                  text-[18px]
+                  text-[#6D2980]
+                  font-semibold
+                  px-1
+
+                  ${results[1] === false ? "border-[#D1232A]" : "border-black"}
+                `}
+              />
+
+              {results[1] === false && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-8px",
+                    width: "20px",
+                    height: "20px",
+                    background: "#ef4444",
+                    color: "white",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "11px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                  }}
+                >
+                  ✕
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit4_Page24_Q1;

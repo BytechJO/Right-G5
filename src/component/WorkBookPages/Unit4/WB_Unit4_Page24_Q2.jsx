@@ -2,62 +2,31 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit4_Page22_Q1 = () => {
+// IMAGES
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U4/Page 24/Asset 2.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U4/Page 24/Asset 3.svg";
+
+const WB_Unit4_Page24_Q2 = () => {
   const answers = [
     "always",
-    "usually",
-    "never",
-    "occasionally",
-    "often",
-    "sometimes",
+    "often read a book together",
   ];
 
-  const wordBank = [
-    "occasionally",
-    "never",
-    "always",
-    "sometimes",
-    "often",
-    "usually",
-  ];
-
-  const sentences = [
+  const questions = [
     {
-      before: "We (100%)",
-      after: "go to the grocery store.",
+      image: img1,
+      before: "He",
+      after: "rides his bike.",
     },
 
     {
-      before: "My friend (80%)",
-      after: "comes over to my house.",
-    },
-
-    {
-      before: "We (0%)",
-      after: "cross the street when the traffic light is green.",
-    },
-
-    {
-      before: "They (40%)",
-      after: "go for a walk in the park.",
-    },
-
-    {
-      before: "Sarah and Tina (60%)",
-      after: "do their homework together.",
-    },
-
-    {
-      before: "We (30%)",
-      after: "travel during the winter.",
+      image: img2,
+      before: "They",
+      after: "",
     },
   ];
 
   const [studentAnswers, setStudentAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
     "",
     "",
   ]);
@@ -94,30 +63,42 @@ const WB_Unit4_Page22_Q1 = () => {
   const checkAnswers = () => {
     if (locked) return;
 
-    const hasEmpty = studentAnswers.some((a) => !a.trim());
+    const hasEmpty = studentAnswers.some(
+      (a) => !a.trim(),
+    );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      ValidationAlert.info(
+        "Please complete all answers.",
+      );
 
       return;
     }
 
     let correctCount = 0;
 
-    const newResults = studentAnswers.map((answer, i) => {
-      const ok = normalize(answer) === normalize(answers[i]);
+    const newResults = studentAnswers.map(
+      (answer, i) => {
+        const ok =
+          normalize(answer) ===
+          normalize(answers[i]);
 
-      if (ok) correctCount++;
+        if (ok) correctCount++;
 
-      return ok;
-    });
+        return ok;
+      },
+    );
 
     setResult(newResults);
 
     const total = answers.length;
 
     const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+      correctCount === total
+        ? "green"
+        : correctCount === 0
+          ? "red"
+          : "orange";
 
     const msg = `
       <div style="font-size:18px;text-align:center;">
@@ -141,26 +122,33 @@ const WB_Unit4_Page22_Q1 = () => {
   const showAnswers = () => {
     setStudentAnswers(answers);
 
-    setResult([true, true, true, true, true, true]);
+    setResult([true, true]);
 
     setLocked(true);
   };
 
   const handleReset = () => {
-    setStudentAnswers(["", "", "", "", "", ""]);
+    setStudentAnswers(["", ""]);
 
     setResult([]);
 
     setLocked(false);
   };
 
-  const inputField = (i, width = "190px") => (
+  const inputField = (
+    i,
+    width = "320px",
+  ) => (
     <div className="relative inline-block">
       <input
         type="text"
         value={studentAnswers[i]}
-        disabled={locked || result[i] === true}
-        onChange={(e) => handleChange(i, e.target.value)}
+        disabled={
+          locked || result[i] === true
+        }
+        onChange={(e) =>
+          handleChange(i, e.target.value)
+        }
         className={`
           border-0
           border-b
@@ -171,7 +159,11 @@ const WB_Unit4_Page22_Q1 = () => {
           font-semibold
           px-1
 
-          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+          ${
+            result[i] === false
+              ? "border-[#D1232A]"
+              : "border-black"
+          }
         `}
         style={{
           width,
@@ -195,7 +187,8 @@ const WB_Unit4_Page22_Q1 = () => {
             fontSize: "11px",
             fontWeight: "bold",
             border: "2px solid white",
-            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+            boxShadow:
+              "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
           ✕
@@ -208,39 +201,54 @@ const WB_Unit4_Page22_Q1 = () => {
     <div className="flex flex-col items-center p-[30px]">
       <div className="div-forall text-[18px]">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-[7vh]">
+        <h5 className="header-title-page8 mb-[14vh]">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            C
+            I
           </span>
-          Read and write the correct{" "}
-          <span className="text-[#00AEEF]">adverb of frequency.</span>
+
+          Look and write. Use an{" "}
+          <span className="text-[#00AEEF]">
+            adverb of frequency.
+          </span>
         </h5>
 
-        {/* WORD BANK */}
-        <div className="flex flex-wrap justify-center gap-8 border-2 border-[#7D3C98] rounded-xl px-6 py-3 w-fit mb-10">
-          {wordBank.map((word, index) => (
-            <span key={index} className="text-[18px]">
-              {word}
-            </span>
-          ))}
-        </div>
-
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-8">
-          {sentences.map((sentence, index) => (
-            <div key={index} className="flex items-center gap-3 flex-wrap">
-              <span className="font-bold w-5">{index + 1}</span>
+        <div className="flex flex-col gap-14">
+          {questions.map((q, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-12"
+            >
+              {/* IMAGE */}
+              <div className="relative">
+                <img
+                  src={q.image}
+                  alt=""
+                  style={{
+                    width: "180px",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
 
-              <span>{sentence.before}</span>
+              {/* QUESTION */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="font-bold">
+                  {index + 1}
+                </span>
 
-              {inputField(index)}
+                <span>{q.before}</span>
 
-              <span>{sentence.after}</span>
+                {inputField(index)}
+
+                <span>{q.after}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -248,15 +256,24 @@ const WB_Unit4_Page22_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>
@@ -264,4 +281,4 @@ const WB_Unit4_Page22_Q1 = () => {
   );
 };
 
-export default WB_Unit4_Page22_Q1;
+export default WB_Unit4_Page24_Q2;
