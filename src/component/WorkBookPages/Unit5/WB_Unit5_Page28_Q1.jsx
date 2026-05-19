@@ -1,580 +1,539 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-// غيّري المسارات حسب ملفاتك
-import topImg1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C1.svg";
-import topImg2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C2.svg";
-import topImg3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C3.svg";
-import topImg4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C4.svg";
-import topImg5 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C5.svg";
+// IMAGES
+import grillImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 28/Asset 12.svg";
+import foodImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 28/Asset 13.svg";
 
-import iconBoy1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C6.svg";
-import iconBoy2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C7.svg";
-import iconGirl1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C8.svg";
-import iconGirl2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C9.svg";
-import iconSofa from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C10.svg";
-import iconFridge from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/C11.svg";
+const WB_Unit5_Page28_Q1 = () => {
+  const vocabAnswers = [
+    "sharks",
+    "Mediterranean food",
+    "shish kebabs",
+    "barbecue",
+    "both",
+    "entire",
+    "recipe",
+    "information",
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    question: "Is he in the bedroom?",
-    icon: iconBoy1,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: ["Yes, he is.", "No, he isn’t."],
-        correct: "No, he isn’t.",
-      },
-      {
-        key: "line2",
-        type: "select",
-        options: [
-          "He’s in the bathroom.",
-          "He’s in the kitchen.",
-          "He’s in the bedroom.",
-          "He’s in the living room.",
-        ],
-        correct: "He’s in the bathroom.",
-      },
-    ],
-  },
-  {
-    id: 2,
-    question: "Is he in the living room?",
-    icon: iconBoy2,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: ["Yes, he is.", "No, he isn’t."],
-        correct: "Yes, he is.",
-      },
-      {
-        key: "line2",
-        type: "empty",
-      },
-    ],
-  },
-  {
-    id: 3,
-    question: "Is she in the bedroom?",
-    icon: iconGirl1,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: ["Yes, she is.", "No, she isn’t."],
-        correct: "Yes, she is.",
-      },
-      {
-        key: "line2",
-        type: "empty",
-      },
-    ],
-  },
-  {
-    id: 4,
-    question: "Is she in the dining room?",
-    icon: iconGirl2,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: ["Yes, she is.", "No, she isn’t."],
-        correct: "No, she isn’t.",
-      },
-      {
-        key: "line2",
-        type: "select",
-        options: [
-          "She’s in the kitchen.",
-          "She’s in the bedroom.",
-          "She’s in the bathroom.",
-          "She’s in the living room.",
-        ],
-        correct: "She’s in the kitchen.",
-      },
-    ],
-  },
-  {
-    id: 5,
-    question: "Where’s the sofa?",
-    icon: iconSofa,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: [
-          "It’s in the living room.",
-          "It’s in the kitchen.",
-          "It’s in the bathroom.",
-          "It’s in the bedroom.",
-        ],
-        correct: "It’s in the living room.",
-      },
-      {
-        key: "line2",
-        type: "empty",
-      },
-    ],
-  },
-  {
-    id: 6,
-    question: "Where’s the fridge?",
-    icon: iconFridge,
-    lines: [
-      {
-        key: "line1",
-        type: "select",
-        options: [
-          "It’s in the kitchen.",
-          "It’s in the bathroom.",
-          "It’s in the living room.",
-          "It’s in the bedroom.",
-        ],
-        correct: "It’s in the kitchen.",
-      },
-      {
-        key: "line2",
-        type: "empty",
-      },
-    ],
-  },
-];
+  const questionAnswer =
+    "Can I please have a second plate of the shish kebab dish?";
 
-const TOP_IMAGES = [topImg1, topImg2, topImg3, topImg4, topImg5];
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+  const storyWords = [
+    "In",
+    "the",
+    "summer,",
+    "my",
+    "family",
+    "and",
+    "I",
+    "went",
+    "to",
+    "the",
+    "Middle",
+    "East.",
+    "We",
+    "started",
+    "off",
+    "our",
+    "vacation",
+    "on",
+    "the",
+    "beach,",
+    "and",
+    "we",
+    "sat",
+    "next",
+    "to",
+    "the",
+    "sea.",
+    "There",
+    "were",
+    "some",
+    "fish",
+    "in",
+    "the",
+    "water.",
+    "Luckily,",
+    "there",
+    "weren’t",
+    "any",
+    "sharks!",
+    "We",
+    "ate",
+    "Mediterranean",
+    "food.",
+    "The",
+    "shish",
+    "kebabs",
+    "were",
+    "part",
+    "of",
+    "a",
+    "big",
+    "barbecue.",
+    "My",
+    "sister",
+    "and",
+    "I",
+    "both",
+    "shared",
+    "a",
+    "plate",
+    "of",
+    "shish",
+    "kebabs.",
+    "We",
+    "ate",
+    "the",
+    "entire",
+    "dish.",
+    "It",
+    "was",
+    "so",
+    "delicious",
+    "that",
+    "my",
+    "mom",
+    "asked",
+    "for",
+    "the",
+    "recipe.",
+    "We",
+    "didn’t",
+    "know",
+    "the",
+    "language,",
+    "but",
+    "we",
+    "didn’t",
+    "need",
+    "to",
+    "ask",
+    "around",
+    "for",
+    "help",
+    "because",
+    "everything",
+    "was",
+    "written",
+    "in",
+    "an",
+    "information",
+    "booklet",
+    "in",
+    "English.",
+    "We",
+    "had",
+    "lots",
+    "of",
+    "fun",
+    "there.",
+  ];
 
-export default function WB_Unit5_Page28_QC() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const clickablePhrases = [
+    "sharks!",
+    "Mediterranean food.",
+    "shish kebabs",
+    "barbecue.",
+    "both",
+    "entire",
+    "recipe.",
+    "information",
+  ];
+  const [selectedWords, setSelectedWords] = useState([]);
 
-  const handleChange = (itemId, lineKey, value) => {
-    if (showAns) return;
+  const toggleUnderline = (phrase) => {
+    if (locked) return;
 
-    setAnswers((prev) => ({
-      ...prev,
-      [itemId]: {
-        ...prev[itemId],
-        [lineKey]: value,
-      },
-    }));
-
-    setChecked(false);
+    if (selectedWords.includes(phrase)) {
+      setSelectedWords((prev) => prev.filter((p) => p !== phrase));
+    } else {
+      setSelectedWords((prev) => [...prev, phrase]);
+    }
   };
+  const [questionInput, setQuestionInput] = useState("");
 
-  const getValue = (itemId, lineKey) => answers[itemId]?.[lineKey] || "";
+  const [result, setResult] = useState([]);
 
-  const isLineWrong = (item, line) => {
-    if (!checked || showAns || line.type !== "select") return false;
-    return getValue(item.id, line.key) !== line.correct;
-  };
+  const [questionResult, setQuestionResult] = useState(undefined);
 
-  const isItemWrong = (item) => {
-    if (!checked || showAns) return false;
+  const [locked, setLocked] = useState(false);
 
-    return item.lines.some((line) => {
-      if (line.type !== "select") return false;
-      return getValue(item.id, line.key) !== line.correct;
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
+  };
+
+  const handleQuestionChange = (value) => {
+    if (locked || questionResult === true) return;
+
+    setQuestionInput(value);
+
+    setQuestionResult(undefined);
   };
 
   const checkAnswers = () => {
-    if (showAns) return;
+    if (locked) return;
 
-    const requiredLines = ITEMS.flatMap((item) =>
-      item.lines.filter((line) => line.type === "select").map((line) => ({
-        itemId: item.id,
-        lineKey: line.key,
-      }))
+    // لازم يعمل underline لكل الكلمات
+    const missingUnderlines = clickablePhrases.filter(
+      (phrase) => !selectedWords.includes(phrase),
     );
 
-    const allAnswered = requiredLines.every(
-      ({ itemId, lineKey }) => getValue(itemId, lineKey).trim() !== ""
-    );
+    if (missingUnderlines.length > 0) {
+      ValidationAlert.info("Please underline all vocabulary words first.");
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
       return;
     }
 
-    let score = 0;
+    // لازم يعبي كل الانبوتات
+    const hasEmptyInputs = studentAnswers.some((a) => !a.trim());
 
-    ITEMS.forEach((item) => {
-      const allCorrect = item.lines.every((line) => {
-        if (line.type !== "select") return true;
-        return getValue(item.id, line.key) === line.correct;
-      });
+    if (hasEmptyInputs || !questionInput.trim()) {
+      ValidationAlert.info("Please complete all answers.");
 
-      if (allCorrect) score += 1;
+      return;
+    }
+
+    let correctCount = 0;
+
+    // --------------------------------
+    // CHECK INPUTS
+    // --------------------------------
+
+    const normalizedAnswers = vocabAnswers.map((a) => normalize(a));
+
+    const usedAnswers = [];
+
+    const newResults = studentAnswers.map((answer) => {
+      const normalized = normalize(answer);
+
+      const foundIndex = normalizedAnswers.findIndex(
+        (a, i) => a === normalized && !usedAnswers.includes(i),
+      );
+
+      const ok = foundIndex !== -1;
+
+      if (ok) {
+        usedAnswers.push(foundIndex);
+
+        correctCount++;
+      }
+
+      return ok;
     });
 
-    setChecked(true);
+    // --------------------------------
+    // CHECK QUESTION
+    // --------------------------------
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const questionOk = normalize(questionInput) === normalize(questionAnswer);
+
+    if (questionOk) {
+      correctCount++;
+    }
+
+    setResult(newResults);
+
+    setQuestionResult(questionOk);
+
+    // --------------------------------
+    // SCORE
+    // --------------------------------
+
+    const total = 9;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
+  const showAnswers = () => {
+    setStudentAnswers(vocabAnswers);
 
-    ITEMS.forEach((item) => {
-      filled[item.id] = {};
-      item.lines.forEach((line) => {
-        if (line.type === "select") {
-          filled[item.id][line.key] = line.correct;
-        }
-      });
-    });
+    setQuestionInput(questionAnswer);
 
-    setAnswers(filled);
-    setChecked(true);
-    setShowAns(true);
+    setSelectedWords(clickablePhrases);
+
+    setResult([true, true, true, true, true, true, true, true]);
+
+    setQuestionResult(true);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", "", "", "", "", "", ""]);
+
+    setQuestionInput("");
+
+    setSelectedWords([]);
+
+    setResult([]);
+
+    setQuestionResult(undefined);
+
+    setLocked(false);
   };
+  const inputField = (value, onChange, isWrong, width = "240px") => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={value}
+        disabled={locked || isWrong === true}
+        onChange={onChange}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  const renderLine = (item, line) => {
-    if (line.type === "empty") {
-      return <div className="wb-c-line wb-c-line--empty" />;
-    }
+          ${isWrong === false ? "border-[#D1232A]" : "border-black"}
+        `}
+        style={{
+          width,
+        }}
+      />
 
-    return (
-      <div className="wb-c-line-wrap">
-        <div className="wb-c-line">
-          <div className="wb-c-select-wrap">
-            <select
-              value={getValue(item.id, line.key)}
-              disabled={showAns}
-              onChange={(e) => handleChange(item.id, line.key, e.target.value)}
-              className={`wb-c-select ${
-                getValue(item.id, line.key) ? "wb-c-select--filled" : ""
-              }`}
-            >
-              <option value="" disabled hidden>
-                Select
-              </option>
-              {line.options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+      {isWrong === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
-            {!showAns && <span className="wb-c-arrow">▼</span>}
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-6">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            C
+          </span>
+          Read and write.
+        </h5>
+
+        {/* READING BOX */}
+        <div className="border-2 border-[#7D3C98] rounded-xl p-5 mb-8">
+          <div className="flex gap-5 items-start">
+            <div className="leading-normal flex-1">
+              <div className="leading-normal flex-1">
+                {(() => {
+                  let skipCount = 0;
+
+                  return storyWords.map((word, index) => {
+                    if (skipCount > 0) {
+                      skipCount--;
+
+                      return null;
+                    }
+
+                    const matchedPhrase = clickablePhrases.find((phrase) => {
+                      const phraseWords = phrase.split(" ");
+
+                      return phraseWords.every(
+                        (w, i) => storyWords[index + i] === w,
+                      );
+                    });
+
+                    if (matchedPhrase) {
+                      const phraseWords = matchedPhrase.split(" ");
+
+                      skipCount = phraseWords.length - 1;
+
+                      const selected = selectedWords.includes(matchedPhrase);
+
+                      return (
+                        <React.Fragment key={index}>
+                          <button
+                            type="button"
+                            disabled={locked}
+                            onClick={() => toggleUnderline(matchedPhrase)}
+                            style={{
+                              background: "transparent",
+                              border: "none",
+                              cursor: locked ? "default" : "pointer",
+                              borderBottom: selected
+                                ? "3px solid #6D2980"
+                                : "3px solid transparent",
+                              padding: "0 2px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            {matchedPhrase}
+                          </button>{" "}
+                        </React.Fragment>
+                      );
+                    }
+
+                    return (
+                      <React.Fragment key={index}>
+                        <span>{word}</span>{" "}
+                      </React.Fragment>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+
+            <img
+              src={grillImg}
+              alt=""
+              style={{
+                width: "250px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
           </div>
         </div>
 
-        {isLineWrong(item, line) && <div className="wb-c-wrong">✕</div>}
+        {/* Q1 */}
+        <div className="mb-10">
+          <div className="mb-5">
+            <span className="font-bold mr-2">1</span>
+            Underline all the vocabulary words and write them down below.
+          </div>
+
+          <div className="grid grid-cols-2 gap-y-5 gap-x-14">
+            {studentAnswers.map((answer, index) => (
+              <div key={index}>
+                {inputField(
+                  answer,
+                  (e) => handleChange(index, e.target.value),
+                  result[index],
+                  "260px",
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Q2 */}
+        <div>
+          <div className="flex items-start justify-between gap-8 mb-10">
+            <div className="flex-1">
+              <div className="mb-5">
+                <span className="font-bold mr-2">2</span>
+                How would you politely ask the server for a second plate of
+                shish kebabs?
+              </div>
+
+              {inputField(
+                questionInput,
+                (e) => handleQuestionChange(e.target.value),
+                questionResult,
+                "600px",
+              )}
+            </div>
+
+            <img
+              src={foodImg}
+              alt=""
+              style={{
+                width: "170px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+        </div>
       </div>
-    );
-  };
 
-  return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-c-wrapper {
-          width: 100%;
-          max-width: 1100px;
-          margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-          box-sizing: border-box;
-        }
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-        .wb-c-top-images {
-          display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
-          gap: clamp(6px, 1vw, 12px);
-          width: 100%;
-          
-          max-width: 820px;
-          margin: 0 auto;
-        }
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-        .wb-c-top-card {
-          background: #f2f2f2;
-          border: 2px solid #f39b42;
-          border-radius: 12px;
-          overflow: hidden;
-          aspect-ratio: 1.12 / 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .wb-c-top-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
-
-        .wb-c-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: clamp(22px, 4vw, 40px) clamp(30px, 5vw, 70px);
-          width: 100%;
-          align-items: start;
-        }
-
-        .wb-c-item {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          min-width: 0;
-        }
-
-        .wb-c-question-row {
-          display: flex;
-          align-items: center;
-          gap: clamp(8px, 1vw, 14px);
-          min-width: 0;
-          flex-wrap: wrap;
-        }
-
-        .wb-c-num {
-          font-size: clamp(18px, 2vw, 28px);
-          font-weight: 700;
-          color: #222;
-          line-height: 1;
-          flex-shrink: 0;
-        }
-
-        .wb-c-icon {
-          width: clamp(34px, 4vw, 50px);
-          height: clamp(34px, 4vw, 50px);
-          object-fit: contain;
-          flex-shrink: 0;
-        }
-
-        .wb-c-question {
-          font-size: clamp(20px, 2.1vw, 27px);
-          line-height: 1.35;
-          color: #111;
-          font-weight: 500;
-          min-width: 0;
-        }
-
-        .wb-c-answer-block {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          padding-left: clamp(42px, 5vw, 58px);
-        }
-
-        .wb-c-line-wrap {
-          position: relative;
-          width: 100%;
-        }
-
-        .wb-c-line {
-          width: 100%;
-          min-height: clamp(42px, 5vw, 54px);
-          border-bottom: 2.5px solid #3a3a3a;
-          display: flex;
-          align-items: center;
-          padding-bottom: 4px;
-          box-sizing: border-box;
-        }
-
-        .wb-c-line--empty {
-          width: 100%;
-          min-height: clamp(42px, 5vw, 54px);
-          border-bottom: 2.5px solid #3a3a3a;
-        }
-
-        .wb-c-select-wrap {
-          position: relative;
-          width: 100%;
-          max-width: 100%;
-        }
-
-        .wb-c-select {
-          width: 100%;
-          height: clamp(36px, 4vw, 44px);
-          border: none;
-          background: transparent;
-          padding: 0 30px 0 0;
-          font-size: clamp(17px, 2vw, 25px);
-          line-height: 1.2;
-          color: #000000ff;
-          font-weight: 500;
-          outline: none;
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          box-sizing: border-box;
-          text-align: center;
-          text-align-last: center;
-          cursor: ${showAns ? "default" : "pointer"};
-        }
-
-        .wb-c-select option {
-          color: #222;
-          background: #fff;
-        }
-
-        .wb-c-arrow {
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 11px;
-          color: #666;
-          pointer-events: none;
-        }
-
-        .wb-c-wrong {
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          width: 22px;
-          height: 22px;
-          border-radius: 999px;
-          background: #ef4444;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          border: 2px solid #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-          box-sizing: border-box;
-        }
-
-        .wb-c-buttons {
-          display: flex;
-          justify-content: center;
-          margin-top: 6px;
-        }
-
-        @media (max-width: 980px) {
-          .wb-c-top-images {
-            max-width: 680px;
-          }
-
-          .wb-c-grid {
-            gap: 24px 28px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .wb-c-top-images {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            max-width: 520px;
-          }
-
-          .wb-c-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .wb-c-answer-block {
-            padding-left: 0;
-          }
-        }
-
-        @media (max-width: 560px) {
-          .wb-c-top-images {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            max-width: 340px;
-          }
-
-          .wb-c-question-row {
-            align-items: flex-start;
-          }
-
-          .wb-c-question {
-            font-size: 18px;
-          }
-
-          .wb-c-select {
-            font-size: 18px;
-          }
-
-          .wb-c-wrong {
-            width: 20px;
-            height: 20px;
-            font-size: 11px;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall "
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin: 0,
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span className="WB-ex-A">C</span>
-          Look, read, and write.
-        </h1>
-
-        <div className="wb-c-top-images">
-          {TOP_IMAGES.map((img, index) => (
-            <div key={index} className="wb-c-top-card">
-              <img src={img} alt={`room-${index + 1}`} className="wb-c-top-img" />
-            </div>
-          ))}
-        </div>
-
-        <div className="wb-c-grid">
-          {ITEMS.map((item) => (
-            <div key={item.id} className="wb-c-item">
-              <div className="wb-c-question-row">
-                <div className="wb-c-num">{item.id}</div>
-                <img src={item.icon} alt={`icon-${item.id}`} className="wb-c-icon" />
-                <div className="wb-c-question">{item.question}</div>
-              </div>
-
-              <div className="wb-c-answer-block">
-                {item.lines.map((line) => (
-                  <React.Fragment key={line.key}>
-                    {renderLine(item, line)}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="wb-c-buttons">
-          <Button
-            checkAnswers={checkAnswers}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit5_Page28_Q1;

@@ -29,7 +29,7 @@ const Page9_Q3 = () => {
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         maxLength={1}
-        className={`w-[40px] border-b outline-none text-center font-bold uppercase
+        className={`w-10 border-b outline-none text-center font-bold uppercase
         ${result[i] === false ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
       `}
       />

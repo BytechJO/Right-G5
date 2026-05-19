@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 17/Asset 1.svg";
+import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 16/SVG/Asset 1.svg";
 const WB_Unit3_Page16_Q1 = () => {
   const answers = [
     {
@@ -314,7 +314,7 @@ const WB_Unit3_Page16_Q1 = () => {
             C
           </span>
           Read the chart, then write sentences about each of the people. Use
-          linking verbs.
+         <span className="text-[#00AEEF]"> linking verbs</span>.
         </h5>
 
         {/* TABLE IMAGE */}
@@ -324,7 +324,7 @@ const WB_Unit3_Page16_Q1 = () => {
             alt=""
             style={{
               width: "auto",
-              height: "400px",
+              height: "300px",
               objectFit: "contain",
             }}
           />

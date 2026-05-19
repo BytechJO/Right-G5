@@ -184,7 +184,7 @@ const Review7_Page1_Q2 = () => {
             />
 
             <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
-              <div className="leading-[2]">He is keeping busy.</div>
+              <div className="leading-loose">He is keeping busy.</div>
 
               <div>{inputField(0, "w-[150px]")}</div>
             </div>
@@ -204,7 +204,7 @@ const Review7_Page1_Q2 = () => {
             />
 
             <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
-              <div className="leading-[2]">
+              <div className="leading-loose">
                 They are jotting down some information.
               </div>
 
@@ -226,7 +226,7 @@ const Review7_Page1_Q2 = () => {
             />
 
             <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
-              <div className="leading-[2]">He is limping stiffly.</div>
+              <div className="leading-loose">He is limping stiffly.</div>
 
               <div>{inputField(2, "w-[150px]")}</div>
             </div>
@@ -246,7 +246,7 @@ const Review7_Page1_Q2 = () => {
             />
 
             <div className="text-[18px] mt-3 self-start w-[230px] h-[120px] flex flex-col justify-between">
-              <div className="leading-[2]">She is looking at photo albums.</div>
+              <div className="leading-loose">She is looking at photo albums.</div>
 
               <div>{inputField(3, "w-[150px]")}</div>
             </div>

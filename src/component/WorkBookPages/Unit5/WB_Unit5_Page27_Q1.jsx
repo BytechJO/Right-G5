@@ -1,356 +1,394 @@
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../Button";
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A4.svg";
-import img5 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A5.svg";
-import img6 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 27/A6.svg";
 
-const YELLOW_COLOR = "#f39b42";
-const RED_COLOR = "#ef4444";
-const TEXT_COLOR = "#222";
-const BORDER_COLOR = "#d4d4d4";
+const WB_Unit5_Page27_Q1 = () => {
+  const inputsRef = useRef({});
+  const [direction, setDirection] = useState("across");
+  const words = [
+    { id: 1, answer: "report", row: 0, col: 18, dir: "down" },
+    { id: 2, answer: "sharks", row: 1, col: 0, dir: "down" },
+    { id: 3, answer: "information", row: 2, col: 8, dir: "down" },
+    { id: 4, answer: "assignment", row: 3, col: 0, dir: "across" },
+    { id: 5, answer: "recipe", row: 3, col: 14, dir: "down" },
+    { id: 6, answer: "entire", row: 4, col: 14, dir: "across" },
+    { id: 7, answer: "librarian", row: 6, col: 3, dir: "across" },
+    { id: 8, answer: "both", row: 6, col: 5, dir: "down" },
+    { id: 9, answer: "barbecue", row: 8, col: 7, dir: "across" },
+    { id: 10, answer: "presentation", row: 12, col: 3, dir: "across" },
+  ];
 
-const DATA = [
-  {
-    id: 1,
-    img: img1,
-    options: ["bathroom", "garage", "bedroom"],
-    correct: "bedroom",
-  },
-  {
-    id: 2,
-    img: img2,
-    options: ["dining room", "basement", "hall"],
-    correct: "dining room",
-  },
-  {
-    id: 3,
-    img: img3,
-    options: ["kitchen", "living room", "dining room"],
-    correct: "kitchen",
-  },
-  {
-    id: 4,
-    img: img4,
-    options: ["living room", "office", "basement"],
-    correct: "office",
-  },
-  {
-    id: 5,
-    img: img5,
-    options: ["basement", "garage", "kitchen"],
-    correct: "basement",
-  },
-  {
-    id: 6,
-    img: img6,
-    options: ["hall", "bathroom", "stairs"],
-    correct: "bathroom",
-  },
-];
+  const cluesDown = [
+    ["1", "a written description about something"],
+    ["2", "dangerous kinds of fish"],
+    ["3", "facts about people, places, things, or so on"],
+    ["5", "instructions to make a food dish"],
+    ["8", "referring to two things"],
+  ];
 
-const initialSelections = {
-  1: null,
-  2: null,
-  3: null,
-  4: null,
-  5: null,
-  6: null,
-};
+  const cluesAcross = [
+    ["4", "a job or task that is given to someone"],
+    ["6", "all"],
+    ["7", "person who works and helps to find books in a library"],
+    ["9", "a meal prepared outside, using a grill"],
+    [
+      "10",
+      "an activity performed in front of people to explain or show something",
+    ],
+  ];
 
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: "clamp(18px, 4vw, 42px)",
-    width: "100%",
-  },
+  const rows = 13;
+  const cols = 24;
 
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "clamp(10px, 2vw, 18px)",
-    minWidth: 0,
-  },
+  const buildCells = () => {
+    const cells = {};
 
-  topRow: {
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "center",
-    gap: "clamp(10px, 1.8vw, 18px)",
-    width: "100%",
-    flexWrap: "nowrap",
-  },
+    words.forEach((word) => {
+      word.answer.split("").forEach((letter, i) => {
+        const row = word.dir === "down" ? word.row + i : word.row;
+        const col = word.dir === "across" ? word.col + i : word.col;
+        const key = `${row}-${col}`;
 
-  number: {
-    fontSize: "clamp(18px, 2.2vw, 28px)",
-    fontWeight: "700",
-    color: TEXT_COLOR,
-    lineHeight: 1,
-    paddingTop: "clamp(4px, 0.7vw, 8px)",
-    flexShrink: 0,
-  },
+        cells[key] = {
+          letter,
+          number: i === 0 ? word.id : cells[key]?.number,
+        };
+      });
+    });
 
-  imageWrap: {
-    width: "clamp(78px, 14vw, 140px)",
-    height: "clamp(78px, 14vw, 140px)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
+    return cells;
+  };
 
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
-    display: "block",
-  },
+  const cells = buildCells();
 
-  optionsWrap: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "clamp(8px, 1.2vw, 12px)",
-    minWidth: 0,
-    flex: 1,
-    paddingTop: "clamp(2px, 0.5vw, 6px)",
-  },
+  const [studentAnswers, setStudentAnswers] = useState(
+    Object.keys(cells).reduce((acc, key) => {
+      acc[key] = "";
+      return acc;
+    }, {}),
+  );
 
-  optionButton: {
-    position: "relative",
-    border: "none",
-    background: "transparent",
-    padding: "0 clamp(12px, 2vw, 20px)",
-    minHeight: "clamp(26px, 3vw, 36px)",
-    fontSize: "clamp(16px, 2vw, 22px)",
-    fontWeight: "500",
-    color: TEXT_COLOR,
-    cursor: "pointer",
-    borderRadius: "999px",
-    lineHeight: 1.2,
-    transition: "all 0.2s ease",
-    whiteSpace: "nowrap",
-  },
+  const [result, setResult] = useState({});
 
-  buttonsWrap: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "clamp(8px, 2vw, 16px)",
-    width: "100%",
-  },
-};
+  const [locked, setLocked] = useState(false);
 
-const WB_Unit7_Page27_Q1 = () => {
-  const [userSelections, setUserSelections] = useState(initialSelections);
-  const [showAnswers, setShowAnswers] = useState(false);
-  const [wrongAnswers, setWrongAnswers] = useState({});
-  const [checkedAnswers, setCheckedAnswers] = useState(false);
+  const handleChange = (key, value) => {
+    if (locked || result[key] === true) return;
 
-  const handleSelect = (id, option) => {
-    if (showAnswers) return;
+    const char = value.slice(-1);
 
-    setUserSelections((prev) => ({
+    setStudentAnswers((prev) => ({
       ...prev,
-      [id]: option,
+      [key]: char,
     }));
 
-    setCheckedAnswers(false);
-    setWrongAnswers({});
+    setResult((prev) => ({
+      ...prev,
+      [key]: undefined,
+    }));
+
+    if (char) {
+      const [row, col] = key.split("-").map(Number);
+
+      let nextKey;
+
+      if (direction === "across") {
+        nextKey = `${row}-${col + 1}`;
+      } else {
+        nextKey = `${row + 1}-${col}`;
+      }
+
+      const nextInput = inputsRef.current[nextKey];
+
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
   };
 
   const checkAnswers = () => {
-    const allAnswered = Object.values(userSelections).every((val) => val !== null);
+    if (locked) return;
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions!");
+    const hasEmpty = Object.keys(cells).some(
+      (key) => !studentAnswers[key].trim(),
+    );
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
       return;
     }
 
-    let currentScore = 0;
-    const totalQuestions = DATA.length;
-    const newWrong = {};
+    let correctCount = 0;
 
-    DATA.forEach((item) => {
-      const userAnswer = userSelections[item.id];
+    const newResults = {};
 
-      if (userAnswer === item.correct) {
-        currentScore++;
-        newWrong[item.id] = false;
-      } else {
-        newWrong[item.id] = true;
-      }
+    words.forEach((word) => {
+      let isCorrect = true;
+
+      word.answer.split("").forEach((letter, i) => {
+        const row = word.dir === "down" ? word.row + i : word.row;
+
+        const col = word.dir === "across" ? word.col + i : word.col;
+
+        const key = `${row}-${col}`;
+
+        const studentLetter = studentAnswers[key]?.toLowerCase();
+
+        if (studentLetter !== letter.toLowerCase()) {
+          isCorrect = false;
+        }
+      });
+
+      if (isCorrect) correctCount++;
+
+      // ✅ save result by word id
+      newResults[word.id] = isCorrect;
     });
 
-    setWrongAnswers(newWrong);
-    setCheckedAnswers(true);
+    setResult(newResults);
 
-    if (currentScore === totalQuestions) {
-      ValidationAlert.success(`Score: ${currentScore} / ${totalQuestions}`);
-    } else if (currentScore > 0) {
-      ValidationAlert.warning(`Score: ${currentScore} / ${totalQuestions}`);
+    const total = words.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${currentScore} / ${totalQuestions}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const answers = {};
-    DATA.forEach((item) => {
-      answers[item.id] = item.correct;
+  const showAnswers = () => {
+    const filled = {};
+
+    Object.keys(cells).forEach((key) => {
+      filled[key] = cells[key].letter;
     });
 
-    setUserSelections(answers);
-    setShowAnswers(true);
-    setCheckedAnswers(false);
-    setWrongAnswers({});
+    setStudentAnswers(filled);
+
+    setResult(
+      Object.keys(cells).reduce((acc, key) => {
+        acc[key] = true;
+        return acc;
+      }, {}),
+    );
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setUserSelections(initialSelections);
-    setShowAnswers(false);
-    setWrongAnswers({});
-    setCheckedAnswers(false);
+  const handleReset = () => {
+    setStudentAnswers(
+      Object.keys(cells).reduce((acc, key) => {
+        acc[key] = "";
+        return acc;
+      }, {}),
+    );
+
+    setResult({});
+
+    setLocked(false);
   };
 
-  const getOptionStyle = (item, option) => {
-    const isSelected = userSelections[item.id] === option;
-    const isCorrect = option === item.correct;
-    const isWrongSelected =
-      checkedAnswers && wrongAnswers[item.id] && isSelected;
+  const errorBadge = (dir) => (
+    <span
+      style={{
+        position: "absolute",
 
-    if (showAnswers && isCorrect) {
-      return {
-        ...styles.optionButton,
-        border: `3px solid ${YELLOW_COLOR}`,
-      };
-    }
+        // ✅ position حسب الاتجاه
+        top: dir === "down" ? "-10px" : "20%",
+        left: dir === "across" ? "-10px" : "20%",
 
-    if (isWrongSelected) {
-      return {
-        ...styles.optionButton,
-        border: `3px solid ${RED_COLOR}`,
-      };
-    }
+        transform: dir === "across" ? "translateX(-50%)" : "translateY(-50%)",
 
-    if (isSelected) {
-      return {
-        ...styles.optionButton,
-        border: `3px solid ${YELLOW_COLOR}`,
-      };
-    }
-
-    return {
-      ...styles.optionButton,
-      border: "3px solid transparent",
-      background: "transparent",
-    };
-  };
+        width: "20px",
+        height: "20px",
+        background: "#ef4444",
+        color: "white",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "11px",
+        fontWeight: "bold",
+        border: "2px solid white",
+        boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+        zIndex: 5,
+      }}
+    >
+      ✕
+    </span>
+  );
 
   return (
-    <div className="main-container-component">
-
-      <div
-        className="div-forall"
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[17px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "28px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Complete the puzzle.
+        </h5>
 
-      >
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin: 0,
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span className="WB-ex-A">A</span>
-          Look, read, and circle.
-        </h1>
+        {/* PUZZLE */}
+        <div className="flex justify-center mb-10">
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: `repeat(${cols}, 32px)`,
+              gridTemplateRows: `repeat(${rows}, 32px)`,
+            }}
+          >
+            {Array.from({ length: rows }).map((_, row) =>
+              Array.from({ length: cols }).map((_, col) => {
+                const key = `${row}-${col}`;
+                const cell = cells[key];
 
-        <div className="wb-u7-q1-grid" style={styles.grid}>
-          {DATA.map((item) => (
-            <div key={item.id} style={styles.card}>
-              <div className="wb-u7-q1-row" style={styles.topRow}>
-                <div style={styles.number}>{item.id}</div>
+                if (!cell) {
+                  return <div key={key} />;
+                }
 
-                <div style={styles.imageWrap}>
-                  <img src={item.img} alt={`option-${item.id}`} style={styles.image} />
-                </div>
-
-                <div style={styles.optionsWrap}>
-                  {item.options.map((option) => {
-                    const isWrongSelected =
-                      checkedAnswers &&
-                      wrongAnswers[item.id] &&
-                      userSelections[item.id] === option;
-
-                    return (
-                      <button
-                        key={option}
-                        onClick={() => handleSelect(item.id, option)}
+                return (
+                  <div
+                    key={key}
+                    className="relative"
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      border: "1.5px solid #7D3C98",
+                    }}
+                  >
+                    {cell.number && (
+                      <span
                         style={{
-                          ...getOptionStyle(item, option),
-                          cursor: showAnswers ? "default" : "pointer",
+                          position: "absolute",
+                          top: "0px",
+                          left: "2px",
+                          fontSize: "10px",
+                          fontWeight: "bold",
                         }}
                       >
-                        {option}
+                        {cell.number}
+                      </span>
+                    )}
+                    <input
+                      type="text"
+                      ref={(el) => (inputsRef.current[key] = el)}
+                      data-crossword
+                      maxLength={1}
+                      value={studentAnswers[key]}
+                      disabled={
+                        locked ||
+                        words.some((word) => {
+                          if (result[word.id] !== true) return false;
 
-                        {isWrongSelected && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              top: "-8px",
-                              right: "-8px",
-                              width: "clamp(18px, 2vw, 22px)",
-                              height: "clamp(18px, 2vw, 22px)",
-                              borderRadius: "50%",
-                              background: RED_COLOR,
-                              color: "#fff",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: "clamp(10px, 1vw, 12px)",
-                              fontWeight: "700",
-                              border: "2px solid #fff",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-                              boxSizing: "border-box",
-                            }}
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                          return word.answer.split("").some((_, i) => {
+                            const row =
+                              word.dir === "down" ? word.row + i : word.row;
+
+                            const col =
+                              word.dir === "across" ? word.col + i : word.col;
+
+                            return `${row}-${col}` === key;
+                          });
+                        })
+                      }
+                      onChange={(e) => handleChange(key, e.target.value, e)}
+                      onClick={() => {
+                        const [row, col] = key.split("-").map(Number);
+
+                        if (cells[`${row}-${col + 1}`]) {
+                          setDirection("across");
+                        } else {
+                          setDirection("down");
+                        }
+                      }}
+                      onFocus={(e) => e.target.select()}
+                      className={`
+                        w-full
+                        h-full
+                        border-0
+                        outline-none
+                        bg-transparent
+                        text-center
+                        text-[16px]
+                        text-[#6D2980]
+                        font-semibold
+                        
+                      `}
+                    />
+                    {cell.number &&
+                      result[cell.number] === false &&
+                      errorBadge(
+                        words.find((w) => w.id === cell.number)?.dir,
+                      )}{" "}
+                  </div>
+                );
+              }),
+            )}
+          </div>
+        </div>
+
+        {/* CLUES */}
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <div className="border-2 border-[#7D3C98] rounded-xl p-4">
+            <h3 className="text-center font-bold mb-3">Down</h3>
+
+            {cluesDown.map((clue) => (
+              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">
+                <span className="font-bold">{clue[0]}</span>
+                <span>{clue[1]}</span>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div style={styles.buttonsWrap}>
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-            checkAnswers={checkAnswers}
-          />
+          <div className="border-2 border-[#7D3C98] rounded-xl p-4">
+            <h3 className="text-center font-bold mb-3">Across</h3>
+
+            {cluesAcross.map((clue) => (
+              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">
+                <span className="font-bold">{clue[0]}</span>
+                <span>{clue[1]}</span>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit7_Page27_Q1;
+export default WB_Unit5_Page27_Q1;

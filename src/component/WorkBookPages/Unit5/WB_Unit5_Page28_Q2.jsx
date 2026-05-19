@@ -1,484 +1,212 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import roomImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 28/Asset 92.svg";
+const WB_Unit5_Page28_Q2 = () => {
+  const answers = [
+    "Can I make an order, please?",
+    "May I go to the store, please?",
+    "Can I have more milk, please?",
+  ];
 
-const ITEMS = [
-  {
-    id: 1,
-    fixed: true,
-    prefix: "The mirror is",
-    correct: "above the dresser.",
-  },
-  {
-    id: 2,
-    fixed: false,
-    prefix: "The clock is next to the",
-    options: ["window.", "bed.", "chair.", "dresser."],
-    correct: "window.",
-  },
-  {
-    id: 3,
-    fixed: false,
-    prefix: "The rug is",
-    options: [
-      "in front of the dresser.",
-      "under the bed.",
-      "next to the chair.",
-      "above the bed.",
-    ],
-    correct: "in front of the dresser.",
-  },
-  {
-    id: 4,
-    fixed: false,
-    prefix: "The chair is",
-    options: [
-      "under the clock.",
-      "next to the window.",
-      "in front of the bed.",
-      "above the dresser.",
-    ],
-    correct: "under the clock.",
-  },
-  {
-    id: 5,
-    fixed: false,
-    prefix: "The window is",
-    options: [
-      "above the bed.",
-      "next to the rug.",
-      "under the chair.",
-      "in front of the clock.",
-    ],
-    correct: "above the bed.",
-  },
-  {
-    id: 6,
-    fixed: false,
-    prefix: "The bed is",
-    options: [
-      "next to the chair.",
-      "under the rug.",
-      "above the window.",
-      "in front of the mirror.",
-    ],
-    correct: "next to the chair.",
-  },
-];
+  const sentences = [
+    "I want to place an order.",
+    "I want to go to the store.",
+    "I need more milk.",
+  ];
 
-export default function WB_Unit5_Page28_QD() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const [studentAnswers, setStudentAnswers] = useState(["", "", ""]);
 
-  const handleChange = (id, value) => {
-    if (showAns) return;
+  const [result, setResult] = useState([]);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const [locked, setLocked] = useState(false);
 
-    setChecked(false);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  const checkAnswers = () => {
+    if (locked) return;
 
-    const allAnswered = ITEMS.filter((item) => !item.fixed).every(
-      (item) => answers[item.id]
-    );
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
-    const total = ITEMS.length;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      const userAnswer = item.fixed ? item.correct : answers[item.id];
-      if (userAnswer === item.correct) {
-        score++;
-      }
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setChecked(true);
+    setResult(newResults);
 
-    if (score === total) {
-      ValidationAlert.success(`Score: ${score} / ${total}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${total}`);
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${total}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
+  const showAnswers = () => {
+    setStudentAnswers(answers);
 
-    ITEMS.forEach((item) => {
-      if (!item.fixed) {
-        filled[item.id] = item.correct;
-      }
-    });
+    setResult([true, true, true]);
 
-    setAnswers(filled);
-    setChecked(true);
-    setShowAns(true);
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (item) => {
-    if (!checked || showAns || item.fixed) return false;
-    return answers[item.id] !== item.correct;
-  };
+  const inputField = (i) => (
+    <div className="relative flex-1">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  const getValue = (id) => answers[id] || "";
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      
+      />
 
-  const renderSelect = (item) => {
-    return (
-      <div className="wb-room-select-wrap">
-        <select
-          value={getValue(item.id)}
-          disabled={showAns}
-          onChange={(e) => handleChange(item.id, e.target.value)}
-          className={`wb-room-select ${
-            getValue(item.id) ? "wb-room-select--filled" : ""
-          }`}
-        >
-          <option value="" disabled hidden>
-            Select
-          </option>
-          {item.options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-
-        {!showAns && <span className="wb-room-arrow">▼</span>}
-      </div>
-    );
-  };
-
-  return (
-    <div className="main-container-component">
-      <style>{`
-        .wb-room-wrapper {
-          width: 100%;
-          max-width: 1100px;
-          margin: 0 auto;
-          padding: 8px 0 24px;
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          gap: 28px;
-        }
-
-        .wb-room-title {
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-
-        .wb-room-image-wrap {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-        }
-
-        .wb-room-image-box {
-          width: 100%;
-          max-width: 520px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .wb-room-image {
-          width: 100%;
-          height: auto;
-          display: block;
-          object-fit: contain;
-          border-radius: 14px;
-        }
-
-        .wb-room-list {
-          width: 100%;
-          max-width: 1000px;
-          margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-        }
-
-        .wb-room-row {
-          display: grid;
-          grid-template-columns: 34px minmax(0, 1fr);
-          gap: 14px;
-          align-items: start;
-          width: 100%;
-        }
-
-        .wb-room-num {
-          font-size: clamp(20px, 1.7vw, 28px);
-          font-weight: 700;
-          line-height: 1;
-          color: #222;
-          padding-top: 6px;
-        }
-
-        .wb-room-line-wrap {
-          position: relative;
-          width: 100%;
-        }
-
-        .wb-room-line {
-          width: 100%;
-          min-height: 56px;
-          border-bottom: 3px solid #2f2f2f;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding-bottom: 6px;
-          box-sizing: border-box;
-          min-width: 0;
-          flex-wrap: wrap;
-        }
-
-        .wb-room-prefix {
-          font-size: clamp(20px, 2vw, 28px);
-          line-height: 1.3;
-          color: #111;
-          font-weight: 500;
-          white-space: nowrap;
-        }
-
-        .wb-room-answer-fixed {
-          font-size: clamp(20px, 2.1vw, 28px);
-          line-height: 1.3;
-          color: #111;
-          font-weight: 500;
-        }
-
-        .wb-room-answer-show {
-          font-size: clamp(20px, 2.2vw, 28px);
-          line-height: 1.3;
-          color: #d62828;
-          font-weight: 500;
-          word-break: break-word;
-        }
-
-        .wb-room-wrong {
-          position: absolute;
-          top: -7px;
-          right: -7px;
-          width: 22px;
-          height: 22px;
-          border-radius: 999px;
-          background: #ef4444;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          border: 2px solid #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-          box-sizing: border-box;
-        }
-
-        .wb-room-select-wrap {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          flex: 0 1 clamp(210px, 34vw, 430px);
-          min-width: 170px;
-          max-width: 100%;
-        }
-
-        .wb-room-select {
-          width: 100%;
-          min-width: 0;
-          height: clamp(38px, 4vw, 46px);
-          border: 2px solid #c9c9c9;
-          border-radius: 10px;
-          background: #fff;
-          padding: 0 34px 0 12px;
-          font-size: clamp(15px, 1.55vw, 22px);
-          font-weight: 500;
-          color: #222;
-          outline: none;
-          appearance: none;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          box-sizing: border-box;
-          cursor: pointer;
-          text-align: center;
-          text-align-last: center;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .wb-room-select--filled {
-          color: #111;
-        }
-
-        .wb-room-select:disabled {
-          opacity: 1;
-          cursor: default;
-        }
-
-        .wb-room-arrow {
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 12px;
-          color: #666;
-          pointer-events: none;
-        }
-
-        .wb-room-buttons {
-          display: flex;
-          justify-content: center;
-          margin-top: 4px;
-        }
-
-        @media (max-width: 900px) {
-          .wb-room-list {
-            gap: 12px;
-          }
-
-          .wb-room-line {
-            min-height: 52px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .wb-room-wrapper {
-            gap: 24px;
-          }
-
-          .wb-room-row {
-            grid-template-columns: 28px 1fr;
-            gap: 10px;
-          }
-
-          .wb-room-line {
-            min-height: auto;
-            padding-bottom: 8px;
-            gap: 6px;
-          }
-
-          .wb-room-prefix {
-            white-space: normal;
-          }
-
-          .wb-room-select-wrap {
-            flex: 1 1 220px;
-          }
-
-          .wb-room-image-box {
-            max-width: 420px;
-          }
-        }
-
-        @media (max-width: 560px) {
-          .wb-room-line {
-            gap: 6px;
-          }
-
-          .wb-room-select {
-            height: 40px;
-            padding: 0 30px 0 10px;
-            font-size: 15px;
-          }
-
-          .wb-room-arrow {
-            right: 10px;
-            font-size: 11px;
-          }
-
-          .wb-room-image-box {
-            max-width: 320px;
-          }
-        }
-      `}</style>
-
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "18px",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
+      {result[i] === false && (
+        <span
           style={{
-            margin: 0,
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            flexWrap: "wrap",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          <span className="WB-ex-A">D</span>
-          Read, look, and write.
-        </h1>
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
-        <div className="wb-room-image-wrap">
-          <div className="wb-room-image-box">
-            <img src={roomImg} alt="room" className="wb-room-image" />
-          </div>
-        </div>
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[20px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-[12vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            D
+          </span>
+          Make <span className="text-[#00AEEF]">polite requests</span>  from the
+          statements below.
+        </h5>
 
-        <div className="wb-room-list">
-          {ITEMS.map((item) => (
-            <div key={item.id} className="wb-room-row">
-              <div className="wb-room-num">{item.id}</div>
+        {/* QUESTIONS */}
+        <div className="flex flex-col gap-15">
+          {sentences.map((sentence, index) => (
+            <div key={index} className="w-full">
+              <div className="flex gap-3 mb-3">
+                <span className="font-bold w-5">{index + 1}</span>
 
-              <div className="wb-room-line-wrap">
-                <div className="wb-room-line">
-                  <span className="wb-room-prefix">{item.prefix}</span>
-
-                  {item.fixed ? (
-                    <span className="wb-room-answer-fixed">{item.correct}</span>
-                  ) : showAns ? (
-                    <span className="wb-room-answer-show">{item.correct}</span>
-                  ) : (
-                    renderSelect(item)
-                  )}
-                </div>
-
-                {isWrong(item) && <div className="wb-room-wrong">✕</div>}
+                <span>{sentence}</span>
               </div>
+
+              <div className="pl-8">{inputField(index)}</div>
             </div>
           ))}
         </div>
+      </div>
 
-        <div className="wb-room-buttons">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit5_Page28_Q2;

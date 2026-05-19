@@ -5,50 +5,35 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import trueImg from "../../../assets/imgs/true.svg";
 import falseImg from "../../../assets/imgs/false.svg";
 
-const WB_Unit5_Page30_Q2 = () => {
+const WB_Unit5_Page29_Q3 = () => {
   const questions = [
     {
-      status: "false",
-      correction: "librarian",
-    },
-
-    {
       status: "true",
       correction: "",
     },
 
     {
       status: "false",
-      correction: "entire",
+      correction: "Can you help me to find the bathroom, please?",
     },
 
     {
-      status: "true",
-      correction: "",
+      status: "false",
+      correction: "Would you please help me to solve this math question?",
     },
   ];
 
   const sentences = [
-    <>
-      The <u>information</u> in the library gave me all the books I requested.
-    </>,
+    "I would like a cup of milk, please.",
 
-    <>
-      The teacher gave us a new class <u>assignment</u>.
-    </>,
+    "Where is the bathroom?",
 
-    <>
-      The <u>both</u> class went to the field trip.
-    </>,
-
-    <>
-      We ordered some <u>shish kebab</u> for dinner.
-    </>,
+    "Help me solve this math question.",
   ];
 
-  const [marks, setMarks] = useState(["", "", "", ""]);
+  const [marks, setMarks] = useState(["", "", ""]);
 
-  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [answers, setAnswers] = useState(["", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -66,7 +51,7 @@ const WB_Unit5_Page30_Q2 = () => {
   // ------------------------
 
   const handleMark = (i, value) => {
-    if (locked || result[i]?.mark === true) return;
+    if (locked || result[i]?.row === true) return;
 
     const updatedMarks = [...marks];
 
@@ -115,7 +100,7 @@ const WB_Unit5_Page30_Q2 = () => {
   };
 
   // ------------------------
-  // CHECK
+  // CHECK ANSWERS
   // ------------------------
 
   const checkAnswers = () => {
@@ -129,14 +114,13 @@ const WB_Unit5_Page30_Q2 = () => {
       return;
     }
 
+    // اذا اختار X لازم يكتب
     const hasMissingCorrection = marks.some(
       (m, i) => m === "false" && !answers[i].trim(),
     );
 
     if (hasMissingCorrection) {
-      ValidationAlert.info(
-        "Please write the correct vocabulary word for X answers.",
-      );
+      ValidationAlert.info("Please write the correct sentence for X answers.");
 
       return;
     }
@@ -160,7 +144,7 @@ const WB_Unit5_Page30_Q2 = () => {
           : normalize(answers[i]) === normalize(questions[i].correction);
 
       // -------------------
-      // FINAL
+      // FINAL ROW
       // -------------------
 
       const rowOk = markOk && correctionOk;
@@ -205,17 +189,15 @@ const WB_Unit5_Page30_Q2 = () => {
   // ------------------------
 
   const showAnswers = () => {
-    setMarks(["false", "true", "false", "true"]);
+    setMarks(["true", "false", "false"]);
 
-    setAnswers(["librarian", "", "entire", ""]);
+    setAnswers([
+      "",
+      "Can you help me to find the bathroom, please?",
+      "Would you please help me to solve this math question?",
+    ]);
 
     setResult([
-      {
-        mark: true,
-        correction: true,
-        row: true,
-      },
-
       {
         mark: true,
         correction: true,
@@ -243,9 +225,9 @@ const WB_Unit5_Page30_Q2 = () => {
   // ------------------------
 
   const handleReset = () => {
-    setMarks(["", "", "", ""]);
+    setMarks(["", "", ""]);
 
-    setAnswers(["", "", "", ""]);
+    setAnswers(["", "", ""]);
 
     setResult([]);
 
@@ -273,7 +255,7 @@ const WB_Unit5_Page30_Q2 = () => {
         style={{
           width: "34px",
           height: "34px",
-          border:"1px solid #6D2980" ,
+          border:  "1px solid #6D2980" ,
           borderRadius: "6px",
           background: "transparent",
           cursor: locked || result[i]?.mark === true ? "default" : "pointer",
@@ -321,15 +303,15 @@ const WB_Unit5_Page30_Q2 = () => {
   // INPUT
   // ------------------------
 
-  const inputField = (i, width = "240px") => (
-    <div className="relative inline-block">
+  const inputField = (i, width = "100%") => (
+    <div className="relative w-full">
       <input
         type="text"
         value={answers[i]}
         disabled={locked || result[i]?.row === true || marks[i] === "true"}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`
-          ${width}
+          w-full
           border-0
           border-b
           outline-none
@@ -345,6 +327,9 @@ const WB_Unit5_Page30_Q2 = () => {
               : "border-black"
           }
         `}
+        style={{
+          width,
+        }}
       />
 
       {result[i]?.correction === false && marks[i] === "false" && (
@@ -378,28 +363,31 @@ const WB_Unit5_Page30_Q2 = () => {
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <div className="header-title-page8 mb-[12vh]">
-          <span className="ex-A mr-2">I</span>
-          <div style={{ display: "block" }}>
-            Read and write <span className="text-[#D1252B]">✓</span> or{" "}
-            <span className="text-[#D1252B]">✕</span> to show if the underlined
-            word is used for your correctly.
-            <div style={{ marginTop: "4px" }}>
-              Write the correct vocabulary word if the underlined word is
-              incorrect.
-            </div>
-          </div>
-        </div>
+        <h5 className="header-title-page8 mb-[12vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            G
+          </span>
+          Write <span className="text-[#D1252B]">✓</span> or{" "}
+          <span className="text-[#D1252B]">✕</span>. For
+          <span className="text-[#D1252B]">✕</span> , rewrite the sentence as a{" "}
+          <span className="text-[#00AEEF]">polite request</span>.
+        </h5>
 
         {/* QUESTIONS */}
 
-        <div className="flex flex-col gap-15">
+        <div className="flex flex-col gap-12">
           {sentences.map((sentence, index) => (
             <div key={index} className="w-full">
               {/* ROW */}
 
-              <div className="flex items-center gap-6 w-full whitespace-nowrap">
+              <div className="flex items-center gap-4 mb-4 flex-wrap">
                 {/* BOXES */}
+
                 <div className="flex items-center gap-2">
                   {markBox(index, "true", trueImg)}
 
@@ -407,14 +395,17 @@ const WB_Unit5_Page30_Q2 = () => {
                 </div>
 
                 {/* NUMBER */}
+
                 <span className="font-bold w-5">{index + 1}</span>
 
                 {/* SENTENCE */}
-                <span>{sentence}</span>
 
-                {/* INPUT */}
-                <div className="flex-1">{inputField(index)}</div>
+                <span>{sentence}</span>
               </div>
+
+              {/* INPUT */}
+
+              <div className="pl-[90px]">{inputField(index, "100%")}</div>
             </div>
           ))}
         </div>
@@ -439,4 +430,4 @@ const WB_Unit5_Page30_Q2 = () => {
   );
 };
 
-export default WB_Unit5_Page30_Q2;
+export default WB_Unit5_Page29_Q3;

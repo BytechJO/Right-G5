@@ -193,7 +193,7 @@ const WB_Unit4_Page22_Q2 = () => {
         style={{
           width: "34px",
           height: "34px",
-          border: active ? "2px solid #6D2980" : "1px solid #6D2980",
+          border:  "1px solid #6D2980",
           borderRadius: "6px",
           background: "transparent",
           cursor: locked || result[i]?.row === true ? "default" : "pointer",

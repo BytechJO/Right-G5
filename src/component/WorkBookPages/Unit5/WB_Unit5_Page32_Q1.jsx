@@ -1,332 +1,322 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.4.svg";
-import img5 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.5.svg";
-import img6 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U5 Folder/Page 32/A.6.svg";
+// IMAGE
+import teaImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 32/Asset 17.svg";
 
-const BORDER_COLOR = "#e0e0e0";
-const WRONG_COLOR  = "#ef4444";
-const CHECK_COLOR  = "#16a34a";
+const WB_Unit5_Page32_Q1 = () => {
+  const wordBank = [
+    "information",
+    "shish kebab",
+    "recipe",
+    "have in mind",
+    "presentation",
+    "What would you like",
+  ];
 
-const ITEMS = [
-  { id: 1, img: img1, correct: true  },
-  { id: 2, img: img2, correct: false },
-  { id: 3, img: img3, correct: true  },
-  { id: 4, img: img4, correct: false },
-  { id: 5, img: img5, correct: false },
-  { id: 6, img: img6, correct: true  },
-];
+  const answers = [
+    "shish kebab",
+    "have in mind",
+    "What would you like",
+    "recipe",
+    "information",
+    "presentation",
+  ];
 
-export default function WB_YSound_PageA() {
-  const [answers,     setAnswers]     = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-  // كليك على الكارد — يبدّل بين ✓ و ✕ و فاضي
-  const handleCardClick = (id) => {
-    if (showAns) return;
-    setAnswers((prev) => {
-      if (prev[id] === undefined) return { ...prev, [id]: true  };  // أول كليك → ✓
-      if (prev[id] === true)      return { ...prev, [id]: false };  // تاني كليك → ✕
-      const upd = { ...prev }; delete upd[id]; return upd;          // تالت كليك → فاضي
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-    setShowResults(false);
   };
 
-  // كليك على بوكس الـ ✓/✕ مباشرة
-  const handleBoxClick = (e, id, value) => {
-    e.stopPropagation();
-    if (showAns) return;
-    setAnswers((prev) => ({ ...prev, [id]: value }));
-    setShowResults(false);
-  };
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => answers[i.id] !== undefined);
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((i) => { if (answers[i.id] === i.correct) score++; });
-    setShowResults(true);
-    const total = ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
-  };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = i.correct; });
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
-  };
+    let correctCount = 0;
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
-  };
+    // ترتيب الانبوتات مش مهم
+    const normalizedAnswers = answers.map((a) => normalize(a));
 
-  const isWrong = (item) =>
-    showResults && !showAns && answers[item.id] !== item.correct;
+    const usedAnswers = [];
 
-  const getCardBorder = (item) => {
-    if (!showResults) return `2px solid ${BORDER_COLOR}`;
-    if (showAns)      return `2px solid ${BORDER_COLOR}`;
-    return answers[item.id] === item.correct
-      ? `2px solid ${BORDER_COLOR}`
-      : `2.5px solid ${WRONG_COLOR}`;
-  };
+    const newResults = studentAnswers.map((answer) => {
+      const normalized = normalize(answer);
 
-  // لون رمز الـ ✓/✕ داخل البوكس
-  const getSymbolColor = (item, value) => {
-    if (!showResults) return value ? CHECK_COLOR : WRONG_COLOR;
-    if (answers[item.id] === value) {
-      return answers[item.id] === item.correct ? CHECK_COLOR : WRONG_COLOR;
+      const foundIndex = normalizedAnswers.findIndex(
+        (a, i) => a === normalized && !usedAnswers.includes(i),
+      );
+
+      const ok = foundIndex !== -1;
+
+      if (ok) {
+        usedAnswers.push(foundIndex);
+
+        correctCount++;
+      }
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
     }
-    return value ? CHECK_COLOR : WRONG_COLOR;
   };
+
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  // ------------------------
+  // INPUT
+  // ------------------------
+
+  const inputField = (i, width = "260px") => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+        style={{
+          width,
+        }}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "18px",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin:     0,
-            display:    "flex",
-            alignItems: "center",
-            gap:        "12px",
-            flexWrap:   "wrap",
-          }}
-        >
-          <span className="WB-ex-A">A</span>
-          Does it have a <strong style={{ fontWeight: 900 }}>-y sound</strong>? Write ✓ or ✕.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[17px] w-full">
+        {/* TITLE */}
 
-        {/* Cards grid */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(6, minmax(0,1fr))",
-            gap:                 "clamp(8px,1.2vw,16px)",
-            width:               "100%",
-          }}
-        >
-          {ITEMS.map((item) => {
-            const answered = answers[item.id] !== undefined;
-            const wrong    = isWrong(item);
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            L
+          </span>
+          Read and write.
+        </h5>
 
-            return (
-              <div
-                key={item.id}
-                onClick={() => handleCardClick(item.id)}
-                style={{
-                  position:     "relative",
-                  width:        "100%",
-                  aspectRatio:  "1 / 1",
-                  border:       getCardBorder(item),
-                  borderRadius: "clamp(10px,1.2vw,16px)",
-                  background:   "#fff",
-                  overflow:     "visible",
-                  boxSizing:    "border-box",
-                  boxShadow:    "0 2px 8px rgba(0,0,0,0.07)",
-                  cursor:       showAns ? "default" : "pointer",
-                  userSelect:   "none",
-                }}
-              >
-                {/* inner clip */}
-                <div
-                  style={{
-                    position:     "absolute",
-                    inset:        0,
-                    borderRadius: "clamp(10px,1.2vw,16px)",
-                    overflow:     "hidden",
-                  }}
-                >
-                  {/* Number badge — top left */}
-                  <div
-                    style={{
-                      position:       "absolute",
-                      top:            "clamp(4px,0.7vw,8px)",
-                      left:           "clamp(4px,0.7vw,8px)",
-                      width:          "clamp(20px,2.8vw,36px)",
-                      height:         "clamp(20px,2.8vw,36px)",
-                      borderRadius:   "clamp(5px,0.6vw,8px)",
-                      border:         `2px solid ${BORDER_COLOR}`,
-                      background:     "#fff",
-                      display:        "flex",
-                      alignItems:     "center",
-                      justifyContent: "center",
-                      fontSize:       "clamp(11px,1.5vw,20px)",
-                      fontWeight:     700,
-                      color:          "#111",
-                      zIndex:         2,
-                      boxSizing:      "border-box",
-                    }}
-                  >
-                    {item.id}
-                  </div>
+        {/* WORD BANK */}
 
-                  {/* Image */}
-                  <img
-                    src={item.img}
-                    alt={`item-${item.id}`}
-                    style={{
-                      width:         "100%",
-                      height:        "100%",
-                      objectFit:     "contain",
-                      display:       "block",
-                      padding:       "clamp(10px,1.6vw,20px)",
-                      boxSizing:     "border-box",
-                      userSelect:    "none",
-                      pointerEvents: "none",
-                    }}
-                  />
-
-                  {/* ── ✓ box — bottom right ── */}
-                  <div
-                    onClick={(e) => handleBoxClick(e, item.id, true)}
-                    style={{
-                      position:       "absolute",
-                      bottom:         0,
-                      right:          0,
-                      width:          "clamp(28px,4vw,52px)",
-                      height:         "clamp(28px,4vw,52px)",
-                      borderTop:      `2px solid ${BORDER_COLOR}`,
-                      borderLeft:     `2px solid ${BORDER_COLOR}`,
-                      borderBottomRightRadius: "clamp(10px,1.2vw,16px)",
-                      background:     answers[item.id] === true
-                        ? "rgba(22,163,74,0.08)"
-                        : "#fff",
-                      display:        "flex",
-                      alignItems:     "center",
-                      justifyContent: "center",
-                      cursor:         showAns ? "default" : "pointer",
-                      zIndex:         3,
-                      transition:     "background 0.15s",
-                    }}
-                  >
-                    {answers[item.id] === true && (
-                      <span
-                        style={{
-                          fontSize:   "clamp(16px,2.8vw,38px)",
-                          fontWeight: 900,
-                          color:      showResults
-                            ? (item.correct ? CHECK_COLOR : WRONG_COLOR)
-                            : CHECK_COLOR,
-                          lineHeight: 1,
-                          userSelect: "none",
-                        }}
-                      >
-                        ✓
-                      </span>
-                    )}
-                  </div>
-
-                  {/* ── ✕ box — جنب ✓ box (للخيار الثاني) ── */}
-                  {/* نحن ما عندنا بوكسين — بس بوكس وحد يعرض الاختيار */}
-                  {answers[item.id] === false && (
-                    <div
-                      onClick={(e) => handleBoxClick(e, item.id, false)}
-                      style={{
-                        position:       "absolute",
-                        bottom:         0,
-                        right:          0,
-                        width:          "clamp(28px,4vw,52px)",
-                        height:         "clamp(28px,4vw,52px)",
-                        borderTop:      `2px solid ${BORDER_COLOR}`,
-                        borderLeft:     `2px solid ${BORDER_COLOR}`,
-                        borderBottomRightRadius: "clamp(10px,1.2vw,16px)",
-                        background:     "rgba(239,68,68,0.06)",
-                        display:        "flex",
-                        alignItems:     "center",
-                        justifyContent: "center",
-                        cursor:         showAns ? "default" : "pointer",
-                        zIndex:         3,
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize:   "clamp(16px,2.8vw,38px)",
-                          fontWeight: 900,
-                          color:      showResults
-                            ? (!item.correct ? CHECK_COLOR : WRONG_COLOR)
-                            : WRONG_COLOR,
-                          lineHeight: 1,
-                          userSelect: "none",
-                        }}
-                      >
-                        ✕
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Wrong badge — خارج الـ clip */}
-                {wrong && (
-                  <div
-                    style={{
-                      position:        "absolute",
-                      top:             "-8px",
-                      right:           "-8px",
-                      width:           "clamp(16px,1.8vw,22px)",
-                      height:          "clamp(16px,1.8vw,22px)",
-                      borderRadius:    "50%",
-                      backgroundColor: WRONG_COLOR,
-                      color:           "#fff",
-                      display:         "flex",
-                      alignItems:      "center",
-                      justifyContent:  "center",
-                      fontSize:        "clamp(9px,0.9vw,12px)",
-                      fontWeight:      700,
-                      boxShadow:       "0 1px 4px rgba(0,0,0,0.25)",
-                      zIndex:          5,
-                      pointerEvents:   "none",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {wordBank.map((word, index) => (
+            <div
+              key={index}
+              className="border border-[#7D3C98] rounded-lg px-3 py-0.5 text-[17px]"
+            >
+              {word}
+            </div>
+          ))}
         </div>
 
-        {/* Buttons */}
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
+        {/* STORY */}
+
+        <div className="leading-7 pl-[45px] relative mb-10">
+          <div>One night as I went out to eat</div>
+
+          <div>{inputField(0, "260px")} and all kinds of meat.</div>
+
+          <div>A server came and asked me,</div>
+
+          <div>“Would you please order some tea?”</div>
+
+          <div>“Why?” I asked. “Is that the deal</div>
+
+          <div>To have some tea along with my meal?”</div>
+
+          <div>“No,” said the server, “The tea is free.</div>
+
+          <div>We want you to try our selection of tea.</div>
+
+          <div>Which flavor do you {inputField(1, "250px")} ?</div>
+
+          <div>We can give you tea of almost any kind.</div>
+
+          <div>{inputField(2, "260px")} ? What kinds of teas?”</div>
+
+          <div>“I would prefer the black tea, please.”</div>
+
+          <div>“I have just the right blend for you</div>
+
+          <div>And a free cake with it, too.</div>
+
+          <div>I will give you our secret {inputField(3, "240px")}</div>
+
+          <div>For our special blend of spice tea.</div>
+
+          <div>I’ll give you first some tea {inputField(4, "250px")}</div>
+
+          <div>And then I’ll give you a quick {inputField(5, "260px")}</div>
+
+          <div>Of why our teas do taste so great.</div>
+
+          <div>Don’t worry, I’ll be quick; you won’t be late.”</div>
+
+          {/* IMAGE */}
+
+          <img
+            src={teaImg}
+            alt=""
+            style={{
+              width: "200px",
+              height: "auto",
+              objectFit: "contain",
+              position: "absolute",
+              right: "0",
+              bottom: "0",
+            }}
           />
         </div>
       </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default WB_Unit5_Page32_Q1;
