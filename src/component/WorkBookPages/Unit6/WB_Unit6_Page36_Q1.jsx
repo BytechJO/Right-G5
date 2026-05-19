@@ -1,432 +1,323 @@
-import React, { useEffect, useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const INSTRUCTIONS = [
-  "1. Draw a face in the first square and an umbrella in the fifth square.",
-  "2. Color the second square green and the eighth square red.",
-  "3. Write your name in the third square and your friend's name in the tenth square.",
-  "4. Draw the sun in the ninth square and the moon in the fourth square.",
-  "5. Draw a triangle in the seventh square and a star in the twelfth square.",
-  "6. Write your birthday in the sixth square and your friend's birthday in the eleventh square.",
-];
+// IMAGES
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 36/Asset 13.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 36/Asset 14.svg";
 
-const COLORS = [
-  "#111827",
-  "#ef4444",
-  "#22c55e",
-  "#3b82f6",
-  "#eab308",
-  "#a855f7",
-  "#ec4899",
-  "#ffffff",
-];
+const WB_Unit6_Page36_Q1 = () => {
+  const wordBank = [
+    "take advantage of",
+    "a bunch",
+    "bowling",
+    "trade",
+    "attractions",
+    "shoot",
+    "discounts",
+  ];
 
-const SIZES = [2, 4, 8, 12];
+  const answers = [
+    "attractions",
+    "bowling",
+    "shoot",
+    "take advantage of",
+    "discounts",
+    "trade",
+    "a bunch",
+  ];
 
-const BOX_SIZE = 110;
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-const BOX_LAYOUT = [
-  { num: 4, row: 1, col: 1 },
-  { num: 5, row: 1, col: 2 },
-  { num: 6, row: 1, col: 3 },
-  { num: 7, row: 1, col: 4 },
-  { num: 8, row: 1, col: 5 },
-  { num: 9, row: 1, col: 6 },
+  const [result, setResult] = useState([]);
 
-  { num: 3, row: 2, col: 1 },
-  { num: 10, row: 2, col: 6 },
+  const [locked, setLocked] = useState(false);
 
-  { num: 2, row: 3, col: 1 },
-  { num: 11, row: 3, col: 6 },
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  { num: 1, row: 4, col: 1 },
-  { num: 12, row: 4, col: 6 },
-];
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
 
-export default function WB_Unit6_Page36_QG() {
-  const [tool, setTool] = useState("pencil"); // pencil | eraser | fill | text
-  const [color, setColor] = useState("#ef4444");
-  const [size, setSize] = useState(4);
-  const [selectedBox, setSelectedBox] = useState(1);
-  const [textValue, setTextValue] = useState("");
-  const [isDrawing, setIsDrawing] = useState(false);
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-  const canvasRefs = useRef({});
-  const ctxRefs = useRef({});
-  const lastPos = useRef({});
+    const updated = [...studentAnswers];
 
-  useEffect(() => {
-    BOX_LAYOUT.forEach(({ num }) => {
-      const canvas = canvasRefs.current[num];
-      if (!canvas) return;
+    updated[i] = value;
 
-      const ctx = canvas.getContext("2d");
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctxRefs.current[num] = ctx;
+    setStudentAnswers(updated);
 
-      clearCanvas(num);
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-  }, []);
-
-  const clearCanvas = (num) => {
-    const canvas = canvasRefs.current[num];
-    const ctx = ctxRefs.current[num];
-    if (!canvas || !ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
-  const clearAllCanvases = () => {
-    BOX_LAYOUT.forEach(({ num }) => clearCanvas(num));
-  };
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-  const getPos = (e, canvas) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  const checkAnswers = () => {
+    if (locked) return;
 
-    if (e.touches) {
-      return {
-        x: (e.touches[0].clientX - rect.left) * scaleX,
-        y: (e.touches[0].clientY - rect.top) * scaleY,
-      };
-    }
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
-    };
-  };
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
 
-  const startDrawing = (e, num) => {
-    e.preventDefault();
-    setSelectedBox(num);
-
-    const canvas = canvasRefs.current[num];
-    const ctx = ctxRefs.current[num];
-    if (!canvas || !ctx) return;
-
-    if (tool === "fill") {
-      ctx.fillStyle = color;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
       return;
     }
 
-    if (tool === "text") {
-      if (!textValue.trim()) {
-        ValidationAlert.info("Please type text first.");
-        return;
-      }
+    let correctCount = 0;
 
-      const pos = getPos(e, canvas);
-      ctx.fillStyle = color;
-      ctx.font = "16px Arial";
-      ctx.textBaseline = "top";
-      ctx.fillText(textValue, pos.x, pos.y);
-      return;
-    }
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
 
-    const pos = getPos(e, canvas);
-    lastPos.current[num] = pos;
-    setIsDrawing(true);
+      if (ok) correctCount++;
 
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, (tool === "eraser" ? size * 2 : size) / 2, 0, Math.PI * 2);
-    ctx.fillStyle = tool === "eraser" ? "#ffffff" : color;
-    ctx.fill();
-  };
+      return ok;
+    });
 
-  const draw = (e, num) => {
-    e.preventDefault();
-    if (!isDrawing || selectedBox !== num) return;
+    setResult(newResults);
 
-    const canvas = canvasRefs.current[num];
-    const ctx = ctxRefs.current[num];
-    if (!canvas || !ctx) return;
+    const total = answers.length;
 
-    if (tool !== "pencil" && tool !== "eraser") return;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const pos = getPos(e, canvas);
-    const prev = lastPos.current[num];
-    if (!prev) return;
-
-    ctx.beginPath();
-    ctx.moveTo(prev.x, prev.y);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color;
-    ctx.lineWidth = tool === "eraser" ? size * 3 : size;
-    ctx.stroke();
-
-    lastPos.current[num] = pos;
-  };
-
-  const stopDrawing = (e, num) => {
-    e?.preventDefault();
-    setIsDrawing(false);
-    lastPos.current[num] = null;
-  };
-
-  const handleCheck = () => {
-    ValidationAlert.success("Done! Please review the drawings and writing.");
-  };
-
-  const getCursor = () => {
-    if (tool === "eraser") return "cell";
-    if (tool === "text") return "text";
-    return "crosshair";
-  };
-
-  const renderBox = (num) => (
-    <div
-      key={num}
-      onClick={() => setSelectedBox(num)}
-      style={{
-        position: "relative",
-        width: `${BOX_SIZE}px`,
-        height: `${BOX_SIZE}px`,
-        border: selectedBox === num ? "3px solid #f59e0b" : "2px solid #f59e0b",
-        borderRadius: "10px",
-        backgroundColor: "#fff",
-        overflow: "hidden",
-        boxSizing: "border-box",
-        boxShadow: selectedBox === num ? "0 0 0 3px rgba(245, 158, 11, 0.15)" : "none",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: "4px",
-          left: "4px",
-          width: "18px",
-          height: "18px",
-          borderRadius: "50%",
-          border: "1px solid #111",
-          backgroundColor: "#fff",
-          fontSize: "11px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 2,
-        }}
-      >
-        {num}
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
       </div>
+    `;
 
-      <canvas
-        ref={(el) => {
-          if (el) canvasRefs.current[num] = el;
-        }}
-        width={BOX_SIZE}
-        height={BOX_SIZE}
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResult([true, true, true, true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  // ------------------------
+  // INPUT
+  // ------------------------
+
+  const inputField = (i, width) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
         style={{
-          width: "100%",
-          height: "100%",
-          display: "block",
-          cursor: getCursor(),
-          touchAction: "none",
+          width,
         }}
-        onMouseDown={(e) => startDrawing(e, num)}
-        onMouseMove={(e) => draw(e, num)}
-        onMouseUp={(e) => stopDrawing(e, num)}
-        onMouseLeave={(e) => stopDrawing(e, num)}
-        onTouchStart={(e) => startDrawing(e, num)}
-        onTouchMove={(e) => draw(e, num)}
-        onTouchEnd={(e) => stopDrawing(e, num)}
       />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "18px",
+            height: "18px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
     </div>
   );
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "16px" , marginBottom:"70px" }}>
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">G</span>
-          Read and complete.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* Toolbar */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: "12px",
-            padding: "12px 16px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "16px",
-            background: "#f9fafb",
-            
-          }}
-        >
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {[
-              { id: "pencil", label: "✏️ Draw" },
-              { id: "eraser", label: "🧽 Erase" },
-              { id: "fill", label: "🪣 Fill" },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setTool(item.id)}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "10px",
-                  border: tool === item.id ? "2px solid #3b82f6" : "2px solid #d1d5db",
-                  background: tool === item.id ? "#eff6ff" : "#fff",
-                  color: tool === item.id ? "#1d4ed8" : "#374151",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ width: "1px", height: "28px", background: "#d1d5db" }} />
-
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {COLORS.map((c) => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
-                style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  border: color === c ? "3px solid #111827" : "2px solid #d1d5db",
-                  background: c,
-                  cursor: "pointer",
-                }}
-              />
-            ))}
-          </div>
-
-          <div style={{ width: "1px", height: "28px", background: "#d1d5db" }} />
-
-          <div style={{ display: "flex", gap: "8px" }}>
-            {SIZES.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSize(s)}
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  border: size === s ? "2px solid #3b82f6" : "2px solid #d1d5db",
-                  background: "#fff",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <span
-                  style={{
-                    width: `${Math.min(s * 2, 16)}px`,
-                    height: `${Math.min(s * 2, 16)}px`,
-                    borderRadius: "50%",
-                    background: "#111827",
-                    display: "block",
-                  }}
-                />
-              </button>
-            ))}
-          </div>
-
-       
-
-          <button
-            onClick={() => clearCanvas(selectedBox)}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-              padding: "8px 12px",
-              borderRadius: "10px",
-              border: "2px solid #fca5a5",
-              background: "#fef2f2",
-              color: "#dc2626",
-              fontWeight: "600",
-              cursor: "pointer",
+              marginRight: "10px",
             }}
           >
-            Clear Selected
-          </button>
+            H
+          </span>
+          Read and write.
+        </h5>
 
-          <button
-            onClick={clearAllCanvases}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "10px",
-              border: "2px solid #fecaca",
-              background: "#fff",
-              color: "#b91c1c",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            Clear All
-          </button>
-        </div>
+        {/* WORD BANK */}
 
-        {/* Main layout */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px`,
-            gridTemplateRows: `${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px ${BOX_SIZE}px`,
-            gap: "0",
-            justifyContent: "center",
-            alignItems: "center",
-            maxWidth: "900px",
-            margin: "0 auto",
-            position: "relative",
-          }}
-        >
-          {BOX_LAYOUT.map((box) => (
+        <div className="flex flex-wrap gap-2 mb-8">
+          {wordBank.map((word, index) => (
             <div
-              key={box.num}
-              style={{
-                gridColumn: box.col,
-                gridRow: box.row,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              key={index}
+              className="border border-[#7D3C98] rounded-lg px-3 py-0.5 text-[17px]"
             >
-              {renderBox(box.num)}
+              {word}
             </div>
           ))}
+        </div>
 
-          <div
-            style={{
-              gridColumn: "2 / 6",
-              gridRow: "2 / 5",
-              padding: "12px 20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "10px",
-              fontSize: "18px",
-              lineHeight: "1.45",
-              color: "#222",
-              marginTop:"50px"
-            }}
-          >
-            {INSTRUCTIONS.map((item, index) => (
-              <div key={index} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                <span style={{ fontWeight: "700" }}>{index + 1}</span>
-                <p style={{ margin: 0 }}>{item}</p>
+        {/* CONTENT */}
+
+        <div className="px-[30px] leading-[1.7] relative">
+          {/* FIRST PART */}
+
+          <div className="flex justify-between items-start gap-2">
+            {/* TEXT */}
+            <div className="flex-1">
+              <div>
+                My friend and I love to see the new {inputField(0, "140px")} at
+                the carnival.
               </div>
-            ))}
+
+              <div className="mt-3">
+                We can go {inputField(1, "120px")} or {inputField(2, "110px")} a
+                basketball.
+              </div>
+
+              <div>
+                We can go to the water show to see the dolphins and whales.
+              </div>
+
+              <div className="mt-5">
+                We love to {inputField(3, "260px")} the
+              </div>
+
+              <div>{inputField(4, "180px")} and sales.</div>
+            </div>
+
+            {/* IMAGE */}
+            <img
+              src={img1}
+              alt=""
+              style={{
+                width: "250px",
+                height: "200px",
+                objectFit: "contain",
+                flexShrink: 0,
+              }}
+            />
+          </div>
+
+          {/* SECOND PART */}
+          <div className="flex items-start gap-6 mt-8">
+            {/* WHALE IMAGE */}
+
+            <img
+              src={img2}
+              alt=""
+              style={{
+                width: "270px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
+
+            {/* TEXT */}
+
+            <div className="leading-[1.8] pt-2">
+              <div>
+                We can {inputField(5, "120px")} our winning tickets for lots of
+                toys.
+              </div>
+
+              <div className="mt-2">We go with {inputField(6, "220px")} of</div>
+
+              <div>friends. That way, the fun never ends!</div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "12px" }}>
-          <Button checkAnswers={handleCheck} handleStartAgain={clearAllCanvases} />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit6_Page36_Q1;

@@ -2,76 +2,39 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit6_Page34_Q2 = () => {
-  const leftItems = [
-    "half price",
-    "expert",
-    "action figure",
-    "try out",
-    "made it",
-    "attractions",
-    "booth",
-    "a bunch",
+const WB_Unit6_Page34_Q3 = () => {
+  const questions = [
+    "I play park the at Could?",
+
+    "I to tomorrow the dentist go might.",
+
+    "football to go the Shall we game?",
+
+    "join the Would me at you museum?",
   ];
 
-  const rightItems = [
-    {
-      letter: "a",
-      text: "a lot",
-    },
+  const answers = [
+    "Could I play at the park?",
 
-    {
-      letter: "b",
-      text: "use or play something for the first time to check it",
-    },
+    "I might go to the dentist tomorrow.",
 
-    {
-      letter: "c",
-      text: "a person who has a special skill in something",
-    },
+    "Shall we go to the football game?",
 
-    {
-      letter: "d",
-      text: "did well",
-    },
-
-    {
-      letter: "e",
-      text: "rides and places to see",
-    },
-
-    {
-      letter: "f",
-      text: "a small closed area where things are sold",
-    },
-
-    {
-      letter: "g",
-      text: "50 percent off a price of something",
-    },
-
-    {
-      letter: "h",
-      text: "a small plastic toy that may look like a soldier, action hero, or a robot",
-    },
+    "Would you join me at the museum?",
   ];
 
-  const answers = ["g", "c", "h", "b", "d", "e", "f", "a"];
-
-  const [studentAnswers, setStudentAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
   const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
   // ------------------------
   // HANDLE INPUT
@@ -80,14 +43,9 @@ const WB_Unit6_Page34_Q2 = () => {
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
 
-    const lower = value.toLowerCase();
-
-    // فقط a-h
-    if (lower && !/^[a-h]$/.test(lower)) return;
-
     const updated = [...studentAnswers];
 
-    updated[i] = lower;
+    updated[i] = value;
 
     setStudentAnswers(updated);
 
@@ -107,7 +65,7 @@ const WB_Unit6_Page34_Q2 = () => {
   const checkAnswers = () => {
     if (locked) return;
 
-    const hasEmpty = studentAnswers.some((a) => !a);
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
       ValidationAlert.info("Please complete all answers.");
@@ -118,7 +76,7 @@ const WB_Unit6_Page34_Q2 = () => {
     let correctCount = 0;
 
     const newResults = studentAnswers.map((answer, i) => {
-      const ok = answer === answers[i];
+      const ok = normalize(answer) === normalize(answers[i]);
 
       if (ok) correctCount++;
 
@@ -158,7 +116,7 @@ const WB_Unit6_Page34_Q2 = () => {
   const showAnswers = () => {
     setStudentAnswers(answers);
 
-    setResult([true, true, true, true, true, true, true, true]);
+    setResult([true, true, true, true]);
 
     setLocked(true);
   };
@@ -168,7 +126,7 @@ const WB_Unit6_Page34_Q2 = () => {
   // ------------------------
 
   const handleReset = () => {
-    setStudentAnswers(["", "", "", "", "", "", "", ""]);
+    setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
 
@@ -180,23 +138,22 @@ const WB_Unit6_Page34_Q2 = () => {
   // ------------------------
 
   const inputField = (i) => (
-    <div className="relative">
+    <div className="relative w-full">
       <input
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
-        maxLength={1}
         className={`
-          w-[34px]
+          w-full
           border-0
           border-b
           outline-none
           bg-transparent
-          text-center
           text-[18px]
           text-[#6D2980]
           font-semibold
+          px-1
 
           ${result[i] === false ? "border-[#D1232A]" : "border-black"}
         `}
@@ -208,8 +165,8 @@ const WB_Unit6_Page34_Q2 = () => {
             position: "absolute",
             top: "-8px",
             right: "-8px",
-            width: "18px",
-            height: "18px",
+            width: "20px",
+            height: "20px",
             background: "#ef4444",
             color: "white",
             borderRadius: "50%",
@@ -233,56 +190,36 @@ const WB_Unit6_Page34_Q2 = () => {
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-10">
+        <h5 className="header-title-page8 mb-[7vh]">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            D
+            E
           </span>
-          Match.
+          Unscramble and write.
         </h5>
 
-        {/* CONTENT */}
+        {/* QUESTIONS */}
 
-        <div className="grid grid-cols-2 gap-x-16">
-          {/* LEFT SIDE */}
+        <div className="flex flex-col gap-10">
+          {questions.map((question, index) => (
+            <div key={index} className="w-full">
+              {/* QUESTION */}
 
-          <div className="flex flex-col gap-7">
-            {leftItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-4">
-                {/* INPUT */}
+              <div className="flex items-start gap-4 mb-5">
+                <span className="font-bold">{index + 1}</span>
 
-                {inputField(index)}
-
-                {/* NUMBER */}
-
-                <span className="font-bold w-[18px]">{index + 1}</span>
-
-                {/* WORD */}
-
-                <span>{item}</span>
+                <span>{question}</span>
               </div>
-            ))}
-          </div>
 
-          {/* RIGHT SIDE */}
+              {/* INPUT */}
 
-          <div className="flex flex-col gap-7">
-            {rightItems.map((item, index) => (
-              <div key={index} className="flex items-start gap-4 leading-[1.4]">
-                {/* LETTER */}
-
-                <span className="font-bold">{item.letter}</span>
-
-                {/* TEXT */}
-
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </div>
+              <div className="pl-[35px]">{inputField(index)}</div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -305,4 +242,4 @@ const WB_Unit6_Page34_Q2 = () => {
   );
 };
 
-export default WB_Unit6_Page34_Q2;
+export default WB_Unit6_Page34_Q3;

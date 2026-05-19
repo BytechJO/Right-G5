@@ -1,285 +1,620 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 26.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 31.svg";
+import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 4.svg";
+import img4 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 5.svg";
+import img5 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 6.svg";
+import img6 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 33/Asset 7.svg";
+const WB_Unit6_Page33_Q1 = () => {
+  const questions = [
+    {
+      answer: "bunch",
+      options: ["trade", "bunch", "booth"],
+      image: img1,
+    },
+    {
+      answer: "action figure",
+      options: ["action figure", "bowling", "shoot"],
+      image: img2,
+    },
+    {
+      answer: "shoot",
+      options: ["shoot", "in a row", "expert"],
+      image: img3,
+    },
+    {
+      answer: "in a row",
+      options: ["in a row", "take advantage of", "Shall we?"],
+      image: img4,
+    },
+    {
+      answer: "discount",
+      options: ["bowling", "doll", "discount"],
+      image: img5,
+    },
+    {
+      answer: "try out",
+      options: ["made it", "try out", "half price"],
+      image: img6,
+    },
+  ];
 
-import imgHelen  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.1.svg";
-import imgStella from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.2.svg";
-import imgJohn   from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.3.svg";
-import imgHarley from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.4.svg";
-import imgTom    from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.5.svg";
-import imgHansel from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U6 Folder/Page 33/A.6.svg";
+  const [selected, setSelected] = useState(["", "", "", "", "", ""]);
 
-const NAME_BANK = ["Helen", "Stella", "John", "Harley", "Tom", "Hansel"];
-const CORRECT_ORDER = ["Hansel", "Harley", "Helen", "John", "Stella", "Tom"];
+  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
 
-const NAME_IMGS = {
-  Hansel: imgHansel,
-  Harley: imgHarley,
-  Helen:  imgHelen,
-  John:   imgJohn,
-  Stella: imgStella,
-  Tom:    imgTom,
-};
+  const [result, setResult] = useState([]);
 
-const QUESTIONS = [
-  { id: 1, question: "What is the first name?",  answer: "Hansel"         },
-  { id: 2, question: "What is the fourth name?", answer: "John"           },
-  { id: 3, question: "What is the sixth name?",  answer: "Tom"            },
-  { id: 4, question: "What is the third name?",  answer: "Helen"          },
-  { id: 5, question: "Is Hansel first?",         answer: "Yes, he is."    },
-  { id: 6, question: "Is Helen fifth?",          answer: "No, she isn't." },
-  { id: 7, question: "Is Stella third?",         answer: "No, she isn't." },
-  { id: 8, question: "Is Tom sixth?",            answer: "Yes, he is."    },
-];
+  const [locked, setLocked] = useState(false);
 
-const YES_NO_OPTIONS = ["Yes, he is.", "No, he isn't.", "Yes, she is.", "No, she isn't."];
+  const handleSelect = (i, option) => {
+    if (locked || result[i] === true) return;
 
-const ErrorBadge = () => (
-  <div style={{
-    position:       "absolute",
-    top:            -6,
-    right:          -6,
-    width:          16,
-    height:         16,
-    background:     "#ef4444",
-    color:          "#fff",
-    borderRadius:   "50%",
-    display:        "flex",
-    alignItems:     "center",
-    justifyContent: "center",
-    fontSize:       9,
-    fontWeight:     700,
-    border:         "1.5px solid #fff",
-    pointerEvents:  "none",
-  }}>
-    ✕
-  </div>
-);
+    const updatedSelected = [...selected];
 
-export default function WB_Unit6_Page33_Q1() {
-  const [orderAnswers, setOrderAnswers] = useState({ 1:"", 2:"", 3:"", 4:"", 5:"", 6:"" });
-  const [qAnswers,     setQAnswers]     = useState({});
-  const [checked,      setChecked]      = useState(false);
-  const [showAns,      setShowAns]      = useState(false);
-  const [wrongSlots,   setWrongSlots]   = useState({});
-  const [wrongQIds,    setWrongQIds]    = useState({});
+    updatedSelected[i] = option;
 
-  const usedNames = Object.values(orderAnswers).filter(Boolean);
+    setSelected(updatedSelected);
 
-  const handleOrderSelect = (slot, name) => {
-    if (showAns) return;
-    setChecked(false);
-    setWrongSlots({});
-    setWrongQIds({});
-    const newAnswers = { ...orderAnswers };
-    Object.keys(newAnswers).forEach(k => {
-      if (newAnswers[k] === name) newAnswers[k] = "";
+    const updatedAnswers = [...answers];
+
+    updatedAnswers[i] = option;
+
+    setAnswers(updatedAnswers);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-    newAnswers[slot] = name;
-    setOrderAnswers(newAnswers);
   };
 
-  const handleQSelect = (id, val) => {
-    if (showAns) return;
-    setChecked(false);
-    setWrongSlots({});
-    setWrongQIds({});
-    setQAnswers(prev => ({ ...prev, [id]: val }));
-  };
+  const checkAnswers = () => {
+    if (locked) return;
 
-  const handleCheck = () => {
-    const allOrder = Object.values(orderAnswers).every(Boolean);
-    const allQ     = QUESTIONS.every(q => qAnswers[q.id]);
-    if (!allOrder || !allQ) {
-      ValidationAlert.error("Please answer all questions first! ✏️");
+    const hasEmpty = selected.some((s) => !s);
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    const newWrongSlots = {};
-    Object.entries(orderAnswers).forEach(([slot, name]) => {
-      if (name !== CORRECT_ORDER[+slot - 1]) newWrongSlots[slot] = true;
+    let correctCount = 0;
+
+    const newResults = selected.map((s, i) => {
+      const ok = s.toLowerCase() === questions[i].answer.toLowerCase();
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    const newWrongQIds = {};
-    QUESTIONS.forEach(q => {
-      if (qAnswers[q.id] !== q.answer) newWrongQIds[q.id] = true;
-    });
+    setResult(newResults);
 
-    setWrongSlots(newWrongSlots);
-    setWrongQIds(newWrongQIds);
-    setChecked(true);
-    setShowAns(false);
+    const total = questions.length;
 
-    const correct = (6 - Object.keys(newWrongSlots).length) + (QUESTIONS.length - Object.keys(newWrongQIds).length);
-    const total   = 6 + QUESTIONS.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    if (correct === total) {
-      ValidationAlert.success("Excellent! All correct! 🎉");
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`${correct} / ${total} correct. Try again! 💪`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const newOrder = {};
-    CORRECT_ORDER.forEach((name, i) => { newOrder[i + 1] = name; });
-    setOrderAnswers(newOrder);
-    const newQ = {};
-    QUESTIONS.forEach(q => { newQ[q.id] = q.answer; });
-    setQAnswers(newQ);
-    setWrongSlots({});
-    setWrongQIds({});
-    setChecked(false);
-    setShowAns(true);
+  const showAnswers = () => {
+    const solved = questions.map((q) => q.answer);
+
+    setSelected(solved);
+
+    setAnswers(solved);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setOrderAnswers({ 1:"", 2:"", 3:"", 4:"", 5:"", 6:"" });
-    setQAnswers({});
-    setChecked(false);
-    setShowAns(false);
-    setWrongSlots({});
-    setWrongQIds({});
+    setSelected(["", "", "", "", "", ""]);
+
+    setAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  // ستايل ثابت — بدون أي تغيير عند التحقق
-  const qBtnStyle = (qId, option) => {
-    const isSelected = qAnswers[qId] === option;
-    return {
-      background: isSelected ? "#3b82f6" : "#f3f4f6",
-      color:      isSelected ? "#fff"    : "#374151",
-      border:     isSelected ? "2px solid #3b82f6" : "2px solid #e5e7eb",
-    };
+  const inputField = (i, width) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={answers[i]}
+        readOnly
+        className={`
+          ${width}
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
+  const optionCircle = (i, option) => {
+    const active = selected[i] === option;
+
+    return (
+      <button
+        type="button"
+        disabled={locked || result[i] === true}
+        onClick={() => handleSelect(i, option)}
+        style={{
+          position: "relative",
+          background: "transparent",
+          border: "none",
+          fontSize: "18px",
+          cursor: locked || result[i] === true ? "default" : "pointer",
+          color: "black",
+          textAlign: "left",
+          width: "fit-content",
+        }}
+      >
+        {option}
+
+        {active && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-6px",
+              left: "-10px",
+              width: "calc(100% + 20px)",
+              height: "calc(100% + 12px)",
+              border: "3px solid #6D2980",
+              borderRadius: "50%",
+              pointerEvents: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          />
+        )}
+      </button>
+    );
   };
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "18px" }}>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Read, look, and circle.
+        </h5>
 
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">A</span>{" "}
-          Write the names in ABC order. Answer the questions.
-        </h1>
+        {/* QUESTIONS */}
+        <div className="grid grid-cols-2 gap-x-12 gap-y-10 w-[110%] mb-15">
+          {/* 1 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">1</span>
 
-        {/* Word Bank */}
-        <div className="flex flex-wrap gap-2 justify-center p-3 bg-gray-50 rounded-2xl border border-gray-200">
-          {NAME_BANK.map(name => (
-            <span
-              key={name}
-              className="px-3 py-1 rounded-full text-sm font-semibold"
-              style={{
-                background:     usedNames.includes(name) ? "#d1fae5" : "#f3f4f6",
-                color:          usedNames.includes(name) ? "#16a34a" : "#374151",
-                border:         usedNames.includes(name) ? "1.5px solid #86efac" : "1.5px solid #e5e7eb",
-                textDecoration: usedNames.includes(name) ? "line-through" : "none",
-              }}
-            >
-              {name}
-            </span>
-          ))}
-        </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap">My dad gave me a</span>
 
-        {/* ── الجزء الأول: الترتيب ── */}
-        <div className="flex flex-col gap-3">
-          {[1,2,3,4,5,6].map(slot => (
-            <div key={slot} className="flex items-center gap-3">
-
-              <div style={{ width: 44, height: 44 }}>
-                {orderAnswers[slot] && NAME_IMGS[orderAnswers[slot]] ? (
-                  <img
-                    src={NAME_IMGS[orderAnswers[slot]]}
-                    alt={orderAnswers[slot]}
-                    style={{ width: 44, height: 44, objectFit: "contain" }}
-                  />
-                ) : (
-                  <div style={{ width: 44, height: 44, background: "#f3f4f6", borderRadius: 8 }} />
-                )}
-              </div>
-
-              <span className="font-bold text-gray-500 w-4">{slot}</span>
-
-              <div style={{ position: "relative", display: "inline-block" }}>
-                <select
-                  disabled={showAns}
-                  value={orderAnswers[slot]}
-                  onChange={e => handleOrderSelect(slot, e.target.value)}
-                  className="rounded-xl px-3 py-1 text-sm font-semibold outline-none"
-                  style={{
-                    border:     "2px solid #e5e7eb",
-                    minWidth:   120,
-                    background: "#fff",
-                    color:      "#1f2937",
-                    cursor:     showAns ? "default" : "pointer",
-                  }}
-                >
-                  <option value="">— choose —</option>
-                  {NAME_BANK.map(name => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
-
-                {checked && wrongSlots[slot] && <ErrorBadge />}
-              </div>
-
-            </div>
-          ))}
-        </div>
-
-        <hr className="border-gray-200" />
-
-        {/* ── الجزء الثاني: الأسئلة ── */}
-        <div className="grid grid-cols-1 gap-3" style={{ gridTemplateColumns: "1fr 1fr" }}>
-          {QUESTIONS.map(q => (
-            <div key={q.id} className="flex flex-col gap-1">
-              <p className="text-sm font-semibold text-gray-700">
-                <span className="text-orange-400 font-bold mr-1">{q.id}</span>
-                {q.question}
-              </p>
-
-              {q.id <= 4 ? (
-                <div className="flex flex-wrap gap-1">
-                  {CORRECT_ORDER.map(name => (
-                    <button
-                      key={name}
-                      disabled={showAns}
-                      onClick={() => handleQSelect(q.id, name)}
-                      className="px-2 py-1 rounded-lg text-xs font-semibold transition-all relative"
-                      style={qBtnStyle(q.id, name)}
-                    >
-                      {name}
-                      {checked && qAnswers[q.id] === name && wrongQIds[q.id] && <ErrorBadge />}
-                    </button>
-                  ))}
+                  {inputField(0, "w-[180px]")}
                 </div>
-              ) : (
-                <div className="flex flex-wrap gap-1">
-                  {YES_NO_OPTIONS.map(opt => (
-                    <button
-                      key={opt}
-                      disabled={showAns}
-                      onClick={() => handleQSelect(q.id, opt)}
-                      className="px-2 py-1 rounded-lg text-xs font-semibold transition-all relative"
-                      style={qBtnStyle(q.id, opt)}
-                    >
-                      {opt}
-                      {checked && qAnswers[q.id] === opt && wrongQIds[q.id] && <ErrorBadge />}
-                    </button>
-                  ))}
-                </div>
-              )}
+
+                <span className="mt-2">of gifts for my birthday.</span>
+              </div>
             </div>
-          ))}
-        </div>
 
-        <div className="mt-4 flex justify-center">
-          <Button
-            checkAnswers={handleCheck}
-            handleStartAgain={handleReset}
-            showAnswer={handleShowAnswer}
-          />
-        </div>
+            <div className="flex gap-4">
+              <img
+                src={questions[0].image}
+                alt="ferris-wheel"
+                style={{
+                  width: "165px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
 
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "230px",
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(0, "trade")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(0, "bunch")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(0, "booth")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">2</span>
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap">I won a nice</span>
+
+                  {inputField(1, "w-[180px]")}
+                </div>
+
+                <span className="mt-2">that looked like an army man.</span>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <img
+                src={questions[1].image}
+                alt="gardener"
+                alt="father-son"
+                style={{
+                  width: "165px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "220px",
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(1, "action figure")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(1, "bowling")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(1, "shoot")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">3</span>
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap">I love to</span>
+
+                  {inputField(2, "w-[180px]")}
+                </div>
+
+                <span className="mt-2">basketballs.</span>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <img
+                src={questions[2].image}
+                alt="father-son"
+                style={{
+                  width: "180px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "220px",
+                  height: "150px",
+                }}
+              >
+                <div className="flex flex-col gap-3 whitespace-normal">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(2, "shoot")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(2, "in a row")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(2, "expert")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">4</span>
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap mb-4">
+                    I won four games
+                  </span>
+
+                  {inputField(3, "w-[180px]")}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4 mt-8">
+              <img
+                src={questions[3].image}
+                alt="europe"
+                style={{
+                  width: "180px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "210px",
+                  height: "150px",
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(3, "in a row")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(3, "take advantage of")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(3, "Shall we?")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 5 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">5</span>
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap"> I got a 40%</span>
+
+                  {inputField(4, "w-[180px]")}
+                </div>
+
+                <span className="mt-2">on this pair of jeans.</span>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <img
+                src={questions[4].image}
+                alt="merry-go-round"
+                style={{
+                  width: "165px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "240px",
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(4, "bowling")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(4, "doll")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(4, "discount")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 6 */}
+          <div>
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-bold">6</span>
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap"> I like to </span>
+                  {inputField(5, "w-[180px]")} new
+                </div>
+
+                <span className="mt-2">games and see if I like them.</span>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <img
+                src={questions[5].image}
+                alt="rollercoaster"
+                style={{
+                  width: "165px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              <div
+                style={{
+                  border: "2px solid #7D3C98",
+                  borderRadius: "10px",
+                  padding: "12px 18px",
+                  width: "220px",
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <span className="font-bold">a</span>
+
+                    {optionCircle(5, "made it")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">b</span>
+
+                    {optionCircle(5, "try out")}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <span className="font-bold">c</span>
+
+                    {optionCircle(5, "half price")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit6_Page33_Q1;
