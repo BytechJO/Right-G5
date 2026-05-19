@@ -6,7 +6,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 30/Asset 4.svg";
 import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 30/Asset 14.svg";
 
-const WB_Unit5_Page30_Q1 = () => {
+const WB_Unit5_Page30_Q15 = () => {
   const answers = [
     "I'd like the spaghetti and meatballs, please.",
 
@@ -282,4 +282,4 @@ const WB_Unit5_Page30_Q1 = () => {
   );
 };
 
-export default WB_Unit5_Page30_Q1;
+export default WB_Unit5_Page30_Q15;
