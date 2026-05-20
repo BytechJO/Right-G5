@@ -1,523 +1,245 @@
-import React, { useEffect, useRef, useState } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 48/SVG/8.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 48/SVG/9.svg";
-import img3 from"../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 48/SVG/10.svg";
+const WB_Unit8_Page48_Q2 = () => {
+  const questions = [
+    "IP / loves / hot-air balloons",
 
-const COLORS = [
-  "#111827",
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#3b82f6",
-  "#a855f7",
-  "#ec4899",
-  "#ffffff",
-];
+    "I / know / IP / who can help you",
 
-const SIZES = [2, 4, 8, 12];
+    "IP / should learn / to read",
 
-const ITEMS = [
-  {
-    id: 1,
-    img: img1,
-    width: 320,
-    height: 250,
-    text: [
-      "My grandfather had a small, old house.",
-      "It had a red roof and two tall chimneys.",
-      "It had little windows and a big green door.",
-    ],
-  },
-  {
-    id: 2,
-    img: img2,
-    width: 320,
-    height: 250,
-    text: [
-      "Grandpa had a pretty garden, too.",
-      "There was a swing in the tree.",
-      "There were lots of pink and yellow flowers.",
-    ],
-  },
-  {
-    id: 3,
-    img: img3,
-    width: 320,
-    height: 220,
-    text: [
-      "Grandpa had a car. It was very old, slow, and noisy,",
-      "but it was beautiful. It was red and black.",
-    ],
-  },
-];
+    "IP / might come / tomorrow",
+  ];
 
-export default function WB_Unit8_Page48_QH() {
-  const [tool, setTool] = useState("pencil");
-  const [color, setColor] = useState("#ef4444");
-  const [size, setSize] = useState(4);
-  const [selectedCanvas, setSelectedCanvas] = useState(1);
-  const [textValue, setTextValue] = useState("");
-  const [isDrawing, setIsDrawing] = useState(false);
+  const answers = [
+    "Everyone loves hot-air balloons.",
 
-  const canvasRefs = useRef({});
-  const ctxRefs = useRef({});
-  const imageRefs = useRef({});
-  const lastPos = useRef({});
+    "I know someone who can help you.",
 
-  useEffect(() => {
-    ITEMS.forEach((item) => {
-      const canvas = canvasRefs.current[item.id];
-      if (!canvas) return;
+    "Everybody should learn to read.",
 
-      const ctx = canvas.getContext("2d");
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctxRefs.current[item.id] = ctx;
+    "Somebody might come tomorrow.",
+  ];
 
-      loadImageToCanvas(item.id, item.img, item.width, item.height);
-    });
-  }, []);
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", ""]);
 
-  const loadImageToCanvas = (id, src, width, height) => {
-    const canvas = canvasRefs.current[id];
-    const ctx = ctxRefs.current[id];
-    if (!canvas || !ctx) return;
+  const [result, setResult] = useState([]);
 
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(img, 0, 0, width, height);
-      imageRefs.current[id] = img;
-    };
-  };
+  const [locked, setLocked] = useState(false);
 
-  const clearCanvas = (id) => {
-    const item = ITEMS.find((x) => x.id === id);
-    if (!item) return;
-    loadImageToCanvas(id, item.img, item.width, item.height);
-  };
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/-/g, " ")
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const clearAllCanvases = () => {
-    ITEMS.forEach((item) => {
-      loadImageToCanvas(item.id, item.img, item.width, item.height);
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
   };
 
-  const getPos = (e, canvas) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-    if (e.touches && e.touches.length > 0) {
-      return {
-        x: (e.touches[0].clientX - rect.left) * scaleX,
-        y: (e.touches[0].clientY - rect.top) * scaleY,
-      };
-    }
+  const checkAnswers = () => {
+    if (locked) return;
 
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
-    };
-  };
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
-  const startDrawing = (e, id) => {
-    e.preventDefault();
-    setSelectedCanvas(id);
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
 
-    const canvas = canvasRefs.current[id];
-    const ctx = ctxRefs.current[id];
-    if (!canvas || !ctx) return;
-
-    if (tool === "fill") {
-      ctx.fillStyle = color;
-      ctx.globalAlpha = 0.35;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 1;
       return;
     }
 
-    if (tool === "text") {
-      if (!textValue.trim()) {
-        ValidationAlert.info("Please type text first.");
-        return;
-      }
+    let correctCount = 0;
 
-      const pos = getPos(e, canvas);
-      ctx.fillStyle = color;
-      ctx.font = "18px Arial";
-      ctx.textBaseline = "top";
-      ctx.fillText(textValue, pos.x, pos.y);
-      return;
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
     }
-
-    const pos = getPos(e, canvas);
-    lastPos.current[id] = pos;
-    setIsDrawing(true);
-
-    ctx.beginPath();
-    ctx.arc(
-      pos.x,
-      pos.y,
-      (tool === "eraser" ? size * 2.5 : size) / 2,
-      0,
-      Math.PI * 2
-    );
-    ctx.fillStyle = tool === "eraser" ? "#ffffff" : color;
-    ctx.fill();
   };
 
-  const draw = (e, id) => {
-    e.preventDefault();
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    if (!isDrawing || selectedCanvas !== id) return;
+  const showAnswers = () => {
+    setStudentAnswers(answers);
 
-    const canvas = canvasRefs.current[id];
-    const ctx = ctxRefs.current[id];
-    if (!canvas || !ctx) return;
+    setResult([true, true, true, true]);
 
-    if (tool !== "pencil" && tool !== "eraser") return;
-
-    const pos = getPos(e, canvas);
-    const prev = lastPos.current[id];
-    if (!prev) return;
-
-    ctx.beginPath();
-    ctx.moveTo(prev.x, prev.y);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color;
-    ctx.lineWidth = tool === "eraser" ? size * 3 : size;
-    ctx.stroke();
-
-    lastPos.current[id] = pos;
+    setLocked(true);
   };
 
-  const stopDrawing = (e, id) => {
-    e?.preventDefault?.();
-    setIsDrawing(false);
-    lastPos.current[id] = null;
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const handleCheck = () => {
-    ValidationAlert.success("Great! Check your drawing and coloring.");
-  };
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const getCursor = () => {
-    if (tool === "eraser") return "cell";
-    if (tool === "text") return "text";
-    return "crosshair";
-  };
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  return (
-      <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "clamp(18px,2.5vw,28px)",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">H</span>
-          Read, draw, and color.
-        </h1>
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-        {/* Toolbar */}
-        <div
+      {result[i] === false && (
+        <span
           style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
             display: "flex",
-            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "center",
-            gap: "10px",
-            padding: "12px 14px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "16px",
-            backgroundColor: "#f9fafb",
-            width: "100%",
-            boxSizing: "border-box",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {[
-            { id: "pencil", label: "✏️ Draw" },
-            { id: "eraser", label: "🧽 Erase" },
-            { id: "fill", label: "🪣 Fill" },
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setTool(item.id)}
-              style={{
-                padding: "8px 12px",
-                borderRadius: "10px",
-                border:
-                  tool === item.id
-                    ? "2px solid #3b82f6"
-                    : "2px solid #d1d5db",
-                backgroundColor: tool === item.id ? "#eff6ff" : "#fff",
-                color: tool === item.id ? "#1d4ed8" : "#374151",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
-          <div
-            style={{
-              width: "1px",
-              height: "28px",
-              backgroundColor: "#d1d5db",
-            }}
-          />
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
-            {COLORS.map((c) => (
-              <button
-                key={c}
-                onClick={() => setColor(c)}
-                style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  border:
-                    color === c ? "3px solid #111827" : "2px solid #d1d5db",
-                  backgroundColor: c,
-                  cursor: "pointer",
-                }}
-              />
-            ))}
+        <div className="header-title-page8 mb-[4vh]">
+          <span className="ex-A mr-2">H</span>
+          <div style={{ display: "block" }}>
+            Read and write sentences from the words given.
+            <div style={{ marginTop: "4px" }}>
+              Add an <span className="text-[#00AEEF]">indefinite pronoun </span>
+              in place of the “<span className="text-[#00AEEF]">IP</span>.”
+            </div>
           </div>
-
-          <div
-            style={{
-              width: "1px",
-              height: "28px",
-              backgroundColor: "#d1d5db",
-            }}
-          />
-
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            {SIZES.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSize(s)}
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  border:
-                    size === s ? "2px solid #3b82f6" : "2px solid #d1d5db",
-                  backgroundColor: "#fff",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <span
-                  style={{
-                    width: `${Math.min(s * 2, 16)}px`,
-                    height: `${Math.min(s * 2, 16)}px`,
-                    borderRadius: "50%",
-                    backgroundColor: "#111827",
-                    display: "block",
-                  }}
-                />
-              </button>
-            ))}
-          </div>
-
-
-
-          <button
-            onClick={() => clearCanvas(selectedCanvas)}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "10px",
-              border: "2px solid #fca5a5",
-              backgroundColor: "#fef2f2",
-              color: "#dc2626",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            Clear Selected
-          </button>
-
-          <button
-            onClick={clearAllCanvases}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "10px",
-              border: "2px solid #fecaca",
-              backgroundColor: "#fff",
-              color: "#b91c1c",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            Clear All
-          </button>
         </div>
 
-        {/* Sections */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "24px",
-            width: "100%",
-          }}
-        >
-          {ITEMS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "22px",
-                width: "100%",
-                flexWrap: "wrap",
-              }}
-            >
-              {/* image + canvas */}
-              <div
-                style={{
-                  position: "relative",
-                  width: `${item.width}px`,
-                  height: `${item.height}px`,
-                  flexShrink: 0,
-                  border:
-                    selectedCanvas === item.id
-                      ? "3px solid #f59e0b"
-                      : "2px solid #e5e7eb",
-                  borderRadius: "14px",
-                  overflow: "hidden",
-                  backgroundColor: "#fff",
-                  boxSizing: "border-box",
-                }}
-                onClick={() => setSelectedCanvas(item.id)}
-              >
-                <canvas
-                  ref={(el) => {
-                    if (el) canvasRefs.current[item.id] = el;
-                  }}
-                  width={item.width}
-                  height={item.height}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "block",
-                    cursor: getCursor(),
-                    touchAction: "none",
-                  }}
-                  onMouseDown={(e) => startDrawing(e, item.id)}
-                  onMouseMove={(e) => draw(e, item.id)}
-                  onMouseUp={(e) => stopDrawing(e, item.id)}
-                  onMouseLeave={(e) => stopDrawing(e, item.id)}
-                  onTouchStart={(e) => startDrawing(e, item.id)}
-                  onTouchMove={(e) => draw(e, item.id)}
-                  onTouchEnd={(e) => stopDrawing(e, item.id)}
-                />
+        {/* QUESTIONS */}
 
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "6px",
-                    left: "6px",
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                    backgroundColor: "#fff",
-                    border: "1px solid #111",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "13px",
-                    fontWeight: "700",
-                    zIndex: 2,
-                  }}
-                >
-                  {item.id}
-                </div>
+        <div className="flex flex-col gap-10">
+          {questions.map((question, index) => (
+            <div key={index}>
+              {/* QUESTION */}
+
+              <div className="flex items-start gap-4 mb-5">
+                <span className="font-bold">{index + 1}</span>
+
+                <span className="leading-[1.8]">{question}</span>
               </div>
 
-              {/* text */}
-              <div
-                style={{
-                  flex: "1 1 420px",
-                  minWidth: "280px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "6px",
-                  justifyContent: "center",
-                }}
-              >
-                {item.text.map((line, index) => (
-                  <p
-                    key={index}
-                    style={{
-                      margin: 0,
-                      fontSize: "19px",
-                      lineHeight: "1.45",
-                      color: "#222",
-                      fontWeight: index === 0 ? "600" : "500",
-                    }}
-                  >
-                    {index === 0 ? (
-                      <>
-                        <span style={{ fontWeight: "700", marginRight: "8px" }}>
-                          {item.id}
-                        </span>
-                        {line}
-                      </>
-                    ) : (
-                      line
-                    )}
-                  </p>
-                ))}
-              </div>
+              {/* INPUT */}
+
+              <div className="pl-[35px]">{inputField(index)}</div>
             </div>
           ))}
         </div>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleStartAgain={clearAllCanvases}
-          />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit8_Page48_Q2;

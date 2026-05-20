@@ -433,6 +433,8 @@ const WB_Unit2_Page11_Q1 = () => {
                 {row.map((letter, colIndex) => (
                   <span
                     key={colIndex}
+                    data-row={rowIndex}
+                    data-col={colIndex}
                     className="
                           w-10
                           h-10
@@ -450,6 +452,31 @@ const WB_Unit2_Page11_Q1 = () => {
                     onMouseDown={() => startSelection(rowIndex, colIndex)}
                     onMouseEnter={() => addCell(rowIndex, colIndex)}
                     onMouseUp={endSelection}
+                    onTouchStart={() => startSelection(rowIndex, colIndex)}
+                    onTouchMove={(e) => {
+                      e.preventDefault();
+
+                      const touch = e.touches[0];
+
+                      const element = document.elementFromPoint(
+                        touch.clientX,
+                        touch.clientY,
+                      );
+
+                      if (!element) return;
+
+                      const row = element.getAttribute("data-row");
+
+                      const col = element.getAttribute("data-col");
+
+                      if (row !== null && col !== null) {
+                        addCell(Number(row), Number(col));
+                      }
+                    }}
+                    onTouchEnd={endSelection}
+                    style={{
+                      touchAction: "none",
+                    }}
                   >
                     {letter}
                   </span>

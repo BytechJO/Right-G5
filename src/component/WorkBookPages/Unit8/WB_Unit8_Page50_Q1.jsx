@@ -1,472 +1,905 @@
-import { useState, useRef, useLayoutEffect } from "react";
-import Button from "../Button";
+import React, { useState, useRef } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/4.svg";
-import img5 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/5.svg";
-import img6 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 50/SVG/6.svg";
+const WB_Unit8_Page50_Q1 = () => {
+  const words = [
+    "spot",
+    "pilot",
+    "lean",
+    "volunteer",
+    "rainbow",
+    "doubt",
+    "crowded",
+    "board games",
+    "shocked",
+    "fly over",
+    "second home",
+    "landscape",
+    "recognize",
+    "hot-air balloon",
+  ];
 
-const DOT_COLOR    = "#9ca3af";
-const ACTIVE_COLOR = "#f39b42";
-const WRONG_COLOR  = "#ef4444";
-const LINE_COLOR   = "#f39b42";
-const CHUNK_COLOR  = "#ffca94";
+  const grid = [
+    [
+      "p",
+      "w",
+      "n",
+      "v",
+      "t",
+      "t",
+      "t",
+      "e",
+      "d",
+      "r",
+      "a",
+      "i",
+      "n",
+      "b",
+      "o",
+      "w",
+    ],
 
-const WORDS = [
-  { id: 1, prefix: "",         suffix: "andmother", correctChunk: "gr", fullWord: "grandmother", correctImage: 2 },
-  { id: 2, prefix: "bus",      suffix: "",          correctChunk: "es", fullWord: "buses",        correctImage: 1 },
-  { id: 3, prefix: "",         suffix: "esent",     correctChunk: "pr", fullWord: "present",      correctImage: 6 },
-  { id: 4, prefix: "box",      suffix: "",          correctChunk: "es", fullWord: "boxes",        correctImage: 3 },
-  { id: 5, prefix: "",         suffix: "ize",       correctChunk: "pr", fullWord: "prize",        correctImage: 4 },
-  { id: 6, prefix: "sandwich", suffix: "",          correctChunk: "es", fullWord: "sandwiches",   correctImage: 5 },
-];
+    [
+      "a",
+      "e",
+      "f",
+      "o",
+      "v",
+      "o",
+      "l",
+      "u",
+      "n",
+      "t",
+      "e",
+      "e",
+      "r",
+      "i",
+      "a",
+      "x",
+    ],
 
-const IMAGES = [
-  { id: 1, img: img1, alt: "buses"       },
-  { id: 2, img: img2, alt: "grandmother" },
-  { id: 3, img: img3, alt: "boxes"       },
-  { id: 4, img: img4, alt: "prize"       },
-  { id: 5, img: img5, alt: "sandwiches"  },
-  { id: 6, img: img6, alt: "present"     },
-];
+    [
+      "t",
+      "v",
+      "d",
+      "k",
+      "h",
+      "s",
+      "t",
+      "e",
+      "c",
+      "x",
+      "v",
+      "g",
+      "w",
+      "f",
+      "a",
+      "c",
+    ],
 
-const CHUNKS = [
-  { id: "es-1", value: "es" },
-  { id: "gr-1", value: "gr" },
-  { id: "pr-2", value: "pr" },
-  { id: "pr-1", value: "pr" },
-  { id: "es-2", value: "es" },
-  { id: "es-3", value: "es" },
-];
+    [
+      "o",
+      "b",
+      "e",
+      "e",
+      "z",
+      "k",
+      "f",
+      "r",
+      "u",
+      "w",
+      "i",
+      "s",
+      "t",
+      "l",
+      "h",
+      "t",
+    ],
 
-const ROW_HEIGHT = 72;
+    [
+      "j",
+      "o",
+      "l",
+      "k",
+      "r",
+      "c",
+      "r",
+      "o",
+      "w",
+      "d",
+      "e",
+      "d",
+      "q",
+      "y",
+      "k",
+      "s",
+    ],
 
-const WB_Unit8_Page48_QA = () => {
-  const [chunkAnswers, setChunkAnswers] = useState({});
-  const [usedChunkIds, setUsedChunkIds] = useState({});
-  const [draggedChunk, setDraggedChunk] = useState(null);
+    [
+      "e",
+      "a",
+      "y",
+      "h",
+      "f",
+      "e",
+      "s",
+      "r",
+      "z",
+      "g",
+      "i",
+      "y",
+      "a",
+      "o",
+      "z",
+      "h",
+    ],
 
-  const [touchChunk, setTouchChunk] = useState(null);
-  const [touchPos,   setTouchPos]   = useState({ x: 0, y: 0 });
+    [
+      "u",
+      "r",
+      "e",
+      "b",
+      "p",
+      "k",
+      "c",
+      "h",
+      "s",
+      "p",
+      "o",
+      "t",
+      "i",
+      "v",
+      "h",
+      "o",
+    ],
 
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [matches,      setMatches]      = useState({});
-  const [showResults,  setShowResults]  = useState(false);
-  const [showAns,      setShowAns]      = useState(false);
-  const [lines,        setLines]        = useState([]);
+    [
+      "a",
+      "d",
+      "s",
+      "g",
+      "e",
+      "u",
+      "m",
+      "o",
+      "l",
+      "j",
+      "k",
+      "v",
+      "x",
+      "e",
+      "u",
+      "c",
+    ],
 
-  const containerRef = useRef(null);
-  const elementRefs  = useRef({});
-  const dropZoneRefs = useRef({});
+    [
+      "s",
+      "g",
+      "d",
+      "m",
+      "r",
+      "w",
+      "z",
+      "v",
+      "g",
+      "p",
+      "i",
+      "b",
+      "e",
+      "r",
+      "r",
+      "k",
+    ],
 
-  useLayoutEffect(() => {
-    const updateLines = () => {
-      if (!containerRef.current) return;
-      const cr = containerRef.current.getBoundingClientRect();
-      const newLines = Object.entries(matches)
-        .map(([leftId, rightId]) => {
-          const le = elementRefs.current[`left-${leftId}`];
-          const re = elementRefs.current[`right-${rightId}`];
-          if (!le || !re) return null;
-          const lr = le.getBoundingClientRect();
-          const rr = re.getBoundingClientRect();
-          return {
-            id: `${leftId}-${rightId}`,
-            x1: lr.right - cr.left,
-            y1: lr.top   + lr.height / 2 - cr.top,
-            x2: rr.left  - cr.left,
-            y2: rr.top   + rr.height / 2 - cr.top,
-          };
-        })
-        .filter(Boolean);
-      setLines(newLines);
-    };
-    updateLines();
-    window.addEventListener("resize", updateLines);
-    return () => window.removeEventListener("resize", updateLines);
-  }, [matches]);
+    [
+      "x",
+      "a",
+      "p",
+      "o",
+      "e",
+      "c",
+      "a",
+      "l",
+      "a",
+      "n",
+      "d",
+      "s",
+      "c",
+      "a",
+      "p",
+      "e",
+    ],
 
-  // ── منطق مشترك drag و touch ──
-  const applyChunkDrop = (wordId, chunk) => {
-    const oldChunkId = chunkAnswers[wordId]?.chunkId;
-    setChunkAnswers((prev) => ({
-      ...prev,
-      [wordId]: { chunk: chunk.value, chunkId: chunk.id },
-    }));
-    setUsedChunkIds((prev) => {
-      const updated = { ...prev, [chunk.id]: true };
-      if (oldChunkId) delete updated[oldChunkId];
-      return updated;
+    [
+      "v",
+      "m",
+      "o",
+      "l",
+      "u",
+      "h",
+      "x",
+      "l",
+      "f",
+      "t",
+      "i",
+      "v",
+      "f",
+      "t",
+      "m",
+      "d",
+    ],
+
+    [
+      "a",
+      "e",
+      "s",
+      "g",
+      "q",
+      "b",
+      "u",
+      "o",
+      "e",
+      "c",
+      "h",
+      "z",
+      "p",
+      "t",
+      "w",
+      "a",
+    ],
+
+    [
+      "d",
+      "s",
+      "b",
+      "o",
+      "t",
+      "w",
+      "t",
+      "v",
+      "m",
+      "a",
+      "i",
+      "z",
+      "e",
+      "c",
+      "b",
+      "y",
+    ],
+
+    [
+      "p",
+      "i",
+      "l",
+      "o",
+      "t",
+      "o",
+      "s",
+      "e",
+      "c",
+      "o",
+      "n",
+      "d",
+      "h",
+      "o",
+      "m",
+      "e",
+    ],
+
+    [
+      "d",
+      "f",
+      "u",
+      "k",
+      "e",
+      "k",
+      "y",
+      "r",
+      "f",
+      "g",
+      "v",
+      "t",
+      "l",
+      "u",
+      "k",
+      "j",
+    ],
+
+    [
+      "h",
+      "o",
+      "t",
+      "a",
+      "i",
+      "r",
+      "b",
+      "a",
+      "l",
+      "l",
+      "o",
+      "o",
+      "n",
+      "b",
+      "e",
+      "b",
+    ],
+  ];
+
+  const answers = [
+    {
+      word: "rainbow",
+
+      cells: [
+        { row: 0, col: 9 },
+        { row: 0, col: 10 },
+        { row: 0, col: 11 },
+        { row: 0, col: 12 },
+        { row: 0, col: 13 },
+        { row: 0, col: 14 },
+        { row: 0, col: 15 },
+      ],
+    },
+
+    {
+      word: "volunteer",
+
+      cells: [
+        { row: 1, col: 4 },
+        { row: 1, col: 5 },
+        { row: 1, col: 6 },
+        { row: 1, col: 7 },
+        { row: 1, col: 8 },
+        { row: 1, col: 9 },
+        { row: 1, col: 10 },
+        { row: 1, col: 11 },
+        { row: 1, col: 12 },
+      ],
+    },
+
+    {
+      word: "fly over",
+
+      cells: [
+        { row: 2, col: 13 },
+        { row: 3, col: 13 },
+        { row: 4, col: 13 },
+        { row: 5, col: 13 },
+        { row: 6, col: 13 },
+        { row: 7, col: 13 },
+        { row: 8, col: 13 },
+      ],
+    },
+
+    {
+      word: "crowded",
+
+      cells: [
+        { row: 4, col: 5 },
+        { row: 4, col: 6 },
+        { row: 4, col: 7 },
+        { row: 4, col: 8 },
+        { row: 4, col: 9 },
+        { row: 4, col: 10 },
+        { row: 4, col: 11 },
+      ],
+    },
+
+    {
+      word: "spot",
+
+      cells: [
+        { row: 6, col: 8 },
+        { row: 6, col: 9 },
+        { row: 6, col: 10 },
+        { row: 6, col: 11 },
+      ],
+    },
+
+    {
+      word: "landscape",
+
+      cells: [
+        { row: 9, col: 7 },
+        { row: 9, col: 8 },
+        { row: 9, col: 9 },
+        { row: 9, col: 10 },
+        { row: 9, col: 11 },
+        { row: 9, col: 12 },
+        { row: 9, col: 13 },
+        { row: 9, col: 14 },
+        { row: 9, col: 15 },
+      ],
+    },
+
+    {
+      word: "pilot",
+
+      cells: [
+        { row: 13, col: 0 },
+        { row: 13, col: 1 },
+        { row: 13, col: 2 },
+        { row: 13, col: 3 },
+        { row: 13, col: 4 },
+      ],
+    },
+
+    {
+      word: "second home",
+
+      cells: [
+        { row: 13, col: 6 },
+        { row: 13, col: 7 },
+        { row: 13, col: 8 },
+        { row: 13, col: 9 },
+        { row: 13, col: 10 },
+        { row: 13, col: 11 },
+        { row: 13, col: 12 },
+        { row: 13, col: 13 },
+        { row: 13, col: 14 },
+        { row: 13, col: 15 },
+      ],
+    },
+
+    {
+      word: "hot-air balloon",
+
+      cells: [
+        { row: 15, col: 0 },
+        { row: 15, col: 1 },
+        { row: 15, col: 2 },
+        { row: 15, col: 3 },
+        { row: 15, col: 4 },
+        { row: 15, col: 5 },
+        { row: 15, col: 6 },
+        { row: 15, col: 7 },
+        { row: 15, col: 8 },
+        { row: 15, col: 9 },
+        { row: 15, col: 10 },
+        { row: 15, col: 11 },
+        { row: 15, col: 12 },
+      ],
+    },
+    {
+      word: "board games",
+
+      cells: [
+        { row: 3, col: 1 },
+        { row: 4, col: 1 },
+        { row: 5, col: 1 },
+        { row: 6, col: 1 },
+        { row: 7, col: 1 },
+        { row: 8, col: 1 },
+        { row: 9, col: 1 },
+        { row: 10, col: 1 },
+        { row: 11, col: 1 },
+        { row: 12, col: 1 },
+      ],
+    },
+
+    {
+      word: "recognize",
+
+      cells: [
+        { row: 4, col: 4 },
+        { row: 5, col: 5 },
+        { row: 6, col: 6 },
+        { row: 7, col: 7 },
+        { row: 8, col: 8 },
+        { row: 9, col: 9 },
+        { row: 10, col: 10 },
+        { row: 11, col: 11 },
+        { row: 12, col: 12 },
+      ],
+    },
+
+    {
+      word: "doubt",
+
+      cells: [
+        { row: 8, col: 2 },
+        { row: 9, col: 3 },
+        { row: 10, col: 4 },
+        { row: 11, col: 5 },
+        { row: 12, col: 6 },
+      ],
+    },
+
+    {
+      word: "lean",
+
+      cells: [
+        { row: 10, col: 7 },
+        { row: 11, col: 8 },
+        { row: 12, col: 9 },
+        { row: 13, col: 10 },
+      ],
+    },
+
+    {
+      word: "shocked",
+
+      cells: [
+        { row: 4, col: 15 },
+        { row: 5, col: 15 },
+        { row: 6, col: 15 },
+        { row: 7, col: 15 },
+        { row: 8, col: 15 },
+        { row: 9, col: 15 },
+        { row: 10, col: 15 },
+      ],
+    },
+  ];
+
+  const gridRef = useRef(null);
+
+  const [selectedCells, setSelectedCells] = useState([]);
+
+  const [startCell, setStartCell] = useState(null);
+
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  const [foundWords, setFoundWords] = useState([]);
+
+  const [foundSelections, setFoundSelections] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const [showedAnswer, setShowedAnswer] = useState(false);
+
+  // ------------------------
+  // START
+  // ------------------------
+
+  const startSelection = (row, col) => {
+    if (locked || showedAnswer) return;
+
+    setStartCell({ row, col });
+
+    setSelectedCells([{ row, col }]);
+
+    setIsSelecting(true);
+  };
+
+  // ------------------------
+  // MOVE
+  // ------------------------
+
+  const addCell = (row, col) => {
+    if (!isSelecting || !startCell) return;
+
+    const dr = row - startCell.row;
+
+    const dc = col - startCell.col;
+
+    const stepRow = Math.sign(dr);
+
+    const stepCol = Math.sign(dc);
+
+    if (!(dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc))) return;
+
+    const length = Math.max(Math.abs(dr), Math.abs(dc));
+
+    const cells = [];
+
+    for (let i = 0; i <= length; i++) {
+      cells.push({
+        row: startCell.row + i * stepRow,
+
+        col: startCell.col + i * stepCol,
+      });
+    }
+
+    setSelectedCells(cells);
+  };
+
+  // ------------------------
+  // WORD
+  // ------------------------
+
+  const getWordFromCells = (cells) => {
+    let word = "";
+
+    cells.forEach((cell) => {
+      word += grid[cell.row][cell.col];
     });
-    setShowResults(false);
+
+    return word.toLowerCase();
   };
 
-  // ── Drag desktop ──
-  const handleDragStart = (chunk) => {
-    if (showAns || usedChunkIds[chunk.id]) return;
-    setDraggedChunk(chunk);
-  };
-  const handleDropChunk = (wordId) => {
-    if (showAns || !draggedChunk) return;
-    applyChunkDrop(wordId, draggedChunk);
-    setDraggedChunk(null);
-  };
+  // ------------------------
+  // END
+  // ------------------------
 
-  // ── Touch mobile ──
-  const handleTouchStart = (e, chunk) => {
-    if (showAns || usedChunkIds[chunk.id]) return;
-    const t = e.touches[0];
-    setTouchChunk(chunk);
-    setTouchPos({ x: t.clientX, y: t.clientY });
-  };
-  const handleTouchMove = (e) => {
-    if (!touchChunk) return;
-    const t = e.touches[0];
-    setTouchPos({ x: t.clientX, y: t.clientY });
-  };
-  const handleTouchEnd = () => {
-    if (!touchChunk) return;
-    Object.entries(dropZoneRefs.current).forEach(([wordId, ref]) => {
-      if (!ref) return;
-      const r = ref.getBoundingClientRect();
-      if (
-        touchPos.x >= r.left && touchPos.x <= r.right &&
-        touchPos.y >= r.top  && touchPos.y <= r.bottom
-      ) {
-        applyChunkDrop(Number(wordId), touchChunk);
+  const endSelection = () => {
+    setIsSelecting(false);
+
+    if (selectedCells.length === 0) return;
+
+    const word = getWordFromCells(selectedCells);
+
+    const reversed = word.split("").reverse().join("");
+
+    const normalizedWords = words.map((w) =>
+      w.toLowerCase().replace(/\s/g, "").replace(/-/g, ""),
+    );
+
+    const normalizedWord = word.replace(/\s/g, "").replace(/-/g, "");
+
+    const normalizedReversed = reversed.replace(/\s/g, "").replace(/-/g, "");
+
+    const foundIndex = normalizedWords.indexOf(normalizedWord);
+
+    const reversedIndex = normalizedWords.indexOf(normalizedReversed);
+
+    if (foundIndex !== -1 || reversedIndex !== -1) {
+      const correctWord =
+        foundIndex !== -1 ? words[foundIndex] : words[reversedIndex];
+
+      const cellsToSave =
+        foundIndex !== -1 ? [...selectedCells] : [...selectedCells].reverse();
+
+      if (!foundWords.includes(correctWord)) {
+        setFoundWords((prev) => [...prev, correctWord]);
+
+        setFoundSelections((prev) => [
+          ...prev,
+          {
+            word: correctWord,
+            cells: cellsToSave,
+          },
+        ]);
       }
-    });
-    setTouchChunk(null);
+    }
+
+    setSelectedCells([]);
+
+    setStartCell(null);
   };
 
-  // ── Matching ──
-  const handleLeftClick = (id) => {
-    if (showAns) return;
-    setSelectedLeft(id);
-    setShowResults(false);
-  };
-  const handleRightClick = (rightId) => {
-    if (showAns || selectedLeft === null) return;
-    const newMatches = { ...matches };
-    Object.keys(newMatches).forEach((k) => { if (newMatches[k] === rightId) delete newMatches[k]; });
-    newMatches[selectedLeft] = rightId;
-    setMatches(newMatches);
-    setSelectedLeft(null);
-    setShowResults(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const resetAll = () => {
+    setFoundWords([]);
+
+    setFoundSelections([]);
+
+    setSelectedCells([]);
+
+    setStartCell(null);
+
+    setIsSelecting(false);
+
+    setLocked(false);
+
+    setShowedAnswer(false);
   };
 
-  // ── Check / Show / Reset ──
-  const getItemResult = (item) =>
-    chunkAnswers[item.id]?.chunk === item.correctChunk &&
-    matches[item.id] === item.correctImage;
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setFoundWords(words);
+
+    setFoundSelections(answers);
+
+    setLocked(true);
+
+    setShowedAnswer(true);
+  };
+
+  // ------------------------
+  // CHECK
+  // ------------------------
 
   const checkAnswers = () => {
-    if (showAns) return;
-    if (!WORDS.every((i) => chunkAnswers[i.id]?.chunk) || !WORDS.every((i) => matches[i.id])) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (showedAnswer || locked) return;
+
+    if (foundWords.length < answers.length) {
+      ValidationAlert.info("Please find all the words first.");
+
       return;
     }
-    let score = 0;
-    WORDS.forEach((i) => { if (getItemResult(i)) score++; });
-    setShowResults(true);
-    if (score === WORDS.length)  ValidationAlert.success(`Score: ${score} / ${WORDS.length}`);
-    else if (score > 0)          ValidationAlert.warning(`Score: ${score} / ${WORDS.length}`);
-    else                         ValidationAlert.error(`Score: ${score} / ${WORDS.length}`);
+
+    const score = foundWords.length;
+
+    const total = answers.length;
+
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold">
+          Score: ${score} / ${total}
+        </span>
+      </div>
+    `;
+
+    ValidationAlert.success(msg);
+
+    setLocked(true);
   };
 
-  const handleShowAnswer = () => {
-    const correctChunks  = {};
-    const correctUsed    = {};
-    const correctMatches = {};
-    const usedIndexes    = new Set();
-    WORDS.forEach((item) => {
-      const idx = CHUNKS.findIndex((c, i) => c.value === item.correctChunk && !usedIndexes.has(i));
-      if (idx !== -1) {
-        correctChunks[item.id]      = { chunk: CHUNKS[idx].value, chunkId: CHUNKS[idx].id };
-        correctUsed[CHUNKS[idx].id] = true;
-        usedIndexes.add(idx);
-      }
-      correctMatches[item.id] = item.correctImage;
-    });
-    setChunkAnswers(correctChunks);
-    setUsedChunkIds(correctUsed);
-    setMatches(correctMatches);
-    setShowAns(true);
-    setShowResults(true);
-    setSelectedLeft(null);
+  // ------------------------
+  // LINE
+  // ------------------------
+
+  const renderLine = (cells, key, opacity = 0.65) => {
+    if (!cells || cells.length < 2) return null;
+
+    const start = cells[0];
+
+    const end = cells[cells.length - 1];
+
+    const cellSize = 34;
+
+    const x1 = start.col * cellSize + cellSize / 2;
+
+    const y1 = start.row * cellSize + cellSize / 2;
+
+    const x2 = end.col * cellSize + cellSize / 2;
+
+    const y2 = end.row * cellSize + cellSize / 2;
+
+    return (
+      <line
+        key={key}
+        x1={x1}
+        y1={y1}
+        x2={x2}
+        y2={y2}
+        stroke="#7D3C98"
+        strokeWidth="18"
+        strokeLinecap="round"
+        opacity={opacity}
+      />
+    );
   };
-
-  const handleStartAgain = () => {
-    setChunkAnswers({});
-    setUsedChunkIds({});
-    setDraggedChunk(null);
-    setTouchChunk(null);
-    setSelectedLeft(null);
-    setMatches({});
-    setShowResults(false);
-    setShowAns(false);
-    setLines([]);
-  };
-
-  // ── Helpers ──
-  const isWrongItem = (item) => showResults && !showAns && !getItemResult(item);
-
-  const getDotColor = (side, id) => {
-    if (side === "left" && selectedLeft === id) return ACTIVE_COLOR;
-    const connected = side === "left" ? !!matches[id] : Object.values(matches).includes(id);
-    return connected ? ACTIVE_COLOR : DOT_COLOR;
-  };
-
-  const getLeftRowStyle = (itemId) => {
-    const isActive = selectedLeft === itemId;
-    return {
-      position:        "relative",
-      height:          `${ROW_HEIGHT}px`,
-      display:         "flex",
-      alignItems:      "center",
-      justifyContent:  "space-between",
-      gap:             "12px",
-      padding:         "0 10px 0 8px",
-      borderRadius:    "14px",
-      border:          isActive ? `2px solid ${ACTIVE_COLOR}` : "2px solid transparent",
-      backgroundColor: isActive ? "rgba(243,155,66,0.08)" : "transparent",
-      boxShadow:       isActive ? "0 0 0 3px rgba(243,155,66,0.12)" : "none",
-      transition:      "all 0.2s ease",
-    };
-  };
-
-  const dropZoneStyle = (item) => ({
-    minWidth:       "88px",
-    minHeight:      "34px",
-    borderBottom:   "2px solid #333",
-    display:        "flex",
-    alignItems:     "center",
-    justifyContent: "center",
-    color:          chunkAnswers[item.id]?.chunk
-      ? (isWrongItem(item) ? WRONG_COLOR : "#000000ff")
-      : "#9ca3af",
-    fontSize:   "22px",
-    lineHeight: "1",
-    padding:    "0 4px",
-    fontWeight: 700,
-  });
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall w-full">
+        {/* TITLE */}
 
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">A</span>
-          Look, write, and match.
-        </h1>
+        <h5 className="header-title-page8 mb-5">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            L
+          </span>
+          Find and circle the words.
+        </h5>
 
-        {/* ── Chunk bank ── */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap" }}>
-          {CHUNKS.map((chunk) => {
-            const disabled = !!usedChunkIds[chunk.id];
-            return (
-              <div
-                key={chunk.id}
-                draggable={!disabled && !showAns}
-                onDragStart={() => handleDragStart(chunk)}
-                onTouchStart={(e) => handleTouchStart(e, chunk)}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                style={{
-                  padding:         "8px 14px",
-                  borderRadius:    "10px",
-                  backgroundColor: disabled ? "#d1d5db" : CHUNK_COLOR,
-                  color:           disabled ? "#fff" : "#222",
-                  fontSize:        "18px",
-                  fontWeight:      "700",
-                  border:          `1px solid ${disabled ? "#d1d5db" : ACTIVE_COLOR}`,
-                  cursor:          disabled ? "not-allowed" : "grab",
-                  opacity:         disabled ? 0.5 : 1,
-                  userSelect:      "none",
-                  touchAction:     "none",
-                  boxShadow:       "0 2px 6px rgba(0,0,0,0.12)",
-                  minWidth:        "52px",
-                  textAlign:       "center",
-                  transition:      "opacity 0.2s",
-                }}
-              >
-                {chunk.value}
-              </div>
-            );
-          })}
-        </div>
+        {/* CONTENT */}
 
-        {/* ── Matching area ── */}
-        <div
-          ref={containerRef}
-          style={{
-            position:       "relative",
-            display:        "flex",
-            justifyContent: "center",
-            alignItems:     "flex-start",
-            gap:            "90px",
-            padding:        "10px 20px",
-            minHeight:      "560px",
-          }}
-        >
-          {/* Left side */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0", width: "390px" }}>
-            {WORDS.map((item) => (
-              <div key={item.id} style={getLeftRowStyle(item.id)}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1, minHeight: "38px" }}>
-                  <span style={{ fontSize: "18px", fontWeight: "700", color: "#222", minWidth: "18px" }}>
-                    {item.id}
+        <div className="flex gap-8 items-start">
+          {/* GRID */}
+
+          <div
+            ref={gridRef}
+            className="relative select-none"
+            onMouseLeave={endSelection}
+          >
+            {grid.map((row, rowIndex) => (
+              <div key={rowIndex} className="flex">
+                {row.map((letter, colIndex) => (
+                  <span
+                    key={colIndex}
+                    data-row={rowIndex}
+                    data-col={colIndex}
+                    className="
+                      w-[34px]
+                      h-[34px]
+                      border
+                      border-[#7D3C98]
+                      flex
+                      items-center
+                      justify-center
+                      text-[20px]
+                      relative
+                      z-10
+                      cursor-pointer
+                    "
+                    style={{
+                      color: "#3A2352",
+                      touchAction: "none",
+                    }}
+                    onMouseDown={() => startSelection(rowIndex, colIndex)}
+                    onMouseEnter={() => addCell(rowIndex, colIndex)}
+                    onMouseUp={endSelection}
+                    onTouchStart={() => startSelection(rowIndex, colIndex)}
+                    onTouchMove={(e) => {
+                      e.preventDefault();
+
+                      const touch = e.touches[0];
+
+                      const element = document.elementFromPoint(
+                        touch.clientX,
+                        touch.clientY,
+                      );
+
+                      if (!element) return;
+
+                      const row = element.getAttribute("data-row");
+
+                      const col = element.getAttribute("data-col");
+
+                      if (row !== null && col !== null) {
+                        addCell(Number(row), Number(col));
+                      }
+                    }}
+                    onTouchEnd={endSelection}
+                  >
+                    {letter}
                   </span>
+                ))}
+              </div>
+            ))}
 
-                  {item.prefix ? (
-                    <>
-                      <span style={{ fontSize: "22px", color: "#222", lineHeight: "1" }}>{item.prefix}</span>
-                      <div
-                        ref={(el) => (dropZoneRefs.current[item.id] = el)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={() => handleDropChunk(item.id)}
-                        style={dropZoneStyle(item)}
-                      >
-                        {chunkAnswers[item.id]?.chunk || ""}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        ref={(el) => (dropZoneRefs.current[item.id] = el)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={() => handleDropChunk(item.id)}
-                        style={dropZoneStyle(item)}
-                      >
-                        {chunkAnswers[item.id]?.chunk || ""}
-                      </div>
-                      <span style={{ fontSize: "22px", color: "#222", lineHeight: "1" }}>{item.suffix}</span>
-                    </>
-                  )}
-                </div>
+            {/* LINES */}
 
-                {/* Left dot */}
-                <div
-                  ref={(el) => (elementRefs.current[`left-${item.id}`] = el)}
-                  onClick={() => handleLeftClick(item.id)}
-                  style={{
-                    width:           "20px",
-                    height:          "20px",
-                    borderRadius:    "50%",
-                    backgroundColor: getDotColor("left", item.id),
-                    cursor:          showAns ? "default" : "pointer",
-                    flexShrink:      0,
-                    transition:      "all 0.2s ease",
-                    boxShadow:       selectedLeft === item.id ? "0 0 0 4px rgba(243,155,66,0.25)" : "none",
-                  }}
-                />
+            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+              {foundSelections.map((item, index) =>
+                renderLine(item.cells, `found-${index}`, 0.7),
+              )}
 
-                {isWrongItem(item) && (
-                  <div style={{
-                    position:        "absolute",
-                    right:           "-34px",
-                    top:             "50%",
-                    transform:       "translateY(-50%)",
-                    width:           "22px",
-                    height:          "22px",
-                    borderRadius:    "50%",
-                    backgroundColor: WRONG_COLOR,
-                    color:           "#fff",
-                    display:         "flex",
-                    alignItems:      "center",
-                    justifyContent:  "center",
-                    fontSize:        "12px",
-                    fontWeight:      "700",
-                    boxShadow:       "0 2px 6px rgba(0,0,0,0.2)",
-                  }}>✕</div>
-                )}
+              {renderLine(selectedCells, "current", 0.45)}
+            </svg>
+          </div>
+
+          {/* WORDS */}
+
+          <div
+            style={{
+              border: "2px solid #6D2980",
+              borderRadius: "12px",
+              padding: "2px 20px",
+              minWidth: "180px",
+            }}
+            className="flex flex-col gap-3 text-[18px]"
+          >
+            {words.map((word, index) => (
+              <div
+                key={index}
+                className={`
+                  text-center
+                  ${
+                    foundWords.includes(word)
+                      ? "text-[#D1232A] line-through font-semibold"
+                      : ""
+                  }
+                `}
+              >
+                {word}
               </div>
             ))}
           </div>
-
-          {/* Right side */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0", width: "250px" }}>
-            {IMAGES.map((item) => (
-              <div key={item.id} style={{ height: `${ROW_HEIGHT}px`, display: "flex", alignItems: "center", gap: "14px" }}>
-                <div
-                  ref={(el) => (elementRefs.current[`right-${item.id}`] = el)}
-                  onClick={() => handleRightClick(item.id)}
-                  style={{
-                    width:           "20px",
-                    height:          "20px",
-                    borderRadius:    "50%",
-                    backgroundColor: getDotColor("right", item.id),
-                    cursor:          showAns || selectedLeft === null ? "default" : "pointer",
-                    flexShrink:      0,
-                    transition:      "all 0.2s ease",
-                  }}
-                />
-                <div style={{ width: "120px", height: "56px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <img
-                    src={item.img}
-                    alt={item.alt}
-                    style={{ maxWidth: "110px", maxHeight: "52px", objectFit: "contain", display: "block" }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* SVG lines */}
-          <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
-            {lines.map((line) => (
-              <line
-                key={line.id}
-                x1={line.x1} y1={line.y1}
-                x2={line.x2} y2={line.y2}
-                stroke={LINE_COLOR}
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            ))}
-          </svg>
-        </div>
-
-        {/* Buttons */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "8px" }}>
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-            checkAnswers={checkAnswers}
-          />
         </div>
       </div>
 
-      {/* ── Ghost chunk للتاتش ── */}
-      {touchChunk && (
-        <div style={{
-          position:        "fixed",
-          left:            touchPos.x - 26,
-          top:             touchPos.y - 26,
-          backgroundColor: CHUNK_COLOR,
-          color:           "#222",
-          width:           "52px",
-          height:          "52px",
-          borderRadius:    "10px",
-          border:          `1px solid ${ACTIVE_COLOR}`,
-          display:         "flex",
-          alignItems:      "center",
-          justifyContent:  "center",
-          fontSize:        "18px",
-          fontWeight:      "700",
-          pointerEvents:   "none",
-          zIndex:          9999,
-          boxShadow:       "0 4px 12px rgba(0,0,0,0.25)",
-          userSelect:      "none",
-        }}>
-          {touchChunk.value}
-        </div>
-      )}
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button onClick={resetAll} className="try-again-button">
+          Start Again ↻
+        </button>
+
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
+
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
 };
 
-export default WB_Unit8_Page48_QA;
+export default WB_Unit8_Page50_Q1;

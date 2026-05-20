@@ -1,295 +1,295 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 49/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 49/SVG/2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 49/SVG/3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 49/SVG/4.svg";
+// IMAGES
+// IMAGE
+import mainImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 49/Asset 18.svg";
+const WB_Unit8_Page49_Q1 = () => {
+  const questions = [
+    {
+      sentence: "No one brought chips.",
 
-const ITEMS = [
-  {
-    id: 1,
-    img: img1,
-    options: [
-      "There were horses on the farm.",
-      "There weren’t horses on the farm.",
-    ],
-    correct: "There were horses on the farm.",
-  },
-  {
-    id: 2,
-    img: img2,
-    options: [
-      "They were at the bus station.",
-      "They weren’t at the bus station.",
-    ],
-    correct: "They weren’t at the bus station.",
-  },
-  {
-    id: 3,
-    img: img3,
-    options: [
-      "They were watching TV at home.",
-      "They weren’t watching TV at home.",
-    ],
-    correct: "They were watching TV at home.",
-  },
-  {
-    id: 4,
-    img: img4,
-    options: ["He was at school.", "He wasn’t at school."],
-    correct: "He wasn’t at school.",
-  },
-];
+      correct: "false",
+    },
 
-export default function WB_Unit8_Page48_QI() {
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+    {
+      sentence: "Nobody brought cake.",
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
+      correct: "false",
+    },
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    {
+      sentence: "Everyone brought water.",
+
+      correct: "true",
+    },
+
+    {
+      sentence: "Someone brought sandwiches.",
+
+      correct: "false",
+    },
+
+    {
+      sentence: "Someone brought cookies.",
+
+      correct: "true",
+    },
+
+    {
+      sentence: "Everybody brought hot dogs.",
+
+      correct: "true",
+    },
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-    const allAnswered = ITEMS.every((item) => answers[item.id]);
+  const checkAnswers = () => {
+    if (locked) return;
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) {
-        score++;
-      }
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(questions[i].correct);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctMap = {};
-    ITEMS.forEach((item) => {
-      correctMap[item.id] = item.correct;
-    });
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    setAnswers(correctMap);
-    setShowResults(true);
-    setShowAns(true);
+  const showAnswers = () => {
+    setStudentAnswers(questions.map((q) => q.correct));
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (id) => {
-    if (!showResults) return false;
-    return answers[id] !== ITEMS.find((item) => item.id === id).correct;
-  };
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const renderCheckBox = (itemId, text) => {
-    const selected = answers[itemId] === text;
+  const inputField = (i) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-[70px]
+          border
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-center
+          text-[#6D2980]
+          font-semibold
+          rounded-lg
+          px-1
+          py-1
 
-    return (
-      <button
-        onClick={() => handleSelect(itemId, text)}
-        style={{
-          width: "44px",
-          height: "44px",
-          border: "2px solid #f39b42",
-          borderRadius: "8px",
-          backgroundColor: "#fff",
-          color: selected ? "#dc2626" : "transparent",
-          fontSize: "40px",
-          lineHeight: "1",
-          fontWeight: "700",
-          cursor: showAns ? "default" : "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-          padding: 0,
-        }}
-      >
-        ✓
-      </button>
-    );
-  };
+        `}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "clamp(18px,2.5vw,28px)",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin: 0,
-          }}
-        >
-          <span className="WB-ex-A">I</span> Look, read, and write ✓.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
+        <h5 className="header-title-page8 mb-6 leading-[1.4]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            J
+          </span>
+          Look, read, and write <span className="text-[#00AEEF]">true</span>or
+          <span className="text-[#00AEEF]">false</span>.
+        </h5>
+
+        {/* TOP TEXT */}
+
+        <div className=" leading-normal">
+          Helen and her friends went on a field trip. Everyone packed their
+          backpack for the trip.
+        </div>
+
+        {/* IMAGE BOX */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-            width: "100%",
+            overflow: "hidden",
           }}
+          className="mb-10"
         >
-          {ITEMS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                position: "relative",
-                display: "grid",
-                gridTemplateColumns: "360px 1fr",
-                gap: "18px",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              {/* left side */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "12px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "22px",
-                    fontWeight: "700",
-                    color: "#222",
-                    minWidth: "18px",
-                    lineHeight: "1",
-                    marginTop: "10px",
-                  }}
-                >
-                  {item.id}
-                </span>
+          <img
+            src={mainImg}
+            alt=""
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "contain",
+              display: "block",
+            }}
+          />
+        </div>
 
-                <img
-                  src={item.img}
-                  alt={`question-${item.id}`}
-                  style={{
-                    width: "310px",
-                    height: "150px",
-                    objectFit: "cover",
-                              border: "2px solid #f39b42",
-                              borderRadius : "6%",
+        {/* QUESTIONS */}
 
-                    display: "block",
-                    flexShrink: 0,
-                  }}
-                />
-              </div>
+        <div className="grid grid-cols-2 gap-y-6 gap-x-10 mb-10">
+          {questions.map((q, index) => (
+            <div key={index} className="flex items-center gap-3">
+              {inputField(index)}
 
-              {/* right side */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "14px",
-                  width: "100%",
-                }}
-              >
-                {item.options.map((option, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 50px",
-                      gap: "14px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "26px",
-                        lineHeight: "1.35",
-                        color: "#222",
-                      }}
-                    >
-                      {option}
-                    </p>
+              <span className="font-bold">{index + 1}</span>
 
-                    {renderCheckBox(item.id, option)}
-                  </div>
-                ))}
-              </div>
-
-              {isWrong(item.id) && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "-6px",
-                    right: "-6px",
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                    backgroundColor: "#ef4444",
-                    color: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "13px",
-                    fontWeight: "700",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-                  }}
-                >
-                  ✕
-                </div>
-              )}
+              <span>{q.sentence}</span>
             </div>
           ))}
         </div>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit8_Page49_Q1;

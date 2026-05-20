@@ -1,5 +1,5 @@
 import React from "react";
-import page_1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 454.png";
+import page_1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 48.png";
 import "./WB_unit8.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -17,7 +17,7 @@ const WB_Unit7_Page43 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 98 })}
+          onClick={() => openPopup("exercise", { startIndex: 91 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
@@ -41,7 +41,30 @@ const WB_Unit7_Page43 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 99 })}
+          onClick={() => openPopup("exercise", { startIndex: 92 })}
+          style={{ overflow: "visible" }}
+          // className="click-icon-page8-2 hover:scale-110 transition"
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+      <div
+        className="q9-8 hover:scale-110 transition "
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 93 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >

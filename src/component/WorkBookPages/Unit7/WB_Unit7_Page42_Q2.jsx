@@ -159,7 +159,7 @@ const WB_Unit7_Page42_Q2 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+      <div className="div-forall text-[18px]">
         <h5 className="header-title-page8 mb-[8vh]">
           <span
             className="ex-A"

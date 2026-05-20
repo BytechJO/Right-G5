@@ -1,330 +1,402 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import roomImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 47/SVG/1.svg"
+// IMAGES
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 47/Asset 5.svg";
+import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 47/Asset 17.svg";
 
-const BORDER_COLOR = "#f39b42";
-const WRONG_COLOR  = "#ef4444";
-const CHECK_COLOR  = "#ef4444";
+const WB_Unit8_Page47_Q1 = () => {
+  const clickableWords = [
+    "Everyone",
+    "no one",
+    "nobody",
+    "someone",
+    "everything",
+    "everyone",
+  ];
 
-const ITEMS = [
-  { id: 1, text: "Did Grandma have a radio?", correct: "yes" },
-  { id: 2, text: "Did she have a TV?",        correct: "no"  },
-  { id: 3, text: "Did she have a cat?",       correct: "no"  },
-  { id: 4, text: "Did she have a bird?",      correct: "no"  },
-  { id: 5, text: "Did she have a lamp?",      correct: "yes" },
-  { id: 6, text: "Did she have a phone?",     correct: "no"  },
-  { id: 7, text: "Did she have a rug?",       correct: "yes" },
-  { id: 8, text: "Did she have a mirror?",    correct: "no"  },
-];
+  const answer = "Because the pilot was his 3rd grade science teacher.";
 
-export default function WB_YesNo_PageC() {
-  const [answers,     setAnswers]     = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+  const firstPart = `
+Everyone was talking about the hot-air balloon ride that opened in town.
+People were crowded in line and were waiting for their turn to ride in the
+rainbow hot-air balloon. I was shocked to see so many people. no one knew
+how many people were allowed to be in one ride. There was a small airplane
+ride nearby. I went over to it and was shocked when I spotted the pilot. I
+recognized him from third grade. “Mr. Myers?” I asked, looking confused.
+“Hello, John. How are you? Are you still getting good grades in science
+class?” he shouted back. Mr. Myers was my third grade science teacher.
+nobody told me that he became a pilot!
+`;
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
-    setAnswers((prev) => ({
+  const secondPart = `
+He told me he was volunteering to fly the plane since the original pilot
+was busy. someone walked towards us. He was another pilot. He leaned
+towards Mr. Myers. “Get ready. The flight will take off in five minutes,”
+he told him. “See you later, Mr. Myers,” I said as I started going towards
+the hot-air balloon ride. “Wait,” said Mr. Myers. “Come on in and let’s
+fly over the town.” I happily accepted. It was so fun feeling on top of
+the world. everything looked so small from above. everyone waiting in line
+looked like ants. It was a ride I’ll never forget.
+`;
+
+  const [selectedWords, setSelectedWords] = useState([]);
+
+  const [studentAnswer, setStudentAnswer] = useState("");
+
+  const [result, setResult] = useState({
+    paragraph: false,
+    input: undefined,
+  });
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’"]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // TOGGLE WORD
+  // ------------------------
+
+  const toggleWord = (word) => {
+    if (locked) return;
+
+    setSelectedWords((prev) => {
+      if (prev.includes(word)) {
+        return prev.filter((w) => w !== word);
+      }
+
+      return [...prev, word];
+    });
+  };
+  const renderParagraph = (text) => {
+    const regex = /\b(no one|Everyone|nobody|someone|everything|everyone)\b/g;
+
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      const matchedWord = clickableWords.find((word) => word === part);
+
+      if (matchedWord) {
+        const selected = selectedWords.includes(matchedWord);
+
+        return (
+          <button
+            key={index}
+            type="button"
+            disabled={locked}
+            onClick={() => toggleWord(matchedWord)}
+            style={{
+              background: "transparent",
+              border: "none",
+              borderBottom: selected
+                ? "2px solid #6D2980"
+                : "2px solid transparent",
+              paddingBottom: "1px",
+              color: "inherit",
+              cursor: locked ? "default" : "pointer",
+              padding: 0,
+              margin: 0,
+              lineHeight: "inherit",
+            }}
+          >
+            {matchedWord}
+          </button>
+        );
+      }
+
+      return <span key={index}>{part}</span>;
+    });
+  };
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (value) => {
+    if (locked || result.input === true) return;
+
+    setStudentAnswer(value);
+
+    setResult((prev) => ({
       ...prev,
-      [id]: prev[id] === value ? undefined : value,
+      input: undefined,
     }));
-    setShowResults(false);
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => answers[i.id]);
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    // ------------------------
+    // VALIDATION
+    // ------------------------
+
+    if (selectedWords.length === 0) {
+      ValidationAlert.info("Please underline at least one word.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((i) => { if (answers[i.id] === i.correct) score++; });
-    setShowResults(true);
-    const total = ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
+
+    if (!studentAnswer.trim()) {
+      ValidationAlert.info("Please complete all answers.");
+
+      return;
+    }
+
+    // ------------------------
+    // PARAGRAPH SCORE
+    // ------------------------
+
+    const paragraphCorrect = selectedWords.length;
+
+    const paragraphOk = paragraphCorrect === 6;
+
+    // ------------------------
+    // INPUT
+    // ------------------------
+
+    const inputOk = normalize(studentAnswer) === normalize(answer);
+
+    // ------------------------
+    // SCORE
+    // ------------------------
+
+    let correctCount = 0;
+
+    // 6 marks for paragraph
+    correctCount += paragraphCorrect;
+
+    // 1 mark for writing answer
+    if (inputOk) correctCount++;
+
+    setResult({
+      paragraph: paragraphOk,
+      input: inputOk,
+    });
+
+    const total = 7;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+    <div style="font-size:18px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = i.correct; });
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setSelectedWords(clickableWords);
+
+    setStudentAnswer(answer);
+
+    setResult({
+      paragraph: true,
+      input: true,
+    });
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setSelectedWords([]);
+
+    setStudentAnswer("");
+
+    setResult({
+      paragraph: false,
+      input: undefined,
+    });
+
+    setLocked(false);
   };
 
-  const isWrong = (item) =>
-    showResults && !showAns && answers[item.id] !== item.correct;
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const renderCheckbox = (item, value) => {
-    const selected  = answers[item.id] === value;
-    const wrong     = isWrong(item) && selected;
+  const inputField = () => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswer}
+        disabled={locked || result.input === true}
+        onChange={(e) => handleChange(e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-    return (
-      <div
-        onClick={() => handleSelect(item.id, value)}
-        style={{
-          position:        "relative",
-          width:           "clamp(28px,3.5vw,44px)",
-          height:          "clamp(28px,3.5vw,44px)",
-          border:          `2px solid ${wrong ? WRONG_COLOR : BORDER_COLOR}`,
-          borderRadius:    "clamp(5px,0.6vw,8px)",
-          background:      "#fff",
-          display:         "flex",
-          alignItems:      "center",
-          justifyContent:  "center",
-          cursor:          showAns ? "default" : "pointer",
-          boxSizing:       "border-box",
-          flexShrink:      0,
-          transition:      "border-color 0.2s",
-        }}
-      >
-        {selected && (
-          <span
-            style={{
-              fontSize:   "clamp(18px,2.8vw,36px)",
-              fontWeight: 900,
-              color:      wrong ? WRONG_COLOR : CHECK_COLOR,
-              lineHeight: 1,
-              userSelect: "none",
-            }}
-          >
-            ✓
-          </span>
-        )}
+          ${result.input === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-        {/* wrong badge — يسار أعلى */}
-        {wrong && (
-          <div
-            style={{
-              position:        "absolute",
-              top:             "-7px",
-              left:            "-7px",
-              width:           "clamp(14px,1.6vw,20px)",
-              height:          "clamp(14px,1.6vw,20px)",
-              borderRadius:    "50%",
-              backgroundColor: WRONG_COLOR,
-              border:          "1px solid #fff",
-              color:           "#fff",
-              display:         "flex",
-              alignItems:      "center",
-              justifyContent:  "center",
-              fontSize:        "clamp(8px,0.8vw,11px)",
-              fontWeight:      700,
-              boxShadow:       "0 1px 4px rgba(0,0,0,0.25)",
-              zIndex:          5,
-              pointerEvents:   "none",
-            }}
-          >
-            ✕
-          </div>
-        )}
-      </div>
-    );
-  };
+      {result.input === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "18px",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin:     0,
-            display:    "flex",
-            alignItems: "center",
-            gap:        "12px",
-            flexWrap:   "wrap",
-          }}
-        >
-          <span className="WB-ex-A">C</span>
-          Look and write ✓ for{" "}
-          <strong style={{ fontWeight: 900 }}>Yes</strong> or{" "}
-          <strong style={{ fontWeight: 900 }}>No</strong>.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* Main layout: image LEFT | table RIGHT */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "minmax(0,1fr) minmax(0,1.2fr)",
-            gap:                 "clamp(16px,2.5vw,32px)",
-            alignItems:          "start",
-            width:               "100%",
-          }}
-        >
-          {/* Room image */}
-          <div
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-              width:        "100%",
-              borderRadius: "clamp(10px,1.2vw,16px)",
-              overflow:     "hidden",
-              border:       `2px solid ${BORDER_COLOR}`,
-              background:   "#f7f7f7",
-              flexShrink:   0,
+              marginRight: "10px",
             }}
           >
-            <img
-              src={roomImg}
-              alt="grandma room"
-              style={{
-                width:      "100%",
-                height:     "auto",
-                display:    "block",
-                userSelect: "none",
-              }}
-            />
-          </div>
+            F
+          </span>
+          Read and write.
+        </h5>
 
-          {/* Questions table */}
-          <div style={{ minWidth: 0 }}>
-            {/* Header */}
-            <div
-              style={{
-                display:             "grid",
-                gridTemplateColumns: "1fr clamp(50px,8vw,100px) clamp(50px,8vw,100px)",
-                gap:                 "clamp(6px,1vw,12px)",
-                marginBottom:        "clamp(8px,1vw,12px)",
-                paddingRight:        "clamp(4px,0.5vw,8px)",
-              }}
-            >
-              <div />
-              <div
-                style={{
-                  textAlign:  "center",
-                  fontSize:   "clamp(16px,2vw,26px)",
-                  fontWeight: 700,
-                  color:      "#111",
-                }}
-              >
-                Yes
-              </div>
-              <div
-                style={{
-                  textAlign:  "center",
-                  fontSize:   "clamp(16px,2vw,26px)",
-                  fontWeight: 700,
-                  color:      "#111",
-                }}
-              >
-                No
-              </div>
-            </div>
+        {/* PARAGRAPH BOX */}
 
-            {/* Rows */}
-            <div
-              style={{
-                display:       "flex",
-                flexDirection: "column",
-                gap:           "clamp(10px,1.5vw,18px)",
-              }}
-            >
-              {ITEMS.map((item) => (
-                <div
-                  key={item.id}
-                  style={{
-                    display:             "grid",
-                    gridTemplateColumns: "1fr clamp(50px,8vw,100px) clamp(50px,8vw,100px)",
-                    gap:                 "clamp(6px,1vw,12px)",
-                    alignItems:          "center",
-                  }}
-                >
-                  {/* sentence */}
-                  <div
-                    style={{
-                      display:    "flex",
-                      alignItems: "center",
-                      gap:        "clamp(6px,0.8vw,12px)",
-                      minWidth:   0,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize:   "clamp(15px,1.8vw,24px)",
-                        fontWeight: 700,
-                        color:      "#111",
-                        lineHeight: 1,
-                        flexShrink: 0,
-                        minWidth:   "clamp(12px,1.6vw,22px)",
-                      }}
-                    >
-                      {item.id}
-                    </span>
-                    <span
-                      style={{
-                        fontSize:   "clamp(13px,1.6vw,21px)",
-                        fontWeight: 500,
-                        color:      isWrong(item) ? WRONG_COLOR : "#111",
-                        lineHeight: 1.35,
-                        wordBreak:  "break-word",
-                        transition: "color 0.2s",
-                      }}
-                    >
-                      {item.text}
-                    </span>
-                  </div>
-
-                  {/* Yes checkbox */}
-                  <div
-                    style={{
-                      display:        "flex",
-                      justifyContent: "center",
-                      alignItems:     "center",
-                    }}
-                  >
-                    {renderCheckbox(item, "yes")}
-                  </div>
-
-                  {/* No checkbox */}
-                  <div
-                    style={{
-                      display:        "flex",
-                      justifyContent: "center",
-                      alignItems:     "center",
-                    }}
-                  >
-                    {renderCheckbox(item, "no")}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Buttons */}
         <div
           style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
+            border: "2px solid #6D2980",
+            borderRadius: "12px",
+            padding: "14px",
+            overflow: "hidden",
+            fontSize: "17px",
+            color: "#3b2b20",
+            background: "#fff",
           }}
         >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
+          {/* TOP IMAGE */}
+          <img
+            src={img1}
+            alt=""
+            style={{
+              float: "right",
+              width: "170px",
+              height: "auto",
+              objectFit: "contain",
+              marginLeft: "12px",
+              marginBottom: "8px",
+              borderRadius: "6px",
+            }}
           />
+          {renderParagraph(firstPart)}
+
+          {/* BOTTOM IMAGE */}
+          <img
+            src={img2}
+            alt=""
+            style={{
+              float: "left",
+              width: "120px",
+              height: "auto",
+              objectFit: "contain",
+              marginRight: "12px",
+              marginTop: "10px",
+              clear: "both",
+            }}
+          />
+          {renderParagraph(secondPart)}
         </div>
+
+        {/* QUESTION 1 */}
+
+        <div className="mt-10 mb-8">
+          <div className="flex items-start gap-4">
+            <span className="font-bold">1</span>
+
+            <span>Underline all the indefinite pronouns in the story.</span>
+          </div>
+        </div>
+
+        {/* QUESTION 2 */}
+
+        <div className="mb-12">
+          <div className="flex items-start gap-4 mb-5">
+            <span className="font-bold">2</span>
+
+            <span>
+              Why was John shocked to see the pilot of the small airplane?
+            </span>
+          </div>
+
+          <div className="pl-[35px]">{inputField()}</div>
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit8_Page47_Q1;

@@ -214,7 +214,7 @@ const WB_Unit5_Page31_Q1 = () => {
 
         {/* SENTENCES */}
 
-        <div className="flex flex-col gap-2 mb-10">
+        <div className="grid grid-cols-2 gap-2 mb-10">
           {sentences.map((sentence, index) => (
             <div key={index} className="flex items-center gap-3">
               <span className="font-bold w-[18px]">{index + 1}</span>
@@ -226,7 +226,7 @@ const WB_Unit5_Page31_Q1 = () => {
 
         {/* IMAGES */}
 
-        <div className="grid grid-cols-2 gap-y-5 gap-x-2 mb-10">
+        <div className="grid grid-cols-3 gap-y-5 gap-x-2 mb-10">
           {images.map((img, index) => (
             <div key={index} className="relative w-fit">
               <img

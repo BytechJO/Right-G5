@@ -1,330 +1,326 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import roomImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U8 Folder/Page 46/SVG/1.svg";
+const WB_Unit8_Page46_Q1 = () => {
+  const answers = [
+    "everyone",
+    "everybody",
+    "everything",
+    "anybody",
+    "anyone",
+    "anything",
+    "no one",
+    "nobody",
+    "nothing",
+    "someone",
+    "somebody",
+    "something",
+  ];
 
-const BORDER_COLOR = "#f39b42";
-const WRONG_COLOR  = "#ef4444";
-const CHECK_COLOR  = "#ef4444";
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-const ITEMS = [
-  { id: 1, text: "Did Grandma have a radio?", correct: "yes" },
-  { id: 2, text: "Did she have a TV?",        correct: "no"  },
-  { id: 3, text: "Did she have a cat?",       correct: "no"  },
-  { id: 4, text: "Did she have a bird?",      correct: "no"  },
-  { id: 5, text: "Did she have a lamp?",      correct: "yes" },
-  { id: 6, text: "Did she have a phone?",     correct: "no"  },
-  { id: 7, text: "Did she have a rug?",       correct: "yes" },
-  { id: 8, text: "Did she have a mirror?",    correct: "no"  },
-];
+  const [result, setResult] = useState([]);
 
-export default function WB_YesNo_PageC() {
-  const [answers,     setAnswers]     = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+  const [locked, setLocked] = useState(false);
 
-  const handleSelect = (id, value) => {
-    if (showAns) return;
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: prev[id] === value ? undefined : value,
-    }));
-    setShowResults(false);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => answers[i.id]);
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((i) => { if (answers[i.id] === i.correct) score++; });
-    setShowResults(true);
-    const total = ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
-  };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = i.correct; });
-    setAnswers(filled);
-    setShowResults(true);
-    setShowAns(true);
-  };
+    let correctCount = 0;
 
-  const handleStartAgain = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
-  };
+    const normalizedCorrect = answers.map(normalize);
 
-  const isWrong = (item) =>
-    showResults && !showAns && answers[item.id] !== item.correct;
+    const usedAnswers = [];
 
-  const renderCheckbox = (item, value) => {
-    const selected  = answers[item.id] === value;
-    const wrong     = isWrong(item) && selected;
+    const newResults = studentAnswers.map((answer) => {
+      const normalizedStudent = normalize(answer);
 
-    return (
-      <div
-        onClick={() => handleSelect(item.id, value)}
-        style={{
-          position:        "relative",
-          width:           "clamp(28px,3.5vw,44px)",
-          height:          "clamp(28px,3.5vw,44px)",
-          border:          `2px solid ${BORDER_COLOR}`,
-          borderRadius:    "clamp(5px,0.6vw,8px)",
-          background:      "#fff",
-          display:         "flex",
-          alignItems:      "center",
-          justifyContent:  "center",
-          cursor:          showAns ? "default" : "pointer",
-          boxSizing:       "border-box",
-          flexShrink:      0,
-          transition:      "border-color 0.2s",
-        }}
-      >
-        {selected && (
-          <span
-            style={{
-              fontSize:   "clamp(18px,2.8vw,36px)",
-              fontWeight: 900,
-              color:      wrong ? WRONG_COLOR : CHECK_COLOR,
-              lineHeight: 1,
-              userSelect: "none",
-            }}
-          >
-            ✓
-          </span>
-        )}
+      const foundIndex = normalizedCorrect.findIndex(
+        (correct, index) =>
+          correct === normalizedStudent && !usedAnswers.includes(index),
+      );
 
-        {/* wrong badge — يسار أعلى */}
-        {wrong && (
-          <div
-            style={{
-              position:        "absolute",
-              top:             "-7px",
-              left:            "-7px",
-              width:           "clamp(14px,1.6vw,20px)",
-              height:          "clamp(14px,1.6vw,20px)",
-              borderRadius:    "50%",
-              backgroundColor: WRONG_COLOR,
-              border:          "1px solid #fff",
-              color:           "#fff",
-              display:         "flex",
-              alignItems:      "center",
-              justifyContent:  "center",
-              fontSize:        "clamp(8px,0.8vw,11px)",
-              fontWeight:      700,
-              boxShadow:       "0 1px 4px rgba(0,0,0,0.25)",
-              zIndex:          5,
-              pointerEvents:   "none",
-            }}
-          >
-            ✕
-          </div>
-        )}
+      const ok = foundIndex !== -1;
+
+      if (ok) {
+        usedAnswers.push(foundIndex);
+
+        correctCount++;
+      }
+
+      return ok;
+    });
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
       </div>
-    );
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResult([
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
+
+    setLocked(true);
+  };
+
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", "", "", "", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
+  };
+
+  // ------------------------
+  // INPUT
+  // ------------------------
+
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "18px",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin:     0,
-            display:    "flex",
-            alignItems: "center",
-            gap:        "12px",
-            flexWrap:   "wrap",
-          }}
-        >
-          <span className="WB-ex-A">C</span>
-          Look and write ✓ for{" "}
-          <strong style={{ fontWeight: 900 }}>Yes</strong> or{" "}
-          <strong style={{ fontWeight: 900 }}>No</strong>.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* Main layout: image LEFT | table RIGHT */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "minmax(0,1fr) minmax(0,1.2fr)",
-            gap:                 "clamp(16px,2.5vw,32px)",
-            alignItems:          "start",
-            width:               "100%",
-          }}
-        >
-          {/* Room image */}
-          <div
-            style={{
-              width:        "100%",
-              borderRadius: "clamp(10px,1.2vw,16px)",
-              overflow:     "hidden",
-              border:       `2px solid ${BORDER_COLOR}`,
-              background:   "#f7f7f7",
-              flexShrink:   0,
-            }}
-          >
-            <img
-              src={roomImg}
-              alt="grandma room"
-              style={{
-                width:      "100%",
-                height:     "auto",
-                display:    "block",
-                userSelect: "none",
-              }}
-            />
-          </div>
-
-          {/* Questions table */}
-          <div style={{ minWidth: 0 }}>
-            {/* Header */}
-            <div
-              style={{
-                display:             "grid",
-                gridTemplateColumns: "1fr clamp(50px,8vw,100px) clamp(50px,8vw,100px)",
-                gap:                 "clamp(6px,1vw,12px)",
-                marginBottom:        "clamp(8px,1vw,12px)",
-                paddingRight:        "clamp(4px,0.5vw,8px)",
-              }}
-            >
-              <div />
-              <div
-                style={{
-                  textAlign:  "center",
-                  fontSize:   "clamp(16px,2vw,26px)",
-                  fontWeight: 700,
-                  color:      "#111",
-                }}
-              >
-                Yes
-              </div>
-              <div
-                style={{
-                  textAlign:  "center",
-                  fontSize:   "clamp(16px,2vw,26px)",
-                  fontWeight: 700,
-                  color:      "#111",
-                }}
-              >
-                No
-              </div>
+        <div className="header-title-page8 mb-[12vh]">
+          <span className="ex-A mr-2">C</span>
+          <div style={{ display: "block" }}>
+            write <span className="text-[#00AEEF]">indefinite pronouns </span>by
+            putting the words together. You
+            <div style={{ marginTop: "4px" }}>
+              can use the words more than once.
             </div>
+          </div>
+        </div>
+        {/* CONTENT */}
 
-            {/* Rows */}
-            <div
-              style={{
-                display:       "flex",
-                flexDirection: "column",
-                gap:           "clamp(10px,1.5vw,18px)",
-              }}
-            >
-              {ITEMS.map((item) => (
+        <div className="grid grid-cols-[300px_1fr] gap-10">
+          {/* LEFT SIDE */}
+
+          <div className="flex items-center gap-4">
+            {/* COLUMN 1 */}
+
+            <div className="flex flex-col gap-10">
+              {["every", "any", "no", "some"].map((word, index) => (
                 <div
-                  key={item.id}
+                  key={index}
+                  className="flex items-center justify-center"
                   style={{
-                    display:             "grid",
-                    gridTemplateColumns: "1fr clamp(50px,8vw,100px) clamp(50px,8vw,100px)",
-                    gap:                 "clamp(6px,1vw,12px)",
-                    alignItems:          "center",
+                    width: "100px",
+                    height: "40px",
+                    border: "2px solid #6D2980",
+                    borderRadius: "12px",
+                    fontSize: "18px",
                   }}
                 >
-                  {/* sentence */}
-                  <div
-                    style={{
-                      display:    "flex",
-                      alignItems: "center",
-                      gap:        "clamp(6px,0.8vw,12px)",
-                      minWidth:   0,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize:   "clamp(15px,1.8vw,24px)",
-                        fontWeight: 700,
-                        color:      "#111",
-                        lineHeight: 1,
-                        flexShrink: 0,
-                        minWidth:   "clamp(12px,1.6vw,22px)",
-                      }}
-                    >
-                      {item.id}
-                    </span>
-                    <span
-                      style={{
-                        fontSize:   "clamp(13px,1.6vw,21px)",
-                        fontWeight: 500,
-                        color:      "#111",
-                        lineHeight: 1.35,
-                        wordBreak:  "break-word",
-                        transition: "color 0.2s",
-                      }}
-                    >
-                      {item.text}
-                    </span>
-                  </div>
+                  {word}
+                </div>
+              ))}
+            </div>
 
-                  {/* Yes checkbox */}
-                  <div
-                    style={{
-                      display:        "flex",
-                      justifyContent: "center",
-                      alignItems:     "center",
-                    }}
-                  >
-                    {renderCheckbox(item, "yes")}
-                  </div>
+            {/* PLUS */}
 
-                  {/* No checkbox */}
-                  <div
-                    style={{
-                      display:        "flex",
-                      justifyContent: "center",
-                      alignItems:     "center",
-                    }}
-                  >
-                    {renderCheckbox(item, "no")}
-                  </div>
+            <div
+              className="font-bold"
+              style={{
+                fontSize: "45px",
+                marginTop: "-10px",
+              }}
+            >
+              +
+            </div>
+
+            {/* COLUMN 2 */}
+
+            <div className="flex flex-col gap-10">
+              {["one", "body", "thing"].map((word, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-center"
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    border: "2px solid #6D2980",
+                    borderRadius: "12px",
+                    fontSize: "18px",
+                  }}
+                >
+                  {word}
                 </div>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* Buttons */}
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
+          {/* RIGHT SIDE */}
+
+          <div className="grid grid-cols-2 gap-x-10 gap-y-10">
+            {studentAnswers.map((_, index) => (
+              <div key={index}>{inputField(index)}</div>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit8_Page46_Q1;
