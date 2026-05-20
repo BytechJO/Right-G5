@@ -214,12 +214,10 @@ const WB_Unit2_Page14_Q1 = () => {
           <div
             style={{
               border: "2px solid #7D3C98",
-
               borderRadius: "12px",
-
               padding: "12px 24px",
             }}
-            className="grid grid-cols-4 gap-x-10 gap-y-2"
+            className="flex flex-row gap-10 whitespace-nowrap "
           >
             {words.map((word, index) => (
               <div key={index} className="text-center">

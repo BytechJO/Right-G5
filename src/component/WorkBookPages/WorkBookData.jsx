@@ -91,11 +91,11 @@ import WB_Unit7_Page41_Q1 from "./Unit7/WB_Unit7_Page41_Q1";
 import WB_Unit7_Page41_Q2 from "./Unit7/WB_Unit7_Page41_Q2";
 import WB_Unit7_Page42_Q1 from "./Unit7/WB_Unit7_Page42_Q1";
 import WB_Unit7_Page42_Q2 from "./Unit7/WB_Unit7_Page42_Q2";
+import WB_Unit7_Page42_Q3 from "./Unit7/WB_Unit7_Page42_Q3";
 import WB_Unit7_Page43_Q1 from "./Unit7/WB_Unit7_Page43_Q1";
 import WB_Unit7_Page43_Q2 from "./Unit7/WB_Unit7_Page43_Q2";
 import WB_Unit7_Page44_Q1 from "./Unit7/WB_Unit7_Page44_Q1";
 import WB_Unit7_Page44_Q2 from "./Unit7/WB_Unit7_Page44_Q2";
-import WB_Unit7_Page44_Q3 from "./Unit7/WB_Unit7_Page44_Q3";
 
 // Unit8
 import WB_Unit8_Page45_Q1 from "./Unit8/WB_Unit8_Page45_Q1";
@@ -212,35 +212,35 @@ export const workBookData = [
   { component: WB_Unit5_Page32_Q1, unit: 5, lastOfUnit: true }, //57
 
   // UNIT 6
-  { component: WB_Unit6_Page33_Q1, unit: 6 },//58
-  { component: WB_Unit6_Page33_Q2, unit: 6 },//59
-  { component: WB_Unit6_Page34_Q1, unit: 6 },//60
-  { component: WB_Unit6_Page34_Q2, unit: 6 },//61
-  { component: WB_Unit6_Page34_Q3, unit: 6 },//62
-  { component: WB_Unit6_Page35_Q1, unit: 6 },//63
-  { component: WB_Unit6_Page35_Q2, unit: 6 },//64
-  { component: WB_Unit6_Page36_Q1, unit: 6 },//65
-  { component: WB_Unit6_Page36_Q2, unit: 6 },//66
-  { component: WB_Unit6_Page36_Q3, unit: 6 },//67
-  { component: WB_Unit6_Page37_Q1, unit: 6 },//68
-  { component: WB_Unit6_Page37_Q2, unit: 6 },//69
-  { component: WB_Unit6_Page38_Q1, unit: 6 },//70
-  { component: WB_Unit6_Page38_Q2, unit: 6, lastOfUnit: true },//71
+  { component: WB_Unit6_Page33_Q1, unit: 6 }, //58
+  { component: WB_Unit6_Page33_Q2, unit: 6 }, //59
+  { component: WB_Unit6_Page34_Q1, unit: 6 }, //60
+  { component: WB_Unit6_Page34_Q2, unit: 6 }, //61
+  { component: WB_Unit6_Page34_Q3, unit: 6 }, //62
+  { component: WB_Unit6_Page35_Q1, unit: 6 }, //63
+  { component: WB_Unit6_Page35_Q2, unit: 6 }, //64
+  { component: WB_Unit6_Page36_Q1, unit: 6 }, //65
+  { component: WB_Unit6_Page36_Q2, unit: 6 }, //66
+  { component: WB_Unit6_Page36_Q3, unit: 6 }, //67
+  { component: WB_Unit6_Page37_Q1, unit: 6 }, //68
+  { component: WB_Unit6_Page37_Q2, unit: 6 }, //69
+  { component: WB_Unit6_Page38_Q1, unit: 6 }, //70
+  { component: WB_Unit6_Page38_Q2, unit: 6, lastOfUnit: true }, //71
 
   // UNIT 7
-  { component: WB_Unit7_Page39_Q1, unit: 7 },
-  { component: WB_Unit7_Page39_Q2, unit: 7 },
-  { component: WB_Unit7_Page40_Q1, unit: 7 },
-  { component: WB_Unit7_Page40_Q2, unit: 7 },
-  { component: WB_Unit7_Page41_Q1, unit: 7 },
-  { component: WB_Unit7_Page41_Q2, unit: 7 },
-  { component: WB_Unit7_Page42_Q1, unit: 7 },
-  { component: WB_Unit7_Page42_Q2, unit: 7 },
-  { component: WB_Unit7_Page43_Q1, unit: 7 },
-  { component: WB_Unit7_Page43_Q2, unit: 7 },
-  { component: WB_Unit7_Page44_Q1, unit: 7 },
-  { component: WB_Unit7_Page44_Q2, unit: 7 },
-  { component: WB_Unit7_Page44_Q3, unit: 7, lastOfUnit: true },
+  { component: WB_Unit7_Page39_Q1, unit: 7 }, //72
+  { component: WB_Unit7_Page39_Q2, unit: 7 }, //73
+  { component: WB_Unit7_Page40_Q1, unit: 7 }, //74
+  { component: WB_Unit7_Page40_Q2, unit: 7 }, //75
+  { component: WB_Unit7_Page41_Q1, unit: 7 }, //76
+  { component: WB_Unit7_Page41_Q2, unit: 7 }, //77
+  { component: WB_Unit7_Page42_Q1, unit: 7 }, //78
+  { component: WB_Unit7_Page42_Q2, unit: 7 }, //79
+  { component: WB_Unit7_Page42_Q3, unit: 7 }, //80
+  { component: WB_Unit7_Page43_Q1, unit: 7 }, //81
+  { component: WB_Unit7_Page43_Q2, unit: 7 }, //82
+  { component: WB_Unit7_Page44_Q1, unit: 7 }, //83
+  { component: WB_Unit7_Page44_Q2, unit: 7, lastOfUnit: true }, //84
 
   // UNIT 8
   { component: WB_Unit8_Page45_Q1, unit: 8 },

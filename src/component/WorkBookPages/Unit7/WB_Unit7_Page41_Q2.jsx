@@ -1,222 +1,291 @@
-import React, { useRef, useState, useEffect } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-// ✅ استبدل هذا المسار بمسار صورة الشجرة عندك
-import imgTree from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 41/SVG/2.svg";
+// IMAGE
+import familyImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U7/Page 41/Asset 9.svg";
 
-const INSTRUCTIONS = [
-  "Draw a nest in the tree.",
-  "Draw a box next to the tree.",
-  "Draw a cat between the flowers.",
-];
+const WB_Unit7_Page41_Q2 = () => {
+  const wordBank = [
+    "make yourself at home",
+    "albums",
+    "wonderful",
+    "orphanage",
+    "miss",
+  ];
 
-// أدوات الرسم
-const TOOLS = [
-  { id: "pencil", label: "✏️ Pencil" },
-  { id: "eraser", label: "🧹 Eraser" },
-];
+  const answers = [
+    "wonderful",
+    "orphanage",
+    "make yourself at home",
+    "miss",
+    "albums",
+  ];
 
-const COLORS = ["#1e293b", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#a855f7", "#ec4899"];
-const SIZES = [2, 4, 7, 12];
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", "", ""]);
 
-export default function WB_Unit7_Page41_Draw() {
-  const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [tool, setTool] = useState("pencil");
-  const [color, setColor] = useState("#1e293b");
-  const [size, setSize] = useState(4);
-  const lastPos = useRef(null);
+  const [result, setResult] = useState([]);
 
-  // ارسم الصورة على الـ canvas عند التحميل
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.src = imgTree;
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-  }, []);
+  const [locked, setLocked] = useState(false);
 
-  const getPos = (e, canvas) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    if (e.touches) {
-      return {
-        x: (e.touches[0].clientX - rect.left) * scaleX,
-        y: (e.touches[0].clientY - rect.top) * scaleY,
-      };
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
+  };
+
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
+      return;
     }
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
-    };
+
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const startDrawing = (e) => {
-    e.preventDefault();
-    const canvas = canvasRef.current;
-    lastPos.current = getPos(e, canvas);
-    setIsDrawing(true);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResult([true, true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const draw = (e) => {
-    e.preventDefault();
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const pos = getPos(e, canvas);
+  // ------------------------
+  // RESET
+  // ------------------------
 
-    ctx.beginPath();
-    ctx.moveTo(lastPos.current.x, lastPos.current.y);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color;
-    ctx.lineWidth = tool === "eraser" ? size * 4 : size;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.stroke();
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", ""]);
 
-    lastPos.current = pos;
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const stopDrawing = (e) => {
-    e?.preventDefault();
-    setIsDrawing(false);
-    lastPos.current = null;
-  };
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const handleClear = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // أعد رسم الصورة
-    const img = new Image();
-    img.src = imgTree;
-    img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  };
+  const inputField = (i, width) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  const handleCheck = () => {
-    ValidationAlert.success("Great drawing! 🎨");
-  };
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+        style={{
+          width,
+        }}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "1px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "15px" }}>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* العنوان */}
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">G</span>Read and draw.
-        </h1>
+        <h5 className="header-title-page8 mb-[9vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            F
+          </span>
+          Read and write.
+        </h5>
 
-        {/* التعليمات */}
-        <div className="flex flex-col gap-1 mb-2">
-          {INSTRUCTIONS.map((inst, i) => (
-            <p key={i} className="text-gray-700 text-sm font-medium">
-              • {inst}
-            </p>
+        {/* WORD BANK */}
+
+        <div className="flex flex-wrap gap-4 mb-8 ml-[45px]">
+          {wordBank.map((word, index) => (
+            <div
+              key={index}
+              className="
+                  border
+                  border-[#7D3C98]
+                  rounded-lg
+                  px-4
+                  py-1
+                  text-[18px]
+                "
+            >
+              {word}
+            </div>
           ))}
         </div>
 
-        {/* شريط الأدوات */}
-        <div className="flex flex-wrap items-center gap-3 bg-gray-50 border border-gray-200 rounded-2xl p-3">
+        {/* CONTENT */}
 
-          {/* أدوات */}
-          <div className="flex gap-2">
-            {TOOLS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTool(t.id)}
-                className={`px-3 py-1.5 rounded-xl text-sm font-medium border-2 transition-all
-                  ${tool === t.id
-                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-                  }`}
-              >
-                {t.label}
-              </button>
-            ))}
+        <div className="flex justify-between gap-8">
+          {/* LEFT SIDE */}
+
+          <div className="flex-1 leading-[2.5]">
+            <div>Hey, dear children, let’s go out and play.</div>
+
+            <div className="mt-2">
+              It’s a beautiful morning. It’s a {inputField(0, "240px")} day.
+            </div>
+
+            <div>
+              Oh, children in the {inputField(1, "340px")}. You have grown.
+            </div>
+
+            <div>Come visit us and {inputField(2, "520px")}.</div>
+
+            <div>
+              We {inputField(3, "180px")} seeing you. When you decide to come,
+              we can take some pictures and put them in{inputField(4, "320px")}.
+            </div>
+            <div>We always have fun.</div>
           </div>
 
-          {/* فاصل */}
-          <div className="w-px h-6 bg-gray-200" />
+          {/* RIGHT IMAGE */}
 
-          {/* الألوان */}
-          <div className="flex gap-1.5 flex-wrap">
-            {COLORS.map((c) => (
-              <button
-                key={c}
-                onClick={() => { setColor(c); setTool("pencil"); }}
-                className={`w-6 h-6 rounded-full border-2 transition-all ${
-                  color === c && tool === "pencil" ? "border-gray-700 scale-110" : "border-transparent hover:scale-105"
-                }`}
-                style={{ backgroundColor: c }}
-              />
-            ))}
-          </div>
-
-          {/* فاصل */}
-          <div className="w-px h-6 bg-gray-200" />
-
-          {/* حجم الفرشاة */}
-          <div className="flex items-center gap-2">
-            {SIZES.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSize(s)}
-                className={`flex items-center justify-center rounded-full border-2 transition-all bg-white
-                  ${size === s ? "border-blue-500" : "border-gray-200 hover:border-gray-300"}`}
-                style={{ width: 28, height: 28 }}
-              >
-                <span
-                  className="rounded-full bg-gray-700"
-                  style={{ width: Math.min(s * 2, 20), height: Math.min(s * 2, 20) }}
-                />
-              </button>
-            ))}
-          </div>
-
-          {/* فاصل */}
-          <div className="w-px h-6 bg-gray-200" />
-
-          {/* مسح الكل */}
-          <button
-            onClick={handleClear}
-            className="px-3 py-1.5 rounded-xl text-sm font-medium border-2 border-red-200 bg-red-50 text-red-500 hover:border-red-400 transition-all"
+          <div
+            className="
+    pt-[140px]
+    shrink-0
+  "
           >
-            🗑️ Clear
-          </button>
+            <img
+              src={familyImg}
+              alt=""
+              style={{
+                width: "170px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
+          </div>
         </div>
+      </div>
 
-        {/* الـ Canvas */}
-        <div className="relative w-full rounded-2xl overflow-hidden border-2 border-gray-200 bg-white"
-          style={{ cursor: tool === "eraser" ? "cell" : "crosshair" }}
-        >
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={600}
-            className="w-full h-auto touch-none"
-            onMouseDown={startDrawing}
-            onMouseMove={draw}
-            onMouseUp={stopDrawing}
-            onMouseLeave={stopDrawing}
-            onTouchStart={startDrawing}
-            onTouchMove={draw}
-            onTouchEnd={stopDrawing}
-          />
-        </div>
+      {/* BUTTONS */}
 
-        {/* الأزرار */}
-        <div className="mt-6 flex justify-center">
-          <Button
-            checkAnswers={handleCheck}
-            handleStartAgain={handleClear}
-          />
-        </div>
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit7_Page41_Q2;

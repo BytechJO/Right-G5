@@ -203,7 +203,7 @@ const WB_Unit5_Page30_Q3 = () => {
                   style={{
                     display: "inline-block",
                     minWidth: "260px",
-                    borderBottom: "2px solid black",
+                    borderBottom: "1px solid black",
                     margin: "0 6px",
                     padding: "0 6px",
                     textAlign: "center",

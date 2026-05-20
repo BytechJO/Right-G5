@@ -1,296 +1,395 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import houseImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 41/SVG/1.svg";
+import trueImg from "../../../assets/imgs/true.svg";
+import flaseImg from "../../../assets/imgs/false.svg";
 
-const WRONG_COLOR = "#ef4444";
-const RED_COLOR   = "#000000ff";
-const LINE_COLOR  = "#333";
-const OPTIONS     = ["in", "on", "in front of"];
+const WB_Unit7_Page41_Q1 = () => {
+  const [fieldResults, setFieldResults] = useState([
+    { q1: undefined, q2: undefined },
+    { q1: undefined, q2: undefined },
+    { q1: undefined, q2: undefined },
+    { q1: undefined, q2: undefined },
+  ]);
+  const questions = [
+    {
+      scrambled: "the school going to are children",
 
-const ITEMS = [
-  {
-    id:      1,
-    before:  "There's a cat",
-    after:   "the toy house.",
-    correct: "on",
-  },
-  {
-    id:      2,
-    before:  "There's a mouse",
-    after:   "the toy house.",
-    correct: "in",
-  },
-  {
-    id:      3,
-    before:  "There's cheese",
-    after:   "the toy house.",
-    correct: "in front of",
-  },
-];
+      answer1: "Are the children going to school?",
 
-export default function WB_ReadLookWrite_PageE() {
-  const [selected,    setSelected]    = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+      answer2: "Yes, they are.",
 
-  const handleChange = (id, value) => {
-    if (showAns) return;
-    setSelected((prev) => ({ ...prev, [id]: value }));
-    setShowResults(false);
+      correct: true,
+    },
+
+    {
+      scrambled: "garden the blooming flowers in the are",
+
+      answer1: "Are the flowers in the garden blooming?",
+
+      answer2: "No, they aren’t.",
+
+      correct: false,
+    },
+
+    {
+      scrambled: "their the students are books reading",
+
+      answer1: "Are the students reading their books?",
+
+      answer2: "Yes, they are.",
+
+      correct: true,
+    },
+
+    {
+      scrambled: "boys the their eating are breakfast",
+
+      answer1: "Are the boys eating their breakfast?",
+
+      answer2: "No, they aren’t.",
+
+      correct: false,
+    },
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState([
+    {
+      q1: "",
+      q2: "",
+    },
+
+    {
+      q1: "",
+      q2: "",
+    },
+
+    {
+      q1: "",
+      q2: "",
+    },
+
+    {
+      q1: "",
+      q2: "",
+    },
+  ]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (index, field, value) => {
+    if (locked || result[index] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[index][field] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[index] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => selected[i.id]);
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((q) => !q.q1.trim() || !q.q2.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((i) => { if (selected[i.id] === i.correct) score++; });
-    setShowResults(true);
-    const total = ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
+
+    let correctCount = 0;
+
+    const newResults = [];
+    const newFieldResults = [];
+
+    studentAnswers.forEach((answer, i) => {
+      const ok1 = normalize(answer.q1) === normalize(questions[i].answer1);
+
+      const ok2 = normalize(answer.q2) === normalize(questions[i].answer2);
+
+      newFieldResults.push({
+        q1: ok1,
+        q2: ok2,
+      });
+
+      const final = ok1 && ok2;
+
+      if (final) correctCount++;
+
+      newResults.push(final);
+    });
+
+    setResult(newResults);
+    setFieldResults(newFieldResults);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = i.correct; });
-    setSelected(filled);
-    setShowResults(true);
-    setShowAns(true);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers([
+      {
+        q1: questions[0].answer1,
+
+        q2: questions[0].answer2,
+      },
+
+      {
+        q1: questions[1].answer1,
+
+        q2: questions[1].answer2,
+      },
+
+      {
+        q1: questions[2].answer1,
+
+        q2: questions[2].answer2,
+      },
+
+      {
+        q1: questions[3].answer1,
+
+        q2: questions[3].answer2,
+      },
+    ]);
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setSelected({});
-    setShowResults(false);
-    setShowAns(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers([
+      {
+        q1: "",
+        q2: "",
+      },
+
+      {
+        q1: "",
+        q2: "",
+      },
+
+      {
+        q1: "",
+        q2: "",
+      },
+
+      {
+        q1: "",
+        q2: "",
+      },
+    ]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (item) =>
-    showResults && !showAns && selected[item.id] !== item.correct;
+  // ------------------------
+  // INPUT
+  // ------------------------
+
+  const inputField = (index, field, width) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        value={studentAnswers[index][field]}
+        disabled={locked || result[index] === true}
+        onChange={(e) => handleChange(index, field, e.target.value)}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${
+            fieldResults[index]?.[field] === false
+              ? "border-[#D1232A]"
+              : "border-black"
+          }
+        `}
+        style={{
+          width,
+        }}
+      />
+      {fieldResults[index]?.[field] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "18px",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin:     0,
-            display:    "flex",
-            alignItems: "center",
-            gap:        "12px",
-            flexWrap:   "wrap",
-          }}
-        >
-          <span className="WB-ex-A">E</span>
-          Read, look, and write{" "}
-          <strong style={{ fontWeight: 900 }}>in</strong>,{" "}
-          <strong style={{ fontWeight: 900 }}>on</strong>, or{" "}
-          <strong style={{ fontWeight: 900 }}>in front of</strong>.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* Main layout: sentences LEFT | house image RIGHT */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "1fr auto",
-            gap:                 "clamp(20px,3vw,40px)",
-            alignItems:          "center",
-            width:               "100%",
-          }}
-        >
-          {/* Sentences */}
-          <div
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
             style={{
-              display:       "flex",
-              flexDirection: "column",
-              gap:           "clamp(20px,3vw,36px)",
-              minWidth:      0,
+              marginRight: "10px",
             }}
           >
-            {ITEMS.map((item) => {
-              const wrong = isWrong(item);
-              return (
-                <div
-                  key={item.id}
+            E
+          </span>
+          Unscramble and write. Then answer with
+          <span className="text-[#00AEEF]"> “Yes, they are.”</span> or
+          <span className="text-[#00AEEF]"> “No, they aren’t.”</span>
+        </h5>
+
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-4">
+          {questions.map((q, index) => (
+            <div key={index}>
+              {/* SCRAMBLED */}
+
+              <div className="flex items-center gap-3 mb-3">
+                <span className="font-bold">{index + 1}</span>
+
+                <span>{q.scrambled}</span>
+              </div>
+
+              {/* ANSWER AREA */}
+
+              <div className="flex items-start gap-4 ml-4">
+                {/* SVG */}
+
+                <img
+                  src={q.correct ? trueImg : flaseImg}
+                  alt=""
                   style={{
-                    display:    "flex",
-                    alignItems: "flex-start",
-                    gap:        "clamp(8px,1vw,14px)",
-                    minWidth:   0,
+                    width: "34px",
+                    height: "34px",
+                    marginTop: "32px",
+                    border: "2px solid #6D2980",
+                    borderRadius: "6px",
+                    padding: "4px",
                   }}
-                >
-                  {/* number */}
-                  <span
-                    style={{
-                      fontSize:   "clamp(16px,1.9vw,26px)",
-                      fontWeight: 700,
-                      color:      "#111",
-                      lineHeight: 1.4,
-                      flexShrink: 0,
-                      minWidth:   "clamp(14px,1.8vw,24px)",
-                    }}
-                  >
-                    {item.id}
-                  </span>
+                />
 
-                  {/* sentence block */}
-                  <div
-                    style={{
-                      display:   "flex",
-                      flexWrap:  "wrap",
-                      alignItems:"baseline",
-                      gap:       "clamp(4px,0.5vw,7px)",
-                      minWidth:  0,
-                      flex:      1,
-                    }}
-                  >
-                    {/* before */}
-                    <span
-                      style={{
-                        fontSize:   "clamp(14px,1.8vw,24px)",
-                        fontWeight: 500,
-                        color:      "#111",
-                        lineHeight: 1.4,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {item.before}
-                    </span>
+                {/* INPUTS */}
 
-                    {/* dropdown */}
-                    <div
-                      style={{
-                        position: "relative",
-                        display:  "inline-flex",
-                        alignItems: "flex-end",
-                      }}
-                    >
-                      <select
-                        disabled={showAns}
-                        value={selected[item.id] || ""}
-                        onChange={(e) => handleChange(item.id, e.target.value)}
-                        style={{
-                          minWidth:     "clamp(80px,14vw,180px)",
-                          borderTop:    "none",
-                          borderLeft:   "none",
-                          borderRight:  "none",
-                          borderBottom: `2.5px solid ${wrong ? WRONG_COLOR : LINE_COLOR}`,
-                          borderRadius: 0,
-                          outline:      "none",
-                          fontSize:     "clamp(14px,1.8vw,24px)",
-                          fontWeight:   700,
-                          color:        RED_COLOR,
-                          padding:      "0 clamp(4px,0.6vw,8px) 3px 2px",
-                          background:   "transparent",
-                          cursor:       showAns ? "default" : "pointer",
-                          appearance:   "auto",
-                          boxSizing:    "border-box",
-                        }}
-                      >
-                        <option value="" disabled hidden></option>
-                        {OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
+                <div className="flex flex-col gap-3 w-full">
+                  {/* Q1 */}
 
-                      {/* wrong badge — يسار أعلى */}
-                      {wrong && (
-                        <div
-                          style={{
-                            position:        "absolute",
-                            top:             "-8px",
-                            left:            "-8px",
-                            width:           "clamp(16px,1.8vw,22px)",
-                            height:          "clamp(16px,1.8vw,22px)",
-                            borderRadius:    "50%",
-                            backgroundColor: WRONG_COLOR,
-                            border:          "1px solid #fff",
-                            color:           "#fff",
-                            display:         "flex",
-                            alignItems:      "center",
-                            justifyContent:  "center",
-                            fontSize:        "clamp(9px,0.9vw,12px)",
-                            fontWeight:      700,
-                            boxShadow:       "0 1px 4px rgba(0,0,0,0.2)",
-                            zIndex:          3,
-                            pointerEvents:   "none",
-                          }}
-                        >
-                          ✕
-                        </div>
-                      )}
-                    </div>
+                  <div className="flex items-end gap-2">
+                    {inputField(index, "q1", "620px")}
 
-                    {/* after */}
-                    <span
-                      style={{
-                        fontSize:   "clamp(14px,1.8vw,24px)",
-                        fontWeight: 500,
-                        color:      "#111",
-                        lineHeight: 1.4,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {item.after}
-                    </span>
+                    <span>?</span>
+                  </div>
+
+                  {/* Q2 */}
+
+                  <div>
+                    {inputField(index, "q2", "620px")}
+
+                    <span>.</span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* House image */}
-          <div
-            style={{
-              width:        "clamp(180px,28vw,340px)",
-              flexShrink:   0,
-            }}
-          >
-            <img
-              src={houseImg}
-              alt="toy house"
-              style={{
-                width:         "100%",
-                height:        "auto",
-                display:       "block",
-                userSelect:    "none",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
+              </div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Buttons */}
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit7_Page41_Q1;

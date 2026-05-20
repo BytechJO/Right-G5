@@ -1,391 +1,276 @@
-import React, { useState, useRef, useEffect } from "react";
-import Button from "../Button";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import AudioWithCaption from "../../AudioWithCaption";
 
-import sound1 from "../../../assets/audio/ClassBook/Grade 3/cd2pg14instruction-adult-lady_tUKGw1L9.mp3"; // ← غيّر المسار حسب ملف الأوديو
+import roomImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U7/Page 44/Asset 11.svg";
 
-const BORDER_COLOR = "#f39b42";
-const WRONG_COLOR  = "#ef4444";
-const LINE_COLOR   = "#ef4444";
+const WB_Unit7_Page44_Q2 = () => {
+  const correctAnswers = [
+    "They are playing a game.",
+    "She is eating cereal.",
+    "Stella is playing with a puppy.",
+    "Hansel is taking a nap.",
+    "Harley is wiping the window.",
+    "Helen is sitting on the couch.",
+  ];
 
-const TOP_ITEMS    = [1, 2, 3, 4, 5, 6, 7, 8];
-const BOTTOM_ITEMS = ["i", "y", "z", "q", "c", "p", "t", "r"];
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-// الإجابات الصحيحة: رقم → حرف
-const CORRECT = {
-  1: "z",
-  2: "y",
-  3: "q",
-  4: "i",
-  5: "c",
-  6: "t",
-  7: "p",
-  8: "r",
-};
+  const [result, setResult] = useState([]);
 
-export default function WB_ListenAndMatch_PageB() {
-  const [lines,       setLines]       = useState([]);   // [{from, to}]
-  const [selecting,   setSelecting]   = useState(null); // رقم أو حرف مختار
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
-  const [mousePos,    setMousePos]    = useState({ x: 0, y: 0 });
+  const [locked, setLocked] = useState(false);
 
-  const topRefs    = useRef({});
-  const bottomRefs = useRef({});
-  const svgRef     = useRef(null);
-  const containerRef = useRef(null);
-const captions = [
-  { start: 0.52, end: 3.22, text: "Page 44, phonics exercise B." },
-  { start: 3.22, end: 5.18, text: "Listen and match." },
-  { start: 5.18, end: 7.96, text: "1- math." },
-  { start: 7.96, end: 10.66, text: "2- thick." },
-  { start: 10.66, end: 13.82, text: "3- this." },
-  { start: 13.82, end: 16.56, text: "4- father." },
-  { start: 16.56, end: 19.36, text: "5- bank." },
-];
-  // تتبع الماوس لرسم الخط المؤقت
-  useEffect(() => {
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-  const getCenter = (el) => {
-    if (!el || !containerRef.current) return { x: 0, y: 0 };
-    const elRect   = el.getBoundingClientRect();
-    const conRect  = containerRef.current.getBoundingClientRect();
-    return {
-      x: elRect.left + elRect.width  / 2 - conRect.left,
-      y: elRect.top  + elRect.height / 2 - conRect.top,
-    };
-  };
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const getContainerPos = (clientX, clientY) => {
-    if (!containerRef.current) return { x: 0, y: 0 };
-    const r = containerRef.current.getBoundingClientRect();
-    return { x: clientX - r.left, y: clientY - r.top };
-  };
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
 
-  const isConnected = (key, type) =>
-    lines.some((l) => type === "top" ? l.from === key : l.to === key);
+    const updated = [...studentAnswers];
 
-  const handleTopClick = (num) => {
-    if (showAns) return;
-    if (selecting === null) {
-      setSelecting({ type: "top", key: num });
-    } else if (selecting.type === "top") {
-      setSelecting({ type: "top", key: num });
-    } else {
-      // كان محدد حرف، نوصل
-      connectLine(selecting.key, num);
-    }
-  };
+    updated[i] = value;
 
-  const handleBottomClick = (letter) => {
-    if (showAns) return;
-    if (selecting === null) {
-      setSelecting({ type: "bottom", key: letter });
-    } else if (selecting.type === "bottom") {
-      setSelecting({ type: "bottom", key: letter });
-    } else {
-      // كان محدد رقم، نوصل
-      connectLine(selecting.key, letter);
-    }
-  };
+    setStudentAnswers(updated);
 
-  const connectLine = (from, to) => {
-    // امسح أي خط قديم للرقم أو الحرف
-    setLines((prev) => {
-      const filtered = prev.filter((l) => l.from !== from && l.to !== to);
-      return [...filtered, { from, to }];
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-    setSelecting(null);
-    setShowResults(false);
   };
 
-  const handleRemoveLine = (from) => {
-    if (showAns) return;
-    setLines((prev) => prev.filter((l) => l.from !== from));
-    setShowResults(false);
-  };
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-  const handleCheck = () => {
-    if (showAns) return;
-    if (lines.length < TOP_ITEMS.length) {
-      ValidationAlert.info("Please complete all matches first.");
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    lines.forEach((l) => { if (CORRECT[l.from] === l.to) score++; });
-    setShowResults(true);
-    const total = TOP_ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
+
+    let correctCount = 0;
+
+    const usedAnswers = [];
+
+    const newResults = studentAnswers.map((studentAnswer) => {
+      const normalizedStudent = normalize(studentAnswer);
+
+      const foundIndex = correctAnswers.findIndex(
+        (correct, index) =>
+          !usedAnswers.includes(index) &&
+          normalize(correct) === normalizedStudent,
+      );
+
+      if (foundIndex !== -1) {
+        usedAnswers.push(foundIndex);
+
+        correctCount++;
+
+        return true;
+      }
+
+      return false;
+    });
+
+    setResult(newResults);
+
+    const total = correctAnswers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const ans = TOP_ITEMS.map((num) => ({ from: num, to: CORRECT[num] }));
-    setLines(ans);
-    setShowResults(true);
-    setShowAns(true);
-    setSelecting(null);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(correctAnswers);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setLines([]);
-    setSelecting(null);
-    setShowResults(false);
-    setShowAns(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isLineWrong = (line) =>
-    showResults && !showAns && CORRECT[line.from] !== line.to;
+  // ------------------------
+  // INPUT FIELD
+  // ------------------------
 
-  const getLineColor = (line) =>
-    showResults
-      ? isLineWrong(line) ? WRONG_COLOR : "#16a34a"
-      : LINE_COLOR;
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  // حساب إحداثيات الخطوط
-  const computedLines = lines.map((line) => ({
-    ...line,
-    from_pos: getCenter(topRefs.current[line.from]),
-    to_pos:   getCenter(bottomRefs.current[line.to]),
-  }));
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
 
-  // الخط المؤقت
-  const tempFrom = selecting?.type === "top"
-    ? getCenter(topRefs.current[selecting.key])
-    : selecting?.type === "bottom"
-    ? getCenter(bottomRefs.current[selecting.key])
-    : null;
-
-  const tempTo = tempFrom
-    ? getContainerPos(mousePos.x, mousePos.y)
-    : null;
-
-  return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "clamp(18px,2.5vw,28px)",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        <h1
-          className="WB-header-title-page8"
-          style={{ margin: 0, display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}
-        >
-          <span className="WB-ex-A">B</span> Listen and match.
-        </h1>
-<div style={{ display: "flex", justifyContent: "center" }}>
-  <AudioWithCaption src={sound1} captions={captions} />
-</div>
-
-        {/* ── منطقة الـ match ── */}
-        <div
-          ref={containerRef}
+      {result[i] === false && (
+        <span
           style={{
-            position: "relative",
-            width:    "100%",
-            padding:  "clamp(16px,2vw,28px) 0",
+            position: "absolute",
+
+            top: "-8px",
+
+            right: "-8px",
+
+            width: "20px",
+
+            height: "20px",
+
+            background: "#ef4444",
+
+            color: "white",
+
+            borderRadius: "50%",
+
+            display: "flex",
+
+            alignItems: "center",
+
+            justifyContent: "center",
+
+            fontSize: "11px",
+
+            fontWeight: "bold",
+
+            border: "2px solid white",
           }}
         >
-          {/* SVG للخطوط */}
-          <svg
-            ref={svgRef}
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-              position:      "absolute",
-              top:           0,
-              left:          0,
-              width:         "100%",
-              height:        "100%",
-              pointerEvents: "none",
-              zIndex:        1,
+              marginRight: "10px",
             }}
           >
-            {/* الخطوط المرسومة */}
-            {computedLines.map((line) => (
-              <line
-                key={`${line.from}-${line.to}`}
-                x1={line.from_pos.x} y1={line.from_pos.y}
-                x2={line.to_pos.x}   y2={line.to_pos.y}
-                stroke={getLineColor(line)}
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            ))}
+            M
+          </span>
+          Look and write what everyone is doing. Use{" "}
+          <span className="text-[#00AEEF]">–ing</span> verbs.
+        </h5>
 
-            {/* الخط المؤقت */}
-            {tempFrom && tempTo && (
-              <line
-                x1={tempFrom.x} y1={tempFrom.y}
-                x2={tempTo.x}   y2={tempTo.y}
-                stroke={BORDER_COLOR}
-                strokeWidth="2"
-                strokeDasharray="6,4"
-                strokeLinecap="round"
-              />
-            )}
-          </svg>
+        {/* IMAGE */}
 
-          {/* الأرقام فوق */}
-          <div
+        <div className="flex justify-center mb-5">
+          <img
+            src={roomImg}
+            alt=""
             style={{
-              display:             "grid",
-              gridTemplateColumns: `repeat(${TOP_ITEMS.length}, minmax(0,1fr))`,
-              gap:                 "clamp(6px,1vw,14px)",
-              width:               "100%",
-              position:            "relative",
-              zIndex:              2,
+              width: "70%",
+              height: "auto",
+              objectFit: "contain",
             }}
-          >
-            {TOP_ITEMS.map((num) => {
-              const connected = isConnected(num, "top");
-              const isSelecting = selecting?.type === "top" && selecting.key === num;
-              const line = lines.find((l) => l.from === num);
-              const wrong = showResults && line && CORRECT[line.from] !== line.to;
-
-              return (
-                <div
-                  key={num}
-                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
-                >
-                  <div
-                    ref={(el) => (topRefs.current[num] = el)}
-                    onClick={() => handleTopClick(num)}
-                    style={{
-                      width:           "clamp(36px,5vw,56px)",
-                      height:          "clamp(36px,5vw,56px)",
-                      borderRadius:    "50%",
-                      border:          `2.5px solid ${wrong ? WRONG_COLOR : isSelecting ? BORDER_COLOR : connected ? BORDER_COLOR : "#ccc"}`,
-                      background:      isSelecting ? "rgba(243,155,66,0.15)" : "#fff",
-                      display:         "flex",
-                      alignItems:      "center",
-                      justifyContent:  "center",
-                      fontSize:        "clamp(14px,1.7vw,22px)",
-                      fontWeight:      700,
-                      color:           wrong ? WRONG_COLOR : "#111",
-                      cursor:          showAns ? "default" : "pointer",
-                      userSelect:      "none",
-                      transition:      "all 0.15s",
-                      position:        "relative",
-                      boxShadow:       isSelecting ? `0 0 0 3px rgba(243,155,66,0.3)` : "none",
-                    }}
-                  >
-                    {num}
-
-                    {wrong && (
-                      <div style={{
-                        position:        "absolute",
-                        top:             "-6px",
-                        right:           "-6px",
-                        width:           "16px",
-                        height:          "16px",
-                        borderRadius:    "50%",
-                        border:          "1px solid #fff",
-                        backgroundColor: WRONG_COLOR,
-                        color:           "#fff",
-                        display:         "flex",
-                        alignItems:      "center",
-                        justifyContent:  "center",
-                        fontSize:        "9px",
-                        fontWeight:      700,
-                        boxShadow:       "0 1px 4px rgba(0,0,0,0.2)",
-                        pointerEvents:   "none",
-                        cursor:          "pointer",
-                      }}
-                        onClick={(e) => { e.stopPropagation(); handleRemoveLine(num); }}
-                      >✕</div>
-                    )}
-                  </div>
-
-                  {/* نقطة وصل */}
-                  <div style={{
-                    width:        "10px",
-                    height:       "10px",
-                    borderRadius: "50%",
-                    background:   connected ? (wrong ? WRONG_COLOR : BORDER_COLOR) : "#ccc",
-                    transition:   "background 0.15s",
-                  }} />
-                </div>
-              );
-            })}
-          </div>
-
-          {/* مسافة بين الصفين */}
-          <div style={{ height: "clamp(40px,7vw,80px)" }} />
-
-          {/* الحروف تحت */}
-          <div
-            style={{
-              display:             "grid",
-              gridTemplateColumns: `repeat(${BOTTOM_ITEMS.length}, minmax(0,1fr))`,
-              gap:                 "clamp(6px,1vw,14px)",
-              width:               "100%",
-              position:            "relative",
-              zIndex:              2,
-            }}
-          >
-            {BOTTOM_ITEMS.map((letter) => {
-              const connected   = isConnected(letter, "bottom");
-              const isSelecting = selecting?.type === "bottom" && selecting.key === letter;
-              const line        = lines.find((l) => l.to === letter);
-              const wrong       = showResults && line && CORRECT[line.from] !== line.to;
-
-              return (
-                <div
-                  key={letter}
-                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
-                >
-                  {/* نقطة وصل */}
-                  <div style={{
-                    width:        "10px",
-                    height:       "10px",
-                    borderRadius: "50%",
-                    background:   connected ? (wrong ? WRONG_COLOR : BORDER_COLOR) : "#ccc",
-                    transition:   "background 0.15s",
-                  }} />
-
-                  <div
-                    ref={(el) => (bottomRefs.current[letter] = el)}
-                    onClick={() => handleBottomClick(letter)}
-                    style={{
-                      width:           "clamp(36px,5vw,56px)",
-                      height:          "clamp(36px,5vw,56px)",
-                      borderRadius:    "50%",
-                      border:          `2.5px solid ${wrong ? WRONG_COLOR : isSelecting ? BORDER_COLOR : connected ? BORDER_COLOR : "#ccc"}`,
-                      background:      isSelecting ? "rgba(243,155,66,0.15)" : "#fff",
-                      display:         "flex",
-                      alignItems:      "center",
-                      justifyContent:  "center",
-                      fontSize:        "clamp(14px,1.7vw,22px)",
-                      fontWeight:      700,
-                      color:           wrong ? WRONG_COLOR : "#111",
-                      cursor:          showAns ? "default" : "pointer",
-                      userSelect:      "none",
-                      transition:      "all 0.15s",
-                      boxShadow:       isSelecting ? `0 0 0 3px rgba(243,155,66,0.3)` : "none",
-                    }}
-                  >
-                    {letter}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          />
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "clamp(6px,1vw,12px)" }}>
-          <Button checkAnswers={handleCheck} handleShowAnswer={handleShowAnswer} handleStartAgain={handleStartAgain} />
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-8 mb-10">
+          {studentAnswers.map((_, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <span className="font-bold">{index + 1}</span>
+
+              <div className="flex-1">{inputField(index)}</div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit7_Page44_Q2;

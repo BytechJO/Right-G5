@@ -1,297 +1,389 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+// IMAGE
+import springImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U7/Page 43/Asset 19.svg";
 
-import person1Img  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 43/SVG/1.svg";
-import person2Img  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 43/SVG/2.svg";
-import person3Img  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 43/SVG/3.svg";
-import person4Img  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U7 Folder/Page 43/SVG/4.svg";
+const WB_Unit7_Page43_Q1 = () => {
+  const questions = [
+    {
+      sentence: "The wind is blowing lightly.",
 
-const WRONG_COLOR  = "#ef4444";
-const RED_COLOR    = "#000000ff";
-const LINE_COLOR   = "#333";
-const OPTIONS      = ["me", "you", "it"];
+      correct: true,
+    },
 
-// كل bubble: جهة الصورة (left/right) + جهة السهم
-const ITEMS = [
-  {
-    id:        1,
-    before:    "Look at",
-    after:     "!",
-    correct:   "me",
-    imgSrc:    person1Img,
-    imgSide:   "left",   // الصورة يسار والفقاعة يمين
-  },
-  {
-    id:        2,
-    before:    "Can I play with",
-    after:     "?",
-    correct:   "you",
-    imgSrc:    person2Img,
-    imgSide:   "right",  // الصورة يمين والفقاعة يسار
-  },
-  {
-    id:        3,
-    before:    "I can't draw",
-    after:     "!",
-    correct:   "you",
-    imgSrc:    person3Img,
-    imgSide:   "left",
-  },
-  {
-    id:        4,
-    before:    "Please play with",
-    after:     "!",
-    correct:   "me",
-    imgSrc:    person4Img,
-    imgSide:   "right",
-  },
-];
+    {
+      sentence: "Helen and her friends are catching grasshoppers.",
 
-export default function SB_LookReadWrite_PageI() {
-  const [selected,    setSelected]    = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+      correct: false,
+    },
 
-  const handleChange = (id, value) => {
-    if (showAns) return;
-    setSelected((prev) => ({ ...prev, [id]: value }));
-    setShowResults(false);
+    {
+      sentence: "Everyone is getting bored.",
+
+      correct: false,
+    },
+
+    {
+      sentence: "Stella is smelling the flowers.",
+
+      correct: false,
+    },
+
+    {
+      sentence: "Harley is eating a sandwich.",
+
+      correct: true,
+    },
+
+    {
+      sentence: "Tom is watching the football game.",
+
+      correct: false,
+    },
+  ];
+
+  const [selected, setSelected] = useState(Array(questions.length).fill(""));
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  // ------------------------
+  // SELECT
+  // ------------------------
+
+  const handleSelect = (index, value) => {
+    if (locked || result[index] === true) return;
+
+    const updated = [...selected];
+
+    updated[index] = value;
+
+    setSelected(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[index] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => selected[i.id]);
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = selected.some((s) => !s);
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let score = 0;
-    ITEMS.forEach((i) => { if (selected[i.id] === i.correct) score++; });
-    setShowResults(true);
-    const total = ITEMS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
-  };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = i.correct; });
-    setSelected(filled);
-    setShowResults(true);
-    setShowAns(true);
-  };
+    let correctCount = 0;
 
-  const handleStartAgain = () => {
-    setSelected({});
-    setShowResults(false);
-    setShowAns(false);
-  };
+    const newResults = questions.map((q, i) => {
+      const correctSymbol = q.correct ? "true" : "false";
 
-  const isWrong = (item) =>
-    showResults && !showAns && selected[item.id] !== item.correct;
+      const ok = selected[i] === correctSymbol;
 
-  const renderBubble = (item) => {
-    const wrong = isWrong(item);
-    return (
-      <div
-        style={{
-          display:      "flex",
-          alignItems:   "center",
-          gap:          "clamp(6px,1vw,14px)",
-          width:        "100%",
-          flexDirection: item.imgSide === "left" ? "row" : "row-reverse",
-        }}
-      >
-        {/* صورة الشخص */}
-        <div
-          style={{
-            width:        "clamp(70px,12vw,140px)",
-            flexShrink:   0,
-            display:      "flex",
-            alignItems:   "flex-end",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={item.imgSrc}
-            alt={`person-${item.id}`}
-            style={{
-              width:         "100%",
-              height:        "auto",
-              objectFit:     "contain",
-              display:       "block",
-              userSelect:    "none",
-              pointerEvents: "none",
-            }}
-          />
-        </div>
+      if (ok) correctCount++;
 
-     
+      return ok;
+    });
 
-        {/* فقاعة الكلام */}
-        <div
-          style={{
-            position:     "relative",
-            flex:         1,
-            minWidth:     0,
-            border:       `2px solid #555`,
-            borderRadius: "clamp(10px,1.4vw,18px)",
-            padding:      "clamp(8px,1.2vw,16px) clamp(12px,1.6vw,20px)",
-            background:   "#fff",
-            display:      "flex",
-            alignItems:   "center",
-            flexWrap:     "wrap",
-            gap:          "clamp(4px,0.5vw,8px)",
-            boxSizing:    "border-box",
-            transition:   "border-color 0.2s",
-          }}
-        >
-          {/* before text */}
-          <span
-            style={{
-              fontSize:   "clamp(14px,1.9vw,26px)",
-              fontWeight: 500,
-              color:      "#111",
-              lineHeight: 1.3,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {item.before}
-          </span>
+    setResult(newResults);
 
-          {/* dropdown */}
-          <div style={{ position: "relative", display: "inline-flex", alignItems: "flex-end" }}>
-            <select
-              disabled={showAns}
-              value={selected[item.id] || ""}
-              onChange={(e) => handleChange(item.id, e.target.value)}
-              style={{
-                minWidth:     "clamp(60px,10vw,130px)",
-                borderTop:    "none",
-                borderLeft:   "none",
-                borderRight:  "none",
-                borderBottom: `2.5px solid ${wrong ? WRONG_COLOR : LINE_COLOR}`,
-                borderRadius: 0,
-                outline:      "none",
-                fontSize:     "clamp(14px,1.9vw,26px)",
-                fontWeight:   700,
-                color:         RED_COLOR,
-                padding:      "0 clamp(4px,0.5vw,6px) 2px 2px",
-                background:   "transparent",
-                cursor:       showAns ? "default" : "pointer",
-                appearance:   "auto",
-                boxSizing:    "border-box",
-              }}
-            >
-              <option value="" disabled hidden></option>
-              {OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
+    const total = questions.length;
 
-            {/* wrong badge — يسار أعلى */}
-            {wrong && (
-              <div
-                style={{
-                  position:        "absolute",
-                  top:             "-8px",
-                  left:            "-8px",
-                  width:           "clamp(16px,1.8vw,22px)",
-                  height:          "clamp(16px,1.8vw,22px)",
-                  borderRadius:    "50%",
-                  backgroundColor: WRONG_COLOR,
-                  border:          "1px solid #fff",
-                  color:           "#fff",
-                  display:         "flex",
-                  alignItems:      "center",
-                  justifyContent:  "center",
-                  fontSize:        "clamp(9px,0.9vw,12px)",
-                  fontWeight:      700,
-                  boxShadow:       "0 1px 4px rgba(0,0,0,0.2)",
-                  zIndex:          3,
-                  pointerEvents:   "none",
-                }}
-              >
-                ✕
-              </div>
-            )}
-          </div>
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-          {/* after text */}
-          <span
-            style={{
-              fontSize:   "clamp(14px,1.9vw,26px)",
-              fontWeight: 500,
-              color:      "#111",
-              lineHeight: 1.3,
-            }}
-          >
-            {item.after}
-          </span>
-        </div>
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
       </div>
-    );
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
+  };
+
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setSelected(questions.map((q) => (q.correct ? "true" : "false")));
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
+  };
+
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setSelected(Array(questions.length).fill(""));
+
+    setResult([]);
+
+    setLocked(false);
   };
 
   return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "18px",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{
-            margin:     0,
-            display:    "flex",
-            alignItems: "center",
-            gap:        "12px",
-            flexWrap:   "wrap",
-          }}
-        >
-          <span className="WB-ex-A">I</span>
-          Look, read, and write{" "}
-          <strong style={{ fontWeight: 900 }}>me</strong>,{" "}
-          <strong style={{ fontWeight: 900 }}>you</strong>, or{" "}
-          <strong style={{ fontWeight: 900 }}>it</strong>.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* Bubbles */}
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            J
+          </span>
+          Read and circle <span className="text-[#00AEEF]">true</span> or{" "}
+          <span className="text-[#00AEEF]">false</span>.
+        </h5>
+        {/* STORY */}
+
         <div
           style={{
-            display:       "flex",
-            flexDirection: "column",
-            gap:           "clamp(18px,3vw,36px)",
-            width:         "100%",
+            border: "2px solid #8C3FAF",
+            borderRadius: "10px",
+            padding: "14px 16px",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "14px",
+            background: "#fff",
           }}
         >
-          {ITEMS.map((item) => renderBubble(item))}
-        </div>
+          {/* TEXT */}
 
-        {/* Buttons */}
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
+          <div
+            style={{
+              flex: 1,
+              fontSize: "17px",
+              lineHeight: "2",
+              color: "#3d2b1f",
+              textAlign: "left",
+            }}
+          >
+            It is springtime. Helen and her friends are playing in her backyard.
+            They are enjoying the wonderful breeze and the super colors of
+            spring. They are catching butterflies and putting them in glass jars
+            that have openings for air. The wind is blowing lightly. The birds
+            are chirping. They were waiting for spring all winter long. Finally,
+            it has arrived. There are many fun outdoor games and activities to
+            do. Everyone is keeping busy with something. Hansel is playing tag
+            with Sarah. Stella is counting the flowers that are blooming. Harley
+            is eating his sandwich. Tom is watching the grasshoppers hop.
+          </div>
+
+          {/* IMAGE */}
+
+          <div
+            style={{
+              flexShrink: 0,
+              alignSelf: "flex-end",
+            }}
+          >
+            <img
+              src={springImg}
+              alt=""
+              style={{
+                width: "220px",
+                height: "170px",
+                objectFit: "contain",
+                display: "block",
+              }}
+            />
+          </div>
         </div>
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-7 mt-8 mb-10">
+          {questions.map((q, index) => (
+            <div
+              key={index}
+              className="
+          flex
+          items-center
+          justify-between
+          gap-6
+        "
+            >
+              {/* SENTENCE */}
+
+              <div className="flex items-center gap-3 flex-1">
+                <span className="font-bold">{index + 1}</span>
+
+                <span>{q.sentence}</span>
+              </div>
+
+              {/* OPTIONS */}
+
+              <div className="flex items-center gap-10">
+                {/* TRUE */}
+
+                <button
+                  type="button"
+                  disabled={locked || result[index] === true}
+                  onClick={() => handleSelect(index, "true")}
+                  className="relative"
+                  style={{
+                    borderRadius: "50%",
+                    padding: "2px 8px",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "relative",
+                      zIndex: 2,
+                    }}
+                  >
+                    true
+                  </span>
+
+                  {selected[index] === "true" && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: "-6px",
+                        border: "2px solid #6D2980",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  )}
+
+                  {result[index] === false &&
+                    selected[index] === "true" &&
+                    !questions[index].correct && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "-8px",
+                          right: "-8px",
+                          width: "20px",
+                          height: "20px",
+                          background: "#ef4444",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "11px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        ✕
+                      </span>
+                    )}
+                </button>
+
+                {/* FALSE */}
+
+                <button
+                  type="button"
+                  disabled={locked || result[index] === true}
+                  onClick={() => handleSelect(index, "false")}
+                  className="relative"
+                  style={{
+                    borderRadius: "50%",
+                    padding: "2px 8px",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "relative",
+                      zIndex: 2,
+                    }}
+                  >
+                    false
+                  </span>
+
+                  {selected[index] === "false" && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: "-6px",
+                        border: "2px solid #6D2980",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  )}
+
+                  {result[index] === false &&
+                    selected[index] === "false" &&
+                    questions[index].correct && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "-8px",
+                          right: "-8px",
+                          width: "20px",
+                          height: "20px",
+                          background: "#ef4444",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "11px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                          boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        ✕
+                      </span>
+                    )}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit7_Page43_Q1;
