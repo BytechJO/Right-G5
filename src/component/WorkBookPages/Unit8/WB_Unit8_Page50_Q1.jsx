@@ -734,7 +734,7 @@ const WB_Unit8_Page50_Q1 = () => {
 
     const end = cells[cells.length - 1];
 
-    const cellSize = 34;
+    const cellSize = 30;
 
     const x1 = start.col * cellSize + cellSize / 2;
 
@@ -794,8 +794,8 @@ const WB_Unit8_Page50_Q1 = () => {
                     data-row={rowIndex}
                     data-col={colIndex}
                     className="
-                      w-[34px]
-                      h-[34px]
+                      w-[30px]
+                      h-[30px]
                       border
                       border-[#7D3C98]
                       flex
@@ -859,10 +859,10 @@ const WB_Unit8_Page50_Q1 = () => {
             style={{
               border: "2px solid #6D2980",
               borderRadius: "12px",
-              padding: "2px 20px",
+              padding: "3px 20px",
               minWidth: "180px",
             }}
-            className="flex flex-col gap-3 text-[18px]"
+            className="flex flex-col gap-2 text-[18px]"
           >
             {words.map((word, index) => (
               <div

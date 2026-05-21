@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import page2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 51.png";
+import React from "react";
+import page2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 51.png";
 import "./WB_unit9.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -17,7 +17,7 @@ const WB_Unit9_Page51 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 104 })}
+          onClick={() => openPopup("exercise", { startIndex: 98 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
@@ -41,7 +41,7 @@ const WB_Unit9_Page51 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 105 })}
+          onClick={() => openPopup("exercise", { startIndex: 99 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >

@@ -1,224 +1,448 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import AudioWithCaption from "../../AudioWithCaption";
 
-import sound1 from "../../../assets/audio/ClassBook/Grade 3/cd2pg14instruction-adult-lady_tUKGw1L9.mp3"; 
+import trueImg from "../../../assets/imgs/true.svg";
+import falseImg from "../../../assets/imgs/false.svg";
 
-const ITEMS = [
-  {
-    id: 1,
-    text: "The cats have cups and bats.",
-    correct: true,
-  },
-  {
-    id: 2,
-    text: "The bees and dogs see the trees.",
-    correct: true,
-  },
-  {
-    id: 3,
-    text: "The girl has books, peas, and dogs.",
-    correct: false,
-  },
-];
+const WB_Unit9_Page56_Q1 = () => {
+  const questions = [
+    {
+      status: "true",
+      correction: "",
+    },
 
-export default function Phonics_QA() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
-const captions = [
-  { start: 0.44, end: 3.08, text: "Page 50, phonics exercise B." },
-  { start: 3.08, end: 4.90, text: "Listen and circle." },
-  { start: 5.98, end: 7.66, text: "1- princess." },
-  { start: 8.70, end: 10.50, text: "2- bracelet." },
-  { start: 11.54, end: 13.32, text: "3- present." },
-  { start: 13.32, end: 16.32, text: "4- grandfather." },
-  { start: 16.32, end: 19.02, text: "5- broom." },
-];
-  const handleSelect = (id, value) => {
-    if (showAns) return;
+    {
+      status: "false",
+      correction: "great news",
+    },
 
-    setAnswers((prev) => ({
-      ...prev,
-      [id]: prev[id] === value ? undefined : value,
-    }));
+    {
+      status: "true",
+      correction: "",
+    },
+
+    {
+      status: "false",
+      correction: "stadium",
+    },
+    {
+      status: "true",
+      correction: "",
+    },
+  ];
+
+  const sentences = [
+    <>
+      I got new <u>braces</u> for my teeth.
+    </>,
+
+    <>
+      I have <u>mowing</u> ! We are going to a field trip tomorrow!
+    </>,
+
+    <>
+      Let’s begin the school year and <u>see how it goes</u> .
+    </>,
+
+    <>
+      Jane went to the <u>congratulations</u> today. She is going to see a game.
+    </>,
+    <>
+      Ben will <u>ring</u> his friend later today.
+    </>,
+  ];
+
+  const [marks, setMarks] = useState(["", "", "", ""]);
+
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE MARK
+  // ------------------------
+
+  const handleMark = (i, value) => {
+    if (locked || result[i]?.mark === true) return;
+
+    const updatedMarks = [...marks];
+
+    updatedMarks[i] = value;
+
+    setMarks(updatedMarks);
+
+    // اذا اختار صح يمسح الانبوت
+    if (value === "true") {
+      const updatedAnswers = [...answers];
+
+      updatedAnswers[i] = "";
+
+      setAnswers(updatedAnswers);
+    }
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const isWrong = (item) => {
-    if (!checked) return false;
-    return answers[item.id] !== item.correct;
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i]?.row === true || marks[i] === "true") return;
+
+    const updated = [...answers];
+
+    updated[i] = value;
+
+    setAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-    const allAnswered = ITEMS.every(
-      (item) => answers[item.id] !== undefined
-    );
+  const checkAnswers = () => {
+    if (locked) return;
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions!");
+    const hasEmptyMark = marks.some((m) => !m);
+
+    if (hasEmptyMark) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-const captions = [
-  { start: 0.46, end: 3.42, text: "Page 56, phonics exercise A." },
-  { start: 3.42, end: 8.62, text: "Do the words ending in S have the same S sound?" },
-  { start: 8.62, end: 11.88, text: "Listen and write check or X." },
-  { start: 13.00, end: 17.42, text: "1- the cats have cups and bats." },
-  { start: 17.42, end: 21.58, text: "2- the bees and dogs see the trees." },
-  { start: 21.58, end: 27.88, text: "3- the girl has books, peas, and dogs." },
-];
-    let score = 0;
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) score++;
+    const hasMissingCorrection = marks.some(
+      (m, i) => m === "false" && !answers[i].trim(),
+    );
+
+    if (hasMissingCorrection) {
+      ValidationAlert.info(
+        "Please write the correct vocabulary word for X answers.",
+      );
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const newResults = marks.map((mark, i) => {
+      // -------------------
+      // CHECK MARK
+      // -------------------
+
+      const markOk = mark === questions[i].status;
+
+      // -------------------
+      // CHECK INPUT
+      // -------------------
+
+      const correctionOk =
+        mark === "true"
+          ? true
+          : normalize(answers[i]) === normalize(questions[i].correction);
+
+      // -------------------
+      // FINAL
+      // -------------------
+
+      const rowOk = markOk && correctionOk;
+
+      if (rowOk) correctCount++;
+
+      return {
+        mark: markOk,
+        correction: correctionOk,
+        row: rowOk,
+      };
     });
 
-    setChecked(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const ans = {};
-    ITEMS.forEach((item) => {
-      ans[item.id] = item.correct;
-    });
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    setAnswers(ans);
-    setChecked(true);
-    setShowAns(true);
+  const showAnswers = () => {
+    setMarks(["true", "false", "true", "false", "true"]);
+
+    setAnswers(["", "great news", "", "stadium", ""]);
+
+    setResult([
+      {
+        mark: true,
+        correction: true,
+        row: true,
+      },
+
+      {
+        mark: true,
+        correction: true,
+        row: true,
+      },
+
+      {
+        mark: true,
+        correction: true,
+        row: true,
+      },
+
+      {
+        mark: true,
+        correction: true,
+        row: true,
+      },
+    ]);
+
+    setLocked(true);
   };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setMarks(["", "", "", ""]);
+
+    setAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const renderBox = (id, value) => {
-    const selected = answers[id] === value;
+  // ------------------------
+  // MARK BOX
+  // ------------------------
+
+  const markBox = (i, value, img) => {
+    const active = marks[i] === value;
+
+    const showError =
+      result[i]?.mark === false &&
+      ((value === "true" && marks[i] === "true") ||
+        (value === "false" && marks[i] === "false"));
 
     return (
-      <div
-        onClick={() => handleSelect(id, value)}
+      <button
+        type="button"
+        disabled={locked || result[i]?.mark === true}
+        onClick={() => handleMark(i, value)}
+        className="relative flex items-center justify-center"
         style={{
-          width: "38px",
-          height: "38px",
-          border: "2px solid #f39b42",
+          width: "34px",
+          height: "34px",
+          border: "1px solid #6D2980",
           borderRadius: "6px",
-          backgroundColor: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: showAns ? "default" : "pointer",
+          background: "transparent",
+          cursor: locked || result[i]?.mark === true ? "default" : "pointer",
         }}
       >
-        {selected && (
+        {active && (
+          <img
+            src={img}
+            alt={value}
+            style={{
+              width: "24px",
+              height: "24px",
+            }}
+          />
+        )}
+
+        {showError && (
           <span
             style={{
-              fontSize: "24px",
+              position: "absolute",
+              top: "-8px",
+              right: "-8px",
+              width: "20px",
+              height: "20px",
+              background: "#ef4444",
+              color: "white",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "11px",
               fontWeight: "bold",
-              color: value ? "#ef4444" : "#ef4444",
+              border: "2px solid white",
+              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
             }}
           >
-            {value ? "✓" : "✕"}
+            ✕
           </span>
         )}
-      </div>
+      </button>
     );
   };
 
+  // ------------------------
+  // INPUT
+  // ------------------------
+
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={answers[i]}
+        disabled={locked || result[i]?.row === true || marks[i] === "true"}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full          
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${
+            result[i]?.correction === false && marks[i] === "false"
+              ? "border-[#D1232A]"
+              : "border-black"
+          }
+        `}
+      />
+
+      {result[i]?.correction === false && marks[i] === "false" && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
   return (
-          <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(20px,3vw,36px)",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">A</span>
-          Do the words ending in "s" have the same -s sound? Write ✓ or ✕.
-        </h1>
-<div style={{ display: "flex", justifyContent: "center" }}>
-  <AudioWithCaption src={sound1} captions={captions} />
-</div>
-
-        {ITEMS.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "20px",
-            }}
-          >
-            {/* sentence */}
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                alignItems: "center",
-              }}
-            >
-              <span style={{ fontWeight: "700" }}>{item.id}</span>
-              <p style={{ margin: 0, fontSize: "18px" }}>{item.text}</p>
-            </div>
-
-            {/* choices */}
-            <div style={{ display: "flex", gap: "10px" }}>
-              {renderBox(item.id, true)}
-              {renderBox(item.id, false)}
-            </div>
-
-            {/* wrong mark */}
-            {isWrong(item) && (
-              <div
-                style={{
-                  position: "absolute",
-                  right: "-8px",
-                  top: "-8px",
-                  width: "22px",
-                  height: "22px",
-                  borderRadius: "50%",
-                  background: "#ef4444",
-                  color: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "12px",
-                  fontWeight: "700",
-                }}
-              >
-                ✕
-              </div>
-            )}
-          </div>
-        ))}
-
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-            checkAnswers={handleCheck}
-          />
+        <div className="header-title-page8 mb-[13vh]">
+          <span className="ex-A mr-2">J</span>
+          Read and write <span className="text-[#D1252B]">✓</span> or{" "}
+          <span className="text-[#D1252B]">✕</span> For{" "}
+          <span className="text-[#D1252B]">✕</span>, write the correct word or
+          expression.
         </div>
+
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-12">
+          {sentences.map((sentence, index) => (
+            <div key={index} className="w-full">
+              {/* ROW */}
+
+              <div className="flex items-end gap-4 w-full">
+                {/* BOXES */}
+
+                <div className="flex items-center gap-2 shrink-0">
+                  {markBox(index, "true", trueImg)}
+
+                  {markBox(index, "false", falseImg)}
+                </div>
+
+                {/* NUMBER */}
+
+                <span className="font-bold shrink-0">{index + 1}</span>
+
+                {/* SENTENCE */}
+
+                <span className="shrink-0">{sentence}</span>
+
+                {/* INPUT */}
+
+                <div className="flex-1">{inputField(index, "100%")}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit9_Page56_Q1;

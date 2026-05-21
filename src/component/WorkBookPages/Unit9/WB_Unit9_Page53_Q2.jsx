@@ -1,466 +1,415 @@
-import { useState, useRef, useLayoutEffect } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../Button";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 53/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 53/SVG/2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 53/SVG/3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 53/SVG/4.svg";
+const WB_Unit9_Page53_Q2 = () => {
+  const leftSide = [
+    "If this summer gets too hot,",
 
-const exerciseData = {
-  left: [
+    "When Gary learns how to ride a bike,",
+
+    "Karen can bring the desserts",
+
+    "We could make a snowman",
+
+    "When the rain stops,",
+
+    "If we go to the beach,",
+  ];
+
+  const rightSide = [
     {
-      id: 1,
-      img: img1,
-      text: "Where were they this morning?",
+      letter: "a",
+
+      text: "if it snows tomorrow.",
     },
+
     {
-      id: 2,
-      img: img2,
-      text: "Where is she now?",
+      letter: "b",
+
+      text: "he will join us in a bike race.",
     },
+
     {
-      id: 3,
-      img: img3,
-      text: "Where was she this morning?",
+      letter: "c",
+
+      text: "we can collect seashells.",
     },
+
     {
-      id: 4,
-      img: img4,
-      text: "Where is he now?",
+      letter: "d",
+
+      text: "we might travel to a cooler country.",
     },
-  ],
-  right: [
+
     {
-      id: 1,
-      text: "She was in the computer lab.",
+      letter: "e",
+
+      text: "we can go out and play.",
     },
+
     {
-      id: 2,
-      text: "She is on the playground.",
+      letter: "f",
+
+      text: "when we go on a picnic.",
     },
-    {
-      id: 3,
-      text: "He is at the swimming pool.",
-    },
-    {
-      id: 4,
-      text: "They were at the circus.",
-    },
-  ],
-  correctMatches: {
-    1: 4,
-    2: 2,
-    3: 1,
-    4: 3,
-  },
-};
+  ];
 
-const WB_Unit8_Page53_QF = () => {
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [matches, setMatches] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [lines, setLines] = useState([]);
+  const correctMatches = ["d", "b", "f", "a", "e", "c"];
 
-  const containerRef = useRef(null);
-  const elementRefs = useRef({});
+  const sentenceAnswers = [
+    "If this summer gets too hot, we might travel to a cooler country.",
 
-  useLayoutEffect(() => {
-    const updateLines = () => {
-      if (!containerRef.current) return;
+    "When Gary learns how to ride a bike, he will join us in a bike race.",
 
-      const containerRect = containerRef.current.getBoundingClientRect();
+    "Karen can bring the desserts when we go on a picnic.",
 
-      const newLines = Object.entries(matches)
-        .map(([leftId, rightId]) => {
-          const leftEl = elementRefs.current[`left-${leftId}`];
-          const rightEl = elementRefs.current[`right-${rightId}`];
+    "We could make a snowman if it snows tomorrow.",
 
-          if (leftEl && rightEl) {
-            const leftRect = leftEl.getBoundingClientRect();
-            const rightRect = rightEl.getBoundingClientRect();
+    "When the rain stops, we can go out and play.",
 
-            return {
-              id: `${leftId}-${rightId}`,
-              x1: leftRect.right - containerRect.left,
-              y1: leftRect.top + leftRect.height / 2 - containerRect.top,
-              x2: rightRect.left - containerRect.left,
-              y2: rightRect.top + rightRect.height / 2 - containerRect.top,
-            };
-          }
+    "If we go to the beach, we can collect seashells.",
+  ];
 
-          return null;
-        })
-        .filter(Boolean);
+  const [matches, setMatches] = useState(["", "", "", "", "", ""]);
 
-      setLines(newLines);
-    };
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-    updateLines();
-    window.addEventListener("resize", updateLines);
-    return () => window.removeEventListener("resize", updateLines);
-  }, [matches]);
+  const [matchResult, setMatchResult] = useState([]);
 
-  const handleLeftClick = (id) => {
-    setSelectedLeft(id);
-    setShowResults(false);
-  };
+  const [sentenceResult, setSentenceResult] = useState([]);
 
-  const handleRightClick = (rightId) => {
-    if (selectedLeft === null) return;
+  const [locked, setLocked] = useState(false);
 
-    const newMatches = { ...matches };
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’',]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    Object.keys(newMatches).forEach((key) => {
-      if (newMatches[key] === rightId) {
-        delete newMatches[key];
-      }
+  // ------------------------
+  // MATCH INPUT
+  // ------------------------
+
+  const handleMatchChange = (i, value) => {
+    if (locked || matchResult[i] === true) return;
+
+    const updated = [...matches];
+
+    updated[i] = value.toLowerCase().slice(0, 1);
+
+    setMatches(updated);
+
+    setMatchResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
     });
-
-    newMatches[selectedLeft] = rightId;
-
-    setMatches(newMatches);
-    setSelectedLeft(null);
   };
 
-  const isWrongMatch = (leftId) => {
-    if (!showResults) return false;
-    if (!matches[leftId]) return false;
+  // ------------------------
+  // SENTENCE INPUT
+  // ------------------------
 
-    return matches[leftId] !== exerciseData.correctMatches[leftId];
+  const handleSentenceChange = (i, value) => {
+    if (locked || sentenceResult[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setSentenceResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
+
+  // ------------------------
+  // CHECK
+  // ------------------------
 
   const checkAnswers = () => {
-    const totalQuestions = exerciseData.left.length;
+    if (locked) return;
 
-    const allConnected = exerciseData.left.every((item) => matches[item.id]);
+    const hasEmptyMatch = matches.some((a) => !a.trim());
 
-    if (!allConnected) {
-      ValidationAlert.info("Please connect all items first.");
+    const hasEmptySentence = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmptyMatch || hasEmptySentence) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    setShowResults(true);
+    let correctCount = 0;
 
-    let currentScore = 0;
+    // MATCHES
 
-    Object.keys(exerciseData.correctMatches).forEach((leftId) => {
-      if (matches[leftId] === exerciseData.correctMatches[leftId]) {
-        currentScore++;
-      }
+    const newMatchResults = matches.map((answer, i) => {
+      const ok = normalize(answer) === normalize(correctMatches[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    if (currentScore === totalQuestions) {
-      ValidationAlert.success(`Score: ${currentScore} / ${totalQuestions}`);
-    } else if (currentScore > 0) {
-      ValidationAlert.warning(`Score: ${currentScore} / ${totalQuestions}`);
+    // SENTENCES
+
+    const normalizedCorrectAnswers = sentenceAnswers.map((s) => normalize(s));
+
+    const usedAnswers = [];
+
+    const newSentenceResults = studentAnswers.map((answer) => {
+      const normalizedAnswer = normalize(answer);
+
+      const matchedIndex = normalizedCorrectAnswers.findIndex(
+        (correct, i) =>
+          !usedAnswers.includes(i) && normalizedAnswer === correct,
+      );
+
+      const ok = matchedIndex !== -1;
+
+      if (ok) {
+        usedAnswers.push(matchedIndex);
+        correctCount++;
+      }
+
+      return ok;
+    });
+    setMatchResult(newMatchResults);
+
+    setSentenceResult(newSentenceResults);
+
+    const total = correctMatches.length + sentenceAnswers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${currentScore} / ${totalQuestions}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    setMatches(exerciseData.correctMatches);
-    setShowResults(true);
-    setSelectedLeft(null);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setMatches(correctMatches);
+
+    setStudentAnswers(sentenceAnswers);
+
+    setMatchResult([true, true, true, true, true, true]);
+
+    setSentenceResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setMatches({});
-    setSelectedLeft(null);
-    setShowResults(false);
-    setLines([]);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setMatches(["", "", "", "", "", ""]);
+
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setMatchResult([]);
+
+    setSentenceResult([]);
+
+    setLocked(false);
   };
 
-  const getLineColor = () => {
-    return "#f39b42";
-  };
+  // ------------------------
+  // SMALL INPUT
+  // ------------------------
 
-  const getDotColor = (side, id) => {
-    if (side === "left" && selectedLeft === id) {
-      return "#f39b42";
-    }
+  const matchInput = (i) => (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        maxLength={1}
+        value={matches[i]}
+        disabled={locked || matchResult[i] === true}
+        onChange={(e) => handleMatchChange(i, e.target.value)}
+        className={`
+  w-7
+  h-7
+  border-0
+  border-b
+  outline-none
+  bg-transparent
+  text-center
+  text-[18px]
+  text-[#6D2980]
+  font-semibold
 
-    const isConnected =
-      side === "left" ? !!matches[id] : Object.values(matches).includes(id);
+  ${matchResult[i] === false ? "border-[#D1232A]" : "border-black"}
+`}
+      />
+    </div>
+  );
 
-    if (!isConnected) return "#9ca3af";
+  // ------------------------
+  // BIG INPUT
+  // ------------------------
 
-    return "#f39b42";
-  };
+  const sentenceInput = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || sentenceResult[i] === true}
+        onChange={(e) => handleSentenceChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-  const isLeftSelected = (id) => selectedLeft === id;
+          ${sentenceResult[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {sentenceResult[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-<div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(18px,2.5vw,28px)",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">F</span>
-          Look, read, and match.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        <div
-          ref={containerRef}
-          style={{
-            position: "relative",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "230px 280px 260px",
-            gap: "26px",
-            alignItems: "start",
-          }}
-        >
-          {/* الصور */}
-          <div
+        <h5 className="header-title-page8 mb-10">
+          <span
+            className="ex-A"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
+              marginRight: "10px",
             }}
           >
-            {exerciseData.left.map((item) => (
-              <div
-                key={`img-${item.id}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "700",
-                    color: "#111",
-                    minWidth: "16px",
-                  }}
-                >
-                  {item.id}
-                </div>
+            F
+          </span>
+          Read, match, and write.
+        </h5>
 
-                <div
-                  style={{
-                    width: "170px",
-                    height: "130px",
-                    border: isLeftSelected(item.id)
-                      ? "4px solid #f39b42"
-                      : "2px solid #f39b42",
-                    borderRadius: "16px",
-                    backgroundColor: "#fff",
-                    overflow: "hidden",
-                    boxSizing: "border-box",
-                    transition: "all 0.2s ease",
-                    boxShadow: isLeftSelected(item.id)
-                      ? "0 0 0 4px rgba(59,130,246,0.12)"
-                      : "none",
-                  }}
-                >
-                  <img
-                    src={item.img}
-                    alt={`question-${item.id}`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-                </div>
+        {/* MATCHING */}
+
+        <div className="grid grid-cols-2 gap-x-14 mb-10">
+          {/* LEFT */}
+
+          <div className="flex flex-col gap-5">
+            {leftSide.map((sentence, index) => (
+              <div key={index} className="flex items-start gap-3">
+                {matchInput(index)}
+
+                <span className="font-bold">{index + 1}</span>
+
+                <span>{sentence}</span>
               </div>
             ))}
           </div>
 
-          {/* الأسئلة */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-            }}
-          >
-            {exerciseData.left.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  position: "relative",
-                  minHeight: "130px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                   
-                    gap: "14px",
-                    width: "100%",
-                  }}
-                >
-                  <div
-                    ref={(el) => (elementRefs.current[`left-${item.id}`] = el)}
-                    onClick={() => handleLeftClick(item.id)}
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "50%",
-                      backgroundColor: getDotColor("left", item.id),
-                      cursor: "pointer",
-                      flexShrink: 0,
-                      transition: "all 0.2s ease",
-                      transform: selectedLeft === item.id ? "scale(1.2)" : "scale(1)",
-                    }}
-                  />
+          {/* RIGHT */}
 
-                  <div
-                    onClick={() => handleLeftClick(item.id)}
-                    style={{
-                      fontSize: "22px",
-                      color: "#222",
-                      lineHeight: "1.3",
-                      cursor: "pointer",
-                      userSelect: "none",
-                    }}
-                  >
-                    {item.text}
-                  </div>
-                </div>
+          <div className="flex flex-col gap-5">
+            {rightSide.map((item, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <span className="font-bold">{item.letter}</span>
 
-                {isWrongMatch(item.id) && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: "-10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "50%",
-                      backgroundColor: "#ef4444",
-                      color: "#fff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "12px",
-                      fontWeight: "700",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
+                <span>{item.text}</span>
               </div>
             ))}
           </div>
-
-          {/* الإجابات */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-            }}
-          >
-            {exerciseData.right.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  minHeight: "130px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "14px",
-                    width: "100%",
-                  }}
-                >
-                  <div
-                    ref={(el) => (elementRefs.current[`right-${item.id}`] = el)}
-                    onClick={() => handleRightClick(item.id)}
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      borderRadius: "50%",
-                      backgroundColor: getDotColor("right", item.id),
-                      cursor: "pointer",
-                      flexShrink: 0,
-                      transition: "all 0.2s ease",
-                    }}
-                  />
-
-                  <div
-                    onClick={() => handleRightClick(item.id)}
-                    style={{
-                      fontSize: "22px",
-                      color: "#222",
-                      lineHeight: "1.3",
-                      cursor: "pointer",
-                      userSelect: "none",
-                    }}
-                  >
-                    {item.text}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* SVG Lines */}
-          <svg
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-              overflow: "visible",
-            }}
-          >
-            {lines.map((line) => (
-              <line
-                key={line.id}
-                x1={line.x1}
-                y1={line.y1}
-                x2={line.x2}
-                y2={line.y2}
-                stroke={getLineColor(line.id)}
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            ))}
-          </svg>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-            checkAnswers={checkAnswers}
-          />
+        {/* WRITING */}
+
+        <div className="flex flex-col gap-6 mb-10">
+          {sentenceAnswers.map((_, index) => (
+            <div key={index} className="flex items-start gap-4">
+              <span className="font-bold">{index + 1}</span>
+
+              <div className="flex-1">{sentenceInput(index)}</div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit8_Page53_QF;
+export default WB_Unit9_Page53_Q2;

@@ -1,249 +1,328 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const ITEMS = [
-  {
-    id: 1,
-    words: ["cats", "bats", "bees", "tops"],
-    correct: "bees",
-  },
-  {
-    id: 2,
-    words: ["ducks", "cups", "bags", "cats"],
-    correct: "bags",
-  },
-  {
-    id: 3,
-    words: ["girls", "socks", "beets", "bats"],
-    correct: "girls",
-  },
-  {
-    id: 4,
-    words: ["cups", "nuts", "caps", "cubs"],
-    correct: "cubs",
-  },
-  {
-    id: 5,
-    words: ["bees", "tops", "rats", "socks"],
-    correct: "bees",
-  },
-];
+const WB_Unit9_Page56_Q2 = () => {
+  const wordBank = [
+    "that’ll work",
+    "rush",
+    "appointment",
+    "club",
+    "join",
+    "great news",
+  ];
 
-export default function WB_Unit9_Page56_QB() {
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+  const answers = [
+    "join",
+    "club",
+    "appointment",
+    "rush",
+    "great news",
+    "that’ll work",
+  ];
 
-  const handleSelect = (columnId, word) => {
-    if (showAns) return;
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-    setAnswers((prev) => ({
-      ...prev,
-      [columnId]: word,
-    }));
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-    const allAnswered = ITEMS.every((item) => answers[item.id]);
+  const checkAnswers = () => {
+    if (locked) return;
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all columns first.");
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
+    let correctCount = 0;
 
-    ITEMS.forEach((item) => {
-      if (answers[item.id] === item.correct) {
-        score++;
-      }
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(answers[i]);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctMap = {};
-    ITEMS.forEach((item) => {
-      correctMap[item.id] = item.correct;
-    });
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    setAnswers(correctMap);
-    setShowResults(true);
-    setShowAns(true);
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setShowResults(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (id) => {
-    if (!showResults) return false;
-    return answers[id] !== ITEMS.find((item) => item.id === id).correct;
-  };
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  const getWordStyle = (columnId, word) => {
-    const selected = answers[columnId] === word;
+  const inputField = (i, width = "140px") => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-    return {
-      minWidth: "128px",
-      minHeight: "52px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "24px",
-      lineHeight: "1.2",
-      color: "#222",
-      cursor: showAns ? "default" : "pointer",
-      border: selected ? "4px solid #dc2626" : "4px solid transparent",
-      borderRadius: "999px",
-      backgroundColor: "transparent",
-      transition: "all 0.2s ease",
-      boxSizing: "border-box",
-      padding: "0 10px",
-    };
-  };
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+        style={{
+          width,
+        }}
+      />
+
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
+  );
 
   return (
-        <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(20px,3vw,36px)",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        <h1
-          className="WB-header-title-page8"
-          style={{ margin: 0 }}
-        >
-          <span className="WB-ex-A">B</span> Read and say. Circle the word with a different -s sound.
-        </h1>
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            K
+          </span>
+          Read and write the correct words in the blanks.
+        </h5>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gap: "26px",
-            alignItems: "start",
-            justifyItems: "center",
-          }}
-        >
-          {ITEMS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  paddingLeft: "6px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: "700",
-                    color: "#222",
-                  }}
-                >
-                  {item.id}
-                </span>
-              </div>
+        {/* CONTENT */}
 
-              <div
-                style={{
-                  width: "160px",
-                  minHeight: "330px",
-                  border: "3px solid #a3a3a3",
-                  borderRadius: "24px",
-                  backgroundColor: "#fff",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  alignItems: "center",
-                  padding: "12px 8px",
-                  boxSizing: "border-box",
-                  position: "relative",
-                }}
-              >
-                {item.words.map((word, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleSelect(item.id, word)}
-                    style={getWordStyle(item.id, word)}
-                  >
-                    {word}
-                  </button>
-                ))}
+        <div className="flex gap-10 items-start">
+          {/* LEFT */}
 
-                {isWrong(item.id) && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "-10px",
-                      right: "-10px",
-                      width: "24px",
-                      height: "24px",
-                      borderRadius: "50%",
-                      backgroundColor: "#ef4444",
-                      color: "#fff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "13px",
-                      fontWeight: "700",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
-              </div>
+          <div className="flex-1 leading-[1.7] flex flex-col gap-1">
+            {/* LINE 1 */}
+
+            <div className="flex items-end gap-3 w-full">
+              <span className="shrink-0">When I</span>
+
+              <div >{inputField(0, "100%")}</div>
+
+              <span className="shrink-0">a</span>
+
+              <div >{inputField(1, "100%")}</div>
+
+              <span className="shrink-0">that is fun,</span>
             </div>
-          ))}
-        </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
+            <div> I must follow every rule.</div>
+
+            <div>And be nice to everyone</div>
+
+            <div>Just like I am in school.</div>
+
+            <div className="h-3" />
+
+            {/* LINE 2 */}
+
+            <div className="flex items-end gap-3 w-full">
+              <span className="shrink-0">When I have a club</span>
+
+              <div className="flex-1">{inputField(2, "100%")}</div>
+
+              <span className="shrink-0">,</span>
+            </div>
+
+            <div>I must come right on time.</div>
+
+            <div>There will be disappointment,</div>
+
+            <div>It’ll almost feel like a crime,</div>
+
+            <div className="flex items-end gap-3 w-full">
+              <span className="shrink-0">If I</span>
+
+              <div className="flex-1">{inputField(3, "100%")}</div>
+
+              <span className="shrink-0">in late for the meeting.</span>
+            </div>
+
+            <div>The other members would not be happy,</div>
+
+            <div>And they might not give a welcome greeting.</div>
+
+            <div className="h-3" />
+
+            {/* LINE 3 */}
+
+            <div className="flex items-end gap-3 w-full">
+              <span className="shrink-0">The</span>
+
+              <div className="w-[170px]">{inputField(4, "100%")}</div>
+
+              <span className="shrink-0">is that I can find a time</span>
+
+              <div className="w-[170px]">{inputField(5, "100%")}</div>
+            </div>
+
+            <div>For you and for me!</div>
+          </div>
+
+          {/* RIGHT */}
+
+          <div
+            style={{
+              border: "2px solid #6D2980",
+              borderRadius: "10px",
+              padding: "18px 28px",
+              minWidth: "180px",
+            }}
+            className="
+              flex
+              flex-col
+              gap-5
+              text-[18px]
+              mt-5
+            "
+          >
+            {wordBank.map((word, index) => (
+              <span key={index}>{word}</span>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit9_Page56_Q2;

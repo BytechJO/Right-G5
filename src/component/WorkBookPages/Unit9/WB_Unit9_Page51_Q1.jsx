@@ -1,338 +1,359 @@
-import React, { useState } from "react";
-import Button from "../Button";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 51/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 51/SVG/2.svg";
-import img3 from"../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 51/SVG/3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 51/SVG/4.svg";
-const ITEMS = [
-  {
-    id: 1,
-    question: "Where were they a week ago?",
-    img: img1,
-    correctSubject: "They were",
-    correctPlace: "library",
-  },
-  {
-    id: 2,
-    question: "Where was she yesterday?",
-    img: img2,
-    correctSubject: "She was",
-    correctPlace: "playground",
-  },
-  {
-    id: 3,
-    question: "Where was she a day ago?",
-    img: img3,
-    correctSubject: "She was",
-    correctPlace: "zoo",
-  },
-  {
-    id: 4,
-    question: "Where were they at 5:00 p.m.?",
-    img: img4,
-    correctSubject: "They were",
-    correctPlace: "restaurant",
-  },
-];
+// IMAGE
+import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 51/Asset 8.svg";
 
-const SUBJECT_OPTIONS = ["She was", "She were", "They was", "They were"];
-const PLACE_OPTIONS = ["library", "playground", "zoo", "restaurant"];
+const WB_Unit9_Page51_Q1 = () => {
+  const inputRefs = useRef([]);
+  const questions = [
+    {
+      prefix: "m",
 
-export default function WB_Unit8_Page49_QA() {
-  const [subjects, setSubjects] = useState({});
-  const [places, setPlaces] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+      suffix: "g",
 
-  const handleSubjectChange = (id, value) => {
-    if (showAns) return;
+      answer: "owin",
 
-    setSubjects((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+      meaning: "= cutting (the grass) with a machine",
+    },
 
-    setShowResults(false);
+    {
+      prefix: "r",
+
+      suffix: "",
+
+      answer: "ush",
+
+      meaning: "= to hurry",
+    },
+
+    {
+      prefix: "c",
+
+      suffix: "",
+
+      answer: "lub",
+
+      meaning: "= a small group that certain people join",
+    },
+
+    {
+      prefix: "j",
+
+      suffix: "",
+
+      answer: "oin",
+
+      meaning: "= to become part of something",
+    },
+
+    {
+      parts: ["a", "input:ppoi", "nt", "input:men", "t"],
+      answer: "ppoimen",
+      meaning: "= a meeting set for a certain time and place",
+    },
+    {
+      prefix: "s",
+
+      suffix: "m",
+
+      answer: "tadiu",
+
+      meaning:
+        "= a roofless building with many seats; it is used for sports events and concerts",
+    },
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, "")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (qIndex, value) => {
+    if (locked || result[qIndex] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[qIndex] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[qIndex] = undefined;
+
+      return copy;
+    });
   };
 
-  const handlePlaceChange = (id, value) => {
-    if (showAns) return;
-
-    setPlaces((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-
-    setShowResults(false);
-  };
-
-  const getItemResult = (item) => {
-    return (
-      subjects[item.id] === item.correctSubject &&
-      places[item.id] === item.correctPlace
-    );
-  };
-
-  const isWrong = (item) => {
-    if (!showResults) return false;
-    return !getItemResult(item);
-  };
+  // ------------------------
+  // CHECK
+  // ------------------------
 
   const checkAnswers = () => {
-    if (showAns) return;
+    if (locked) return;
 
-    const allAnswered = ITEMS.every(
-      (item) => subjects[item.id] && places[item.id]
-    );
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please complete all answers first.");
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
 
-    let score = 0;
-    ITEMS.forEach((item) => {
-      if (getItemResult(item)) score++;
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(questions[i].answer);
+
+      if (ok) correctCount++;
+
+      return ok;
     });
 
-    setShowResults(true);
+    setResult(newResults);
 
-    if (score === ITEMS.length) {
-      ValidationAlert.success(`Score: ${score} / ${ITEMS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${ITEMS.length}`);
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${ITEMS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctSubjects = {};
-    const correctPlaces = {};
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    ITEMS.forEach((item) => {
-      correctSubjects[item.id] = item.correctSubject;
-      correctPlaces[item.id] = item.correctPlace;
-    });
+  const showAnswers = () => {
+    setStudentAnswers(questions.map((q) => q.answer));
 
-    setSubjects(correctSubjects);
-    setPlaces(correctPlaces);
-    setShowAns(true);
-    setShowResults(true);
+    setResult([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setSubjects({});
-    setPlaces({});
-    setShowResults(false);
-    setShowAns(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
+  // ------------------------
+  // LETTER INPUTS
+  // ------------------------
+
+  const renderLetterInputs = (q, qIndex) => {
+    let inputCounter = 0;
+
+    const parts =
+      q.parts || [q.prefix, `input:${q.answer}`, q.suffix].filter(Boolean);
+
+    return (
+      <div className="flex items-center flex-wrap gap-1">
+        {parts.map((part, partIndex) => {
+          if (!part.startsWith("input:")) {
+            return <span key={partIndex}>{part}</span>;
+          }
+
+          const letters = part.replace("input:", "").split("");
+
+          return letters.map((_, i) => {
+            const letterIndex = inputCounter++;
+
+            return (
+              <div key={`${partIndex}-${i}`} className="relative">
+                <input
+                  ref={(el) => {
+                    if (!inputRefs.current[qIndex])
+                      inputRefs.current[qIndex] = [];
+                    inputRefs.current[qIndex][letterIndex] = el;
+                  }}
+                  type="text"
+                  maxLength={1}
+                  value={studentAnswers[qIndex][letterIndex] || ""}
+                  disabled={locked || result[qIndex] === true}
+                  onChange={(e) => {
+                    const value = e.target.value.toLowerCase();
+                    if (!value) return;
+
+                    const updated = [...q.answer].map(
+                      (_, idx) => studentAnswers[qIndex][idx] || "",
+                    );
+
+                    updated[letterIndex] = value;
+                    handleChange(qIndex, updated.join(""));
+
+                    const nextInput =
+                      inputRefs.current[qIndex]?.[letterIndex + 1];
+
+                    if (nextInput) {
+                      nextInput.focus();
+                      nextInput.select();
+                    }
+                  }}
+                  onFocus={(e) => e.target.select()}
+                  className={`
+                  w-[22px] border-0 border-b outline-none bg-transparent
+                  text-center text-[18px] text-[#6D2980] font-semibold
+                  ${
+                    result[qIndex] === false
+                      ? "border-[#D1232A]"
+                      : "border-black"
+                  }
+                `}
+                />
+
+                {letterIndex === q.answer.length - 1 &&
+                  result[qIndex] === false && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "-8px",
+                        right: "-8px",
+                        width: "20px",
+                        height: "20px",
+                        background: "#ef4444",
+                        color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "11px",
+                        fontWeight: "bold",
+                        border: "2px solid white",
+                        boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      ✕
+                    </span>
+                  )}
+              </div>
+            );
+          });
+        })}
+      </div>
+    );
+  };
   return (
-  <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(18px,2.5vw,28px)",
-          maxWidth: "1100px",
-          margin: "0 auto",
-        }}
-      >
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">A</span>
-          Read, look, and write.
-        </h1>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "28px 34px",
-            alignItems: "start",
-          }}
-        >
-          {ITEMS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "8px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: "700",
-                    color: "#222",
-                    minWidth: "18px",
-                  }}
-                >
-                  {item.id}
-                </span>
+        <h5 className="header-title-page8 mb-[8vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            A
+          </span>
+          Read and write the missing letters.
+        </h5>
 
-                <div
-                  style={{
-                    fontSize: "16px",
-                    color: "#222",
-                    lineHeight: "1.4",
-                    fontWeight: "500",
-                  }}
-                >
-                  {item.question}
+        {/* CONTENT */}
+
+        <div className="flex  items-start ">
+          {/* LEFT */}
+
+          <div className="flex-1 flex flex-col gap-12">
+            {questions.map((q, index) => (
+              <div key={index}>
+                <div className="flex items-start gap-4">
+                  {/* NUMBER */}
+
+                  <span className="font-bold">{index + 1}</span>
+
+                  {/* WORD */}
+
+                  <div className="leading-[1.8]">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {renderLetterInputs(q, index)}
+
+                      <span>{q.meaning}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
 
-              <div
-                style={{
-                  width: "100%",
-                  height: "140px",
-                  border: "2px solid #f39b42",
-                  borderRadius: "16px",
-                  backgroundColor: "#fff",
-                  overflow: "hidden",
-                }}
-              >
-                <img
-                  src={item.img}
-                  alt={`item-${item.id}`}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
-              </div>
-
-              <div
-                style={{
-                  position: "relative",
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  minHeight: "38px",
-                }}
-              >
-                <select
-                  value={subjects[item.id] || ""}
-                  onChange={(e) => handleSubjectChange(item.id, e.target.value)}
-                  disabled={showAns}
-                  style={{
-                    border: "1px solid #cfcfcf",
-                    borderRadius: "8px",
-                    padding: "6px 10px",
-                    fontSize: "17px",
-                    outline: "none",
-                    backgroundColor: showAns ? "#f3f4f6" : "#fff",
-                    color: "#444",
-                    cursor: showAns ? "default" : "pointer",
-                  }}
-                >
-                  <option value="">Select</option>
-                  {SUBJECT_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-
-                <span
-                  style={{
-                    fontSize: "18px",
-                    color: "#222",
-                  }}
-                >
-                  at the
-                </span>
-
-                <select
-                  value={places[item.id] || ""}
-                  onChange={(e) => handlePlaceChange(item.id, e.target.value)}
-                  disabled={showAns}
-                  style={{
-                    border: "1px solid #cfcfcf",
-                    borderRadius: "8px",
-                    padding: "6px 10px",
-                    fontSize: "17px",
-                    outline: "none",
-                    backgroundColor: showAns ? "#f3f4f6" : "#fff",
-                    color:"#444",
-                    cursor: showAns ? "default" : "pointer",
-                    minWidth: "140px",
-                  }}
-                >
-                  <option value="">Select place</option>
-                  {PLACE_OPTIONS.map((place) => (
-                    <option key={place} value={place}>
-                      {place}
-                    </option>
-                  ))}
-                </select>
-
-                <span
-                  style={{
-                    fontSize: "18px",
-                    color: "#222",
-                  }}
-                >
-                  .
-                </span>
-
-                {isWrong(item) && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "-10px",
-                      right: "-8px",
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "50%",
-                      backgroundColor: "#ef4444",
-                      color: "#fff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "12px",
-                      fontWeight: "700",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+          {/* IMAGE */}
+          <div className="-ml-100">
+            {" "}
+            <img
+              src={img1}
+              alt=""
+              style={{
+                width: "250px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
+          </div>
         </div>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-            checkAnswers={checkAnswers}
-          />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit9_Page51_Q1;

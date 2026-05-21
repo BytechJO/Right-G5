@@ -250,7 +250,7 @@ const WB_Unit8_Page50_Q2 = () => {
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[8vh]">
+        <h5 className="header-title-page8 mb-[7vh]">
           <span
             className="ex-A"
             style={{
@@ -267,14 +267,13 @@ const WB_Unit8_Page50_Q2 = () => {
         <div className="flex gap-8 items-start">
           {/* LEFT */}
 
-          <div className="flex-1 flex flex-col gap-6">
+          <div className="flex-1 flex flex-col gap-4">
             {questions.map((q, index) => (
-              <div key={index} className="leading-[2]">
+              <div key={index} className="leading-loose">
                 {q.before} {inputField(index)} {q.after}
               </div>
             ))}
           </div>
-
 
           {/* IMAGE */}
 

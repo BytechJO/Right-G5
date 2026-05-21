@@ -207,7 +207,7 @@ const WB_Unit7_Page42_Q3 = () => {
   const showAnswers = () => {
     setMarks(["false", "true", "false", "true"]);
 
-    setAnswers(["librarian", "", "entire", ""]);
+    setAnswers(["jotting down", "", "oddly", ""]);
 
     setResult([
       {

@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import page2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 54.png";
+import React from "react";
+import page2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 54.png";
 import "./WB_unit9.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -17,31 +17,7 @@ const WB_Unit9_Page54 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 110 })}
-          style={{ overflow: "visible" }}
-          // className="click-icon-page8-2 hover:scale-110 transition"
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid meet"
-          />
-        </svg>
-      </div>
-
-      <div
-        className="q8-9 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 111 })}
+          onClick={() => openPopup("exercise", { startIndex: 104 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >

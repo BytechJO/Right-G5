@@ -1,5 +1,5 @@
 import React from "react";
-import page_1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U9 Folder/Page 53.png";
+import page_1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 53.png";
 import "./WB_unit9.css";
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
@@ -17,7 +17,7 @@ const WB_Unit9_Page53 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 108 })}
+          onClick={() => openPopup("exercise", { startIndex: 102 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
@@ -41,7 +41,7 @@ const WB_Unit9_Page53 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 109 })}
+          onClick={() => openPopup("exercise", { startIndex: 103 })}
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
