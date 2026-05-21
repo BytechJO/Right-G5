@@ -7,9 +7,9 @@ import BottomBar from "./Book/Navbar/BottomBar";
 import LeftSidebar from "./Book/Sidebars/LeftSidebar";
 import RightSidebar from "./Book/Sidebars/RightSidebar";
 // === cover img ===
-import workbookCover from "../assets/imgs/pages/workbook-cover.jpg";
-import stbookCover from "../assets/imgs/pages/classbook-cover.png";
-import teacherBookCover from "../assets/imgs/pages/classbook-cover.png";
+import workbookCover from "../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 1.png";
+import stbookCover from "../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 1.png";
+import teacherBookCover from "../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 1.png";
 
 // === VIEWERS ===
 
