@@ -1,234 +1,313 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-// ── ثوابت ──────────────────────────────────────────────────────
-const BORDER_COLOR = "#f39b42";
-const WRONG_COLOR  = "#ef4444";
+// IMAGES
+import hayImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 57/Asset 11.svg";
+import violinImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 57/Asset 12.svg";
+import pianoImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 57/Asset 3.svg";
 
-// ── بيانات ─────────────────────────────────────────────────────
-const QUESTIONS = [
-  { id: 1, text: "Will you go to school?"        },
-  { id: 2, text: "Will you go to the park?"      },
-  { id: 3, text: "Will you eat any cake?"        },
-  { id: 4, text: "Will you buy new clothes?"     },
-  { id: 5, text: "Will you play with your friends?" },
-];
+const WB_Unit10_Page57_Q2 = () => {
+  const questions = [
+    {
+      scrambled: "vanresgtih",
 
-const OPTIONS = ["Yes, I will.", "No, I won't."];
+      sentence: (
+        <>
+          We are{" "}
+          <span
+            style={{
+              textDecoration: "underline",
+              textUnderlineOffset: "2px",
+            }}
+          >
+            vanresgtih
+          </span>{" "}
+          our hay.
+        </>
+      ),
 
-// ── المكوّن الرئيسي ─────────────────────────────────────────────
-export default function WB_Unit8_Page57_QB() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
+      answer: "We are harvesting our hay.",
+    },
 
-  const handleSelect = (id, value) => {
-    setChecked(false);
-    setAnswers((prev) => ({ ...prev, [id]: value }));
+    {
+      scrambled: "spyhomyn",
+
+      sentence: (
+        <>
+          He played in a{" "}
+          <span
+            style={{
+              textDecoration: "underline",
+              textUnderlineOffset: "2px",
+            }}
+          >
+            spyhomyn
+          </span>{" "}
+          with his violin.
+        </>
+      ),
+
+      answer: "He played in a symphony with his violin.",
+    },
+
+    {
+      scrambled: "nstrntuiem",
+
+      sentence: (
+        <>
+          This is a very fun{" "}
+          <span
+            style={{
+              textDecoration: "underline",
+              textUnderlineOffset: "2px",
+            }}
+          >
+            nstrntuiem
+          </span>
+          .
+        </>
+      ),
+
+      answer: "This is a very fun instrument.",
+    },
+  ];
+
+  const images = [hayImg, violinImg, pianoImg];
+
+  const [studentAnswers, setStudentAnswers] = useState(["", "", ""]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    const allAnswered = QUESTIONS.every((q) => answers[q.id]);
-    if (!allAnswered) {
-      ValidationAlert.error("Please answer all questions first! ✏️");
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    setChecked(true);
-    ValidationAlert.success("Great! You answered all the questions. 🎉");
+
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(questions[i].answer);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(questions.map((q) => q.answer));
+
+    setResult([true, true, true]);
+
+    setLocked(true);
+  };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
+    setStudentAnswers(["", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "clamp(18px,2.5vw,32px)" }}>
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-        {/* ── العنوان ── */}
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">B</span>{" "}
-          What will you do tomorrow? Read and answer the questions.
-        </h1>
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-        {/* ── صناديق الخيارات العلوية ── */}
-        <div
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
           style={{
-            display:        "flex",
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
             justifyContent: "center",
-            gap:            "clamp(40px,10vw,130px)",
-            flexWrap:       "wrap",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {OPTIONS.map((opt) => (
-            <div
-              key={opt}
-              style={{
-                minWidth:        "clamp(120px,16vw,170px)",
-                height:          "clamp(40px,5vw,52px)",
-                border:          `2px solid ${BORDER_COLOR}`,
-                borderRadius:    "14px",
-                display:         "flex",
-                alignItems:      "center",
-                justifyContent:  "center",
-                fontSize:        "clamp(15px,1.8vw,20px)",
-                fontWeight:      500,
-                color:           "#222",
-                backgroundColor: "#fff",
-                padding:         "0 clamp(12px,1.5vw,20px)",
-                boxSizing:       "border-box",
-              }}
-            >
-              {opt}
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
+
+        <h5 className="header-title-page8 mb-[7vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            B
+          </span>
+          Look, unscramble, and write.
+        </h5>
+
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-15">
+          {questions.map((q, index) => (
+            <div key={index} className="flex gap-6 items-start">
+              {/* NUMBER */}
+
+              <span className="font-bold mt-2">{index + 1}</span>
+
+              {/* IMAGE */}
+
+              <img
+                src={images[index]}
+                alt=""
+                style={{
+                  width: "200px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              {/* RIGHT */}
+
+              <div className="flex-1 pt-3">
+                {/* SCRAMBLED */}
+
+                <div className="mb-5 leading-[1.8]">{q.sentence}</div>
+
+                {/* INPUT */}
+
+                {inputField(index)}
+              </div>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* ── الأسئلة ── */}
-        <div
-          style={{
-            display:       "flex",
-            flexDirection: "column",
-            gap:           "clamp(14px,2vw,22px)",
-            width:         "100%",
-            maxWidth:      "820px",
-            margin:        "0 auto",
-          }}
-        >
-          {QUESTIONS.map((q) => {
-            const selected  = answers[q.id];
-            const unanswered = checked && !selected;
+      {/* BUTTONS */}
 
-            return (
-              <div
-                key={q.id}
-                style={{
-                  position:    "relative",
-                  display:     "flex",
-                  alignItems:  "center",
-                  gap:         "clamp(8px,1.2vw,16px)",
-                  flexWrap:    "wrap",
-                }}
-              >
-                {/* رقم + نص السؤال */}
-                <div
-                  style={{
-                    display:    "flex",
-                    alignItems: "center",
-                    gap:        "clamp(8px,1vw,12px)",
-                    flexShrink: 0,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize:   "clamp(16px,1.9vw,22px)",
-                      fontWeight: 700,
-                      color:      "#111",
-                      minWidth:   "clamp(14px,1.8vw,20px)",
-                    }}
-                  >
-                    {q.id}
-                  </span>
-                  <span
-                    style={{
-                      fontSize:   "clamp(14px,1.7vw,20px)",
-                      color:      "#222",
-                      lineHeight: 1.4,
-                      fontWeight: 500,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {q.text}
-                  </span>
-                </div>
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-                {/* أزرار الاختيار */}
-                <div style={{ display: "flex", gap: "clamp(6px,0.8vw,10px)", flexShrink: 0 }}>
-                  {OPTIONS.map((opt) => {
-                    const active = selected === opt;
-                    return (
-                      <button
-                        key={opt}
-                        onClick={() => handleSelect(q.id, opt)}
-                        style={{
-                          padding:         "clamp(5px,0.7vw,8px) clamp(10px,1.2vw,14px)",
-                          borderRadius:    "20px",
-                          border:          `1.5px solid ${active ? BORDER_COLOR : "#e2e8f0"}`,
-                          backgroundColor: active ? "#ffca94" : "#f8fafc",
-                          color:           active ? "#fff" : "#64748b",
-                          fontSize:        "clamp(12px,1.4vw,15px)",
-                          fontWeight:      600,
-                          cursor:          "pointer",
-                          whiteSpace:      "nowrap",
-                          transition:      "all 0.15s",
-                          userSelect:      "none",
-                        }}
-                      >
-                        {opt}
-                      </button>
-                    );
-                  })}
-                </div>
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-                {/* خط الإجابة */}
-                <div
-                  style={{
-                    flex:         1,
-                    minWidth:     "80px",
-                    minHeight:    "clamp(30px,3.5vw,40px)",
-                    borderBottom: `2px solid ${unanswered ? WRONG_COLOR : "#7f7f7f"}`,
-                    display:      "flex",
-                    alignItems:   "center",
-                    fontSize:     "clamp(14px,1.7vw,20px)",
-                    fontWeight:   600,
-                    color:        "#000000ff",
-                    paddingBottom:"2px",
-                    transition:   "border-color 0.2s",
-                  }}
-                >
-                  {selected || ""}
-                </div>
-
-                {/* بادج الخطأ — فقط لو ما أجاب بعد Check */}
-                {unanswered && (
-                  <div
-                    style={{
-                      position:        "absolute",
-                      right:           -10,
-                      top:             "50%",
-                      transform:       "translateY(-50%)",
-                      width:           "clamp(16px,1.8vw,20px)",
-                      height:          "clamp(16px,1.8vw,20px)",
-                      borderRadius:    "50%",
-                      backgroundColor: WRONG_COLOR,
-                      color:           "#fff",
-                      display:         "flex",
-                      alignItems:      "center",
-                      justifyContent:  "center",
-                      fontSize:        "clamp(8px,0.9vw,11px)",
-                      fontWeight:      700,
-                      border:          "1.5px solid #fff",
-                      pointerEvents:   "none",
-                    }}
-                  >
-                    ✕
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* ── الأزرار — بدون showAnswer ── */}
-        <div className="mt-4 flex justify-center">
-          <Button
-            checkAnswers={handleCheck}
-            handleStartAgain={handleReset}
-          />
-        </div>
-
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit10_Page57_Q2;

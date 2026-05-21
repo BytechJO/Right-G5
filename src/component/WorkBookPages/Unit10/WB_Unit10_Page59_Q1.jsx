@@ -1,376 +1,277 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import stellaImg from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/1.svg";
-import take1     from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/2.svg";
-import take2     from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/3.svg";
-import take3     from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/4.svg";
-import take4     from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/5.svg";
-import notTake1  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/6.svg";
-import notTake2  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/7.svg";
-import notTake3  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/8.svg";
-import notTake4  from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 59/SVG/9.svg";
+// IMAGES
+import drumsImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 4.svg";
+import bikesImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 5.svg";
+import readingImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 6.svg";
+import soupImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 7.svg";
 
-const WRONG_COLOR  = "#ef4444";
-const ACTIVE_COLOR = "#f39b42";
-const RED_COLOR    = "#000000ff";
-const LINE_COLOR   = "#333";
+const WB_Unit_Test_Q30 = () => {
+  const questions = [
+    {
+      clue: "(play the drums)",
 
-const QUESTIONS = [
-  { id: 1, text: "Will Stella take her bag on the trip tomorrow?", correct: "Yes, she will."  },
-  { id: 2, text: "Will she take her red skirt on the trip?",       correct: "No, she won't."  },
-  { id: 3, text: "Will she take an umbrella?",                     correct: "Yes, she will."  },
-  { id: 4, text: "Will she take her shoes?",                       correct: "Yes, she will."  },
-  { id: 5, text: "Will she take her lunchbox?",                    correct: "Yes, she will."  },
-  { id: 6, text: "Will she take her green shirt?",                 correct: "No, she won't."  },
-];
+      answer: "He was playing the drums.",
+    },
 
-const ANSWER_OPTIONS = ["Yes, she will.", "No, she won't."];
-const TAKE_IMAGES     = [take1, take2, take3, take4];
-const NOT_TAKE_IMAGES = [notTake1, notTake2, notTake3, notTake4];
+    {
+      clue: "(ride their bikes)",
 
-export default function WB_Unit8_Page59_QE() {
-  const [selected,    setSelected]    = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [showAns,     setShowAns]     = useState(false);
+      answer: "They were riding their bikes.",
+    },
 
-  const handleChange = (id, value) => {
-    if (showAns) return;
-    setSelected((prev) => ({ ...prev, [id]: value }));
-    setShowResults(false);
+    {
+      clue: "(read a book)",
+
+      answer: "She was reading a book.",
+    },
+
+    {
+      clue: "(eat his soup)",
+
+      answer: "He was eating his soup.",
+    },
+  ];
+
+  const images = [drumsImg, bikesImg, readingImg, soupImg];
+
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = QUESTIONS.every((q) => selected[q.id]);
-    if (!allAnswered) { ValidationAlert.info("Please answer all questions first."); return; }
-    let score = 0;
-    QUESTIONS.forEach((q) => { if (selected[q.id] === q.correct) score++; });
-    setShowResults(true);
-    const total = QUESTIONS.length;
-    if (score === total)  ValidationAlert.success(`Score: ${score} / ${total}`);
-    else if (score > 0)   ValidationAlert.warning(`Score: ${score} / ${total}`);
-    else                  ValidationAlert.error(`Score: ${score} / ${total}`);
+  // ------------------------
+  // CHECK
+  // ------------------------
+
+  const checkAnswers = () => {
+    if (locked) return;
+
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(questions[i].answer);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    QUESTIONS.forEach((q) => { filled[q.id] = q.correct; });
-    setSelected(filled);
-    setShowResults(true);
-    setShowAns(true);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(questions.map((q) => q.answer));
+
+    setResult([true, true, true, true]);
+
+    setLocked(true);
   };
 
-  const handleStartAgain = () => {
-    setSelected({});
-    setShowResults(false);
-    setShowAns(false);
+  // ------------------------
+  // RESET
+  // ------------------------
+
+  const handleReset = () => {
+    setStudentAnswers(["", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  const isWrong = (q) =>
-    showResults && !showAns && selected[q.id] !== q.correct;
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-  return (
-    <div className="main-container-component">
-      <div
-        className="div-forall"
-        style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "clamp(14px,2vw,22px)",
-          maxWidth:      "1100px",
-          margin:        "0 auto",
-        }}
-      >
-        {/* Title */}
-        <h1
-          className="WB-header-title-page8"
-          style={{ margin: 0 }}
-        >
-          <span className="WB-ex-A">E</span> Read, look, and write.
-        </h1>
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
 
-        {/* ── Answer options — ثابتة فوق ── */}
-        <div
+          ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[i] === false && (
+        <span
           style={{
-            display:        "flex",
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
             justifyContent: "center",
-            gap:            "clamp(16px,3vw,40px)",
-            flexWrap:       "wrap",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {ANSWER_OPTIONS.map((opt) => (
-            <div
-              key={opt}
-              style={{
-                minWidth:     "clamp(140px,20vw,220px)",
-                padding:      "clamp(8px,1vw,14px) clamp(14px,1.8vw,24px)",
-                border:       `2.5px solid #f39b42`,
-                borderRadius: "clamp(10px,1.2vw,16px)",
-                background:   "#fff",
-                fontSize:     "clamp(14px,1.8vw,22px)",
-                fontWeight:   600,
-                color:        "#222",
-                textAlign:    "center",
-                userSelect:   "none",
-              }}
-            >
-              {opt}
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
+
+        <h5 className="header-title-page8 mb-10 leading-[1.4]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            F
+          </span>
+          Look and write a sentence using the{" "}
+          <span className="text-[#00AEEF]">
+            past progressive tense
+            (was/were + verb + ing).
+          </span>
+        </h5>
+
+        {/* QUESTIONS */}
+
+        <div className="flex flex-col gap-5">
+          {questions.map((q, index) => (
+            <div key={index} className="flex gap-6 items-start">
+              {/* NUMBER */}
+
+              <span className="font-bold mt-2">{index + 1}</span>
+
+              {/* IMAGE */}
+
+              <img
+                src={images[index]}
+                alt=""
+                style={{
+                  width: "170px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+
+              {/* RIGHT */}
+
+              <div className="flex-1 flex flex-col gap-8 pt-2">
+                {/* LINE 1 */}
+
+                {inputField(index)}
+                {/* CLUE */}
+                <span className="text-[18px]">{q.clue}</span>
+              </div>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* ── Trip title ── */}
-        <div
-          style={{
-            textAlign:      "center",
-            fontSize:       "clamp(16px,2vw,26px)",
-            fontWeight:     700,
-            color:          "#222",
-            textDecoration: "underline",
-          }}
-        >
-          Trip to the Grand Canyon
-        </div>
+      {/* BUTTONS */}
 
-        {/* ── Top layout: Stella | Take | Not Take ── */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "clamp(100px,15vw,170px) 1fr 1fr",
-            gap:                 "clamp(10px,1.5vw,20px)",
-            alignItems:          "stretch",
-            width:               "100%",
-          }}
-        >
-          {/* Stella */}
-          <div
-            style={{
-              border:       "2px solid #f39b42",
-              borderRadius: "clamp(10px,1.2vw,16px)",
-              overflow:     "hidden",
-              background:   "#fff",
-              aspectRatio:  "1 / 1",
-            }}
-          >
-            <img
-              src={stellaImg}
-              alt="Stella"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", userSelect: "none" }}
-            />
-          </div>
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
-          {/* Things to Take */}
-          <div
-            style={{
-              border:       "2px solid #f39b42",
-              borderRadius: "clamp(10px,1.2vw,16px)",
-              padding:      "clamp(8px,1vw,14px)",
-              background:   "#fff",
-              boxSizing:    "border-box",
-            }}
-          >
-            <div
-              style={{
-                textAlign:      "center",
-                fontSize:       "clamp(13px,1.6vw,20px)",
-                fontWeight:     600,
-                color:          "#222",
-                textDecoration: "underline",
-                marginBottom:   "clamp(6px,0.8vw,10px)",
-              }}
-            >
-              Things to Take
-            </div>
-            <div
-              style={{
-                display:             "grid",
-                gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-                gap:                 "clamp(6px,0.8vw,10px)",
-                justifyItems:        "center",
-              }}
-            >
-              {TAKE_IMAGES.map((img, i) => (
-                <img key={i} src={img} alt={`take-${i+1}`}
-                  style={{ width: "clamp(40px,6vw,72px)", height: "clamp(40px,6vw,72px)", objectFit: "contain", display: "block", userSelect: "none" }}
-                />
-              ))}
-            </div>
-          </div>
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
 
-          {/* Things Not to Take */}
-          <div
-            style={{
-              border:       "2px solid #f39b42",
-              borderRadius: "clamp(10px,1.2vw,16px)",
-              padding:      "clamp(8px,1vw,14px)",
-              background:   "#fff",
-              boxSizing:    "border-box",
-            }}
-          >
-            <div
-              style={{
-                textAlign:      "center",
-                fontSize:       "clamp(13px,1.6vw,20px)",
-                fontWeight:     600,
-                color:          "#222",
-                textDecoration: "underline",
-                marginBottom:   "clamp(6px,0.8vw,10px)",
-              }}
-            >
-              Things Not to Take
-            </div>
-            <div
-              style={{
-                display:             "grid",
-                gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-                gap:                 "clamp(6px,0.8vw,10px)",
-                justifyItems:        "center",
-              }}
-            >
-              {NOT_TAKE_IMAGES.map((img, i) => (
-                <img key={i} src={img} alt={`not-take-${i+1}`}
-                  style={{ width: "clamp(40px,6vw,72px)", height: "clamp(40px,6vw,72px)", objectFit: "contain", display: "block", userSelect: "none" }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Questions with dropdown ── */}
-        <div
-          style={{
-            display:       "flex",
-            flexDirection: "column",
-            gap:           "clamp(12px,1.8vw,20px)",
-            width:         "100%",
-          }}
-        >
-          {QUESTIONS.map((q) => {
-            const wrong = isWrong(q);
-            return (
-              <div
-                key={q.id}
-                style={{
-                  display:    "flex",
-                  alignItems: "center",
-                  gap:        "clamp(8px,1.2vw,16px)",
-                  minWidth:   0,
-                  flexWrap:   "wrap",
-                }}
-              >
-                {/* number */}
-                <span
-                  style={{
-                    fontSize:   "clamp(16px,1.9vw,26px)",
-                    fontWeight: 700,
-                    color:      "#111",
-                    lineHeight: 1,
-                    flexShrink: 0,
-                    minWidth:   "clamp(14px,1.8vw,22px)",
-                  }}
-                >
-                  {q.id}
-                </span>
-
-                {/* question text */}
-                <span
-                  style={{
-                    fontSize:  "clamp(13px,1.7vw,22px)",
-                    fontWeight: 500,
-                    color:     "#222",
-                    lineHeight: 1.35,
-                    flex:      1,
-                    minWidth:  "clamp(160px,30vw,300px)",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {q.text}
-                </span>
-
-                {/* dropdown */}
-                <div
-                  style={{
-                    position:  "relative",
-                    flexShrink: 0,
-                  }}
-                >
-                  <select
-                    disabled={showAns}
-                    value={selected[q.id] || ""}
-                    onChange={(e) => handleChange(q.id, e.target.value)}
-                    style={{
-                      minWidth:     "clamp(140px,20vw,240px)",
-                      borderTop:    "none",
-                      borderLeft:   "none",
-                      borderRight:  "none",
-                      borderBottom: `2.5px solid ${wrong ? WRONG_COLOR : LINE_COLOR}`,
-                      borderRadius: 0,
-                      outline:      "none",
-                      fontSize:     "clamp(13px,1.7vw,22px)",
-                      fontWeight:   600,
-                      color:        RED_COLOR,
-                      padding:      "0 clamp(4px,0.6vw,8px) 4px 2px",
-                      background:   "transparent",
-                      cursor:       showAns ? "default" : "pointer",
-                      appearance:   "auto",
-                      boxSizing:    "border-box",
-                    }}
-                  >
-                    <option value="" disabled hidden></option>
-                    {ANSWER_OPTIONS.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-
-                  {/* wrong badge — يسار أعلى */}
-                  {wrong && (
-                    <div
-                      style={{
-                        position:        "absolute",
-                        top:             "-8px",
-                        left:            "-8px",
-                        width:           "clamp(16px,1.8vw,22px)",
-                        height:          "clamp(16px,1.8vw,22px)",
-                        borderRadius:    "50%",
-                        backgroundColor: WRONG_COLOR,
-                        border:          "1px solid #fff",
-                        color:           "#fff",
-                        display:         "flex",
-                        alignItems:      "center",
-                        justifyContent:  "center",
-                        fontSize:        "clamp(9px,0.9vw,12px)",
-                        fontWeight:      700,
-                        boxShadow:       "0 1px 4px rgba(0,0,0,0.2)",
-                        zIndex:          3,
-                        pointerEvents:   "none",
-                      }}
-                    >
-                      ✕
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Buttons */}
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "center",
-            marginTop:      "clamp(6px,1vw,12px)",
-          }}
-        >
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleStartAgain}
-          />
-        </div>
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit_Test_Q30;

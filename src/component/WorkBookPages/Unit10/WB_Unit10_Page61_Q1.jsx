@@ -1,376 +1,502 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { HiArrowUpCircle } from "react-icons/hi2";
+// IMAGE
+import turkeyImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 61/Asset 8.svg";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 61/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 61/SVG/2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 61/SVG/3.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 61/SVG/4.svg";
+const WB_Unit_Test_Q34 = () => {
+  // ------------------------
+  // CLICKABLE WORDS
+  // ------------------------
 
-const QUESTIONS = [
-  {
-    id: 1,
-    question: "Where will Stella and Sarah go?",
-    subjectOptions: ["They", "She", "He"],
-    correctSubject: "They",
-    correctPlace: "park",
-  },
-  {
-    id: 2,
-    question: "Where will Harley and Hansel go?",
-    subjectOptions: ["They", "She", "He"],
-    correctSubject: "They",
-    correctPlace: "beach",
-  },
-  {
-    id: 3,
-    question: "Where will John go?",
-    subjectOptions: ["He", "She", "They"],
-    correctSubject: "He",
-    correctPlace: "toy store",
-  },
-  {
-    id: 4,
-    question: "Where will Tom go?",
-    subjectOptions: ["He", "She", "They"],
-    correctSubject: "He",
-    correctPlace: "farm",
-  },
-];
+  const clickableWords = [
+    "was having",
+    "was working",
+    "was baking",
+    "was getting",
+    "was putting",
+    "was setting",
+    "was getting",
+    "were getting",
+    "was waiting",
+    "was getting",
+  ];
 
-const PLACE_OPTIONS = ["park", "beach", "toy store", "farm"];
+  // ------------------------
+  // QUESTIONS
+  // ------------------------
 
-const SIDE_IMAGES = [
-  { id: 1, img: img1, label: "park" },
-  { id: 2, img: img2, label: "beach" },
-  { id: 3, img: img3, label: "toy store" },
-  { id: 4, img: img4, label: "farm" },
-];
+  const answers = [
+    "They were having a special dinner because it was the narrator’s birthday",
 
-export default function WB_Unit8_Page60_QI() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+    "Everyone was getting hungry because the narrator’s mom took the turkey out of the oven. ",
 
-  const handleSelect = (id, field, value) => {
-    if (showAns) return;
+    clickableWords,
+  ];
 
-    setAnswers((prev) => ({
+  // ------------------------
+  // STATES
+  // ------------------------
+
+  const [selectedWords, setSelectedWords] = useState([]);
+  const [studentAnswers, setStudentAnswers] = useState(["", ""]);
+
+  const [result, setResult] = useState({
+    q1: undefined,
+    q2: undefined,
+    underline: false,
+  });
+
+  const [locked, setLocked] = useState(false);
+
+  // ------------------------
+  // NORMALIZE
+  // ------------------------
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[.?!,’"]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // TOGGLE WORD
+  // ------------------------
+
+  const toggleWord = (index) => {
+    if (locked) return;
+
+    setSelectedWords((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index);
+      }
+
+      return [...prev, index];
+    });
+
+    setResult((prev) => ({
       ...prev,
-      [id]: {
-        ...prev[id],
-        [field]: value,
-      },
+      underline: false,
     }));
   };
 
-  const isCorrect = (item) => {
-    const ans = answers[item.id];
-    if (!ans) return false;
+  // ------------------------
+  // RENDER STORY
+  // ------------------------
 
-    return (
-      ans.subject === item.correctSubject &&
-      ans.place === item.correctPlace
-    );
+  const renderStory = (text, offset = 0) => {
+    const regex =
+      /(was having|was working|was baking|was getting|was putting|was setting|were getting|was waiting)/g;
+
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      const isClickable = clickableWords.includes(part);
+
+      if (isClickable) {
+        const selected = selectedWords.includes(index + offset);
+        return (
+          <button
+            key={index}
+            type="button"
+            disabled={locked}
+            onClick={() => toggleWord(index + offset)}
+            style={{
+              background: "transparent",
+
+              border: "none",
+
+              borderBottom: selected
+                ? "3px solid #6D2980"
+                : "3px solid transparent",
+
+              padding: 0,
+
+              margin: 0,
+
+              cursor: locked ? "default" : "pointer",
+
+              lineHeight: "inherit",
+            }}
+          >
+            {part}
+          </button>
+        );
+      }
+
+      return <span key={index}>{part}</span>;
+    });
   };
 
-  const isWrong = (item) => {
-    if (!checked) return false;
-    return !isCorrect(item);
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[`q${i + 1}`] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => ({
+      ...prev,
+      [`q${i + 1}`]: undefined,
+    }));
   };
 
-  const handleCheck = () => {
-    if (showAns) return;
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-    const allAnswered = QUESTIONS.every(
-      (item) => answers[item.id]?.subject && answers[item.id]?.place
-    );
+  const checkAnswers = () => {
+    if (locked) return;
 
-    if (!allAnswered) {
-      ValidationAlert.info("Please answer all questions first.");
+    // VALIDATION
+
+    if (selectedWords.length === 0) {
+      ValidationAlert.info("Please underline the phrases.");
+
       return;
     }
 
-    let score = 0;
+    if (studentAnswers.some((a) => !a.trim())) {
+      ValidationAlert.info("Please complete all answers.");
 
-    QUESTIONS.forEach((item) => {
-      if (isCorrect(item)) {
-        score++;
-      }
+      return;
+    }
+
+    // ------------------------
+    // UNDERLINE
+    // ------------------------
+
+    const underlineCorrect = selectedWords.length;
+
+    const underlineOk = underlineCorrect === 10;
+
+    // ------------------------
+    // QUESTION 1
+    // ------------------------
+
+    const q1Ok = normalize(studentAnswers[0]) === normalize(answers[0]);
+
+    // ------------------------
+    // QUESTION 2
+    // ------------------------
+
+    const q2Ok = normalize(studentAnswers[1]) === normalize(answers[1]);
+
+    // ------------------------
+    // SCORE
+    // ------------------------
+
+    let correctCount = 0;
+
+    correctCount += underlineCorrect;
+
+    if (q1Ok) correctCount++;
+
+    if (q2Ok) correctCount++;
+
+    setResult({
+      q1: q1Ok,
+      q2: q2Ok,
+      underline: underlineOk,
     });
 
-    setChecked(true);
+    const total = 12;
 
-    if (score === QUESTIONS.length) {
-      ValidationAlert.success(`Score: ${score} / ${QUESTIONS.length}`);
-    } else if (score > 0) {
-      ValidationAlert.warning(`Score: ${score} / ${QUESTIONS.length}`);
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.error(`Score: ${score} / ${QUESTIONS.length}`);
+      ValidationAlert.warning(msg);
     }
   };
 
-  const handleShowAnswer = () => {
-    const correctMap = {};
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
 
-    QUESTIONS.forEach((item) => {
-      correctMap[item.id] = {
-        subject: item.correctSubject,
-        place: item.correctPlace,
-      };
+  const showAnswers = () => {
+    const regex =
+      /(was having|was working|was baking|was getting|was putting|was setting|were getting|was waiting)/g;
+
+    // الجزء الأول
+
+    const firstPart = `
+Last night my family was having a special dinner! It was special because we invited my grandparents.
+
+It was a great evening because everyone was working together. The turkey that my mom made was baking in the oven. It was almost ready. My mom was also making soup. My big brother, George, was getting the glasses from the cupboard.
+`;
+
+    // الجزء الثاني
+
+    const secondPart = `
+My sister, Ana, was putting the plates neatly on the table. She was setting the table. My dad was getting a special cake from the bakery. It was my favorite: chocolate cake. My mom took the turkey from the oven. We were getting hungry. Everyone was waiting impatiently for my grandparents to arrive. We finally ate the turkey. It was delicious! Then, we each took a slice from that tasty chocolate cake. It was very good. After dinner, I was getting sleepy. I think I ate too much!
+`;
+
+    // indexes الجزء الأول
+
+    const firstIndexes = firstPart
+      .split(regex)
+      .map((part, index) => (clickableWords.includes(part) ? index : null))
+      .filter((v) => v !== null);
+
+    // indexes الجزء الثاني مع offset
+
+    const secondIndexes = secondPart
+      .split(regex)
+      .map((part, index) =>
+        clickableWords.includes(part) ? index + 100 : null,
+      )
+      .filter((v) => v !== null);
+
+    // دمج الكل
+
+    const correctIndexes = [...firstIndexes, ...secondIndexes];
+
+    setSelectedWords(correctIndexes);
+
+    setStudentAnswers([answers[0], answers[1]]);
+
+    setResult({
+      q1: true,
+      q2: true,
+      underline: true,
     });
 
-    setAnswers(correctMap);
-    setChecked(true);
-    setShowAns(true);
+    setLocked(true);
   };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setSelectedWords([]);
+
+    setStudentAnswers(["", ""]);
+
+    setResult({
+      q1: undefined,
+      q2: undefined,
+      underline: false,
+    });
+
+    setLocked(false);
   };
 
-  return (
- <div className="main-container-component">
-      <div
-       className="div-forall"
-            style={{
-          flexDirection:  "column",
-       gap: "28px",
-          maxWidth: "1100px",
-         margin: "0 auto",       }}
-      > 
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">I</span>
-          Read, look, and write.
-        </h1>
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-        <div
+  const inputField = (i) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[`q${i + 1}`] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+          w-full
+          border-0
+          border-b
+          outline-none
+          bg-transparent
+          text-[18px]
+          text-[#6D2980]
+          font-semibold
+          px-1
+
+          ${result[`q${i + 1}`] === false ? "border-[#D1232A]" : "border-black"}
+        `}
+      />
+
+      {result[`q${i + 1}`] === false && (
+        <span
           style={{
-            display: "grid",
-            gridTemplateColumns: "1.5fr 0.8fr",
-            gap: "36px",
-            alignItems: "start",
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
           }}
         >
-          {/* left side questions */}
-          <div
+          ✕
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
+
+        <h5 className="header-title-page8 mb-8">
+          <span
+            className="ex-A"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "18px",
+              marginRight: "10px",
             }}
           >
-            {QUESTIONS.map((item) => {
-              const current = answers[item.id] || {};
+            K
+          </span>
+          Read and write.
+        </h5>
 
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "94px",
-                    marginBottom:"30px"
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "10px",
-                      minHeight: "36px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "20px",
-                        fontWeight: "700",
-                        color: "#222",
-                        minWidth: "18px",
-                        lineHeight: "1.4",
-                      }}
-                    >
-                      {item.id}
-                    </span>
+        {/* STORY BOX */}
+        <div
+          style={{
+            position: "relative",
+            padding: "10px 10px 0px 10px",
+            fontSize: "17px",
+            color: "#3b2b20",
+            lineHeight: "2",
+          }}
+        >
+          {/* الجزء العلوي الكامل */}
 
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "18px",
-                        color: "#222",
-                        lineHeight: "1.5",
-                      }}
-                    >
-                      {item.question}
-                    </p>
-                  </div>
+          <div>
+            {renderStory(
+              `
+              Last night my family was having a special dinner! It was special because we invited my grandparents.
 
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      height: "42px",
-                      paddingLeft: "28px",
-                      borderBottom: "2px solid #555",
-                      paddingBottom: "4px",
-                      flexWrap: "nowrap",
-                    }}
-                  >
-                    <select
-                      value={current.subject || ""}
-                      onChange={(e) =>
-                        handleSelect(item.id, "subject", e.target.value)
-                      }
-                      disabled={showAns}
-                      style={{
-                        border: "1px solid #f39b42",
-                        borderRadius: "8px",
-                        padding: "4px 8px",
-                        fontSize: "17px",
-                        outline: "none",
-                        backgroundColor: showAns ? "#f3f4f6" : "#fff",
-                        color: "#444",
-                        cursor: showAns ? "default" : "pointer",
-                        minWidth: "94px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <option value="">Select</option>
-                      {item.subjectOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-
-                    <span
-                      style={{
-                        fontSize: "18px",
-                        color: "#222",
-                        whiteSpace: "nowrap",
-                        flexShrink: 0,
-                      }}
-                    >
-                      will go to the
-                    </span>
-
-                    <select
-                      value={current.place || ""}
-                      onChange={(e) =>
-                        handleSelect(item.id, "place", e.target.value)
-                      }
-                      disabled={showAns}
-                      style={{
-                        border: "1px solid #f39b42",
-                        borderRadius: "8px",
-                        padding: "4px 8px",
-                        fontSize: "17px",
-                        outline: "none",
-                        backgroundColor: showAns ? "#f3f4f6" : "#fff",
-                        color: 
-                        "#444",
-                        cursor: showAns ? "default" : "pointer",
-                        minWidth: "150px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <option value="">Select place</option>
-                      {PLACE_OPTIONS.map((place) => (
-                        <option key={place} value={place}>
-                          {place}
-                        </option>
-                      ))}
-                    </select>
-
-                    <span
-                      style={{
-                        fontSize: "18px",
-                        color: "#222",
-                        flexShrink: 0,
-                      }}
-                    >
-                      .
-                    </span>
-
-                    {isWrong(item) && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "-10px",
-                          right: "-8px",
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          backgroundColor: "#ef4444",
-                          color: "#fff",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: "700",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                        }}
-                      >
-                        ✕
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+              It was a great evening because everyone was working together. The turkey that my mom made was baking in the oven. It was almost ready. My mom was also making soup. My big brother, George, was getting the glasses 
+              `,
+              0,
+            )}
           </div>
 
-          {/* right side images */}
+          {/* الجزء السفلي مع الصورة */}
+
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
+              alignItems: "flex-start",
               gap: "14px",
-              alignItems: "center",
+              marginTop: "10px",
             }}
           >
-            {SIDE_IMAGES.map((item) => (
-              <div
-                key={item.id}
+            {/* النص */}
+
+            <div style={{ flex: 1 }}>
+              {renderStory(
+                `
+from the cupboard. My sister, Ana, was putting the plates neatly on the table. She was setting the table. My dad was getting a special cake from the bakery. It was my favorite: chocolate cake. My mom took the turkey from the oven. We were getting hungry. Everyone was waiting impatiently for my grandparents to arrive. We finally ate the turkey. It was delicious! Then, we each took a slice from that tasty chocolate cake. It was very good. After dinner, I was getting sleepy. I think I ate too much!
+`,
+                100,
+              )}
+            </div>
+
+            {/* الصورة */}
+
+            <img
+              src={turkeyImg}
+              alt=""
+              style={{
+                width: "235px",
+                height: "auto",
+                objectFit: "contain",
+                flexShrink: 0,
+              }}
+            />
+          </div>
+        </div>
+
+        {/* QUESTION 1 */}
+
+        <div className="mt-10 mb-8">
+          <div className="flex items-start gap-4 mb-5">
+            <span className="font-bold">1</span>
+
+            <span>
+              Why were the narrator and his family having a special dinner last
+              night?
+            </span>
+          </div>
+
+          <div className="pl-[35px]">{inputField(0)}</div>
+        </div>
+
+        {/* QUESTION 2 */}
+
+        <div className="mb-8">
+          <div className="flex items-start gap-4 mb-5">
+            <span className="font-bold">2</span>
+
+            <span>Why do you think everyone was getting hungry?</span>
+          </div>
+
+          <div className="pl-[35px]">{inputField(1)}</div>
+        </div>
+
+        {/* QUESTION 3 */}
+
+        <div className="mb-8">
+          <div className="flex items-start gap-4">
+            <span className="font-bold">3</span>
+
+            <span className="flex items-center gap-2">
+              Underline the past progressive phrases in the story.
+              <HiArrowUpCircle
                 style={{
-                  width: "220px",
-                  height: "120px",
-                  border: "2px solid #f39b42",
-                  borderRadius: "14px",
-                  overflow: "hidden",
-                  backgroundColor: "#fff",
+                  color: "#6D2980",
+                  fontSize: "26px",
                   flexShrink: 0,
                 }}
-              >
-                <img
-                  src={item.img}
-                  alt={item.label}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
-              </div>
-            ))}
+              />
+            </span>
           </div>
         </div>
+      </div>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-            checkAnswers={handleCheck}
-          />
-        </div>
+      {/* BUTTONS */}
+
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit_Test_Q34;

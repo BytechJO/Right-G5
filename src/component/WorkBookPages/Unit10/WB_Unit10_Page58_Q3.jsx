@@ -2,88 +2,50 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-const WB_Unit10_Page57_Q1 = () => {
-  const wordBank = ["lively", "enormous", "variety", "huh"];
-
+const WB_Unit10_Page58_Q3 = () => {
   const questions = [
     {
-      sentence: (
-        <>
-          I like to eat a{" "}
-          <span
-            style={{
-              textDecoration: "underline",
-              textUnderlineOffset: "2px",
-            }}
-          >
-            symphony
-          </span>{" "}
-          of fruit.
-        </>
-      ),
+      before: "In addition to harvesting the crops,",
 
-      answer: "I like to eat a variety of fruit.",
+      after: "",
+
+      answer: "they were cleaning the horse stalls.",
     },
 
     {
-      sentence: (
-        <>
-          That was a very{" "}
-          <span
-            style={{
-              textDecoration: "underline",
-              textUnderlineOffset: "2px",
-            }}
-          >
-            enormous
-          </span>{" "}
-          performance!
-        </>
-      ),
+      before: "While Tina went into the forest,",
 
-      answer: "That was a very lively performance!",
+      after: "",
+
+      answer: "he was watching from far away.",
     },
 
     {
-      sentence: (
-        <>
-          You must be so tired after studying for so long,{" "}
-          <span
-            style={{
-              textDecoration: "underline",
-              textUnderlineOffset: "2px",
-            }}
-          >
-            acres
-          </span>
-          ?
-        </>
-      ),
+      before: "During wintertime,",
 
-      answer: "You must be so tired after studying for so long, huh?",
+      after: "",
+
+      answer: "they were staying at my grandma’s house.",
     },
 
     {
-      sentence: (
-        <>
-          You have an{" "}
-          <span
-            style={{
-              textDecoration: "underline",
-              textUnderlineOffset: "2px",
-            }}
-          >
-            a long way to go
-          </span>{" "}
-          house. It’s huge!
-        </>
-      ),
+      before: "Was",
 
-      answer: "You have an enormous house. It’s huge!",
+      after: "when the teacher came in?",
+
+      answer: "Larry talking",
+    },
+
+    {
+      before: "Were",
+
+      after: "while we slept under the stars?",
+
+      answer: "the owls hooting",
     },
   ];
 
-  const [studentAnswers, setStudentAnswers] = useState(["", "", "", ""]);
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", "", ""]);
 
   const [result, setResult] = useState([]);
 
@@ -176,7 +138,7 @@ const WB_Unit10_Page57_Q1 = () => {
   const showAnswers = () => {
     setStudentAnswers(questions.map((q) => q.answer));
 
-    setResult([true, true, true, true]);
+    setResult([true, true, true, true, true]);
 
     setLocked(true);
   };
@@ -186,7 +148,7 @@ const WB_Unit10_Page57_Q1 = () => {
   // ------------------------
 
   const handleReset = () => {
-    setStudentAnswers(["", "", "", ""]);
+    setStudentAnswers(["", "", "", "", ""]);
 
     setResult([]);
 
@@ -198,7 +160,7 @@ const WB_Unit10_Page57_Q1 = () => {
   // ------------------------
 
   const inputField = (i) => (
-    <div className="relative w-full">
+    <div className="relative flex-1 min-w-[120px]">
       <input
         type="text"
         value={studentAnswers[i]}
@@ -247,68 +209,50 @@ const WB_Unit10_Page57_Q1 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+      <div className="div-forall text-[18px]">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[6vh]">
+        <h5 className="header-title-page8 mb-[11vh]">
           <span
             className="ex-A"
             style={{
               marginRight: "10px",
             }}
           >
-            A
+            E
           </span>
-          Read, change, and write.
+          Read and write, using the{" "}
+          <span className="text-[#00AEEF]">past progressive tense.</span>
         </h5>
-
-        {/* WORD BANK */}
-
-        <div
-          className="
-            flex
-            justify-center
-            gap-14
-            mb-12
-          "
-        >
-          {wordBank.map((word, index) => (
-            <div
-              key={index}
-              style={{
-                border: "2px solid #6D2980",
-                borderRadius: "8px",
-                minWidth: "110px",
-                height: "42px",
-              }}
-              className="
-                flex
-                items-center
-                justify-center
-                text-[18px]
-              "
-            >
-              {word}
-            </div>
-          ))}
-        </div>
 
         {/* QUESTIONS */}
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-15">
           {questions.map((q, index) => (
-            <div key={index}>
-              {/* QUESTION */}
+            <div
+              key={index}
+              className="
+                flex
+                items-center
+                gap-3
+                w-full
+              "
+            >
+              {/* NUMBER */}
 
-              <div className="flex gap-4 mb-3">
-                <span className="font-bold">{index + 1}</span>
+              <span className="font-bold">{index + 1}</span>
 
-                <div className="leading-[1.8]">{q.sentence}</div>
-              </div>
+              {/* BEFORE */}
+
+              {q.before && <span className="shrink-0">{q.before}</span>}
 
               {/* INPUT */}
 
-              <div className="pl-[35px]">{inputField(index)}</div>
+              {inputField(index)}
+
+              {/* AFTER */}
+
+              {q.after && <span className="shrink-0">{q.after}</span>}
             </div>
           ))}
         </div>
@@ -333,4 +277,4 @@ const WB_Unit10_Page57_Q1 = () => {
   );
 };
 
-export default WB_Unit10_Page57_Q1;
+export default WB_Unit10_Page58_Q3;

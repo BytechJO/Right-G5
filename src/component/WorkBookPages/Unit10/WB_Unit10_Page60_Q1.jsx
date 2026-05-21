@@ -1,353 +1,351 @@
-import React, { useState } from "react";
-import Button from "../Button";
+import React, { useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 60/SVG/1.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 60/SVG/2.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 60/SVG/3.svg";
-import img4 from"../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 60/SVG/4.svg";
+const WB_Unit10_Page60_Q1 = () => {
+  const answers = [
+    ["a", "c", "r", "e", "s"],
+    ["s", "y", "m", "p", "h", "o", "n", "y"],
+    ["m", "o", "o", "d", "s"],
+    ["f", "l", "e", "x", "i", "b", "l", "e"],
+    ["a", "p", "p", "e", "a", "l", "i", "n", "g"],
+    ["h", "a", "r", "v", "e", "s", "t", "i", "n", "g"],
+  ];
 
-// ── ثوابت ──────────────────────────────────────────────────────
-const WRONG_COLOR  = "#ef4444";
-const SELECT_COLOR = "#f39b42";
-const RED_MARK     = "#d92525";
+  const items = [
+    ["2", "1", "17", "3", "18"],
 
-// ── بيانات ─────────────────────────────────────────────────────
-const ITEMS = [
-  {
-    id: 1, img: img1, subject: "She",   boxMark: "check",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["do her homework.", "do her homework."],
-    correctModal:  "will", correctAction: "do her homework.",
-  },
-  {
-    id: 2, img: img2, subject: "He",  boxMark: "x",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["go to the beach.", "plant a tree."],
-    correctModal:  "won't",  correctAction: "plant a tree..",
-  },
-  {
-    id: 3, img: img3, subject: "They",   boxMark: "check",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["eat at a restaurant.", "eat at a restaurant."],
-    correctModal:  "will",  correctAction: "eat at a restaurant.",
-  },
-  {
-    id: 4, img: img4, subject: "She", boxMark: "x",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["go to the store.", "go to the store."],
-    correctModal:  "won't", correctAction: "go to the store.",
-  },
-];
+    ["18", "6", "16", "10", "11", "14", "7", "6"],
 
-// ── بادج الخطأ ─────────────────────────────────────────────────
-const ErrorBadge = () => (
-  <div
-    style={{
-      position:        "absolute",
-      top:             -7,
-      right:           -7,
-      width:           "clamp(13px,1.5vw,17px)",
-      height:          "clamp(13px,1.5vw,17px)",
-      borderRadius:    "50%",
-      backgroundColor: WRONG_COLOR,
-      color:           "#fff",
-      display:         "flex",
-      alignItems:      "center",
-      justifyContent:  "center",
-      fontSize:        "clamp(7px,0.8vw,10px)",
-      fontWeight:      700,
-      border:          "1.5px solid #fff",
-      pointerEvents:   "none",
-      zIndex:          6,
-    }}
-  >
-    ✕
-  </div>
-);
+    ["16", "14", "14", "20", "18"],
 
-// ── المكوّن الرئيسي ─────────────────────────────────────────────
-export default function WB_Unit8_Page58_QD() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+    ["12", "8", "3", "15", "4", "19", "8", "3"],
 
-  const handleSelect = (id, field, value) => {
-    if (showAns) return;
-    setChecked(false);
-    setAnswers((prev) => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+    ["2", "10", "10", "3", "2", "8", "4", "7", "5"],
+
+    ["11", "2", "17", "13", "3", "18", "9", "4", "7", "5"],
+  ];
+
+  const codeItems = [
+    [
+      "1 = c",
+      "2 = a",
+      "3 = e",
+      "4 = i",
+      "5 = g",
+      "6 = y",
+      "7 = n",
+      "8 = l",
+      "9 = t",
+      "10 = p",
+    ],
+
+    [
+      "11 = h",
+      "12 = f",
+      "13 = v",
+      "14 = o",
+      "15 = x",
+      "16 = m",
+      "17 = r",
+      "18 = s",
+      "19 = b",
+      "20 = d",
+    ],
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState(
+    answers.map((word) => word.map((char) => (char === " " ? " " : ""))),
+  );
+
+  const [results, setResults] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const inputRefs = useRef([]);
+
+  const handleChange = (qIndex, inputIndex, value) => {
+    if (locked || results[qIndex] === true) return;
+
+    const char = value.slice(-1).toLowerCase();
+
+    const updated = [...studentAnswers];
+
+    updated[qIndex][inputIndex] = char;
+
+    setStudentAnswers(updated);
+
+    setResults((prev) => {
+      const copy = [...prev];
+
+      copy[qIndex] = undefined;
+
+      return copy;
+    });
+
+    // move next
+    if (char) {
+      setTimeout(() => {
+        let next = inputIndex + 1;
+
+        while (answers[qIndex][next] === " ") {
+          next++;
+        }
+
+        inputRefs.current[qIndex]?.[next]?.focus();
+      }, 0);
+    }
   };
 
-  const isItemCorrect = (item) => {
-    const ans = answers[item.id];
-    return ans?.modal === item.correctModal && ans?.action === item.correctAction;
+  const handleBackspace = (e, qIndex, inputIndex) => {
+    if (e.key === "Backspace" && !studentAnswers[qIndex][inputIndex]) {
+      let prev = inputIndex - 1;
+
+      while (answers[qIndex][prev] === " ") {
+        prev--;
+      }
+
+      inputRefs.current[qIndex]?.[prev]?.focus();
+    }
   };
 
-  // ── هل هاد الخيار بالذات غلط؟ ──
-  const isOptionWrong = (item, field, value) => {
-    if (!checked || showAns) return false;
-    const ans = answers[item.id];
-    return ans?.[field] === value && value !== (field === "modal" ? item.correctModal : item.correctAction);
-  };
+  const checkAnswers = () => {
+    if (locked) return;
 
-  // ── handlers ──
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => answers[i.id]?.modal && answers[i.id]?.action);
-    if (!allAnswered) {
-      ValidationAlert.error("Please answer all questions first! ✏️");
+    const hasEmpty = studentAnswers.some((word, qIndex) =>
+      word.some(
+        (char, i) =>
+          answers[qIndex][i] !== " " &&
+          answers[qIndex][i] !== undefined &&
+          !char.trim(),
+      ),
+    );
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let correct = 0;
-    ITEMS.forEach((i) => { if (isItemCorrect(i)) correct++; });
-    setChecked(true);
-    const total = ITEMS.length;
-    if (correct === total) ValidationAlert.success("Excellent! All correct! 🎉");
-    else                   ValidationAlert.error(`${correct} / ${total} correct. Try again! 💪`);
+
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((studentWord, qIndex) => {
+      const correct =
+        studentWord.join("").toLowerCase() ===
+        answers[qIndex].join("").toLowerCase();
+
+      if (correct) correctCount++;
+
+      return correct;
+    });
+
+    setResults(newResults);
+
+    const total = answers.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = { modal: i.correctModal, action: i.correctAction }; });
-    setAnswers(filled);
-    setChecked(false);
-    setShowAns(true);
+  const showAnswers = () => {
+    setStudentAnswers(answers);
+
+    setResults([true, true, true, true, true, true]);
+
+    setLocked(true);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
-  };
-
-  // ── رسم خيار واحد كدائرة ──
-  const renderOption = (item, field, value) => {
-    const selected = answers[item.id]?.[field] === value;
-    const wrong    = isOptionWrong(item, field, value);
-
-    return (
-      <div
-        key={value}
-        onClick={() => handleSelect(item.id, field, value)}
-        style={{
-          position:       "relative",
-          display:        "inline-flex",
-          alignItems:     "center",
-          justifyContent: "center",
-          padding:        "clamp(2px,0.4vw,4px) clamp(8px,1.2vw,14px)",
-          cursor:         showAns ? "default" : "pointer",
-          userSelect:     "none",
-          fontSize:       "clamp(13px,1.7vw,20px)",
-          lineHeight:     1.3,
-          color:          wrong ? WRONG_COLOR : "#222",
-          fontWeight:     selected ? 700 : 500,
-          transition:     "color 0.15s",
-          whiteSpace:     "nowrap",
-        }}
-      >
-        {/* الدائرة — تظهر عند الاختيار */}
-        {selected && (
-          <div
-            style={{
-              position:     "absolute",
-              inset:        "-2px -4px",
-              border:       `2.5px solid ${wrong ? WRONG_COLOR : SELECT_COLOR}`,
-              borderRadius: "999px",
-              pointerEvents:"none",
-              transition:   "border-color 0.15s",
-            }}
-          />
-        )}
-        <span style={{ position: "relative", zIndex: 1 }}>{value}</span>
-
-        {/* بادج الخطأ على الدائرة */}
-        {wrong && selected && <ErrorBadge />}
-      </div>
+    setStudentAnswers(
+      answers.map((word) => word.map((char) => (char === " " ? " " : ""))),
     );
-  };
 
-  const renderCornerMark = (type) => (
-    <span
-      style={{
-        color:      RED_MARK,
-        fontSize:   "clamp(22px,3.2vw,42px)",
-        fontWeight: 700,
-        lineHeight: 1,
-        userSelect: "none",
-      }}
-    >
-      {type === "check" ? "✓" : "✕"}
-    </span>
-  );
+    setResults([]);
+
+    setLocked(false);
+
+    setTimeout(() => {
+      inputRefs.current[0]?.[0]?.focus();
+    }, 0);
+  };
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "clamp(18px,2.5vw,30px)" }}>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px]">
+        {/* TITLE */}
+        <h5 className="header-title-page8 mb-[10vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            H
+          </span>
+          Use the code to find the words.
+        </h5>
 
-        {/* ── العنوان ── */}
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">D</span>{" "}
-          Look, read, and circle. Say.
-        </h1>
+        {/* QUESTIONS */}
+        <div className="grid grid-cols-2 gap-x-10 gap-y-10 mb-15">
+          {answers.map((word, qIndex) => (
+            <div key={qIndex} className="flex items-start gap-3">
+              <span className="font-bold">{qIndex + 1}</span>
 
-        {/* ── شبكة 2×2 ── */}
+              <div>
+                {/* INPUTS */}
+                <div className="flex items-center gap-0.5">
+                  {word.map((char, inputIndex) => {
+                    if (char === " ") {
+                      return (
+                        <div
+                          key={inputIndex}
+                          style={{
+                            width: "18px",
+                          }}
+                        />
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={inputIndex}
+                        className="relative  flex flex-col items-center"
+                      >
+                        <input
+                          ref={(el) => {
+                            if (!inputRefs.current[qIndex]) {
+                              inputRefs.current[qIndex] = [];
+                            }
+
+                            inputRefs.current[qIndex][inputIndex] = el;
+                          }}
+                          type="text"
+                          maxLength={1}
+                          value={studentAnswers[qIndex][inputIndex]}
+                          disabled={locked || results[qIndex] === true}
+                          onFocus={(e) => e.target.select()}
+                          onInput={(e) =>
+                            handleChange(qIndex, inputIndex, e.target.value)
+                          }
+                          onKeyDown={(e) =>
+                            handleBackspace(e, qIndex, inputIndex)
+                          }
+                          className={`
+                              w-6
+                              text-center
+                              border-0
+                              border-b
+                              outline-none
+                              bg-transparent
+                              text-[18px]
+                              text-[#6D2980]
+                              font-semibold
+
+                              ${results[qIndex] === false ? "border-[#D1232A]" : "border-black"}
+                            `}
+                        />
+
+                        <span
+                          style={{
+                            width: "24px",
+                            textAlign: "center",
+                            fontSize: "14px",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {items[qIndex][inputIndex]}
+                        </span>
+                        {results[qIndex] === false && inputIndex === 0 && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: "-8px",
+                              right: "15px",
+                              width: "20px",
+                              background: "#ef4444",
+                              color: "white",
+                              borderRadius: "50%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "11px",
+                              fontWeight: "bold",
+                              border: "2px solid white",
+                              boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+                            }}
+                          >
+                            ✕
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CODE BOX */}
         <div
           style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(2, minmax(0,1fr))",
-            gap:                 "clamp(20px,3.5vw,48px) clamp(20px,4vw,55px)",
-            alignItems:          "start",
+            border: "2px solid #7D3C98",
+            borderRadius: "12px",
+            padding: "16px 24px",
           }}
         >
-          {ITEMS.map((item) => {
-            const current = answers[item.id] || {};
 
-            return (
+          <div className="flex flex-col gap-3">
+            {codeItems.map((row, rowIndex) => (
               <div
-                key={item.id}
-                style={{
-                  position:      "relative",
-                  display:       "flex",
-                  flexDirection: "column",
-                  gap:           "clamp(10px,1.4vw,16px)",
-                  minWidth:      0,
-                }}
+                key={rowIndex}
+                className="grid grid-cols-10 place-items-center gap-y-3"
               >
-                {/* رقم + صورة */}
-                <div
-                  style={{
-                    display:    "flex",
-                    alignItems: "flex-start",
-                    gap:        "clamp(8px,1vw,14px)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize:   "clamp(16px,1.9vw,26px)",
-                      fontWeight: 700,
-                      color:      "#111",
-                      flexShrink: 0,
-                      minWidth:   "clamp(14px,1.8vw,22px)",
-                    }}
-                  >
-                    {item.id}
+                {row.map((item, index) => (
+                  <span key={index} className="w-full text-center">
+                    {item}
                   </span>
-
-                  <div
-                    style={{
-                      position:     "relative",
-                      width:        "clamp(120px,20vw,220px)",
-                      height:       "clamp(90px,15vw,170px)",
-                      border:       "2px solid #f39b42",
-                      borderRadius: "clamp(10px,1.2vw,16px)",
-                      overflow:     "hidden",
-                      background:   "#fff",
-                      flexShrink:   0,
-                    }}
-                  >
-                    <img
-                      src={item.img}
-                      alt={`item-${item.id}`}
-                      style={{
-                        width:         "100%",
-                        height:        "100%",
-                        objectFit:     "cover",
-                        display:       "block",
-                        userSelect:    "none",
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    {/* صندوق ✓/✕ في الزاوية */}
-                    <div
-                      style={{
-                        position:        "absolute",
-                        top:             "clamp(4px,0.6vw,8px)",
-                        right:           "clamp(4px,0.6vw,8px)",
-                        width:           "clamp(28px,3.8vw,44px)",
-                        height:          "clamp(28px,3.8vw,44px)",
-                        backgroundColor: "#fff",
-                        border:          "2px solid #f39b42",
-                        borderRadius:    "clamp(5px,0.6vw,8px)",
-                        display:         "flex",
-                        alignItems:      "center",
-                        justifyContent:  "center",
-                        boxSizing:       "border-box",
-                      }}
-                    >
-                      {renderCornerMark(item.boxMark)}
-                    </div>
-                  </div>
-                </div>
-
-                {/* الجملة: subject | modal | action */}
-                <div
-                  style={{
-                    display:     "flex",
-                    alignItems:  "flex-start",
-                    gap:         "clamp(6px,0.8vw,12px)",
-                    paddingLeft: "clamp(20px,2.5vw,32px)",
-                    flexWrap:    "wrap",
-                  }}
-                >
-                  {/* subject */}
-                  <span
-                    style={{
-                      fontSize:   "clamp(13px,1.7vw,20px)",
-                      color:      "#222",
-                      lineHeight: "clamp(28px,4vw,42px)",
-                      fontWeight: 500,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {item.subject}
-                  </span>
-
-                  {/* modal options */}
-                  <div
-                    style={{
-                      borderLeft:    "2.5px solid #222",
-                      paddingLeft:   "clamp(6px,0.8vw,12px)",
-                      display:       "flex",
-                      flexDirection: "column",
-                      gap:           "clamp(2px,0.4vw,6px)",
-                      flexShrink:    0,
-                    }}
-                  >
-                    {item.modalOptions.map((opt) => renderOption(item, "modal", opt))}
-                  </div>
-
-                  {/* action options */}
-                  <div
-                    style={{
-                      borderLeft:    "2.5px solid #222",
-                      paddingLeft:   "clamp(6px,0.8vw,12px)",
-                      display:       "flex",
-                      flexDirection: "column",
-                      gap:           "clamp(2px,0.4vw,6px)",
-                      flex:          1,
-                      minWidth:      0,
-                    }}
-                  >
-                    {item.actionOptions.map((opt) => renderOption(item, "action", opt))}
-                  </div>
-                </div>
-
+                ))}
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
+      </div>
 
-        {/* ── الأزرار ── */}
-        <div className="mt-4 flex justify-center">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
 
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit10_Page60_Q1;

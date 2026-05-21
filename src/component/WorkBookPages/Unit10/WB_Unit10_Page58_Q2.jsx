@@ -1,353 +1,278 @@
 import React, { useState } from "react";
-import Button from "../Button";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 58/SVG/7.svg";
-import img2 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 58/SVG/8.svg";
-import img3 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 58/SVG/9.svg";
-import img4 from "../../../assets/imgs/pages/WB_Right_3/Right Int WB G3 U10 Folder/Page 58/SVG/10.svg";
+const WB_Unit10_Page58_Q2 = () => {
+  const questions = [
+    {
+      before: "Were you",
 
-// ── ثوابت ──────────────────────────────────────────────────────
-const WRONG_COLOR  = "#ef4444";
-const SELECT_COLOR = "#f39b42";
-const RED_MARK     = "#d92525";
+      after: "?",
 
-// ── بيانات ─────────────────────────────────────────────────────
-const ITEMS = [
-  {
-    id: 1, img: img1, subject: "He",   boxMark: "x",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["sit in the sun.", "build a sandcastle."],
-    correctModal:  "won't", correctAction: "sit in the sun.",
-  },
-  {
-    id: 2, img: img2, subject: "She",  boxMark: "check",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["go to the beach.", "read a book."],
-    correctModal:  "will",  correctAction: "read a book.",
-  },
-  {
-    id: 3, img: img3, subject: "They", boxMark: "x",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["watch a movie.", "go to the mall."],
-    correctModal:  "won't", correctAction: "watch a movie.",
-  },
-  {
-    id: 4, img: img4, subject: "He",   boxMark: "check",
-    modalOptions:  ["will", "won't"],
-    actionOptions: ["plant a tree.", "swim in the sea."],
-    correctModal:  "will",  correctAction: "plant a tree.",
-  },
-];
+      answer: "sleeping on the couch last night",
+    },
 
-// ── بادج الخطأ ─────────────────────────────────────────────────
-const ErrorBadge = () => (
-  <div
-    style={{
-      position:        "absolute",
-      top:             -7,
-      right:           -7,
-      width:           "clamp(13px,1.5vw,17px)",
-      height:          "clamp(13px,1.5vw,17px)",
-      borderRadius:    "50%",
-      backgroundColor: WRONG_COLOR,
-      color:           "#fff",
-      display:         "flex",
-      alignItems:      "center",
-      justifyContent:  "center",
-      fontSize:        "clamp(7px,0.8vw,10px)",
-      fontWeight:      700,
-      border:          "1.5px solid #fff",
-      pointerEvents:   "none",
-      zIndex:          6,
-    }}
-  >
-    ✕
-  </div>
-);
+    {
+      before: "",
 
-// ── المكوّن الرئيسي ─────────────────────────────────────────────
-export default function WB_Unit8_Page58_QD() {
-  const [answers, setAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAns, setShowAns] = useState(false);
+      after: "?",
 
-  const handleSelect = (id, field, value) => {
-    if (showAns) return;
-    setChecked(false);
-    setAnswers((prev) => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+      answer: "Were we playing in the soccer field",
+    },
+
+    {
+      before: "",
+
+      after: "?",
+
+      answer: "Was I studying all day long",
+    },
+
+    {
+      before: "",
+
+      after: "?",
+
+      answer: "Were they singing their favorite songs",
+    },
+
+    {
+      before: "",
+
+      after: "?",
+
+      answer: "Was she making a snowman while the snow fell",
+    },
+  ];
+
+  const [studentAnswers, setStudentAnswers] = useState(["", "", "", "", ""]);
+
+  const [result, setResult] = useState([]);
+
+  const [locked, setLocked] = useState(false);
+
+  const normalize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[-.?!,’']/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  // ------------------------
+  // HANDLE INPUT
+  // ------------------------
+
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+
+    const updated = [...studentAnswers];
+
+    updated[i] = value;
+
+    setStudentAnswers(updated);
+
+    setResult((prev) => {
+      const copy = [...prev];
+
+      copy[i] = undefined;
+
+      return copy;
+    });
   };
 
-  const isItemCorrect = (item) => {
-    const ans = answers[item.id];
-    return ans?.modal === item.correctModal && ans?.action === item.correctAction;
-  };
+  // ------------------------
+  // CHECK
+  // ------------------------
 
-  // ── هل هاد الخيار بالذات غلط؟ ──
-  const isOptionWrong = (item, field, value) => {
-    if (!checked || showAns) return false;
-    const ans = answers[item.id];
-    return ans?.[field] === value && value !== (field === "modal" ? item.correctModal : item.correctAction);
-  };
+  const checkAnswers = () => {
+    if (locked) return;
 
-  // ── handlers ──
-  const handleCheck = () => {
-    if (showAns) return;
-    const allAnswered = ITEMS.every((i) => answers[i.id]?.modal && answers[i.id]?.action);
-    if (!allAnswered) {
-      ValidationAlert.error("Please answer all questions first! ✏️");
+    const hasEmpty = studentAnswers.some((a) => !a.trim());
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please complete all answers.");
+
       return;
     }
-    let correct = 0;
-    ITEMS.forEach((i) => { if (isItemCorrect(i)) correct++; });
-    setChecked(true);
-    const total = ITEMS.length;
-    if (correct === total) ValidationAlert.success("Excellent! All correct! 🎉");
-    else                   ValidationAlert.error(`${correct} / ${total} correct. Try again! 💪`);
+
+    let correctCount = 0;
+
+    const newResults = studentAnswers.map((answer, i) => {
+      const ok = normalize(answer) === normalize(questions[i].answer);
+
+      if (ok) correctCount++;
+
+      return ok;
+    });
+
+    setResult(newResults);
+
+    const total = questions.length;
+
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const msg = `
+      <div style="font-size:18px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) {
+      setLocked(true);
+
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  const handleShowAnswer = () => {
-    const filled = {};
-    ITEMS.forEach((i) => { filled[i.id] = { modal: i.correctModal, action: i.correctAction }; });
-    setAnswers(filled);
-    setChecked(false);
-    setShowAns(true);
+  // ------------------------
+  // SHOW ANSWERS
+  // ------------------------
+
+  const showAnswers = () => {
+    setStudentAnswers(questions.map((q) => q.answer));
+
+    setResult([true, true, true, true, true]);
+
+    setLocked(true);
   };
+
+  // ------------------------
+  // RESET
+  // ------------------------
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked(false);
-    setShowAns(false);
+    setStudentAnswers(["", "", "", "", ""]);
+
+    setResult([]);
+
+    setLocked(false);
   };
 
-  // ── رسم خيار واحد كدائرة ──
-  const renderOption = (item, field, value) => {
-    const selected = answers[item.id]?.[field] === value;
-    const wrong    = isOptionWrong(item, field, value);
+  // ------------------------
+  // INPUT
+  // ------------------------
 
-    return (
-      <div
-        key={value}
-        onClick={() => handleSelect(item.id, field, value)}
-        style={{
-          position:       "relative",
-          display:        "inline-flex",
-          alignItems:     "center",
-          justifyContent: "center",
-          padding:        "clamp(2px,0.4vw,4px) clamp(8px,1.2vw,14px)",
-          cursor:         showAns ? "default" : "pointer",
-          userSelect:     "none",
-          fontSize:       "clamp(13px,1.7vw,20px)",
-          lineHeight:     1.3,
-          color:          wrong ? WRONG_COLOR : "#222",
-          fontWeight:     selected ? 700 : 500,
-          transition:     "color 0.15s",
-          whiteSpace:     "nowrap",
-        }}
-      >
-        {/* الدائرة — تظهر عند الاختيار */}
-        {selected && (
-          <div
-            style={{
-              position:     "absolute",
-              inset:        "-2px -4px",
-              border:       `2.5px solid ${wrong ? WRONG_COLOR : SELECT_COLOR}`,
-              borderRadius: "999px",
-              pointerEvents:"none",
-              transition:   "border-color 0.15s",
-            }}
-          />
-        )}
-        <span style={{ position: "relative", zIndex: 1 }}>{value}</span>
+  const inputField = (i) => (
+    <div className="relative flex-1 min-w-[180px]">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked || result[i] === true}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className={`
+        w-full
+        border-0
+        border-b
+        outline-none
+        bg-transparent
+        text-[18px]
+        text-[#6D2980]
+        font-semibold
+        px-1
 
-        {/* بادج الخطأ على الدائرة */}
-        {wrong && selected && <ErrorBadge />}
-      </div>
-    );
-  };
+        ${result[i] === false ? "border-[#D1232A]" : "border-black"}
+      `}
+      />
 
-  const renderCornerMark = (type) => (
-    <span
-      style={{
-        color:      RED_MARK,
-        fontSize:   "clamp(22px,3.2vw,42px)",
-        fontWeight: 700,
-        lineHeight: 1,
-        userSelect: "none",
-      }}
-    >
-      {type === "check" ? "✓" : "✕"}
-    </span>
+      {result[i] === false && (
+        <span
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "20px",
+            height: "20px",
+            background: "#ef4444",
+            color: "white",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "11px",
+            fontWeight: "bold",
+            border: "2px solid white",
+            boxShadow: "0 1px 6px rgba(0,0,0,0.2)",
+          }}
+        >
+          ✕
+        </span>
+      )}
+    </div>
   );
 
   return (
-    <div className="main-container-component">
-      <div className="div-forall" style={{ gap: "clamp(18px,2.5vw,30px)" }}>
+    <div className="flex flex-col items-center p-[30px]">
+      <div className="div-forall text-[18px] w-full">
+        {/* TITLE */}
 
-        {/* ── العنوان ── */}
-        <h1 className="WB-header-title-page8">
-          <span className="WB-ex-A">D</span>{" "}
-          Look, read, and circle. Say.
-        </h1>
+        <h5 className="header-title-page8 mb-[10vh]">
+          <span
+            className="ex-A"
+            style={{
+              marginRight: "10px",
+            }}
+          >
+            D
+          </span>
+          Write each of the sentences in Exercise C as a question.
+        </h5>
 
-        {/* ── شبكة 2×2 ── */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(2, minmax(0,1fr))",
-            gap:                 "clamp(20px,3.5vw,48px) clamp(20px,4vw,55px)",
-            alignItems:          "start",
-          }}
-        >
-          {ITEMS.map((item) => {
-            const current = answers[item.id] || {};
+        {/* QUESTIONS */}
 
-            return (
-              <div
-                key={item.id}
-                style={{
-                  position:      "relative",
-                  display:       "flex",
-                  flexDirection: "column",
-                  gap:           "clamp(10px,1.4vw,16px)",
-                  minWidth:      0,
-                }}
-              >
-                {/* رقم + صورة */}
-                <div
-                  style={{
-                    display:    "flex",
-                    alignItems: "flex-start",
-                    gap:        "clamp(8px,1vw,14px)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize:   "clamp(16px,1.9vw,26px)",
-                      fontWeight: 700,
-                      color:      "#111",
-                      flexShrink: 0,
-                      minWidth:   "clamp(14px,1.8vw,22px)",
-                    }}
-                  >
-                    {item.id}
-                  </span>
+        <div className="flex flex-col gap-15">
+          {questions.map((q, index) => (
+            <div
+              key={index}
+              className="
+              flex
+              items-center
+              gap-3
+              w-full
+            "
+            >
+              {/* NUMBER */}
 
-                  <div
-                    style={{
-                      position:     "relative",
-                      width:        "clamp(120px,20vw,220px)",
-                      height:       "clamp(90px,15vw,170px)",
-                      border:       "2px solid #f39b42",
-                      borderRadius: "clamp(10px,1.2vw,16px)",
-                      overflow:     "hidden",
-                      background:   "#fff",
-                      flexShrink:   0,
-                    }}
-                  >
-                    <img
-                      src={item.img}
-                      alt={`item-${item.id}`}
-                      style={{
-                        width:         "100%",
-                        height:        "100%",
-                        objectFit:     "cover",
-                        display:       "block",
-                        userSelect:    "none",
-                        pointerEvents: "none",
-                      }}
-                    />
+              <span className="font-bold">{index + 1}</span>
 
-                    {/* صندوق ✓/✕ في الزاوية */}
-                    <div
-                      style={{
-                        position:        "absolute",
-                        top:             "clamp(4px,0.6vw,8px)",
-                        right:           "clamp(4px,0.6vw,8px)",
-                        width:           "clamp(28px,3.8vw,44px)",
-                        height:          "clamp(28px,3.8vw,44px)",
-                        backgroundColor: "#fff",
-                        border:          "2px solid #f39b42",
-                        borderRadius:    "clamp(5px,0.6vw,8px)",
-                        display:         "flex",
-                        alignItems:      "center",
-                        justifyContent:  "center",
-                        boxSizing:       "border-box",
-                      }}
-                    >
-                      {renderCornerMark(item.boxMark)}
-                    </div>
-                  </div>
-                </div>
+              {/* BEFORE */}
 
-                {/* الجملة: subject | modal | action */}
-                <div
-                  style={{
-                    display:     "flex",
-                    alignItems:  "flex-start",
-                    gap:         "clamp(6px,0.8vw,12px)",
-                    paddingLeft: "clamp(20px,2.5vw,32px)",
-                    flexWrap:    "wrap",
-                  }}
-                >
-                  {/* subject */}
-                  <span
-                    style={{
-                      fontSize:   "clamp(13px,1.7vw,20px)",
-                      color:      "#222",
-                      lineHeight: "clamp(28px,4vw,42px)",
-                      fontWeight: 500,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {item.subject}
-                  </span>
+              {q.before && <span>{q.before}</span>}
 
-                  {/* modal options */}
-                  <div
-                    style={{
-                      borderLeft:    "2.5px solid #222",
-                      paddingLeft:   "clamp(6px,0.8vw,12px)",
-                      display:       "flex",
-                      flexDirection: "column",
-                      gap:           "clamp(2px,0.4vw,6px)",
-                      flexShrink:    0,
-                    }}
-                  >
-                    {item.modalOptions.map((opt) => renderOption(item, "modal", opt))}
-                  </div>
+              {/* INPUT */}
 
-                  {/* action options */}
-                  <div
-                    style={{
-                      borderLeft:    "2.5px solid #222",
-                      paddingLeft:   "clamp(6px,0.8vw,12px)",
-                      display:       "flex",
-                      flexDirection: "column",
-                      gap:           "clamp(2px,0.4vw,6px)",
-                      flex:          1,
-                      minWidth:      0,
-                    }}
-                  >
-                    {item.actionOptions.map((opt) => renderOption(item, "action", opt))}
-                  </div>
-                </div>
+              {inputField(index)}
+              {/* AFTER */}
 
-              </div>
-            );
-          })}
+              <span>{q.after}</span>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* ── الأزرار ── */}
-        <div className="mt-4 flex justify-center">
-          <Button
-            checkAnswers={handleCheck}
-            handleShowAnswer={handleShowAnswer}
-            handleStartAgain={handleReset}
-          />
-        </div>
+      {/* BUTTONS */}
 
+      <div className="action-buttons-container">
+        <button className="try-again-button" onClick={handleReset}>
+          Start Again ↻
+        </button>
+
+        <button className="show-answer-btn" onClick={showAnswers}>
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit10_Page58_Q2;

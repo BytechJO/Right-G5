@@ -247,18 +247,34 @@ const WB_Unit8_Page45_Q2 = () => {
 
               {/* SENTENCE */}
 
+              {/* SENTENCE */}
+
               <div className="leading-loose pl-7">
                 {q.sentence.includes("__________") ? (
                   <>
-                    {q.sentence.split("__________")[0]}
+                    {/* السطر الأول */}
 
-                    {inputField(index)}
+                    <div className="flex items-end gap-3 flex-wrap">
+                      <span>{q.sentence.split("__________")[0]}</span>
 
-                    {q.sentence.split("__________")[1]}
+                      {inputField(index)}
+                    </div>
+
+                    {/* السطر الثاني */}
+
+                    <div>{q.sentence.split("__________")[1]}</div>
                   </>
                 ) : (
                   <>
-                     {q.sentence} {inputField(index)} {index === 0 ? "!" : "."}
+                    {/* الجملة */}
+
+                    <div>{q.sentence}</div>
+
+                    {/* الانبوت تحت */}
+
+                    <div>
+                      {inputField(index)} {index === 0 ? "!" : "."}
+                    </div>
                   </>
                 )}
               </div>
