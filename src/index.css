@@ -161,6 +161,15 @@ svg {
   position: relative;
   display: block;
 }
+.poster-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1484 / 1023;
+  min-height: 75vh;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: top left;
+}
 /* إعداد الصورة نفسها */
 img {
   height: 85vh;
@@ -205,7 +214,7 @@ img {
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: top left;
-  aspect-ratio: 813 / 1114;
+  aspect-ratio: 792 / 1114;
   position: relative;
   display: block;
 }
@@ -632,9 +641,7 @@ img {
     top: 25%;
     left: 32.8%;
   }
-  .headset-icon-CD-page9 {
-    bottom: 28.5% !important;
-  }
+ 
 }
 @media (max-width: 1024px) {
   .page1-img-wrapper,
@@ -695,9 +702,7 @@ img {
   .click-icon-page8-4 {
     bottom: 25%;
   }
-  .headset-icon-CD-page9 {
-    bottom: 32.5%;
-  }
+  
   .headset-icon-CD-page7 {
     top: 3.5%;
     right: 61.2%;
@@ -782,9 +787,7 @@ img {
   .click-icon-page9-2 {
     top: 26.5%;
   }
-  .headset-icon-CD-page9 {
-    bottom: 31%;
-  }
+
 
   .exercise-image-div {
     flex-wrap: wrap !important;
