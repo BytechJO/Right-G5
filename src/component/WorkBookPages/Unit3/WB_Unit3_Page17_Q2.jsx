@@ -176,7 +176,7 @@ const WB_Unit3_Page17_Q2 = () => {
         className="div-forall text-[18px]"
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
+        <h5 className="header-title-page8 mb-[7vh]">
           <span
             className="ex-A"
             style={{
@@ -212,7 +212,7 @@ const WB_Unit3_Page17_Q2 = () => {
         </div>
 
         {/* SENTENCES */}
-        <div className="flex flex-col gap-4 mt-8">
+        <div className="flex flex-col gap-[3vh] mt-8">
           {questions.map((q, index) => (
             <div key={index} className="flex gap-3">
               <span className="font-bold lowercase">

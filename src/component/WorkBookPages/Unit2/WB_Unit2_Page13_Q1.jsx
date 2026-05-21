@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U2/Page 13/Asset 8.svg";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 const WB_Unit2_Page13_Q1 = () => {
   const vocabAnswers = [
@@ -371,10 +372,7 @@ const WB_Unit2_Page13_Q1 = () => {
 
   return (
     <div className="flex flex-col items-center p-[30px]">
-      <div
-        className="div-forall text-[18px]"
-    
-      >
+      <div className="div-forall text-[18px]">
         {/* TITLE */}
         <h5 className="header-title-page8 mb-8">
           <span
@@ -456,8 +454,17 @@ const WB_Unit2_Page13_Q1 = () => {
         {/* Q1 */}
         <div className="mb-10">
           <div className="mb-4">
-            <span className="font-bold mr-2">1</span> Underline the relative
-            clauses in the story.
+            <span className="flex items-center gap-2">
+            <span className="font-bold mr-2">1</span>
+              Underline the relative clauses in the story.
+              <HiArrowUpCircle
+                style={{
+                  color: "#6D2980",
+                  fontSize: "26px",
+                  flexShrink: 0,
+                }}
+              />
+            </span>
           </div>
         </div>
 

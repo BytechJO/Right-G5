@@ -68,27 +68,29 @@ const WB_Unit8_Page46_Q3 = () => {
   // INPUT
   // ------------------------
 
-  const inputField = (i, width = "260px") => (
-    <input
-      type="text"
-      value={studentAnswers[i]}
-      disabled={locked}
-      onChange={(e) => handleChange(i, e.target.value)}
-      className="
+  const inputField = (i) => (
+    <div className="relative inline-flex flex-1">
+      <input
+        type="text"
+        value={studentAnswers[i]}
+        disabled={locked}
+        onChange={(e) => handleChange(i, e.target.value)}
+        className="
+        w-full
         border-0
         border-b
         border-black
         outline-none
         bg-transparent
+
         text-[18px]
         text-[#6D2980]
         font-semibold
+
         px-1
       "
-      style={{
-        width,
-      }}
-    />
+      />
+    </div>
   );
 
   return (
@@ -111,63 +113,92 @@ const WB_Unit8_Page46_Q3 = () => {
         </h5>
 
         {/* QUESTIONS */}
-
         <div className="flex flex-col gap-8 leading-loose">
           {/* QUESTION 1 */}
 
           <div>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="font-bold">1</span>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="font-bold mr-1">1</span>
 
-              <div>Can {inputField(0)} please help me carry these books?</div>
+              <span>Can</span>
+
+              {inputField(0)}
+
+              <span>please help me carry these books?</span>
             </div>
 
-            <div className="pl-[35px] ">
-              Sure, {inputField(1, "350px")} will help.
+            <div className="pl-[25px] flex items-center gap-2">
+              <span>Sure,</span>
+
+              {inputField(1)}
+
+              <span>will help.</span>
             </div>
           </div>
 
           {/* QUESTION 2 */}
 
           <div>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="font-bold">2</span>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="font-bold mr-1">2</span>
 
-              <div className="">
-                Is {inputField(2)} ready for the hot-air balloon ride?
-              </div>
+              <span>Is</span>
+
+              {inputField(2)}
+
+              <span>ready for the hot-air balloon ride?</span>
             </div>
 
-            <div className="pl-[35px] ">
-              No, there’s {inputField(3, "320px")} who is ready.
+            <div className="pl-[25px] flex items-center gap-2">
+              <span>No, there’s</span>
+
+              {inputField(3)}
+
+              <span>who is ready.</span>
             </div>
           </div>
 
           {/* QUESTION 3 */}
 
           <div>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="font-bold">3</span>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="font-bold mr-1">3</span>
 
-              <div>Will {inputField(4, "330px")} visit me today?</div>
+              <span>Will</span>
+
+              {inputField(4)}
+
+              <span>visit me today?</span>
             </div>
 
-            <div className="pl-[35px] ">
-              Yes, {inputField(5, "330px")} is coming over.
+            <div className="pl-[25px] flex items-center gap-2">
+              <span>Yes,</span>
+
+              {inputField(5)}
+
+              <span>is coming over.</span>
             </div>
           </div>
 
           {/* QUESTION 4 */}
 
           <div>
-            <div className="flex items-center gap-3 mb-5">
-              <span className="font-bold">4</span>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="font-bold mr-1">4</span>
 
-              <div>Did you ride {inputField(6, "360px")} in the carnival?</div>
+              <span>Did you ride</span>
+
+              {inputField(6)}
+
+              <span>in the carnival?</span>
             </div>
 
-            <div className="pl-[35px] ">
-              Yes, I rode {inputField(7, "360px")} .
+            <div className="pl-[25px] flex items-center gap-2">
+              <span>Yes, I rode</span>
+
+              {inputField(7)}
+
+              <span>.</span>
             </div>
           </div>
         </div>

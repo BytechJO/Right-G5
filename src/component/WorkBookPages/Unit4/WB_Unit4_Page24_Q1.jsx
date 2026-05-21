@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 const WB_Unit4_Page24_Q1 = () => {
   const correctWords = [
@@ -340,9 +341,17 @@ const WB_Unit4_Page24_Q1 = () => {
         {/* QUESTION 1 */}
         <div className="mb-10">
           <div className="flex items-start gap-3 mb-5">
-            <span className="font-bold">1</span>
-
-            <span>Circle all the adverbs of frequency in the story.</span>
+            <span className="flex items-center gap-2">
+              <span className="font-bold mr-2">1</span>
+              Circle all the adverbs of frequency in the story.
+              <HiArrowUpCircle
+                style={{
+                  color: "#6D2980",
+                  fontSize: "26px",
+                  flexShrink: 0,
+                }}
+              />
+            </span>
           </div>
         </div>
 

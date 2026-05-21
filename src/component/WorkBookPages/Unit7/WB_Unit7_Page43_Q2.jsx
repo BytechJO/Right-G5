@@ -180,30 +180,52 @@ const WB_Unit7_Page43_Q2 = () => {
             border: "2px solid #8C3FAF",
             borderRadius: "10px",
             padding: "14px 16px",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: "14px",
             background: "#fff",
           }}
         >
+          {/* الجزء العلوي */}
+
           <div
             style={{
-              flex: 1,
               fontSize: "17px",
-              lineHeight: "2",
+              lineHeight: "1.7",
               color: "#3d2b1f",
               textAlign: "left",
             }}
           >
-            {storyWords.map((word, index) => renderWord(word, index))}
+            {storyWords
+              .slice(0, 55)
+              .map((word, index) => renderWord(word, index))}
           </div>
+
+          {/* الجزء السفلي */}
 
           <div
             style={{
-              flexShrink: 0,
-              alignSelf: "flex-end",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "14px",
+              marginTop: "2px",
             }}
           >
+            {/* النص */}
+
+            <div
+              style={{
+                flex: 1,
+                fontSize: "17px",
+                lineHeight: "1.7",
+                color: "#3d2b1f",
+                textAlign: "left",
+              }}
+            >
+              {storyWords
+                .slice(55)
+                .map((word, index) => renderWord(word, index + 55))}
+            </div>
+
+            {/* الصورة */}
+
             <img
               src={springImg}
               alt=""
@@ -211,7 +233,8 @@ const WB_Unit7_Page43_Q2 = () => {
                 width: "220px",
                 height: "170px",
                 objectFit: "contain",
-                display: "block",
+                flexShrink: 0,
+                marginTop: "4px",
               }}
             />
           </div>

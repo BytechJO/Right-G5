@@ -234,7 +234,7 @@ const WB_Unit7_Page44_Q2 = () => {
             src={roomImg}
             alt=""
             style={{
-              width: "70%",
+              width: "55%",
               height: "auto",
               objectFit: "contain",
             }}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 // IMAGES
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U6/Page 35/Asset 8.svg";
@@ -255,25 +256,25 @@ Fred and his friends might meet at the science fair tomorrow. Each one of them w
         const selected = selectedWords.includes(`${cleanWord}-${index}`);
 
         return (
-          <button
+          <span
             key={index}
-            type="button"
-            disabled={locked}
-            onClick={() => toggleWord(`${cleanWord}-${index}`)}
+            onClick={() => {
+              if (!locked) {
+                toggleWord(`${cleanWord}-${index}`);
+              }
+            }}
             style={{
               display: "inline",
-              background: "transparent",
-              border: selected ? "2px solid #6D2980" : "2px solid transparent",
+
+              outline: selected ? "2px solid #6D2980" : "2px solid transparent",
+
               borderRadius: "999px",
-              padding: "0 4px",
-              margin: "0 1px",
+
               cursor: locked ? "default" : "pointer",
-              lineHeight: "inherit",
-              verticalAlign: "baseline",
             }}
           >
-            {word}
-          </button>
+            {word}{" "}
+          </span>
         );
       }
 
@@ -352,7 +353,7 @@ Fred and his friends might meet at the science fair tomorrow. Each one of them w
 
         {/* PARAGRAPH */}
 
-        <div className="leading-[1.6] mb-8 px-10 w-[110%]">
+        <div className="leading-[1.7] mb-8 px-10 w-[110%]">
           {renderParagraph()}
         </div>
 
@@ -377,9 +378,17 @@ Fred and his friends might meet at the science fair tomorrow. Each one of them w
 
         <div className="mb-8">
           <div className="flex items-start gap-4 mb-4">
-            <span className="font-bold">1</span>
-
-            <span>Circle each modal verb in the story.</span>
+            <span className="flex items-center gap-2">
+              <span className="font-bold mr-2">1</span>
+              Circle each modal verb in the story.
+              <HiArrowUpCircle
+                style={{
+                  color: "#6D2980",
+                  fontSize: "26px",
+                  flexShrink: 0,
+                }}
+              />
+            </span>
           </div>
         </div>
 

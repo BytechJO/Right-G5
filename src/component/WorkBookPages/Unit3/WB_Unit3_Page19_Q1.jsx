@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U3/Page 19/SVG/Asset 17.svg";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 const WB_Unit3_Page19_Q1 = () => {
   const linkingVerbIndexes = [2, 7, 12, 31, 59, 88, 92, 102, 105, 75, 108];
@@ -375,9 +376,17 @@ const WB_Unit3_Page19_Q1 = () => {
           {/* 1 */}
           <div>
             <div className="flex gap-3 mb-4">
-              <span className="font-bold">1</span>
-
-              <span>Circle the linking verbs in the story.</span>
+              <span className="flex items-center gap-2">
+                <span className="font-bold mr-2">1</span>
+                Circle the linking verbs in the story.
+                <HiArrowUpCircle
+                  style={{
+                    color: "#6D2980",
+                    fontSize: "26px",
+                    flexShrink: 0,
+                  }}
+                />
+              </span>
             </div>
           </div>
 

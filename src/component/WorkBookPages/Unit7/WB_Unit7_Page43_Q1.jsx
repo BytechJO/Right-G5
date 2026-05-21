@@ -165,26 +165,20 @@ const WB_Unit7_Page43_Q1 = () => {
           Read and circle <span className="text-[#00AEEF]">true</span> or{" "}
           <span className="text-[#00AEEF]">false</span>.
         </h5>
-        {/* STORY */}
-
         <div
           style={{
             border: "2px solid #8C3FAF",
             borderRadius: "10px",
             padding: "14px 16px",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: "14px",
             background: "#fff",
           }}
         >
-          {/* TEXT */}
+          {/* الجزء العلوي الكامل */}
 
           <div
             style={{
-              flex: 1,
               fontSize: "17px",
-              lineHeight: "2",
+              lineHeight: "2.7",
               color: "#3d2b1f",
               textAlign: "left",
             }}
@@ -195,19 +189,38 @@ const WB_Unit7_Page43_Q1 = () => {
             that have openings for air. The wind is blowing lightly. The birds
             are chirping. They were waiting for spring all winter long. Finally,
             it has arrived. There are many fun outdoor games and activities to
-            do. Everyone is keeping busy with something. Hansel is playing tag
-            with Sarah. Stella is counting the flowers that are blooming. Harley
-            is eating his sandwich. Tom is watching the grasshoppers hop.
+            do.
           </div>
 
-          {/* IMAGE */}
+          {/* الجزء السفلي */}
 
           <div
             style={{
-              flexShrink: 0,
-              alignSelf: "flex-end",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "14px",
+              marginTop: "4px",
             }}
           >
+            {/* النص */}
+
+            <div
+              style={{
+                flex: 1,
+                fontSize: "18px",
+                lineHeight: "2.7",
+                color: "#3d2b1f",
+                textAlign: "left",
+              }}
+            >
+              Everyone is keeping busy with something. Hansel is playing tag
+              with Sarah. Stella is counting the flowers that are blooming.
+              Harley is eating his sandwich. Tom is watching the grasshoppers
+              hop.
+            </div>
+
+            {/* الصورة */}
+
             <img
               src={springImg}
               alt=""
@@ -215,7 +228,8 @@ const WB_Unit7_Page43_Q1 = () => {
                 width: "220px",
                 height: "170px",
                 objectFit: "contain",
-                display: "block",
+                flexShrink: 0,
+                marginTop: "4px",
               }}
             />
           </div>

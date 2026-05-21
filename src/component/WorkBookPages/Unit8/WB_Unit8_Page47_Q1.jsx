@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 // IMAGES
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 47/Asset 5.svg";
@@ -359,9 +360,17 @@ looked like ants. It was a ride I’ll never forget.
 
         <div className="mt-10 mb-8">
           <div className="flex items-start gap-4">
-            <span className="font-bold">1</span>
-
-            <span>Underline all the indefinite pronouns in the story.</span>
+            <span className="flex items-center gap-2">
+              <span className="font-bold mr-2">1</span>
+              Underline all the indefinite pronouns in the story.
+              <HiArrowUpCircle
+                style={{
+                  color: "#6D2980",
+                  fontSize: "26px",
+                  flexShrink: 0,
+                }}
+              />
+            </span>
           </div>
         </div>
 

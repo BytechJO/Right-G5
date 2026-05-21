@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { HiArrowUpCircle } from "react-icons/hi2";
 
 // IMAGES
 import grillImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 28/Asset 12.svg";
@@ -469,8 +470,17 @@ const WB_Unit5_Page28_Q1 = () => {
         {/* Q1 */}
         <div className="mb-10">
           <div className="mb-5">
-            <span className="font-bold mr-2">1</span>
-            Underline all the vocabulary words and write them down below.
+            <span className="flex items-center gap-2">
+              <span className="font-bold mr-2">1</span>
+              Underline all the vocabulary words and write them down below.
+              <HiArrowUpCircle
+                style={{
+                  color: "#6D2980",
+                  fontSize: "26px",
+                  flexShrink: 0,
+                }}
+              />
+            </span>
           </div>
 
           <div className="grid grid-cols-2 gap-y-5 gap-x-14">

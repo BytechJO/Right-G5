@@ -380,7 +380,7 @@ const WB_Unit5_Page29_Q3 = () => {
 
         {/* QUESTIONS */}
 
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-[10vh]">
           {sentences.map((sentence, index) => (
             <div key={index} className="w-full">
               {/* ROW */}

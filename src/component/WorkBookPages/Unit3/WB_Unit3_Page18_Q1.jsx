@@ -112,7 +112,7 @@ const WB_Unit3_Page18_Q1 = () => {
                   border: "none",
                   fontSize: "18px",
                   cursor: "pointer",
-                  padding: "2px 6px",
+                  padding: "2px 6px",whiteSpace: "nowrap",
                 }}
               >
                 {word}
