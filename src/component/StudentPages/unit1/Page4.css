@@ -115,17 +115,7 @@
   cursor: pointer;
   padding: 5px;
 }
-.click-icon-page5 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  bottom: 10.5%;
-  right: 37%;
 
-  cursor: pointer;
-}
 
 .header-title-page4 {
   font-family: "Fredoka", sans-serif;

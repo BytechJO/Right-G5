@@ -13,6 +13,7 @@
   transform: translate(-50%, -50%);
   cursor: pointer;
   padding: 5px;
+  
 }
 #CD-1-page5 {
   top: 3%;
@@ -35,8 +36,8 @@
 }
 
 .click-icon-page5 {
-  bottom: 87.5%;
-  right: 69%;
+  top: 6.5%;
+    right: 69.2%;
 }
 .headset-icon-CD-page5-1 {
   position: absolute;

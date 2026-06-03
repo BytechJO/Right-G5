@@ -9,14 +9,14 @@ import RightSidebar from "./Book/Sidebars/RightSidebar";
 // === cover img ===
 import workbookCover from "../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 1.png";
 import stbookCover from "../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 1.png";
-import teacherBookCover from "../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 1.png";
+import teacherBookCover from "../assets/imgs/pages/G5 TB/Right 2nd edition TB G5_Page_001.png";
 
 // === VIEWERS ===
 
 // === POPUP ===
 import Popup from "./Popup/Popup";
 import LessonNavigator from "./StudentPages/LessonNavigator";
-import teacherPdf from "../../public/Right International TB G5-Apple’s iMac (3).pdf";
+import teacherPdf from "../assets/Right International TB G5-Apple’s iMac (3).pdf";
 
 // === ASSETS ===
 import logo from "../assets/Page 01/PMAAlogo.svg";
