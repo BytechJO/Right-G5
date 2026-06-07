@@ -344,10 +344,7 @@ const Unit2_Page5_Q1 = () => {
   return (
     <div className="flex flex-col items-center p-[30px]">
       <div
-        style={{
-          width: "60%",
-          margin: "0 auto",
-        }}
+      className="div-forall"
       >
         {/* HEADER */}
         <div

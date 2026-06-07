@@ -164,7 +164,7 @@ const Review4_Page2_Q1 = () => {
             style={{
               position: "relative",
               display: "grid",
-              gridTemplateColumns: "140px 180px 1fr auto",
+              gridTemplateColumns: "140px 124px 0.5fr auto",
               alignItems: "center",
               gap: "20px",
               paddingLeft: "40px",
@@ -192,7 +192,7 @@ const Review4_Page2_Q1 = () => {
               (often) &nbsp; (he)
             </div>
 
-            {input(0, "w-[500px]")}
+            {input(0, "w-[300px]")}
 
             <span
               style={{
@@ -209,7 +209,7 @@ const Review4_Page2_Q1 = () => {
             style={{
               position: "relative",
               display: "grid",
-              gridTemplateColumns: "140px 180px 1fr auto",
+              gridTemplateColumns: "140px 124px 0.5fr auto",
               alignItems: "center",
               gap: "20px",
               paddingLeft: "40px",
@@ -237,7 +237,7 @@ const Review4_Page2_Q1 = () => {
               (rarely) &nbsp; (she)
             </div>
 
-            {input(1, "w-[500px]")}
+            {input(1, "w-[300px]")}
 
             <span
               style={{
@@ -253,7 +253,7 @@ const Review4_Page2_Q1 = () => {
             style={{
               position: "relative",
               display: "grid",
-              gridTemplateColumns: "140px 180px 1fr auto",
+              gridTemplateColumns: "140px 124px 0.5fr auto",
               alignItems: "center",
               gap: "20px",
               paddingLeft: "40px",
@@ -281,7 +281,7 @@ const Review4_Page2_Q1 = () => {
               (usually) &nbsp; (I)
             </div>
 
-            {input(2, "w-[500px]")}
+            {input(2, "w-[300px]")}
 
             <span
               style={{

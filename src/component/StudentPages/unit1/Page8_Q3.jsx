@@ -161,10 +161,7 @@ const Page8_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          width: "100%",
-          maxWidth: "900px",
-          display: "flex",
-          flexDirection: "column",
+         
           gap: "30px",
         }}
       >

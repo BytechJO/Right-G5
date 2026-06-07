@@ -160,7 +160,7 @@ const Unit2_Page6_Q3 = () => {
 
   return (
     <div className="p-8 flex flex-col items-center">
-      <div className="w-full max-w-[900px]">
+      <div className="div-forall">
         <h5 className="header-title-page8 mb-7">
           <span className="ex-A mr-2">E</span>
           Circle the wrong word and write the correct one

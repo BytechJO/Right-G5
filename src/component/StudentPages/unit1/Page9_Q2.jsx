@@ -162,9 +162,9 @@ const Page9_Q2 = () => {
 
   return (
     <div className="flex flex-col items-center p-8">
-      <div className="w-full max-w-[900px]">
+      <div className="div-forall" style={{gap:"20px"}}>
         {/* Title */}
-        <h5 className="header-title-page8 mb-15">
+        <h5 className="header-title-page8 mb-2">
           <span className="ex-A mr-2">E</span>
           Listen, read, and answer.
         </h5>
@@ -173,7 +173,7 @@ const Page9_Q2 = () => {
           captions={captions}
           stopAtSecond={6.1}
         />
-        <div className="space-y-6 text-[18px] mt-15  mb-15">
+        <div className="space-y-6 text-[18px] mt-5  mb-10">
           {/* 1 */}
           <div>
             <div>1. How deep is the pool?</div>

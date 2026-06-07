@@ -127,13 +127,13 @@ const Page9_Q3 = () => {
 
   return (
     <div className="p-8 flex flex-col items-center">
-      <div className="w-full max-w-[900px]">
+      <div className="div-forall">
         <h5 className="header-title-page8 mb-25">
           <span className="ex-A mr-2">F</span>
           Match each question to its answer.
         </h5>
 
-        <div className="grid grid-cols-2 gap-25 text-[22px]">
+        <div className="grid grid-cols-2 gap-15 text-[20px]">
           {/* LEFT */}
           <div className="space-y-15">
             <div>{input(0)} 1. How do you spell your name?</div>

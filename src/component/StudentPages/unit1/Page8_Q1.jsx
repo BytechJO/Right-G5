@@ -30,9 +30,7 @@ const Page8_Q1 = () => {
     >
       <div
         className="div-forall"
-        style={{
-          width: "clamp(850px, 72%, 1200px)",
-        }}
+        
       >
         <div
           style={{
