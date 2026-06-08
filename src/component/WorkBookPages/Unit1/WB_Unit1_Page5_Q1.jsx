@@ -143,7 +143,6 @@ const WB_Unit1_Page5_Q1 = () => {
         ref={(el) => (inputsRef.current[`${wordIndex}-${letterIndex}`] = el)}
         maxLength={1}
         onFocus={(e) => e.target.select()}
-        maxLength={1}
         value={answers[wordIndex][letterIndex]}
         disabled={locked || result[`${wordIndex}-${letterIndex}`] === true}
         onChange={(e) => handleChange(wordIndex, letterIndex, e.target.value)}

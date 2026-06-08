@@ -317,7 +317,6 @@ const WB_Unit2_Page9_Q1 = () => {
               <img
                 src={questions[1].image}
                 alt="gardener"
-                alt="father-son"
                 style={{
                   width: "165px",
                   height: "auto",
