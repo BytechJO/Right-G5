@@ -1,8 +1,136 @@
+import clip0 from "../../../assets/audio/ClassBook/U3/Page 26 - B/Item_001_kitchen_closets.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U3/Page 26 - B/Item_002_bread_made_with_caraway_seed.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U3/Page 26 - B/Item_003_said_about_something_that_is_tasty.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U3/Page 26 - B/Item_004_a_short_way_to_say_refrigerator.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U3/Page 26 - B/Item_005_small_salty_fish.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import Button from "../../Button";
 
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const Unit3_Page5_Q2 = () => {
+  const [activeCell, setActiveCell] = useState("0-3");
+  const focusFrame = React.useRef(null);
+  const cancelFocus = () => {
+    if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    focusFrame.current = null;
+  };
+  const cellWords = (row, col) =>
+    words.filter((word) =>
+      Array.from(word.word).some(
+        (_, i) =>
+          (word.dir === "down" ? word.row + i : word.row) === row &&
+          (word.dir === "across" ? word.col + i : word.col) === col,
+      ),
+    );
+  const cellLocked = (row, col) =>
+    locked || cellWords(row, col).some((word) => result[word.key] === true);
+  const moveCell = (row, col, dr, dc) => {
+    let r = row + dr,
+      c = col + dc;
+    while (r >= 0 && r < 10 && c >= 0 && c < 12) {
+      if (isCellActive(r, c) && !cellLocked(r, c)) {
+        const key = r + "-" + c;
+        setActiveCell(key);
+        cancelFocus();
+        focusFrame.current = requestAnimationFrame(() => {
+          focusFrame.current = null;
+          inputsRef.current[key]?.focus({ preventScroll: true });
+        });
+        return;
+      }
+      r += dr;
+      c += dc;
+    }
+  };
+  const cellKey = (event, row, col) => {
+    if (event.key === "Tab") return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat) {
+        const next = direction === "across" ? "down" : "across";
+        setDirection(next);
+        setAnnouncement(
+          "Writing " + next + ". Arrow keys move between available letters.",
+        );
+      }
+      return;
+    }
+    const steps = {
+      ArrowLeft: [0, -1],
+      ArrowRight: [0, 1],
+      ArrowUp: [-1, 0],
+      ArrowDown: [1, 0],
+    };
+    if (steps[event.key]) {
+      event.preventDefault();
+      event.stopPropagation();
+      const [dr, dc] = steps[event.key];
+      setDirection(dr ? "down" : "across");
+      moveCell(row, col, dr, dc);
+      return;
+    }
+    if (event.key === "Backspace" || event.key === "Delete") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat && !cellLocked(row, col)) {
+        handleChange(row, col, "");
+        if (event.key === "Backspace")
+          moveCell(
+            row,
+            col,
+            direction === "across" ? 0 : -1,
+            direction === "across" ? -1 : 0,
+          );
+      }
+    }
+  };
+  React.useEffect(
+    () => () => {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    },
+    [],
+  );
+
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = useState("");
+
   const [result, setResult] = useState({});
   const [locked, setLocked] = useState(false);
   const inputsRef = React.useRef({});
@@ -20,29 +148,31 @@ const Unit3_Page5_Q2 = () => {
     { key: "d4", word: "rye", row: 5, col: 6, dir: "down" },
     { key: "a5", word: "sardines", row: 7, col: 0, dir: "across" },
   ];
-  const normalize = (str) => str.toLowerCase().trim();
+  const normalize = normalizeAnswer;
 
   // ✅ change
   const handleChange = (row, col, value) => {
-    if (locked) return;
-
-    const newGrid = grid.map((r) => [...r]);
-    newGrid[row][col] = value;
-    setGrid(newGrid);
-
-    if (value) {
-      let next = null;
-
-      if (direction === "across") {
-        next = inputsRef.current[`${row}-${col + 1}`];
-      }
-
-      if (direction === "down") {
-        next = inputsRef.current[`${row + 1}-${col}`];
-      }
-
-      if (next) next.focus();
-    }
+    if (cellLocked(row, col)) return;
+    const letter = value.slice(-1);
+    if (letter && !/^[a-z]$/i.test(letter)) return;
+    setGrid((previous) =>
+      previous.map((line, r) =>
+        r === row ? line.map((v, c) => (c === col ? letter : v)) : line,
+      ),
+    );
+    setResult((previous) => {
+      const next = { ...previous };
+      for (const word of cellWords(row, col))
+        if (next[word.key] !== true) delete next[word.key];
+      return next;
+    });
+    if (letter)
+      moveCell(
+        row,
+        col,
+        direction === "across" ? 0 : 1,
+        direction === "across" ? 1 : 0,
+      );
   };
 
   // ✅ check active cell
@@ -60,6 +190,11 @@ const Unit3_Page5_Q2 = () => {
   // ✅ check answers
   const checkAnswers = () => {
     if (locked) return;
+    cancelFocus();
+
+    audio.stop();
+
+    if (locked) return;
 
     // تحقق تعبئة
     for (let w of words) {
@@ -68,7 +203,13 @@ const Unit3_Page5_Q2 = () => {
         const c = w.dir === "across" ? w.col + i : w.col;
 
         if (!grid[r][c]) {
-          ValidationAlert.info("Please complete all fields.");
+          (setAnnouncement(
+            String("Please complete all fields.")
+              .replace(/<[^>]*>/g, " ")
+              .replace(/\s+/g, " ")
+              .trim(),
+          ),
+            ValidationAlert.info("Please complete all fields."));
           return;
         }
       }
@@ -108,33 +249,59 @@ const Unit3_Page5_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   // ✅ show answers
   const showAnswers = () => {
-    const newGrid = grid.map((r) => [...r]);
-
-    words.forEach((w) => {
-      for (let i = 0; i < w.word.length; i++) {
-        const r = w.dir === "down" ? w.row + i : w.row;
-        const c = w.dir === "across" ? w.col + i : w.col;
-
-        newGrid[r][c] = w.word[i];
+    audio.stop();
+    cancelFocus();
+    const next = grid.map((row) => [...row]);
+    for (const word of words)
+      for (let i = 0; i < word.word.length; i++) {
+        const r = word.dir === "down" ? word.row + i : word.row,
+          c = word.dir === "across" ? word.col + i : word.col;
+        next[r][c] = word.word[i];
       }
-    });
-
-    setGrid(newGrid);
+    setGrid(next);
+    setResult(Object.fromEntries(words.map((word) => [word.key, true])));
     setLocked(true);
+    setAnnouncement("All crossword answers shown and locked.");
   };
 
   const reset = () => {
+    cancelFocus();
+    setActiveCell("0-3");
+    setDirection("across");
+
+    audio.stop();
+    setAnnouncement("Answers, feedback and locks cleared.");
+
     setGrid(
       Array(10)
         .fill("")
@@ -154,13 +321,36 @@ const Unit3_Page5_Q2 = () => {
     return null;
   };
 
+  const tabCell = (() => {
+    if (!cellLocked(...activeCell.split("-").map(Number))) return activeCell;
+    for (let row = 0; row < 10; row++)
+      for (let col = 0; col < 12; col++)
+        if (isCellActive(row, col) && !cellLocked(row, col))
+          return row + "-" + col;
+    return null;
+  })();
   return (
-    <div className="flex flex-col items-center p-8">
-      <div className="div-forall">
-        <h5 className="header-title-page8 mb-20">
-          <span className="ex-A mr-2.5">B</span>
-          Use the clues to complete the puzzle.
-        </h5>
+    <div
+      data-exercise-scope="Unit3_Page5_Q2.jsx"
+      className="flex flex-col items-center p-8"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit3_Page5_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit3_Page5_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit3_Page5_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+
+      <div className="div-forall" style={{gap:"50px"}}>
+        <ExerciseHeader
+          sectionLetter="B"
+          title={<>Use the clues to complete the puzzle.</>}
+          subTitle="Solve the easiest clues first, then use the crossing letters to help complete the remaining words."
+        />
 
         <div className="flex gap-16">
           {/* GRID */}
@@ -185,6 +375,13 @@ const Unit3_Page5_Q2 = () => {
                       height: "40px",
                       border: active ? "2px solid #713083" : "none",
                       position: "relative",
+                      borderColor: cellWords(row, col).some(
+                        (word) => result[word.key] === true,
+                      )
+                        ? "#16a34a"
+                        : active
+                          ? "#713083"
+                          : undefined,
                     }}
                   >
                     {number && (
@@ -249,6 +446,29 @@ const Unit3_Page5_Q2 = () => {
 
                     {active && (
                       <input
+                        onKeyUp={fieldKeys.onKeyUp}
+                        onKeyDown={(event) => cellKey(event, row, col)}
+                        tabIndex={tabCell === `${row}-${col}` ? 0 : -1}
+                        aria-describedby={cellWords(row, col)
+                          .map((word) => "unit3-crossword-clue-" + word.key)
+                          .join(" ")}
+                        title={`Row ${row + 1}, column ${col + 1}. ${direction}. Arrow keys move; Enter or Space changes direction.`}
+                        aria-label={`Crossword row ${row + 1}, column ${col + 1}; ${cellWords(
+                          row,
+                          col,
+                        )
+                          .map(
+                            (word) =>
+                              word.key.slice(1) +
+                              " " +
+                              word.dir +
+                              ", letter " +
+                              ((word.dir === "down"
+                                ? row - word.row
+                                : col - word.col) +
+                                1),
+                          )
+                          .join("; ")}`}
                         ref={(el) => (inputsRef.current[`${row}-${col}`] = el)}
                         onClick={() => {
                           if (inputsRef.current[`${row}-${col + 1}`]) {
@@ -257,26 +477,15 @@ const Unit3_Page5_Q2 = () => {
                             setDirection("down");
                           }
                         }}
-                        onFocus={(e) => e.target.select()} // 🔥 المهم
+                        onFocus={(event) => {
+                          setActiveCell(`${row}-${col}`);
+                          event.target.select();
+                        }} // 🔥 المهم
                         value={grid[row][col]}
                         maxLength={1}
-                        disabled={
-                          locked ||
-                          words.some((w) => {
-                            if (result[w.key] !== true) return false;
-
-                            for (let i = 0; i < w.word.length; i++) {
-                              const r = w.dir === "down" ? w.row + i : w.row;
-                              const c = w.dir === "across" ? w.col + i : w.col;
-
-                              if (r === row && c === col) return true;
-                            }
-
-                            return false;
-                          })
-                        }
-                        onChange={(e) =>
-                          handleChange(row, col, e.target.value.toLowerCase())
+                        disabled={cellLocked(row, col)}
+                        onChange={(event) =>
+                          handleChange(row, col, event.target.value)
                         }
                         className="w-full h-full text-center font-bold text-[#6D2980]"
                       />
@@ -291,34 +500,96 @@ const Unit3_Page5_Q2 = () => {
           <div style={{ width: "300px" }}>
             <div className="p-4 bg-[#D4C7DC] rounded-xl mb-10">
               <h4 className="font-bold mb-2 text-[#713083]">Down</h4>
-              <p>
-                <b>1</b> kitchen closets
+              <p id="unit3-crossword-clue-d1">
+                <AudioText
+                  audio={audio}
+                  id="clue-d1"
+                  src={clip0}
+                  label="Hear clue 1: kitchen closets"
+                >
+                  <b>1</b> kitchen closets
+                </AudioText>
               </p>
-              <p>
-                <b>4</b> bread made with caraway seed
+              <p id="unit3-crossword-clue-d4">
+                <AudioText
+                  audio={audio}
+                  id="clue-d4"
+                  src={clip1}
+                  label="Hear clue 4: bread made with caraway seed"
+                >
+                  <b>4</b> bread made with caraway seed
+                </AudioText>
               </p>
             </div>
 
             <div className="p-4 bg-[#D4C7DC] rounded-xl">
               <h4 className="font-bold mb-2 text-[#713083]">Across</h4>
-              <p>
-                <b>2</b> said about something that is tasty
+              <p id="unit3-crossword-clue-a2">
+                <AudioText
+                  audio={audio}
+                  id="clue-a2"
+                  src={clip2}
+                  label="Hear clue 2: said about something that is tasty"
+                >
+                  <b>2</b> said about something that is tasty
+                </AudioText>
               </p>
-              <p>
-                <b>3</b> a short way to say refrigerator
+              <p id="unit3-crossword-clue-a3">
+                <AudioText
+                  audio={audio}
+                  id="clue-a3"
+                  src={clip3}
+                  label="Hear clue 3: a short way to say refrigerator"
+                >
+                  <b>3</b> a short way to say refrigerator
+                </AudioText>
               </p>
-              <p>
-                <b>5</b> small salty fish
+              <p id="unit3-crossword-clue-a5">
+                <AudioText
+                  audio={audio}
+                  id="clue-a5"
+                  src={clip4}
+                  label="Hear clue 5: small salty fish"
+                >
+                  <b>5</b> small salty fish
+                </AudioText>
               </p>
             </div>
           </div>
         </div>
 
-        <Button
-          handleShowAnswer={showAnswers}
-          handleStartAgain={reset}
-          checkAnswers={checkAnswers}
-        />
+        <div className="action-buttons-container">
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Start Again"
+            ref={resetButtonRef}
+            onClick={reset}
+            className="try-again-button"
+          >
+            Start Again ↻
+          </button>
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Show Answer"
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Check Answer"
+            onClick={checkAnswers}
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
+            className="check-button2"
+          >
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );

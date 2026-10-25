@@ -1,3 +1,6 @@
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
@@ -8,7 +11,42 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tast
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 25.svg";
 import img6 from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 24/SVG/Asset 11.svg";
 
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const GrammarB = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = useState("");
+
   const correct = [
     { inputs: ["tall"], select: "tall" }, // 1
     { inputs: ["is", "sad"], select: "sad" }, // 2
@@ -32,36 +70,47 @@ const GrammarB = () => {
 
   // ✍️ كتابة
   const handleInput = (q, i, val) => {
-    if (locked) return;
-
-    const updated = [...answers];
-    updated[q].inputs[i] = val.toLowerCase();
-    setAnswers(updated);
-
-    setResult((prev) => {
-      const copy = [...prev];
-      copy[q] = undefined;
-      return copy;
+    if (locked || result[q]?.inputs?.[i] === true) return;
+    setAnswers((previous) =>
+      previous.map((answer, j) =>
+        j === q
+          ? {
+              ...answer,
+              inputs: answer.inputs.map((v, k) => (k === i ? val : v)),
+            }
+          : answer,
+      ),
+    );
+    setResult((previous) => {
+      const next = [...previous];
+      next[q] = { ...next[q], inputs: [...(next[q]?.inputs || [])] };
+      next[q].inputs[i] = undefined;
+      return next;
     });
   };
 
   // 🎯 اختيار
   const handleSelect = (q, val) => {
-    if (locked) return;
-
-    const updated = [...answers];
-    updated[q].select = val;
-    setAnswers(updated);
-
-    setResult((prev) => {
-      const copy = [...prev];
-      copy[q] = undefined;
-      return copy;
+    if (locked || result[q]?.select === true) return;
+    setAnswers((previous) =>
+      previous.map((answer, j) =>
+        j === q ? { ...answer, select: val } : answer,
+      ),
+    );
+    setResult((previous) => {
+      const next = [...previous];
+      next[q] = { ...next[q], select: undefined };
+      return next;
     });
+    setAnnouncement("Item " + (q + 1) + ": " + val + " selected.");
   };
 
   // ✅ CHECK
   const checkAnswers = () => {
+    if (locked) return;
+
+    audio.stop();
+
     if (locked) return;
     const hasEmpty = answers.some((q) => {
       const emptyInput = q.inputs.some((inp) => inp.trim() === "");
@@ -70,7 +119,13 @@ const GrammarB = () => {
     });
 
     if (hasEmpty) {
-      ValidationAlert.info();
+      (setAnnouncement(
+        String("Complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info());
       return;
     }
     let totalScore = 0;
@@ -86,7 +141,7 @@ const GrammarB = () => {
       ans.inputs.forEach((val, idx) => {
         total++;
 
-        if (val === correctAns.inputs[idx]) {
+        if (normalizeAnswer(val) === normalizeAnswer(correctAns.inputs[idx])) {
           res[i].inputs[idx] = true;
           totalScore++;
         } else {
@@ -111,23 +166,55 @@ const GrammarB = () => {
     `;
 
     if (totalScore === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (totalScore === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   // 👀 SHOW
   const showAnswers = () => {
-    setAnswers(correct);
+    audio.stop();
+    setAnswers(
+      correct.map((answer) => ({ ...answer, inputs: [...answer.inputs] })),
+    );
+    setResult(
+      correct.map((answer) => ({
+        inputs: answer.inputs.map(() => true),
+        select: true,
+      })),
+    );
     setLocked(true);
+    setAnnouncement("All correct words and selections shown and locked.");
   };
 
   // 🔄 RESET
   const reset = () => {
+    audio.stop();
+    setAnnouncement("Answers, feedback and locks cleared.");
+
     setAnswers([
       { inputs: [""], select: "" },
       { inputs: ["", ""], select: "" },
@@ -142,18 +229,26 @@ const GrammarB = () => {
 
   // UI helpers
   const input = (q, i) => (
-    <span className="relative mx-1">
+    <span className="u3gb-field">
       <input
+        style={{
+          borderBottomColor:
+            locked || result[q]?.inputs?.[i] === true
+              ? "#16a34a"
+              : result[q]?.inputs?.[i] === false
+                ? "#ef4444"
+                : undefined,
+        }}
+        {...fieldKeys}
+        aria-invalid={result[q]?.inputs?.[i] === false}
+        title={`Item ${q + 1}, blank ${i + 1}: complete the sentence about ${["the man", "the girl", "the boy", "the lions", "the announcer", "the mechanics"][q]}`}
+        aria-label={`Item ${q + 1}, blank ${i + 1}: complete the sentence about ${["the man", "the girl", "the boy", "the lions", "the announcer", "the mechanics"][q]}`}
         value={answers[q].inputs[i]}
-        disabled={locked || result[q]?.inputs[i] === true}
+        disabled={locked || result[q]?.inputs?.[i] === true}
         onChange={(e) => handleInput(q, i, e.target.value)}
-        className={`w-20 border-b text-center font-bold text-[#6D2980]  ${
-          result[i] === false
-            ? "border-red-500 text-[#6D2980]"
-            : "border-black text-[#6D2980]"
-        }`}
+        className={`u3gb-input ${q === 0 ? "u3gb-input-wide" : ""}`}
       />
-      {result[q]?.inputs[i] === false && (
+      {result[q]?.inputs?.[i] === false && (
         <span
           style={{
             position: "absolute",
@@ -186,11 +281,18 @@ const GrammarB = () => {
     const isWrong = result[q]?.select === false && isSelected;
     return (
       <div
+        {...activationKeys}
+        aria-disabled={locked || result[q]?.select === true}
+        aria-pressed={isSelected}
+        aria-label={`Item ${q + 1}, choose ${text}`}
+        data-choice={true}
+        tabIndex={0}
+        role={"button"}
         onClick={() => {
           if (locked || result[q]?.select === true) return;
           handleSelect(q, text);
         }}
-        className="relative cursor-pointer px-2 py-1 rounded-full text-center transition"
+        className="u3gb-option relative cursor-pointer rounded-full transition"
         style={{
           border: isWrong
             ? "2px solid red"
@@ -201,6 +303,14 @@ const GrammarB = () => {
           fontWeight: isSelected ? "bold" : "normal",
           opacity: result[q] === true ? 0.6 : 1, // شكل disabled
           cursor: result[q] === true ? "not-allowed" : "pointer",
+          borderColor:
+            isSelected && (locked || result[q]?.select === true)
+              ? "#16a34a"
+              : isWrong
+                ? "red"
+                : isSelected
+                  ? "#6D2980"
+                  : "transparent",
         }}
       >
         {text}
@@ -214,16 +324,61 @@ const GrammarB = () => {
     );
   };
   return (
-    <div>
+    <div className="u3gb-root" data-exercise-scope="Unit3_Page3_GrammarB.jsx">
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit3_Page3_GrammarB.jsx"] input:focus-visible,[data-exercise-scope="Unit3_Page3_GrammarB.jsx"] textarea:focus-visible,[data-exercise-scope="Unit3_Page3_GrammarB.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}
+.u3gb-root { width:100%; max-width:1000px; min-width:0; margin-inline:auto; box-sizing:border-box; container-type:inline-size; container-name:unit3-grammar-b; }
+.u3gb-root 
+.u3gb-grid { box-sizing:border-box; padding-inline-start:32px; font-family:Arial,Helvetica,sans-serif; color:#000; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:clamp(12px,2cqi,24px); row-gap:clamp(4px,.6cqi,8px); margin-top:0; font-size:clamp(12px,2.2cqi,18px); line-height:1.3; }
+.u3gb-item { display:grid; grid-template-columns:minmax(0,1fr) max-content clamp(44px,8cqi,72px); align-items:center; column-gap:clamp(4px,.8cqi,10px); min-width:0; }
+.u3gb-prompt { display:flex; align-items:baseline; gap:2px; min-width:0; white-space:nowrap; }
+.u3gb-prompt > span:not(.u3gb-field) { flex:0 0 auto; }
+.u3gb-prompt .font-bold { display:inline-block; margin-right:10px; }
+.u3gb-field { position:relative; display:inline-flex; flex:0 0 auto; align-items:baseline; margin-inline:2px; }
+.u3gb-root .u3gb-input { box-sizing:border-box; width:clamp(30px,6.6cqi,64px); min-width:0; height:1.3em; padding:0; border:0; border-bottom:1px solid black; border-radius:0; outline:none; background:transparent; color:#6D2980; font:inherit; font-weight:bold; text-align:center; }
+.u3gb-root .u3gb-input-wide { width:clamp(56px,11cqi,108px); }
+.u3gb-root 
+.u3gb-options { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:0; min-width:0; }
+.u3gb-root .u3gb-option { box-sizing:border-box; padding:0 2px; text-align:left; line-height:1.15; white-space:nowrap; }
+.u3gb-image { display:block; width:100%; height:clamp(42px,8cqi,72px); object-fit:contain; justify-self:center; }
+@container unit3-grammar-b (max-width:520px) {
+ .u3gb-root 
+ .u3gb-grid { padding-inline-start:0; grid-template-columns:minmax(0,1fr); row-gap:12px; font-size:clamp(14px,4cqi,18px); }
+ .u3gb-item { grid-template-columns:minmax(0,1fr) max-content clamp(48px,16cqi,68px); column-gap:6px; }
+ .u3gb-prompt .font-bold { margin-right:8px; }
+ .u3gb-root .u3gb-input { width:clamp(30px,10cqi,52px); }
+ .u3gb-root .u3gb-input-wide { width:clamp(52px,17cqi,90px); }
+ .u3gb-image { height:64px; }
+ .u3gb-root .u3gb-option { padding:2px 4px; min-height:28px; }
+}
+
+@container unit3-grammar-b (max-width:300px) {
+ .u3gb-actions { flex-wrap:wrap; gap:12px; }
+ .u3gb-actions > .group:last-child > span { left:auto; right:0; transform:none; }
+ .u3gb-item { grid-template-columns:minmax(0,1fr) 52px; row-gap:4px; }
+ .u3gb-prompt { grid-column:1; flex-wrap:wrap; line-height:1.6; }
+ .u3gb-options { grid-column:1; flex-direction:row; flex-wrap:wrap; gap:8px; }
+ .u3gb-image { grid-column:2; grid-row:1 / span 2; }
+}
+`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+
       <h5 className="header-title-page8-read mb-5">
         <span className="ex-A-read mr-2">B</span>
         Look, read, choose, and write.
       </h5>
 
-      <div className="grid grid-cols-2 gap-x-5 gap-y-10 text-[18px] mt-10">
+      <div className="u3gb-grid">
         {/* 1 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">1</span> The man is
@@ -231,17 +386,21 @@ const GrammarB = () => {
             {input(0, 0)}
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(0, "tall")}
             {option(0, "short")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img1} />
+          <img
+            alt={"A man and a boy standing beside each other."}
+            className="u3gb-image"
+            src={img1}
+          />
         </div>
 
         {/* 2 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 whitespace-nowrap ml-5">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">2</span> She
@@ -250,17 +409,21 @@ const GrammarB = () => {
             {input(1, 1)}
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(1, "sad")}
             {option(1, "happy")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img2} />
+          <img
+            alt={"A smiling girl with two ponytails."}
+            className="u3gb-image"
+            src={img2}
+          />
         </div>
 
         {/* 3 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 whitespace-nowrap">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">3</span> The boy
@@ -269,17 +432,21 @@ const GrammarB = () => {
             {input(2, 1)}
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(2, "clean")}
             {option(2, "dirty")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img3} />
+          <img
+            alt={"A boy wearing a shirt with dirty marks."}
+            className="u3gb-image"
+            src={img3}
+          />
         </div>
 
         {/* 4 */}
-        <div className="flex items-center flex-nowrap">
-          <div className="flex items-center gap-2 whitespace-nowrap ml-5">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">4</span> The lions
@@ -288,17 +455,21 @@ const GrammarB = () => {
             {input(3, 1)}
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(3, "sleepy")}
             {option(3, "scary")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img4} />
+          <img
+            alt={"Two lions with open mouths."}
+            className="u3gb-image"
+            src={img4}
+          />
         </div>
 
         {/* 5 */}
-        <div className="flex items-center justify-between ">
-          <div className="flex items-center gap-2">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">5</span> He
@@ -307,17 +478,21 @@ const GrammarB = () => {
             <span>an announcer</span>
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(4, "is")}
             {option(4, "are")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img5} />
+          <img
+            alt={"A presenter on a television screen."}
+            className="u3gb-image"
+            src={img5}
+          />
         </div>
 
         {/* 6 */}
-        <div className="flex items-center justify-between ml-5">
-          <div className="flex items-center gap-2">
+        <div className="u3gb-item">
+          <div className="u3gb-prompt">
             <span>
               {" "}
               <span className="font-bold mr-1">6</span> They
@@ -326,25 +501,33 @@ const GrammarB = () => {
             <span>mechanics</span>
           </div>
 
-          <div className="flex flex-col mx-4">
+          <div className="u3gb-options">
             {option(5, "is")}
             {option(5, "are")}
           </div>
 
-          <img style={{ width: "20%", height: "auto"}} src={img6} />
+          <img
+            alt={"Three mechanics holding tools."}
+            className="u3gb-image"
+            src={img6}
+          />
         </div>
       </div>
-      <div className="flex justify-center gap-6 mt-8">
+      <div className="u3gb-actions flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Start Again"
+            ref={resetButtonRef}
             onClick={reset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
           </span>
@@ -352,14 +535,17 @@ const GrammarB = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Show Answer"
             onClick={showAnswers}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
           </span>
@@ -367,14 +553,19 @@ const GrammarB = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Check Answer"
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
             onClick={checkAnswers}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer
           </span>

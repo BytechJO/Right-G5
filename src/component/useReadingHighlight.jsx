@@ -6,21 +6,34 @@ export const readingText = (node) => {
   if (node == null || typeof node === "boolean") return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(readingText).join("");
-  if (isValidElement(node)) return node.type === "br" ? "\n" : readingText(node.props.children);
+  if (isValidElement(node))
+    return node.type === "br" ? "\n" : readingText(node.props.children);
   return "";
 };
 
 export const createNarrationIndex = (data) => {
   let offset = 0;
-  const words = (data?.segments || []).flatMap((segment) => segment.words || [])
-    .filter((word) => word.text.trim() && Number.isFinite(word.start_time) &&
-      Number.isFinite(word.end_time) && word.end_time >= word.start_time)
+  const words = (data?.segments || [])
+    .flatMap((segment) => segment.words || [])
+    .filter(
+      (word) =>
+        word.text.trim() &&
+        Number.isFinite(word.start_time) &&
+        Number.isFinite(word.end_time) &&
+        word.end_time >= word.start_time,
+    )
     .map((word) => {
       const normalized = normalize(word.text);
-      const entry = { ...word, normalized, from: offset, to: offset + normalized.length };
+      const entry = {
+        ...word,
+        normalized,
+        from: offset,
+        to: offset + normalized.length,
+      };
       offset = entry.to;
       return entry;
-    }).filter((word) => word.normalized);
+    })
+    .filter((word) => word.normalized);
   return { words, text: words.map((word) => word.normalized).join("") };
 };
 
@@ -28,14 +41,20 @@ export const createNarrationIndex = (data) => {
 export const createReadingTrack = (node, narration, from = 0, aliases = []) => {
   const text = readingText(node);
   const tokens = [...text.matchAll(/\S+/g)].map((match) => ({
-    text: match[0], from: match.index, to: match.index + match[0].length,
+    text: match[0],
+    from: match.index,
+    to: match.index + match[0].length,
     normalized: normalize(match[0]),
   }));
   for (const { printed, spoken, whole = false } of aliases) {
     if (whole && tokens.length !== printed.length) continue;
     for (let i = 0; i <= tokens.length - printed.length; i += 1) {
-      if (printed.every((word, j) => tokens[i + j].normalized === normalize(word))) {
-        printed.forEach((_, j) => { tokens[i + j].normalized = normalize(spoken[j]); });
+      if (
+        printed.every((word, j) => tokens[i + j].normalized === normalize(word))
+      ) {
+        printed.forEach((_, j) => {
+          tokens[i + j].normalized = normalize(spoken[j]);
+        });
       }
     }
   }
@@ -44,30 +63,50 @@ export const createReadingTrack = (node, narration, from = 0, aliases = []) => {
   let cursor = from;
   let first = 0;
   tokens.forEach((token, last) => {
-    if (!/[.!?][\u201d\u2019"')]*$/.test(token.text) && last !== tokens.length - 1) return;
+    if (
+      !/[.!?][\u201d\u2019"')]*$/.test(token.text) &&
+      last !== tokens.length - 1
+    )
+      return;
     const parts = tokens.slice(first, last + 1);
     first = last + 1;
     const needle = parts.map((part) => part.normalized).join("");
     if (!needle) return;
     let found = narration.text.indexOf(needle, cursor);
-    while (found !== -1 && (!narration.words.some((word) => word.from === found) ||
-      !narration.words.some((word) => word.to === found + needle.length))) {
+    while (
+      found !== -1 &&
+      (!narration.words.some((word) => word.from === found) ||
+        !narration.words.some((word) => word.to === found + needle.length))
+    ) {
       found = narration.text.indexOf(needle, found + 1);
     }
-    if (found === -1) { unmatched.push(text.slice(parts[0].from, token.to)); return; }
+    if (found === -1) {
+      unmatched.push(text.slice(parts[0].from, token.to));
+      return;
+    }
     let position = found;
     const mapped = parts.map((part) => {
       const begin = position;
       position += part.normalized.length;
       // An extra printed article uses the preceding verified word's timing.
-      const overlaps = narration.words.filter((word) => part.normalized.length
-        ? word.from < position && word.to > begin
-        : word.from < begin && word.to >= begin);
-      return { ...part, start: overlaps[0]?.start_time, end: overlaps.at(-1)?.end_time };
+      const overlaps = narration.words.filter((word) =>
+        part.normalized.length
+          ? word.from < position && word.to > begin
+          : word.from < begin && word.to >= begin,
+      );
+      return {
+        ...part,
+        start: overlaps[0]?.start_time,
+        end: overlaps.at(-1)?.end_time,
+      };
     });
     const timed = mapped.filter((part) => part.start !== undefined);
     if (timed.length) {
-      sentences.push({ start: timed[0].start, end: timed.at(-1).end, words: mapped });
+      sentences.push({
+        start: timed[0].start,
+        end: timed.at(-1).end,
+        words: mapped,
+      });
       cursor = found + needle.length;
     }
   });
@@ -77,14 +116,21 @@ export const createReadingTrack = (node, narration, from = 0, aliases = []) => {
 // Slice the existing React content without discarding underlines, colors or line breaks.
 const sliceContent = (node, from, to) => {
   if (from >= to || node == null || typeof node === "boolean") return null;
-  if (typeof node === "string" || typeof node === "number") return String(node).slice(from, to);
+  if (typeof node === "string" || typeof node === "number")
+    return String(node).slice(from, to);
   if (Array.isArray(node)) {
     let offset = 0;
     return node.map((child, index) => {
       const size = readingText(child).length;
-      const result = sliceContent(child, Math.max(0, from - offset), Math.min(size, to - offset));
+      const result = sliceContent(
+        child,
+        Math.max(0, from - offset),
+        Math.min(size, to - offset),
+      );
       offset += size;
-      return isValidElement(result) ? cloneElement(result, { key: child.key ?? index }) : result;
+      return isValidElement(result)
+        ? cloneElement(result, { key: child.key ?? index })
+        : result;
     });
   }
   if (isValidElement(node)) {
@@ -95,16 +141,26 @@ const sliceContent = (node, from, to) => {
 };
 
 export const renderReadingTrack = (track, time) => {
-  const sentence = time == null ? null : track.sentences.find(({ start, end }) =>
-    time >= start && time < end);
-  const readWords = sentence?.words.filter((word) => word.start !== undefined && time >= word.start);
+  const sentence =
+    time == null
+      ? null
+      : track.sentences.find(({ start, end }) => time >= start && time < end);
+  const readWords = sentence?.words.filter(
+    (word) => word.start !== undefined && time >= word.start,
+  );
   if (!readWords?.length) return track.node;
   const first = readWords[0].from;
   const last = readWords.at(-1).to;
   return (
     <>
       {sliceContent(track.node, 0, first)}
-      <span style={{ backgroundColor: "#892EA3", color: "#fff", borderRadius: "4px" }}>
+      <span
+        style={{
+          backgroundColor: "#892EA3",
+          color: "#fff",
+          borderRadius: "4px",
+        }}
+      >
         {sliceContent(track.node, first, last)}
       </span>
       {sliceContent(track.node, last, track.text.length)}
@@ -112,10 +168,18 @@ export const renderReadingTrack = (track, time) => {
   );
 };
 
-export const useReadingHighlight = (wordTimings, aliases = [], enabled = true) => {
+export const useReadingHighlight = (
+  wordTimings,
+  aliases = [],
+  enabled = true,
+) => {
   const [position, setPosition] = useState(null);
-  const narration = useMemo(() => createNarrationIndex(wordTimings), [wordTimings]);
-  const currentTime = position && position.source === wordTimings ? position.time : null;
+  const narration = useMemo(
+    () => createNarrationIndex(wordTimings),
+    [wordTimings],
+  );
+  const currentTime =
+    position && position.source === wordTimings ? position.time : null;
   let cursor = 0;
   const highlight = (node) => {
     if (!wordTimings || !enabled) return node;
@@ -124,9 +188,8 @@ export const useReadingHighlight = (wordTimings, aliases = [], enabled = true) =
     return renderReadingTrack(track, currentTime);
   };
   const onTimeUpdate = (time) => {
-    if (wordTimings && enabled && Number.isFinite(time)) setPosition({ source: wordTimings, time });
+    if (wordTimings && enabled && Number.isFinite(time))
+      setPosition({ source: wordTimings, time });
   };
   return { highlight, onTimeUpdate };
 };
-
-

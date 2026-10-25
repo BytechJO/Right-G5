@@ -30,7 +30,7 @@ const GrammarSection_U1 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit3_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={2}
@@ -40,7 +40,7 @@ const GrammarSection_U1 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt="Grammar chart: Jimmy is tall. Is Jimmy tall? The students are happy. Are the students happy? The milk tastes sour. Does the milk taste sour? Their voices sound clear. Do their voices sound clear?"
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

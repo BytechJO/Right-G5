@@ -1,18 +1,55 @@
+import clip0 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_001_60.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_002_40.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_003_80.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_004_10.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36/SVG/Asset 19.svg";
 import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36/SVG/Asset 20.svg";
 import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36/SVG/Asset 21.svg";
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36/SVG/Asset 22.svg";
 import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 36/SVG/Asset 43.svg";
-
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"()–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 const Review4_Page1_Q3 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
-
   const [locked, setLocked] = useState(false);
   const [result, setResult] = useState([]);
-
   const correctAnswers = [
     "The skier often skis on the mountain.",
     "The boy sometimes skates on the ice.",
@@ -20,33 +57,30 @@ const Review4_Page1_Q3 = () => {
     "They rarely ride on the train.",
     "He never goes (Scuba) diving.",
   ];
-
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[()]/g, "")
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, "")
-      .trim();
-  const handleChange = (i, val) => {
-    const updated = [...answers];
-    updated[i] = val;
-    setAnswers(updated);
-
-    setResult((prev) => {
-      const copy = [...prev];
-      copy[i] = undefined;
-      return copy;
-    });
+  const normalize = normalizeAnswer;
+  const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
+    setAnswers((previous) => previous.map((a, j) => (j === i ? value : a)));
+    setResult((previous) => previous.map((v, j) => (j === i ? undefined : v)));
   };
-
   const input = (i) => (
     <span className="relative inline-block">
       <input
+        style={{
+          ...(result[i] === true
+            ? {
+                borderBottomColor: "#16a34a",
+              }
+            : {}),
+        }}
+        {...fieldKeys}
+        aria-invalid={result[i] === false}
+        title={`Picture ${i + 1}, write the sentence about ${["skiing on a mountain (60%)", "skating on ice (40%)", "jogging on a beach (80%)", "riding a train (10%)", "diving (0%)"][i]}`}
+        aria-label={`Picture ${i + 1}, write the sentence about ${["skiing on a mountain (60%)", "skating on ice (40%)", "jogging on a beach (80%)", "riding a train (10%)", "diving (0%)"][i]}`}
         disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
-        className={`border-b outline-none text-[#6D2980] font-semibold w-[600px] px-2
+        className={`border-b outline-none text-[#6D2980] font-semibold w-[100%] px-2
         ${result[i] === false ? "border-red-500" : "border-black"}
       `}
       />
@@ -78,32 +112,29 @@ const Review4_Page1_Q3 = () => {
       )}
     </span>
   );
-
   const checkAnswers = () => {
     if (locked) return;
-
+    audio.stop();
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(
+        String("Please complete all fields.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all fields."));
       return;
     }
-
     let correctCount = 0;
-
     const res = answers.map((a, i) => {
       const ok = normalize(a) === normalize(correctAnswers[i]);
-
       if (ok) correctCount++;
-
       return ok;
     });
-
     setResult(res);
-
     const total = correctAnswers.length;
-
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
     const msg = `
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color}; font-weight:bold;">
@@ -111,37 +142,58 @@ const Review4_Page1_Q3 = () => {
         </span>
       </div>
     `;
-
     if (correctCount === total) {
+      resetButtonRef.current?.focus({
+        preventScroll: true,
+      });
       setLocked(true);
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
-
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correctAnswers);
     setResult([true, true, true, true, true]);
     setLocked(true);
   };
-
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("All answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
     setResult([]);
     setLocked(false);
   };
-
   const imageStyle = {
     width: "100%",
     height: "auto",
     objectFit: "contain",
   };
-
   return (
     <div
+      data-exercise-scope={"Review4_Page1_Q3.jsx"}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -149,11 +201,23 @@ const Review4_Page1_Q3 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall">
-        <h5 className="header-title-page8 mb-10">
-          <span className="mr-2">C</span>
-          Look and write.
-        </h5>
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review4_Page1_Q3.jsx"] input:focus-visible,[data-exercise-scope="Review4_Page1_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"30px"}}>
+        <ExerciseHeader
+          isReview
+          sectionLetter="C"
+          title={<>Look and write.</>}
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         <div
           style={{
@@ -181,9 +245,26 @@ const Review4_Page1_Q3 = () => {
               1
             </span>
 
-            <img src={img1} alt="" style={imageStyle} />
+            <img
+              src={img1}
+              alt={"A skier descending a snowy mountain."}
+              style={imageStyle}
+            />
 
-            <span style={{ fontSize: "20px" }}>60%</span>
+            <span
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              <AudioText
+                audio={audio}
+                id="frequency-0"
+                src={clip0}
+                label="Hear 60%"
+              >
+                60%
+              </AudioText>
+            </span>
             {input(0)}
           </div>
 
@@ -204,9 +285,26 @@ const Review4_Page1_Q3 = () => {
               2
             </span>
 
-            <img src={img2} alt="" style={imageStyle} />
+            <img
+              src={img2}
+              alt={"A child ice skating while wearing a helmet."}
+              style={imageStyle}
+            />
 
-            <span style={{ fontSize: "20px" }}>40%</span>
+            <span
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              <AudioText
+                audio={audio}
+                id="frequency-1"
+                src={clip1}
+                label="Hear 40%"
+              >
+                40%
+              </AudioText>
+            </span>
 
             {input(1)}
           </div>
@@ -228,9 +326,26 @@ const Review4_Page1_Q3 = () => {
               3
             </span>
 
-            <img src={img3} alt="" style={imageStyle} />
+            <img
+              src={img3}
+              alt={"Two adults jogging on a sandy beach."}
+              style={imageStyle}
+            />
 
-            <span style={{ fontSize: "20px" }}>80%</span>
+            <span
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              <AudioText
+                audio={audio}
+                id="frequency-2"
+                src={clip2}
+                label="Hear 80%"
+              >
+                80%
+              </AudioText>
+            </span>
 
             {input(2)}
           </div>
@@ -252,9 +367,26 @@ const Review4_Page1_Q3 = () => {
               4
             </span>
 
-            <img src={img4} alt="" style={imageStyle} />
+            <img
+              src={img4}
+              alt={"Passengers riding inside a train carriage."}
+              style={imageStyle}
+            />
 
-            <span style={{ fontSize: "20px" }}>10%</span>
+            <span
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              <AudioText
+                audio={audio}
+                id="frequency-3"
+                src={clip3}
+                label="Hear 10%"
+              >
+                10%
+              </AudioText>
+            </span>
 
             {input(3)}
           </div>
@@ -276,9 +408,19 @@ const Review4_Page1_Q3 = () => {
               5
             </span>
 
-            <img src={img5} alt="" style={imageStyle} />
+            <img
+              src={img5}
+              alt={"A scuba diver swimming beside coral."}
+              style={imageStyle}
+            />
 
-            <span style={{ fontSize: "20px" }}>0%</span>
+            <span
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              0%
+            </span>
 
             {input(4)}
           </div>
@@ -287,20 +429,42 @@ const Review4_Page1_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          {...activationKeys}
+          style={{
+            cursor: locked ? "not-allowed" : "pointer",
+          }}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>
     </div>
   );
 };
-
 export default Review4_Page1_Q3;

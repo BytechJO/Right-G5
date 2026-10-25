@@ -158,7 +158,7 @@ const correct = {
     if (keyboard) queueFocus(() => focusSide("left", false, nextMatches));
   };
   const choose = (side, id, keyboard = false) => {
- if(side==="right") audio.play("endpoint-"+id,[clip0,clip1,clip2,clip3,clip4][id]);
+
  if(side==="right") audio.play("endpoint-"+id,[clip0,clip1,clip2,clip3,clip4][id]);
     if (isLocked(side, id)) {
       setAnnouncement(`${id}. This match is correct and locked.`);

@@ -1,3 +1,4 @@
+import { SentenceGroup } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - E/Item_001_Mary_and_Paula,_which_are_swimming_next_week,_will_practice_every_day_th.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - E/Item_002_William_is_fixing_the_car_who_is_broken_and_needs_more_oil.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - E/Item_003_Sandy_gave_her_friend_a_gift_who_she_bought_in_France.mp3";
@@ -116,7 +117,7 @@ const Unit2_Page6_Q3 = () => {
 
   // 🔵 اختيار الكلمة
   const handleSelect = (i, wi) => {
-    audio.play(`word-${i}-${wi}`, [clip0, clip1, clip2, clip3][i]);
+    
     if (locked) return;
     if (locked || result[i]?.word === true) return;
 
@@ -237,7 +238,7 @@ const Unit2_Page6_Q3 = () => {
         {sentences.map((sentence, i) => (
           <div key={i} className="space-y-1 text-[18px] leading-9 mt-7">
             {/* الجملة */}
-            <div className="flex flex-wrap ">
+            <SentenceGroup audio={audio} id={`sentence-${i}`} src={[clip0,clip1,clip2,clip3][i]} label={`Hear the sentence: ${sentence.join(" ")}`} className="flex flex-wrap ">
               <span className="font-bold mr-2">{i + 1}</span>
 
               {sentence.map((word, wi) => (
@@ -280,7 +281,7 @@ const Unit2_Page6_Q3 = () => {
                   `}
                 >
                   {word}
-                  {audio.activeId === `word-${i}-${wi}` && <AudioSpeaker />}
+                  
 
                   {/* ❌ على الكلمة */}
                   {result[i]?.word === false && selected[i] === wi && (
@@ -311,7 +312,7 @@ const Unit2_Page6_Q3 = () => {
                   )}
                 </span>
               ))}
-            </div>
+            </SentenceGroup>
 
             {/* input */}
             <div className="relative">

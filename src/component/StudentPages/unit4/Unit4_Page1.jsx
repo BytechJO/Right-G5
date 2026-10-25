@@ -27,7 +27,6 @@ import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 
 import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 28/SVG/Asset 36.svg";
 import wordJson from "../../../assets/json/pg28-conversation_eng.json";
 import video from "../../../assets/videos/grade 5 unit 4 page 28.mp4";
-
 const Unit4_Page1 = ({ openPopup }) => {
   // ==================== conversation data ==================== //
   const data = [
@@ -157,15 +156,11 @@ const Unit4_Page1 = ({ openPopup }) => {
         end: captionsExample[3].end,
       },
     ],
-
     [captionsExample[4], captionsExample[5]],
-
     [captionsExample[6], captionsExample[7]],
-
     [captionsExample[8], captionsExample[9], captionsExample[10]],
   ];
   const filteredSegments = wordJson.segments.slice(1);
-
   const Voc = [
     [
       filteredSegments[0]?.words || [],
@@ -174,11 +169,8 @@ const Unit4_Page1 = ({ openPopup }) => {
         ...(filteredSegments[2]?.words || []),
       ],
     ],
-
     [filteredSegments[3]?.words || [], filteredSegments[4]?.words || []],
-
     [filteredSegments[5]?.words || [], filteredSegments[6]?.words || []],
-
     [
       filteredSegments[7]?.words || [],
       filteredSegments[8]?.words || [],
@@ -209,56 +201,175 @@ const Unit4_Page1 = ({ openPopup }) => {
       end: 8.22,
       text: "Page 28, Unit 4, Vocabulary. Listen and repeat. Find the words and expressions in the conversation above.",
     },
-
-    { start: 9.399, end: 11.199, text: "1. grocery store." },
-    { start: 11.96, end: 13.96, text: "2. clothes store." },
-    { start: 14.92, end: 16.899, text: "3. jeans." },
-    { start: 17.84, end: 19.719, text: "4. arcade." },
-
-    { start: 20.739, end: 22.779, text: "5. bookstore." },
-    { start: 23.68, end: 25.5, text: "6. boots." },
-    { start: 26.379, end: 28.519, text: "7. electronics." },
-    { start: 29.399, end: 31.399, text: "8. food court." },
-
-    { start: 32.119, end: 35.059, text: "9. check out (verb)." },
-    { start: 35.7, end: 37.579, text: "10. not me." },
-    { start: 38.439, end: 40.54, text: "11. head over." },
-
-    { start: 41.439, end: 43.319, text: "12. wait a minute." },
-    { start: 44.219, end: 46.399, text: "13. split up." },
-    { start: 47.239, end: 49.2, text: "14. straight ahead." },
+    {
+      start: 9.399,
+      end: 11.199,
+      text: "1. grocery store.",
+    },
+    {
+      start: 11.96,
+      end: 13.96,
+      text: "2. clothes store.",
+    },
+    {
+      start: 14.92,
+      end: 16.899,
+      text: "3. jeans.",
+    },
+    {
+      start: 17.84,
+      end: 19.719,
+      text: "4. arcade.",
+    },
+    {
+      start: 20.739,
+      end: 22.779,
+      text: "5. bookstore.",
+    },
+    {
+      start: 23.68,
+      end: 25.5,
+      text: "6. boots.",
+    },
+    {
+      start: 26.379,
+      end: 28.519,
+      text: "7. electronics.",
+    },
+    {
+      start: 29.399,
+      end: 31.399,
+      text: "8. food court.",
+    },
+    {
+      start: 32.119,
+      end: 35.059,
+      text: "9. check out (verb).",
+    },
+    {
+      start: 35.7,
+      end: 37.579,
+      text: "10. not me.",
+    },
+    {
+      start: 38.439,
+      end: 40.54,
+      text: "11. head over.",
+    },
+    {
+      start: 41.439,
+      end: 43.319,
+      text: "12. wait a minute.",
+    },
+    {
+      start: 44.219,
+      end: 46.399,
+      text: "13. split up.",
+    },
+    {
+      start: 47.239,
+      end: 49.2,
+      text: "14. straight ahead.",
+    },
   ];
-
   const wordTimingsVoc = [
-    { start: 9.399, end: 11.199 },
-    { start: 11.96, end: 13.96 },
-    { start: 14.92, end: 16.899 },
-    { start: 17.84, end: 19.719 },
-
-    { start: 20.739, end: 22.779 },
-    { start: 23.68, end: 25.5 },
-    { start: 26.379, end: 28.519 },
-    { start: 29.399, end: 31.399 },
-
-    { start: 32.119, end: 35.059 },
-    { start: 35.7, end: 37.579 },
-    { start: 38.439, end: 40.54 },
-
-    { start: 41.439, end: 43.319 },
-    { start: 44.219, end: 46.399 },
-    { start: 47.239, end: 49.2 },
+    {
+      start: 9.399,
+      end: 11.199,
+    },
+    {
+      start: 11.96,
+      end: 13.96,
+    },
+    {
+      start: 14.92,
+      end: 16.899,
+    },
+    {
+      start: 17.84,
+      end: 19.719,
+    },
+    {
+      start: 20.739,
+      end: 22.779,
+    },
+    {
+      start: 23.68,
+      end: 25.5,
+    },
+    {
+      start: 26.379,
+      end: 28.519,
+    },
+    {
+      start: 29.399,
+      end: 31.399,
+    },
+    {
+      start: 32.119,
+      end: 35.059,
+    },
+    {
+      start: 35.7,
+      end: 37.579,
+    },
+    {
+      start: 38.439,
+      end: 40.54,
+    },
+    {
+      start: 41.439,
+      end: 43.319,
+    },
+    {
+      start: 44.219,
+      end: 46.399,
+    },
+    {
+      start: 47.239,
+      end: 49.2,
+    },
   ];
-
   return (
     <div
+      role="group"
+      aria-label="Unit 4 page 1"
+      data-page-access="unit4-page1"
       className="page1-img-wrapper"
-      style={{ backgroundImage: `url(${page_1})` }}
+      style={{
+        backgroundImage: `url(${page_1})`,
+      }}
     >
+      <style>{`[data-page-access="unit4-page1"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page4-1 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          aria-label={"Open conversation"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -273,6 +384,8 @@ const Unit4_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Conversation
+                  pageId={"sb_unit4_page1_conversation"}
+                  keyboardAccessible={true}
                   title="Conversation"
                   items={data}
                   sound={longAudio}
@@ -286,9 +399,12 @@ const Unit4_Page1 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -301,9 +417,33 @@ const Unit4_Page1 = ({ openPopup }) => {
       </div>
       <div
         className="headset-icon-CD-page4-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          aria-label={"Open vocabulary"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -318,6 +458,8 @@ const Unit4_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Vocabulary
+                  pageId={"sb_unit4_page1_vocabulary"}
+                  keyboardAccessible={true}
                   title="VOCABULARY"
                   subtitle="Listen and repeat. Find the words and expressions in the conversation above."
                   sound={VocabularAudio}
@@ -345,9 +487,12 @@ const Unit4_Page1 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -360,9 +505,33 @@ const Unit4_Page1 = ({ openPopup }) => {
       </div>
       <div
         className="headset-icon-CD-page4-3 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          aria-label={"Open critical thinking"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -370,13 +539,17 @@ const Unit4_Page1 = ({ openPopup }) => {
             openPopup(
               "html",
               <CriticalThinking
+                keyboardAccessible={true}
                 title={"Why do the children have some time to shop?"}
               />,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"
@@ -390,5 +563,4 @@ const Unit4_Page1 = ({ openPopup }) => {
     </div>
   );
 };
-
 export default Unit4_Page1;

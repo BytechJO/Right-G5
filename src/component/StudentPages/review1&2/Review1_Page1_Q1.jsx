@@ -1,3 +1,4 @@
+import { SentenceGroup } from "../unit2/SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 16 - A/Item_001_actually.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 16 - A/Item_002_pancakes.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 16 - A/Item_003_starving.mp3";
@@ -223,106 +224,66 @@ const Page_Read_Write = () => {
         <div className="flex justify-between gap-10">
           {/* LEFT */}
           <div className="space-y-12 text-[18px] ">
-            <div>
+            <SentenceGroup audio={audio} id="sentence-0" src={clip5} label="Hear the sentence: 1 I wanted to have syrup on my blank .">
               {" "}
               <span className="mr-3 font-bold">1</span>
-              <AudioText
-                audio={audio}
-                id="fragment-0-0"
-                src={clip5}
-                label="Hear item 1"
-              >
+              
                 {" "}
                 I wanted to have syrup on my{" "}
-              </AudioText>
+              
               {input(0)}.
-            </div>
+            </SentenceGroup>
 
-            <div>
+            <SentenceGroup audio={audio} id="sentence-1" src={clip6} label="Hear the sentence: 2 I set the blank so I could wake up.">
               {" "}
               <span className="mr-3 font-bold">2</span>
-              <AudioText
-                audio={audio}
-                id="fragment-1-1"
-                src={clip6}
-                label="Hear item 2"
-              >
+              
                 {" "}
                 I set the{" "}
-              </AudioText>
+              
               {input(1)}
-              <AudioText
-                audio={audio}
-                id="fragment-1-2"
-                src={clip6}
-                label="Hear item 2"
-              >
+              
                 {" "}
                 so I could wake up.
-              </AudioText>
-            </div>
+              
+            </SentenceGroup>
 
-            <div>
+            <SentenceGroup audio={audio} id="sentence-2" src={clip7} label="Hear the sentence: 3 Tim is going to wash his blank .">
               {" "}
               <span className="mr-3 font-bold">3</span>
-              <AudioText
-                audio={audio}
-                id="fragment-2-3"
-                src={clip7}
-                label="Hear item 3"
-              >
+              
                 {" "}
                 Tim is going to wash his
-              </AudioText>{" "}
+              {" "}
               {input(2)}.
-            </div>
+            </SentenceGroup>
 
-            <div>
+            <SentenceGroup audio={audio} id="sentence-3" src={clip8} label="Hear the sentence: 4 Jake was blank after not eating all day.">
               {" "}
               <span className="mr-3 font-bold">4</span>
-              <AudioText
-                audio={audio}
-                id="fragment-3-4"
-                src={clip8}
-                label="Hear item 4"
-              >
+              
                 {" "}
                 Jake was{" "}
-              </AudioText>
+              
               {input(3)}{" "}
-              <AudioText
-                audio={audio}
-                id="fragment-3-5"
-                src={clip8}
-                label="Hear item 4"
-              >
+              
                 after not eating all day.
-              </AudioText>
-            </div>
+              
+            </SentenceGroup>
 
             <div className="flex items-start gap-3">
               <span className="font-bold w-[20px]">5</span>
 
-              <div className="flex-1">
-                <AudioText
-                  audio={audio}
-                  id="fragment-4-6"
-                  src={clip9}
-                  label="Hear item 5"
-                >
+              <SentenceGroup audio={audio} id="sentence-4" src={clip9} label="Hear the sentence: Megan was blank very happy because her cousin would visit soon." className="flex-1">
+                
                   Megan was{" "}
-                </AudioText>
+                
                 {input(4)}
-                <AudioText
-                  audio={audio}
-                  id="fragment-4-7"
-                  src={clip9}
-                  label="Hear item 5"
-                >
+                
                   {" "}
                   very happy because her cousin would visit soon.
-                </AudioText>
-              </div>
+                
+              </SentenceGroup>
             </div>
           </div>
 

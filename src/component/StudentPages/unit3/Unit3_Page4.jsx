@@ -7,21 +7,21 @@ import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 const Unit3_Page4 = ({ openPopup }) => {
   return (
     <div
-      className="page1-img-wrapper"
+      role="group" aria-label="Unit 3, page 4" data-page-access="unit3-page4" className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_4})` }}
-    >
+    ><style>{`[data-page-access="unit3-page4"] :focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page7 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg role="button" tabIndex={0} data-launcher aria-label="Open writing" onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => openPopup("html", <WritingSection_U2 />)}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden="true"
             className="svg-img"
             href={arrowBtn}
             x="0"

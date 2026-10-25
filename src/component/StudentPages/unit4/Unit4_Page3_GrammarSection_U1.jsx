@@ -6,44 +6,31 @@ import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping wi
 import grammer_u1 from "../../../assets/audio/ClassBook/U4/PG 30/cd19pg30-grammar.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const GrammarSection_U1 = () => {
-  const captions = [
-    {
-      start: 0.099,
-      end: 26.28,
-      text: "Page 30, grammar. One, adverbs of indefinite frequency. Two, Sally often studies at the library. Three, does Sally often study at the library? Four, the barber sometimes works on Sunday. Five, does the barber sometimes work on Sunday? Adverbs of definite frequency. Sally studies science daily. Does Sally study at the library daily?",
-    },
-  ];
-
-  return (
-    <div>
+  const captions = [{
+    start: 0.099,
+    end: 26.28,
+    text: "Page 30, grammar. One, adverbs of indefinite frequency. Two, Sally often studies at the library. Three, does Sally often study at the library? Four, the barber sometimes works on Sunday. Five, does the barber sometimes work on Sunday? Adverbs of definite frequency. Sally studies science daily. Does Sally study at the library daily?"
+  }];
+  return <div>
       <div className="w-[60%] mx-auto mb-4 flex items-center mt-3">
-        <div
-          className="px-4 py-1 font-bold text-black w-fit"
-          style={{
-            backgroundImage: `url(${ReadingBG})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        >
+        <div className="px-4 py-1 font-bold text-black w-fit" style={{
+        backgroundImage: `url(${ReadingBG})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center"
+      }}>
           Grammar
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
-          src={grammer_u1}
-          captions={captions}
-          stopAtSecond={1.5}
-        />
+        <QuestionAudioPlayer pageId={"sb_unit4_page3_grammar"} src={grammer_u1} captions={captions} stopAtSecond={1.5} />
       </div>
 
       <div className="flex flex-col w-[60%] mx-auto">
-        <img
-          src={img}
-          alt=""
-          style={{ width: "100%", height: "auto" }}
-          className="w-full object-contain"
-        />
+        <img src={img} alt={"Grammar chart: indefinite-frequency adverbs come between the subject and verb, or between the subject and main verb in questions. Definite-frequency adverbs follow the complement. Examples use Sally studying often or daily and the barber working sometimes."} style={{
+        width: "100%",
+        height: "auto"
+      }} className="w-full object-contain" />
         <p className="mt-2 text-sm text-black">
           *Note: <strong>Sometimes</strong> the adverb can go in different
           places in the sentence. For example, adverbs of indefinite frequency
@@ -56,8 +43,6 @@ const GrammarSection_U1 = () => {
           <GrammarC />
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default GrammarSection_U1;

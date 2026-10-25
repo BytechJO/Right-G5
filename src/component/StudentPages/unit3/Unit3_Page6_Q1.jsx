@@ -1,7 +1,56 @@
+import clip0 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_001_no.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_002_way.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_003_tastes.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_004_some.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_005_funny.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_006_try.mp3";
+import clip6 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_007_yourself.mp3";
+import clip7 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_008_help.mp3";
+import clip8 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_009_top.mp3";
+import clip9 from "../../../assets/audio/ClassBook/U3/Page 27 - D/Item_010_off.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const Unit3_Page6_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = useState("");
+
   // ✅ الأزواج الصحيحة
   const correctPairs = [
     ["no", "way"],
@@ -19,14 +68,24 @@ const Unit3_Page6_Q1 = () => {
   const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const normalize = (s) => s.toLowerCase().trim();
+  const normalize = normalizeAnswer;
 
   // ✅ CHECK
   const handleCheck = () => {
     if (locked) return;
 
-    if (answers.some((pair) => !pair[0] || !pair[1])) {
-      ValidationAlert.info("Complete all answers.");
+    audio.stop();
+
+    if (locked) return;
+
+    if (answers.some((pair) => pair.some((word) => !word.trim()))) {
+      (setAnnouncement(
+        String("Complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Complete all answers."));
       return;
     }
 
@@ -38,8 +97,14 @@ const Unit3_Page6_Q1 = () => {
       pair.map(normalize).join(" "),
     );
 
-    const res = userPairs.map((pair) => {
-      const ok = correctFormatted.includes(pair);
+    const used = new Set(userPairs.filter((_, i) => result[i] === true));
+    const res = userPairs.map((pair, i) => {
+      if (result[i] === true) {
+        correctCount++;
+        return true;
+      }
+      const ok = correctFormatted.includes(pair) && !used.has(pair);
+      if (ok) used.add(pair);
       if (ok) correctCount++;
       return ok;
     });
@@ -60,24 +125,48 @@ const Unit3_Page6_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   // 👀 SHOW
   const handleShow = () => {
-    setAnswers(correctPairs);
-    setResult([]);
+    audio.stop();
+    setAnswers(correctPairs.map((pair) => [...pair]));
+    setResult(correctPairs.map(() => true));
     setLocked(true);
+    setAnnouncement("Correct expression pairs shown and locked.");
   };
 
   // 🔄 RESET
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers, feedback and locks cleared.");
+
     setAnswers(
       Array(5)
         .fill(0)
@@ -91,10 +180,23 @@ const Unit3_Page6_Q1 = () => {
   const input = (row, col) => (
     <span className="relative inline-block mx-2">
       <input
+        style={{
+          borderBottomColor:
+            locked || result[row] === true
+              ? "#16a34a"
+              : result[row] === false
+                ? "#ef4444"
+                : undefined,
+        }}
+        {...fieldKeys}
+        aria-invalid={result[row] === false}
+        title={`Expression ${row + 1}, ${col === 0 ? "first" : "second"} word from the bank`}
+        aria-label={`Expression ${row + 1}, ${col === 0 ? "first" : "second"} word from the bank`}
         value={answers[row][col]}
-        disabled={locked}
+        disabled={locked || result[row] === true}
         onFocus={(e) => e.target.select()}
         onChange={(e) => {
+          if (locked || result[row] === true) return;
           if (result[row] === true) return;
 
           const updated = [...answers];
@@ -141,43 +243,143 @@ const Unit3_Page6_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-8">
-      <div className="div-forall">
-        <h5 className="header-title-page8 mb-10">
-          <span className="ex-A mr-2.5">D</span>
-          Put the words together to make expressions or sentences.
-        </h5>
+    <div
+      data-exercise-scope="Unit3_Page6_Q1.jsx"
+      className="flex flex-col items-center p-8"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit3_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit3_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit3_Page6_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+
+      <div className="div-forall" style={{gap:"30px"}}>
+        <ExerciseHeader
+          sectionLetter="D"
+          title={<>Put the words together to make expressions or sentences.</>}
+          subTitle="Read the available words, build one correct expression or sentence pair at a time, then use each word only as allowed."
+        />
 
         {/* WORD BANK */}
-        <div className="bg-[#D4C7DC] rounded-xl flex justify-between text-[18px] p-6 mb-15 w-[500px] mx-auto">
+        <div className="bg-[#D4C7DC] rounded-xl flex justify-between text-[18px] p-6 mb-2 w-[500px] mx-auto">
           {/* العمود الأول */}
           <div className="flex flex-col gap-6">
-            <div>no</div>
-            <div>try</div>
+            <div>
+              <AudioText audio={audio} id="bank-no" src={clip0} label="Hear no">
+                no
+              </AudioText>
+            </div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-try"
+                src={clip5}
+                label="Hear try"
+              >
+                try
+              </AudioText>
+            </div>
           </div>
 
           {/* العمود الثاني */}
           <div className="flex flex-col gap-6">
-            <div>way</div>
-            <div>yourself</div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-way"
+                src={clip1}
+                label="Hear way"
+              >
+                way
+              </AudioText>
+            </div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-yourself"
+                src={clip6}
+                label="Hear yourself"
+              >
+                yourself
+              </AudioText>
+            </div>
           </div>
 
           {/* العمود الثالث */}
           <div className="flex flex-col gap-6">
-            <div>tastes</div>
-            <div>help</div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-tastes"
+                src={clip2}
+                label="Hear tastes"
+              >
+                tastes
+              </AudioText>
+            </div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-help"
+                src={clip7}
+                label="Hear help"
+              >
+                help
+              </AudioText>
+            </div>
           </div>
 
           {/* العمود الرابع */}
           <div className="flex flex-col gap-6">
-            <div>some</div>
-            <div>top</div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-some"
+                src={clip3}
+                label="Hear some"
+              >
+                some
+              </AudioText>
+            </div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-top"
+                src={clip8}
+                label="Hear top"
+              >
+                top
+              </AudioText>
+            </div>
           </div>
 
           {/* العمود الخامس */}
           <div className="flex flex-col gap-6">
-            <div>funny</div>
-            <div>off</div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-funny"
+                src={clip4}
+                label="Hear funny"
+              >
+                funny
+              </AudioText>
+            </div>
+            <div>
+              <AudioText
+                audio={audio}
+                id="bank-off"
+                src={clip9}
+                label="Hear off"
+              >
+                off
+              </AudioText>
+            </div>
           </div>
         </div>
 
@@ -217,15 +419,36 @@ const Unit3_Page6_Q1 = () => {
         </div>
         {/* BUTTONS */}
         <div className="action-buttons-container mt-6">
-          <button className="try-again-button" onClick={handleReset}>
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Start Again"
+            ref={resetButtonRef}
+            className="try-again-button"
+            onClick={handleReset}
+          >
             Start Again ↻
           </button>
 
-          <button onClick={handleShow} className="show-answer-btn">
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Show Answer"
+            onClick={handleShow}
+            className="show-answer-btn"
+          >
             Show Answer
           </button>
 
-          <button className="check-button2" onClick={handleCheck}>
+          <button
+            type="button"
+            {...activationKeys}
+            aria-label="Check Answer"
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
+            className="check-button2"
+            onClick={handleCheck}
+          >
             Check Answer ✓
           </button>
         </div>

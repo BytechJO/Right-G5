@@ -1,3 +1,4 @@
+import { SentencePart } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 14 - B/Item_001_fast.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 14 - B/Item_002_Not_so_fast.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 14 - B/Item_003_first_thing.mp3";
@@ -443,15 +444,15 @@ const Unit2_Page5_Q2 = () => {
           <div className="text-[18px] leading-9 flex flex-col gap-6 mt-1 mb-7">
             {/* LINE 1 */}
             <div>
-              <AudioText
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-0"
+                id="sentence-clip9"
                 src={clip9}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn is a girl who likes blank, blank rides, but her friend Stacy likes the slow rides."
               >
                 Lynn is a girl who likes
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(0)} droppableId="0">
                 {(p, snapshot) => (
                   <span title={("Story blank 1, after Lynn likes. ") + (`Blank ${0 + 1}. ${answers[0] || "Empty"}.${slotLocked(0) ? " Correct and locked." : result[0] === false ? " Not correct." : ""}`)}
@@ -507,46 +508,46 @@ const Unit2_Page5_Q2 = () => {
                   </span>
                 )}
               </Droppable>{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-1"
+                id="sentence-clip9"
                 src={clip9}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn is a girl who likes blank, blank rides, but her friend Stacy likes the slow rides."
               >
                 rides, but her friend Stacy likes the
-              </AudioText>
+              </SentencePart>
             </div>
 
             {/* LINE 2 */}
             <div>
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-2"
+                id="sentence-clip9"
                 src={clip9}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn is a girl who likes blank, blank rides, but her friend Stacy likes the slow rides."
               >
                 slow rides.
-              </AudioText>{" "}
-              <AudioText
+              </SentencePart>{" "}
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-3"
+                id="sentence-clip10"
                 src={clip10}
-                label="Hear this story sentence"
+                label="Hear the sentence: They decide to go to the carnival that is in town."
               >
                 They decide to go to the carnival that is in town.
-              </AudioText>{" "}
-              <AudioText
+              </SentencePart>{" "}
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-4"
+                id="sentence-clip11"
                 src={clip11}
-                label="Hear this story sentence"
+                label="Hear the sentence: The blank they do is buy a blank tickets for a blank of the rides."
               >
                 The
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(2)} droppableId="2">
                 {(p, snapshot) => (
                   <span title={("Story blank 3, before they do is buy. ") + (`Blank ${2 + 1}. ${answers[2] || "Empty"}.${slotLocked(2) ? " Correct and locked." : result[2] === false ? " Not correct." : ""}`)}
@@ -574,28 +575,28 @@ const Unit2_Page5_Q2 = () => {
                   </span>
                 )}
               </Droppable>{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-5"
+                id="sentence-clip11"
                 src={clip11}
-                label="Hear this story sentence"
+                label="Hear the sentence: The blank they do is buy a blank tickets for a blank of the rides."
               >
                 they
-              </AudioText>
+              </SentencePart>
             </div>
 
             {/* LINE 3 */}
             <div>
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-6"
+                id="sentence-clip11"
                 src={clip11}
-                label="Hear this story sentence"
+                label="Hear the sentence: The blank they do is buy a blank tickets for a blank of the rides."
               >
                 do is buy a
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(3)} droppableId="3">
                 {(p, snapshot) => (
                   <span title={("Story blank 4, before tickets. ") + (`Blank ${3 + 1}. ${answers[3] || "Empty"}.${slotLocked(3) ? " Correct and locked." : result[3] === false ? " Not correct." : ""}`)}
@@ -623,15 +624,15 @@ const Unit2_Page5_Q2 = () => {
                   </span>
                 )}
               </Droppable>{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-7"
+                id="sentence-clip11"
                 src={clip11}
-                label="Hear this story sentence"
+                label="Hear the sentence: The blank they do is buy a blank tickets for a blank of the rides."
               >
                 tickets for a
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(4)} droppableId="4">
                 {(p, snapshot) => (
                   <span title={("Story blank 5, before of the rides. ") + (`Blank ${4 + 1}. ${answers[4] || "Empty"}.${slotLocked(4) ? " Correct and locked." : result[4] === false ? " Not correct." : ""}`)}
@@ -659,24 +660,24 @@ const Unit2_Page5_Q2 = () => {
                   </span>
                 )}
               </Droppable>{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-8"
+                id="sentence-clip11"
                 src={clip11}
-                label="Hear this story sentence"
+                label="Hear the sentence: The blank they do is buy a blank tickets for a blank of the rides."
               >
                 of the rides.
-              </AudioText>{" "}
-              <AudioText
+              </SentencePart>{" "}
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-9"
+                id="sentence-clip12"
                 src={clip12}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn blank Stacy to go on the Ferris wheel with her, but Stacy says, blank!"
               >
                 Lynn
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(5)} droppableId="5">
                 {(p, snapshot) => (
                   <span title={("Story blank 6, before Stacy to go on the Ferris wheel. ") + (`Blank ${5 + 1}. ${answers[5] || "Empty"}.${slotLocked(5) ? " Correct and locked." : result[5] === false ? " Not correct." : ""}`)}
@@ -704,28 +705,28 @@ const Unit2_Page5_Q2 = () => {
                   </span>
                 )}
               </Droppable>{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-10"
+                id="sentence-clip12"
                 src={clip12}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn blank Stacy to go on the Ferris wheel with her, but Stacy says, blank!"
               >
                 Stacy to
-              </AudioText>
+              </SentencePart>
             </div>
 
             {/* LINE 4 */}
             <div>
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-11"
+                id="sentence-clip12"
                 src={clip12}
-                label="Hear this story sentence"
+                label="Hear the sentence: Lynn blank Stacy to go on the Ferris wheel with her, but Stacy says, blank!"
               >
                 go on the Ferris wheel with her, but Stacy says,“
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(6)} droppableId="6">
                 {(p, snapshot) => (
                   <span title={("Story blank 7, before the exclamation mark in Stacy's reply. ") + (`Blank ${6 + 1}. ${answers[6] || "Empty"}.${slotLocked(6) ? " Correct and locked." : result[6] === false ? " Not correct." : ""}`)}
@@ -758,15 +759,15 @@ const Unit2_Page5_Q2 = () => {
 
             {/* LINE 5 */}
             <div>
-              <AudioText
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-12"
+                id="sentence-clip13"
                 src={clip13}
-                label="Hear this story sentence"
+                label="Hear the sentence: I like to blank, so let’s go on the blank first."
               >
                 I like to
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(7)} droppableId="7">
                 {(p, snapshot) => (
                   <span title={("Story blank 8, after I like to. ") + (`Blank ${7 + 1}. ${answers[7] || "Empty"}.${slotLocked(7) ? " Correct and locked." : result[7] === false ? " Not correct." : ""}`)}
@@ -795,15 +796,15 @@ const Unit2_Page5_Q2 = () => {
                 )}
               </Droppable>
               ,{" "}
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-13"
+                id="sentence-clip13"
                 src={clip13}
-                label="Hear this story sentence"
+                label="Hear the sentence: I like to blank, so let’s go on the blank first."
               >
                 so let’s go on the
-              </AudioText>{" "}
+              </SentencePart>{" "}
               <Droppable isDropDisabled={slotLocked(8)} droppableId="8">
                 {(p, snapshot) => (
                   <span title={("Story blank 9, after let's go on the. ") + (`Blank ${8 + 1}. ${answers[8] || "Empty"}.${slotLocked(8) ? " Correct and locked." : result[8] === false ? " Not correct." : ""}`)}
@@ -833,24 +834,24 @@ const Unit2_Page5_Q2 = () => {
               </Droppable>{" "}
             </div>
             <div>
-              <AudioText
+              <SentencePart first={false}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-14"
+                id="sentence-clip13"
                 src={clip13}
-                label="Hear this story sentence"
+                label="Hear the sentence: I like to blank, so let’s go on the blank first."
               >
                 first.
-              </AudioText>{" "}
-              <AudioText
+              </SentencePart>{" "}
+              <SentencePart first={true}
                 tabIndex={pickedWord ? -1 : 0}
                 audio={audio}
-                id="story-15"
+                id="sentence-clip14"
                 src={clip14}
-                label="Hear this story sentence"
+                label="Hear the sentence: It goes in circles like the Ferris wheel, but it’s slow."
               >
                 It goes in circles like the Ferris wheel, but it’s slow.”
-              </AudioText>
+              </SentencePart>
             </div>
           </div>
           {/* Buttons */}

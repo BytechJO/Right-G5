@@ -180,7 +180,7 @@ const Conversation = ({
         </h2>
         <h2 className="text-black font-bold">Listen and read. Then say.</h2>
         <div
-          className="pauseBtn-icon-CD-page4 hover:scale-110 transition"
+          className="pauseBtn-icon-CD-vedio hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
           <svg

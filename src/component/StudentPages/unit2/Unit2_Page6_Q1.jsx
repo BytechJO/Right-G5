@@ -1,3 +1,4 @@
+import { SentenceGroup } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_001_Who_goes_to_the_carnival_and_probably_wins_a_trophy_on_Friday.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_002_Who_is_helping_his_dad_with_the_car_engine.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_003_Who_gets_a_trophy_on_Tuesday.mp3";
@@ -191,25 +192,25 @@ const Page9_Q3 = () => {
           {" "}
           {/* LEFT */}
           <div className="space-y-25">
-            <div>
-              {input(0)} <span className="font-bold mr-2">1</span><AudioText audio={audio} id="fragment-0-0" src={clip0} label="Hear item 1"> Who goes to
+            <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: blank 1 Who goes to the carnival and probably wins a trophy on Friday?">
+              {input(0)} <span className="font-bold mr-2">1</span> Who goes to
               the carnival and probably wins a trophy on Friday?
-            </AudioText></div>
+            </SentenceGroup>
 
-            <div>
-              {input(1)} <span className="font-bold mr-2 ">2</span><AudioText audio={audio} id="fragment-1-1" src={clip1} label="Hear item 2"> Who is
+            <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: blank 2 Who is helping his dad with the car engine?">
+              {input(1)} <span className="font-bold mr-2 ">2</span> Who is
               helping his dad with the car engine?
-            </AudioText></div>
+            </SentenceGroup>
 
-            <div>
-              {input(2)} <span className="font-bold mr-2">3</span><AudioText audio={audio} id="fragment-2-2" src={clip2} label="Hear item 3"> Who gets a
+            <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: blank 3 Who gets a trophy on Tuesday?">
+              {input(2)} <span className="font-bold mr-2">3</span> Who gets a
               trophy on Tuesday?
-            </AudioText></div>
+            </SentenceGroup>
 
-            <div>
-              {input(3)} <span className="font-bold mr-2">4</span><AudioText audio={audio} id="fragment-3-3" src={clip2} label="Hear item 4"> Who gets a
+            <SentenceGroup audio={audio} id="sentence-3" src={clip2} label="Hear the sentence: blank 4 Who gets a trophy on Tuesday?">
+              {input(3)} <span className="font-bold mr-2">4</span> Who gets a
               trophy on Tuesday?
-            </AudioText></div>
+            </SentenceGroup>
 
             <div>
               {input(4)} <span className="font-bold mr-2">5</span> Who eats

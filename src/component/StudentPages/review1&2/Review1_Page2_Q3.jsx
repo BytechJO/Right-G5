@@ -1,8 +1,13 @@
+import { SentenceGroup } from "../unit2/SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 17 - F/Item_001_How_long_She_talked.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 17 - F/Item_002_How_far.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 17 - F/Item_003_How_many_She_will_bring.mp3";
 import { useExerciseAudio } from "../unit2/useExerciseAudio";
-import { AudioText, AudioFeedback, AudioSpeaker } from "../unit2/ExerciseAudioText";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit2/ExerciseAudioText";
 import ExerciseHeader from "../../ExerciseHeader";
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -12,25 +17,36 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the O
 const activationKeys = {
   onKeyDown: (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault(); event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     if (!event.repeat) event.currentTarget.click();
   },
   onKeyUp: (event) => {
-    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },
 };
 const fieldKeys = {
-  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
-  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
 };
-const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
-  .replace(/[‘’']/g, "")
-  .replace(/[.,!?;:…“”"–—-]/g, " ")
-  .replace(/\s+/g, " ").trim();
-
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review1_Page2_Q3 = () => {
- const audio=useExerciseAudio();
+  const audio = useExerciseAudio();
   const resetButtonRef = useRef(null);
   const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
@@ -64,8 +80,10 @@ const Review1_Page2_Q3 = () => {
   // ✅ CHECK
   const handleCheck = () => {
     if (locked) return;
- audio.stop();
-    setAnnouncement("Answers checked. Correct answers stay locked; incorrect answers can be changed.");
+    audio.stop();
+    setAnnouncement(
+      "Answers checked. Correct answers stay locked; incorrect answers can be changed.",
+    );
 
     if (answers.some((a) => !a.trim())) {
       setAnnouncement("Complete all fields.");
@@ -89,7 +107,7 @@ const Review1_Page2_Q3 = () => {
 
     if (correctCount === total) {
       setLocked(true);
-      resetButtonRef.current?.focus({preventScroll:true});
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -100,16 +118,16 @@ const Review1_Page2_Q3 = () => {
 
   // 👀 SHOW
   const handleShow = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
-    setResult((correct).map(()=>true));
+    setResult(correct.map(() => true));
     setLocked(true);
   };
 
   // 🔄 RESET
   const handleReset = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
     setResult([]);
@@ -119,7 +137,22 @@ const Review1_Page2_Q3 = () => {
   // 🎯 input
   const input = (i, width = "300px") => (
     <span style={{ position: "relative", marginLeft: "6px" }}>
-      <input {...fieldKeys} aria-label={["Item 1, duration: How long did she talk? Complete She talked.","Item 2, distance: How far did they sail?","Item 3, quantity: How many will she bring? Complete She will bring."][i]} title={["Item 1, duration: How long did she talk? Complete She talked.","Item 2, distance: How far did they sail?","Item 3, quantity: How many will she bring? Complete She will bring."][i]}
+      <input
+        {...fieldKeys}
+        aria-label={
+          [
+            "Item 1, duration: How long did she talk? Complete She talked.",
+            "Item 2, distance: How far did they sail?",
+            "Item 3, quantity: How many will she bring? Complete She will bring.",
+          ][i]
+        }
+        title={
+          [
+            "Item 1, duration: How long did she talk? Complete She talked.",
+            "Item 2, distance: How far did they sail?",
+            "Item 3, quantity: How many will she bring? Complete She will bring.",
+          ][i]
+        }
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         disabled={locked || result[i] === true}
@@ -131,7 +164,13 @@ const Review1_Page2_Q3 = () => {
           fontWeight: "bold",
           color: "#6D2980",
           background: "transparent",
-        borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}}
+          borderBottom:
+            locked || result[i] === true
+              ? "2px solid #16a34a"
+              : result[i] === false
+                ? "2px solid #ef4444"
+                : "1px solid",
+        }}
       />
 
       {result[i] === false && (
@@ -164,12 +203,27 @@ const Review1_Page2_Q3 = () => {
   );
 
   return (
-    <div data-exercise-scope="Review1_Page2_Q3.jsx" style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
-<AudioFeedback audio={audio} />
-<style>{`[data-exercise-scope="Review1_Page2_Q3.jsx"] input:focus-visible,[data-exercise-scope="Review1_Page2_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Review1_Page2_Q3.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
-<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
+    <div
+      data-exercise-scope="Review1_Page2_Q3.jsx"
+      style={{ padding: "30px", display: "flex", justifyContent: "center" }}
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review1_Page2_Q3.jsx"] input:focus-visible,[data-exercise-scope="Review1_Page2_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Review1_Page2_Q3.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
       <div className="div-forall">
-        <ExerciseHeader isReview sectionLetter="F" title={<>Look, read, and write a measurement.</>} subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking." />
+        <ExerciseHeader
+          isReview
+          sectionLetter="F"
+          title={<>Look, read, and write a measurement.</>}
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         {/* المحتوى */}
         <div
@@ -193,7 +247,8 @@ const Review1_Page2_Q3 = () => {
                 1
               </span>
 
-              <img alt="A woman talking on a mobile phone."
+              <img
+                alt="A woman talking on a mobile phone."
                 src={img1}
                 style={{
                   width: "150px",
@@ -204,7 +259,12 @@ const Review1_Page2_Q3 = () => {
               />
             </div>
 
-            <div style={{ flex: 1 }}><AudioText audio={audio} id="fragment-0-0" src={clip0} label="Hear item 1">How long? She talked </AudioText>{input(0)}.</div>
+            <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: How long? She talked blank ." style={{ flex: 1 }}>
+              
+                How long? She talked{" "}
+              
+              {input(0)}.
+            </SentenceGroup>
           </div>
 
           {/* 2 */}
@@ -221,7 +281,8 @@ const Review1_Page2_Q3 = () => {
                 2
               </span>
 
-              <img alt="Two children sailing a boat."
+              <img
+                alt="Two children sailing a boat."
                 src={img2}
                 style={{
                   width: "150px",
@@ -232,7 +293,12 @@ const Review1_Page2_Q3 = () => {
               />
             </div>
 
-            <div style={{ flex: 1 }}><AudioText audio={audio} id="fragment-1-1" src={clip1} label="Hear item 2">How far? </AudioText>{input(1, "350px")}.</div>
+            <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: How far? blank ." style={{ flex: 1 }}>
+              
+                How far?{" "}
+              
+              {input(1, "350px")}.
+            </SentenceGroup>
           </div>
 
           {/* 3 */}
@@ -249,7 +315,8 @@ const Review1_Page2_Q3 = () => {
                 3
               </span>
 
-              <img alt="A girl packing clothing into a suitcase."
+              <img
+                alt="A girl packing clothing into a suitcase."
                 src={img3}
                 style={{
                   width: "150px",
@@ -260,23 +327,47 @@ const Review1_Page2_Q3 = () => {
               />
             </div>
 
-            <div style={{ flex: 1 }}><AudioText audio={audio} id="fragment-2-2" src={clip2} label="Hear item 3">
-              How many? She will bring </AudioText>{input(2, "300px")}.
-            </div>
+            <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: How many? She will bring blank ." style={{ flex: 1 }}>
+              
+                How many? She will bring{" "}
+              
+              {input(2, "300px")}.
+            </SentenceGroup>
           </div>
         </div>
 
         {/* buttons */}
         <div className="action-buttons-container">
-          <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={handleReset}>
+          <button
+            type="button"
+            aria-label="Start Again"
+            {...activationKeys}
+            ref={resetButtonRef}
+            className="try-again-button"
+            onClick={handleReset}
+          >
             Start Again ↻
           </button>
 
-          <button type="button" aria-label="Show Answer" {...activationKeys} onClick={handleShow} className="show-answer-btn">
+          <button
+            type="button"
+            aria-label="Show Answer"
+            {...activationKeys}
+            onClick={handleShow}
+            className="show-answer-btn"
+          >
             Show Answer
           </button>
 
-          <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={handleCheck}>
+          <button
+            type="button"
+            aria-label="Check Answer"
+            {...activationKeys}
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
+            className="check-button2"
+            onClick={handleCheck}
+          >
             Check Answer ✓
           </button>
         </div>

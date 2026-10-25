@@ -1,3 +1,4 @@
+import { SentencePart } from "./SentenceAudio";
 const fieldKeys = {
   onKeyDown: (event) => {
     if (event.key === "Enter" || event.key === " ") event.stopPropagation();
@@ -659,14 +660,14 @@ const Unit2_Page5_Q1 = () => {
                         }}
                       >
                         {idx === 0 ? (
-                          <AudioText
+                          <SentencePart first={true}
                             audio={audio}
-                            id="directions"
+                            id="sentence-clip9"
                             src={clip9}
                             label="Hear forward and backward"
                           >
                             forward and
-                          </AudioText>
+                          </SentencePart>
                         ) : (
                           "and"
                         )}
@@ -744,14 +745,14 @@ const Unit2_Page5_Q1 = () => {
                       {/* backward لأول سؤال */}
                       {idx === 0 && (
                         <span style={{ marginTop: "8px", color: "black" }}>
-                          <AudioText
+                          <SentencePart first={false}
                             audio={audio}
-                            id="directions-backward"
+                            id="sentence-clip9"
                             src={clip9}
                             label="Hear forward and backward"
                           >
                             backward
-                          </AudioText>
+                          </SentencePart>
                         </span>
                       )}
                     </div>

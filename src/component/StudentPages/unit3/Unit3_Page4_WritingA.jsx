@@ -1,7 +1,24 @@
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText,AudioFeedback,AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import { FaRedo } from "react-icons/fa";
 
+const activationKeys = {
+ onKeyDown: event => {if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},
+ onKeyUp: event => {if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}
+};
+const fieldKeys = {
+ onKeyDown: event => {if(event.key==="Enter"||event.key===" ")event.stopPropagation();},
+ onKeyUp: event => {if(event.key==="Enter"||event.key===" ")event.stopPropagation();}
+};
+
+
 const WritingA = () => {
+const audio=useExerciseAudio();
+const resetButtonRef=React.useRef(null);
+const [announcement,setAnnouncement]=useState("");
+
   const [answers, setAnswers] = useState([
     ["", ""], // Mike
     ["", ""], // Gary
@@ -15,6 +32,9 @@ const WritingA = () => {
   };
 
   const reset = () => {
+audio.stop();
+setAnnouncement("Answers, feedback and locks cleared.");
+
     setAnswers([
       ["", ""],
       ["", ""],
@@ -23,7 +43,7 @@ const WritingA = () => {
   };
 
   const input = (row, col) => (
-    <input
+    <input {...fieldKeys} title={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`} aria-label={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`}
       value={answers[row][col]}
       onChange={(e) => handleChange(row, col, e.target.value)}
       style={{
@@ -37,7 +57,9 @@ const WritingA = () => {
   );
 
   return (
-    <div className="space-y-4 w-full max-w-[900px] mx-auto">
+    <div data-exercise-scope="Unit3_Page4_WritingA.jsx" className="space-y-4 w-full max-w-[900px] mx-auto">
+<AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit3_Page4_WritingA.jsx"] input:focus-visible,[data-exercise-scope="Unit3_Page4_WritingA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit3_Page4_WritingA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style><div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
+
       {/* العنوان */}
       <h5 className="header-title-page8-read mb-5">
         <span className="ex-A-read mr-2">A</span>
@@ -95,14 +117,14 @@ const WritingA = () => {
 
       {/* 🔄 فقط Reset */}
       <div className="flex justify-center mt-4">
-        <div
+        <button type="button" {...activationKeys} aria-label="Start Again" ref={resetButtonRef}
           onClick={reset}
           className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
         >
           <div className="bg-white p-3 rounded-full shadow">
             <FaRedo size={14} className="text-gray-700" />
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );

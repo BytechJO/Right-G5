@@ -1,3 +1,4 @@
+import { SentenceGroup } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_001_The_clown_(unicycle_who_the_rode)_could_also_juggle.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_002_We_went_down_the_giant_slide_(meters_was_30_high_that).mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_003_I_liked_the_clown_(chased_that_by_was_bull_the).mp3";
@@ -230,84 +231,49 @@ const Unit2_Page6_Q2 = () => {
 
         <div className="text-[20px] leading-9 flex flex-col gap-10 mt-12">
           {/* 1 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: 1 The clown (unicycle / who / the / rode) could also juggle. blank">
             <span className="font-bold mr-4">1</span>
-            <AudioText
-              audio={audio}
-              id="fragment-0-0"
-              src={clip0}
-              label="Hear item 1"
-            >
+            
               The clown
-            </AudioText>{" "}
+            {" "}
             <span className="text-[#12C8F9]">
-              <AudioText
-                audio={audio}
-                id="fragment-0-1"
-                src={clip0}
-                label="Hear item 1"
-              >
+              
                 (unicycle / who / the / rode)
-              </AudioText>
+              
             </span>{" "}
-            <AudioText
-              audio={audio}
-              id="fragment-0-2"
-              src={clip0}
-              label="Hear item 1"
-            >
+            
               could also juggle.
-            </AudioText>
+            
             {input(0)}
-          </div>
+          </SentenceGroup>
 
           {/* 2 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: 2 We went down the giant slide (meters / was / 30 / high / that) . blank">
             <span className="font-bold mr-4">2</span>
-            <AudioText
-              audio={audio}
-              id="fragment-1-3"
-              src={clip1}
-              label="Hear item 2"
-            >
+            
               We went down the giant slide
-            </AudioText>{" "}
+            {" "}
             <span className="text-[#12C8F9]">
-              <AudioText
-                audio={audio}
-                id="fragment-1-4"
-                src={clip1}
-                label="Hear item 2"
-              >
+              
                 (meters / was / 30 / high / that)
-              </AudioText>
+              
             </span>
             .{input(1)}
-          </div>
+          </SentenceGroup>
 
           {/* 3 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: 3 I liked the clown (chased / that / by / was / bull / the) . blank">
             <span className="font-bold mr-4">3</span>
-            <AudioText
-              audio={audio}
-              id="fragment-2-5"
-              src={clip2}
-              label="Hear item 3"
-            >
+            
               I liked the clown
-            </AudioText>{" "}
+            {" "}
             <span className="text-[#12C8F9]">
-              <AudioText
-                audio={audio}
-                id="fragment-2-6"
-                src={clip2}
-                label="Hear item 3"
-              >
+              
                 (chased / that / by / was / bull / the)
-              </AudioText>
+              
             </span>
             .{input(2)}
-          </div>
+          </SentenceGroup>
         </div>
 
         <div className="action-buttons-container mt-6">

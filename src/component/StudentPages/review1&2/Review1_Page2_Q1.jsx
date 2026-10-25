@@ -1,3 +1,4 @@
+import { SentenceGroup } from "../unit2/SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 17 - D/Item_001_milk_does_he_drink.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 17 - D/Item_002_He_drinks.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 17 - D/Item_003_photos_does_he_take.mp3";
@@ -5,7 +6,11 @@ import clip3 from "../../../assets/audio/ClassBook/U2/Page 17 - D/Item_004_He_ta
 
 import clip5 from "../../../assets/audio/ClassBook/U2/Page 17 - D/Item_006_The_elephant_is.mp3";
 import { useExerciseAudio } from "../unit2/useExerciseAudio";
-import { AudioText, AudioFeedback, AudioSpeaker } from "../unit2/ExerciseAudioText";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit2/ExerciseAudioText";
 import ExerciseHeader from "../../ExerciseHeader";
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -15,25 +20,36 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the O
 const activationKeys = {
   onKeyDown: (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault(); event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     if (!event.repeat) event.currentTarget.click();
   },
   onKeyUp: (event) => {
-    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },
 };
 const fieldKeys = {
-  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
-  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
 };
-const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
-  .replace(/[‘’']/g, "")
-  .replace(/[.,!?;:…“”"–—-]/g, " ")
-  .replace(/\s+/g, " ").trim();
-
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Page_D_Questions = () => {
- const audio=useExerciseAudio();
+  const audio = useExerciseAudio();
   const resetButtonRef = useRef(null);
   const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState([
@@ -67,13 +83,13 @@ const Page_D_Questions = () => {
     if (locked || result[i]?.[field] === true) return;
     if (result[i]?.[field] === true) return;
 
-    const updated = answers.map(row=>({...row}));
+    const updated = answers.map((row) => ({ ...row }));
     updated[i][field] = val;
     setAnswers(updated);
 
     setResult((prev) => {
       const copy = [...prev];
-      if (copy[i]) copy[i] = {...copy[i], [field]:undefined};
+      if (copy[i]) copy[i] = { ...copy[i], [field]: undefined };
       return copy;
     });
   };
@@ -81,8 +97,10 @@ const Page_D_Questions = () => {
   // ✅ CHECK
   const handleCheck = () => {
     if (locked) return;
- audio.stop();
-    setAnnouncement("Answers checked. Correct answers stay locked; incorrect answers can be changed.");
+    audio.stop();
+    setAnnouncement(
+      "Answers checked. Correct answers stay locked; incorrect answers can be changed.",
+    );
 
     if (answers.some((a) => !a.q.trim() || !a.a.trim())) {
       setAnnouncement("Complete all fields.");
@@ -110,7 +128,7 @@ const Page_D_Questions = () => {
 
     if (correctCount === total) {
       setLocked(true);
-      resetButtonRef.current?.focus({preventScroll:true});
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -121,16 +139,16 @@ const Page_D_Questions = () => {
 
   // 👀 SHOW
   const handleShow = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
-    setResult(correct.map(()=>({q:true,a:true})));
+    setResult(correct.map(() => ({ q: true, a: true })));
     setLocked(true);
   };
 
   // 🔄 RESET
   const handleReset = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       { q: "", a: "" },
@@ -144,7 +162,40 @@ const Page_D_Questions = () => {
   // 🎯 input
   const input = (i, field, width = "350px") => (
     <span className="relative inline-block mx-2">
-      <input {...fieldKeys} aria-label={[{"q":"Item 1, question words before: milk does he drink?","a":"Item 1, amount of milk: complete He drinks."},{"q":"Item 2, question words before: photos does he take?","a":"Item 2, number of photos: complete He takes."},{"q":"Item 3, write the question about the height of the pictured elephant.","a":"Item 3, height of the elephant: complete The elephant is."}][i][field]} title={[{"q":"Item 1, question words before: milk does he drink?","a":"Item 1, amount of milk: complete He drinks."},{"q":"Item 2, question words before: photos does he take?","a":"Item 2, number of photos: complete He takes."},{"q":"Item 3, write the question about the height of the pictured elephant.","a":"Item 3, height of the elephant: complete The elephant is."}][i][field]}
+      <input
+        {...fieldKeys}
+        aria-label={
+          [
+            {
+              q: "Item 1, question words before: milk does he drink?",
+              a: "Item 1, amount of milk: complete He drinks.",
+            },
+            {
+              q: "Item 2, question words before: photos does he take?",
+              a: "Item 2, number of photos: complete He takes.",
+            },
+            {
+              q: "Item 3, write the question about the height of the pictured elephant.",
+              a: "Item 3, height of the elephant: complete The elephant is.",
+            },
+          ][i][field]
+        }
+        title={
+          [
+            {
+              q: "Item 1, question words before: milk does he drink?",
+              a: "Item 1, amount of milk: complete He drinks.",
+            },
+            {
+              q: "Item 2, question words before: photos does he take?",
+              a: "Item 2, number of photos: complete He takes.",
+            },
+            {
+              q: "Item 3, write the question about the height of the pictured elephant.",
+              a: "Item 3, height of the elephant: complete The elephant is.",
+            },
+          ][i][field]
+        }
         value={answers[i][field]}
         onChange={(e) => handleChange(i, field, e.target.value)}
         disabled={locked || result[i]?.[field] === true}
@@ -155,7 +206,13 @@ const Page_D_Questions = () => {
           fontWeight: "bold",
           color: "#6D2980",
           background: "transparent",
-        borderBottom:locked || result[i]?.[field] === true ? "2px solid #16a34a" : result[i]?.[field] === false ? "2px solid #ef4444" : undefined}}
+          borderBottom:
+            locked || result[i]?.[field] === true
+              ? "2px solid #16a34a"
+              : result[i]?.[field] === false
+                ? "2px solid #ef4444"
+                : "1px solid",
+        }}
       />
 
       {result[i]?.[field] === false && (
@@ -188,12 +245,27 @@ const Page_D_Questions = () => {
   );
 
   return (
-    <div data-exercise-scope="Review1_Page2_Q1.jsx" className="p-8 flex flex-col items-center">
-<AudioFeedback audio={audio} />
-<style>{`[data-exercise-scope="Review1_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review1_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review1_Page2_Q1.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
-<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
+    <div
+      data-exercise-scope="Review1_Page2_Q1.jsx"
+      className="p-8 flex flex-col items-center"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review1_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review1_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review1_Page2_Q1.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
       <div className="div-forall">
-        <ExerciseHeader isReview sectionLetter="D" title={<>Look and write the questions and answers.</>} subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking." />
+        <ExerciseHeader
+          isReview
+          sectionLetter="D"
+          title={<>Look and write the questions and answers.</>}
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
         <div className="mb-7">
           {/* 🔥 السؤال 1 */}
           <div
@@ -218,7 +290,8 @@ const Page_D_Questions = () => {
                 1
               </span>
 
-              <img alt="A glass of milk on a saucer."
+              <img
+                alt="A glass of milk on a saucer."
                 src={img1}
                 style={{
                   width: "120px",
@@ -230,10 +303,19 @@ const Page_D_Questions = () => {
             </div>
 
             <div style={{ flex: 1 }}>
-              <div>{input(0, "q")}<AudioText audio={audio} id="fragment-0-0" src={clip0} label="Hear item 1"> milk does he drink?</AudioText></div>
-              <div style={{ marginTop: "10px" }}><AudioText audio={audio} id="fragment-0-1" src={clip1} label="Hear item 1">
-                He drinks </AudioText>{input(0, "a", "350px")}.
-              </div>
+              <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: blank milk does he drink?">
+                {input(0, "q")}
+                
+                  {" "}
+                  milk does he drink?
+                
+              </SentenceGroup>
+              <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: He drinks blank ." style={{ marginTop: "10px" }}>
+                
+                  He drinks{" "}
+                
+                {input(0, "a", "350px")}.
+              </SentenceGroup>
             </div>
           </div>
 
@@ -260,7 +342,8 @@ const Page_D_Questions = () => {
                 2
               </span>
 
-              <img alt="A boy holding photographs with a camera around his neck."
+              <img
+                alt="A boy holding photographs with a camera around his neck."
                 src={img2}
                 style={{
                   width: "120px",
@@ -272,10 +355,19 @@ const Page_D_Questions = () => {
             </div>
 
             <div style={{ flex: 1 }}>
-              <div>{input(1, "q")}<AudioText audio={audio} id="fragment-1-2" src={clip2} label="Hear item 2"> photos does he take?</AudioText></div>
-              <div style={{ marginTop: "10px" }}><AudioText audio={audio} id="fragment-1-3" src={clip3} label="Hear item 2">
-                He takes </AudioText>{input(1, "a", "350px")}.
-              </div>
+              <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: blank photos does he take?">
+                {input(1, "q")}
+                
+                  {" "}
+                  photos does he take?
+                
+              </SentenceGroup>
+              <SentenceGroup audio={audio} id="sentence-3" src={clip3} label="Hear the sentence: He takes blank ." style={{ marginTop: "10px" }}>
+                
+                  He takes{" "}
+                
+                {input(1, "a", "350px")}.
+              </SentenceGroup>
             </div>
           </div>
 
@@ -301,7 +393,8 @@ const Page_D_Questions = () => {
                 3
               </span>
 
-              <img alt="An elephant beside a height scale."
+              <img
+                alt="An elephant beside a height scale."
                 src={img3}
                 style={{
                   width: "120px",
@@ -313,22 +406,46 @@ const Page_D_Questions = () => {
             </div>
             <div style={{ flex: 1 }}>
               <div>{input(2, "q", "350px")}?</div>
-              <div style={{ marginTop: "10px" }}><AudioText audio={audio} id="fragment-2-4" src={clip5} label="Hear item 3">
-                The elephant is </AudioText>{input(2, "a", "350px")}.
-              </div>
+              <SentenceGroup audio={audio} id="sentence-4" src={clip5} label="Hear the sentence: The elephant is blank ." style={{ marginTop: "10px" }}>
+                
+                  The elephant is{" "}
+                
+                {input(2, "a", "350px")}.
+              </SentenceGroup>
             </div>
           </div>
         </div>
         <div className="action-buttons-container">
-          <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={handleReset}>
+          <button
+            type="button"
+            aria-label="Start Again"
+            {...activationKeys}
+            ref={resetButtonRef}
+            className="try-again-button"
+            onClick={handleReset}
+          >
             Start Again ↻
           </button>
 
-          <button type="button" aria-label="Show Answer" {...activationKeys} onClick={handleShow} className="show-answer-btn">
+          <button
+            type="button"
+            aria-label="Show Answer"
+            {...activationKeys}
+            onClick={handleShow}
+            className="show-answer-btn"
+          >
             Show Answer
           </button>
 
-          <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={handleCheck}>
+          <button
+            type="button"
+            aria-label="Check Answer"
+            {...activationKeys}
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
+            className="check-button2"
+            onClick={handleCheck}
+          >
             Check Answer ✓
           </button>
         </div>
