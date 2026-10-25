@@ -1,8 +1,29 @@
-import React, {  useState } from "react";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault(); event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+};
+const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
+  .replace(/[‘’']/g, "")
+  .replace(/[.,!?;:…“”"–—-]/g, " ")
+  .replace(/\s+/g, " ").trim();
+
 
 const Unit2_Page2_ComprehensionA = () => {
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
   const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -20,6 +41,7 @@ const Unit2_Page2_ComprehensionA = () => {
   ];
 
   const handleChange = (i, value) => {
+    if (locked || result[i] === true) return;
     const updated = [...answers];
     updated[i] = value;
     setAnswers(updated);
@@ -31,12 +53,13 @@ const Unit2_Page2_ComprehensionA = () => {
       return copy;
     });
   };
-  const normalize = (str) =>
-    str.toLowerCase().replace(/\.$/, "").replace(/\s+/g, " ").trim();
+  const normalize = normalizeAnswer;
   const handleCheck = () => {
     if (locked) return;
+    setAnnouncement("Answers checked. Correct answers stay locked; incorrect answers can be changed.");
 
     if (answers.some((a) => !a || !a.trim())) {
+      setAnnouncement("Please complete all fields.");
       ValidationAlert.info("Please complete all fields.");
       return;
     }
@@ -66,6 +89,7 @@ const Unit2_Page2_ComprehensionA = () => {
 
     if (correctCount === total) {
       setLocked(true); // 🔒 يقفل فقط إذا كله صح
+      resetButtonRef.current?.focus({preventScroll:true});
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -74,17 +98,21 @@ const Unit2_Page2_ComprehensionA = () => {
     }
   };
   const handleShow = () => {
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correctAnswers);
-    setResult([]);
+    setResult((correctAnswers).map(()=>true));
     setLocked(true);
   };
   const handleReset = () => {
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
     setResult([]);
     setLocked(false);
   };
   return (
-    <div className="mb-15 mx-auto w-full">
+    <div data-exercise-scope="Unit2_Page2_ComprehensionA.jsx" className="mb-15 mx-auto w-full">
+<style>{`[data-exercise-scope="Unit2_Page2_ComprehensionA.jsx"] input:focus-visible,[data-exercise-scope="Unit2_Page2_ComprehensionA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit2_Page2_ComprehensionA.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
       {/* العنوان */}
       <div className="flex items-center gap-3 mb-7">
         <h5 className="header-title-page8-read pb-2.5">
@@ -113,7 +141,7 @@ const Unit2_Page2_ComprehensionA = () => {
                 <div className="flex-1 relative">
                   <span>{q}</span>
 
-                  <input
+                  <input placeholder="Complete the sentence" style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} {...fieldKeys} aria-label={`Item ${i + 1}, complete the sentence: ${q}`} title={`Item ${i + 1}, complete the sentence: ${q}`}
                     disabled={locked || result[i] === true}
                     value={answers[i]}
                     onChange={(e) => handleChange(i, e.target.value)}
@@ -125,7 +153,7 @@ const Unit2_Page2_ComprehensionA = () => {
                 <div className="flex-1 flex items-center gap-2 relative">
                   <span className="whitespace-nowrap">{q}</span>
 
-                  <input
+                  <input placeholder="Complete the sentence" style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} {...fieldKeys} aria-label={`Item ${i + 1}, complete the sentence: ${q}`} title={`Item ${i + 1}, complete the sentence: ${q}`}
                     disabled={locked || result[i] === true}
                     value={answers[i]}
                     onChange={(e) => handleChange(i, e.target.value)}
@@ -168,14 +196,14 @@ const Unit2_Page2_ComprehensionA = () => {
       <div className="flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
-            </div>
-          </div>
+            </span>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
           </span>
@@ -183,14 +211,14 @@ const Unit2_Page2_ComprehensionA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Show Answer" {...activationKeys}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
-            </div>
-          </div>
+            </span>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
           </span>
@@ -198,14 +226,14 @@ const Unit2_Page2_ComprehensionA = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
-            </div>
-          </div>
+            </span>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer
           </span>

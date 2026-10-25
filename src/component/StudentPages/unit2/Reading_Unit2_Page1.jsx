@@ -102,50 +102,24 @@ const Reading_Unit2_Page1 = ({
   };
 
   return (
-    <div
+    <div role="group" aria-label="unit2 Reading_Unit2_Page1" data-page-access="unit2/Reading_Unit2_Page1.jsx"
       className="page1-img-wrapper"
       onClick={handleImageClick}
       style={{ backgroundImage: `url(${page24})` }}
-    >
+    ><style>{`[data-page-access="unit2/Reading_Unit2_Page1.jsx"] [data-launcher]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img
         src={page24}
         style={{ display: "block" }}
         onClick={handleImageClick}
       /> */}
 
-      {clickableAreas.map((area, index) => (
-        <div
-          key={index}
-          className={`clickable-area ${
-            hoveredAreaIndex === index || activeAudio === `page1-${index}`
-              ? "highlight"
-              : ""
-          }`}
-          style={{
-            position: "absolute",
-            left: `${area.x1}%`,
-            top: `${area.y1}%`,
-            width: `${area.x2 - area.x1}%`,
-            height: `${area.y2 - area.y1}%`,
-          }}
-          onClick={() => {
-            setActiveAudio(`page1-${index}`);
-            playSound(area.sound);
-          }}
-          onMouseEnter={() => {
-            if (!isPlaying) setHoveredAreaIndex(index);
-          }}
-          onMouseLeave={() => {
-            if (!isPlaying) setHoveredAreaIndex(null);
-          }}
-        ></div>
-      ))}
+      
 
       <div
         className="headset-icon-CD-unit2-page11-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg role="button" tabIndex={0} data-launcher aria-label="Open reading audio" onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -164,13 +138,13 @@ const Reading_Unit2_Page1 = ({
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captionsExample} />
+                <AudioWithCaption pageId="sb_unit2_page20_reading" src={sound1} captions={captionsExample} />
               </div>,
             );
           }}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden="true"
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -185,7 +159,7 @@ const Reading_Unit2_Page1 = ({
         className="pauseBtn-icon-CD-page21 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg role="button" tabIndex={0} data-launcher aria-label="Open reading video" onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -224,7 +198,7 @@ const Reading_Unit2_Page1 = ({
           }}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden="true"
             className="svg-img"
             href={pauseBtn}
             x="0"
@@ -234,7 +208,34 @@ const Reading_Unit2_Page1 = ({
           />
         </svg>
       </div>
-      <audio ref={audioRef} style={{ display: "none" }} />
+      {clickableAreas.map((area, index) => (
+        <div role="button" tabIndex={0} data-launcher aria-label={`Read story section ${index + 1}`} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();}}} onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}}
+          key={index}
+          className={`clickable-area ${
+            hoveredAreaIndex === index || activeAudio === `page1-${index}`
+              ? "highlight"
+              : ""
+          }`}
+          style={{
+            position: "absolute",
+            left: `${area.x1}%`,
+            top: `${area.y1}%`,
+            width: `${area.x2 - area.x1}%`,
+            height: `${area.y2 - area.y1}%`,
+          }}
+          onClick={() => {
+            setActiveAudio(`page1-${index}`);
+            playSound(area.sound);
+          }}
+          onMouseEnter={() => {
+            if (!isPlaying) setHoveredAreaIndex(index);
+          }}
+          onMouseLeave={() => {
+            if (!isPlaying) setHoveredAreaIndex(null);
+          }}
+        ></div>
+      ))}
+<audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
 };

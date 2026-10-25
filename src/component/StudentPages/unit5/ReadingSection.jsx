@@ -1,3 +1,4 @@
+import { useReadingHighlight } from "../../useReadingHighlight";
 import ReadingBG from "../../../assets/imgs/conversation.svg";
 import think from "../../../assets/imgs/pages/classbook/think.svg";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
@@ -13,10 +14,18 @@ const ReadingSection = ({
   sound,
   captions,
   stopAtSecond,
+  wordTimings,
+  timingAliases,
+  pageId,
+  onTimeUpdate,
+  imageAlt,
   readingRef,
   underlineMode,
   originalHtmlRef,
 }) => {
+  const { highlight, onTimeUpdate: updateReadingTime } = useReadingHighlight(
+    wordTimings, timingAliases, !underlineMode,
+  );
   const handleTextSelection = () => {
     if (!underlineMode) return;
 
@@ -63,18 +72,20 @@ const ReadingSection = ({
           Reading
         </div>
 
-        <h2 className="font-bold text-[18px] text-black">{mainTitle}</h2>
+        <h2 className="font-bold text-[18px] text-black">{highlight(mainTitle)}</h2>
       </div>
       <div className="w-[70%] mx-auto">
         <QuestionAudioPlayer
           src={sound}
+          onTimeUpdate={(time) => { updateReadingTime(time); onTimeUpdate?.(time); }}
+          pageId={pageId}
           captions={captions}
           stopAtSecond={stopAtSecond}
         />
       </div>
       <div className="relative w-[60%] mt-2">
         <div className="absolute -top-3 left-4 bg-[#6D2980] text-white px-5 py-1 rounded-md text-sm font-bold">
-          {title}
+          {highlight(title)}
         </div>
 
         <div
@@ -84,6 +95,7 @@ const ReadingSection = ({
           {/* الصورة مع float */}
           <img
             src={image}
+            alt={imageAlt}
             style={{ width: "250px", height: "200px", objectFit: "contain" }}
             className="float-left mr-5 mb-2 rounded-md"
           />
@@ -98,7 +110,7 @@ const ReadingSection = ({
               if (p.note) {
                 return (
                   <p key={i} className="italic  my-3">
-                    {p.note}
+                    {highlight(p.note)}
                   </p>
                 );
               }
@@ -120,7 +132,7 @@ const ReadingSection = ({
                   </span>
 
                   <span>
-                    {p.parts
+                    {highlight(p.parts
                       ? p.parts.map((part, idx) => (
                           <span
                             key={idx}
@@ -133,7 +145,7 @@ const ReadingSection = ({
                             {part.text}
                           </span>
                         ))
-                      : p.text}
+                      : p.text)}
                   </span>
                 </div>
               );

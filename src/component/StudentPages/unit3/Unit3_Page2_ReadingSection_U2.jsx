@@ -4,6 +4,7 @@ import ComprehensionB from "./Unit3_Page2_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 3 Curry Tastes Great! Folder/Page 23/SVG/Asset 23.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U3/PG 23/pg23-reading.mp3";
+import readingTimings from "../../../assets/json/pg23-reading.mp3.json";
 
 const ReadingSection_U2 = () => {
   const paragraphs = [
@@ -54,9 +55,12 @@ const ReadingSection_U2 = () => {
         }
         title="Let Me Introduce You!"
         image={imgReading}
+        imageAlt="A woman holding papers in a television news studio."
         paragraphs={paragraphs}
         question="What do you think she is like? What would you like to ask Linda Robinson?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        pageId="sb_unit3_page23_reading"
         captions={captions}
         stopAtSecond={6.5}
       />

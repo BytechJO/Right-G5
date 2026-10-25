@@ -272,19 +272,19 @@ img {
   display: flex;
   align-items: flex-start;
   gap: 5px;
-  white-space: nowrap;
-  width: 70%;
+  /* white-space: nowrap; */
+  /* width: 70%; */
 }
 .header-title-page8-read {
   font-size: 20px;
   font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
   color: #6d2980;
   font-weight: 700;
-  display: flex;
+  /* display: flex; */
   align-items: flex-start;
   gap: 5px;
-  white-space: nowrap;
-  width: 70%;
+  /* white-space: nowrap; */
+  width: 90%;
   margin-bottom: 2;
 }
 .WB-header-title-page8 {
@@ -688,4 +688,29 @@ img {
     white-space: normal; /* ينزل سطر */
     line-height: 1.4;
   }
+}
+
+@media (max-width: 1200px) and (min-width: 768px) {
+  .header-title-page8 {
+    font-size: 20px; /* أصغر شوي من الديسكتوب */
+    width: 90%; /* أوسع */
+    white-space: normal; /* ينزل سطر */
+    line-height: 1.4;
+  }
+}
+
+svg[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+div[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  /* border-radius: 50%; */
+}
+button[aria-label^="Go to"]:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 50%;
 }

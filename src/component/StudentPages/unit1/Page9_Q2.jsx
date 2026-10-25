@@ -1,12 +1,42 @@
-import React, { useState } from "react";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback } from "./ExerciseAudioText";
+import clip0 from "../../../assets/audio/ClassBook/U1/Page 9 - E/Item_001_How_deep_is_the_pool.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U1/Page 9 - E/Item_002_How_far_did_Frank_swim.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U1/Page 9 - E/Item_003_How_much_does_it_cost_to_swim_for_a_day.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U1/Page 9 - E/Item_004_How_many_times_did_Frank_dive.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import grammer_u1 from "../../../assets/audio/ClassBook/U1/PG 9/cd5pg9.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault(); event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+};
+const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
+  .replace(/[‘’']/g, "")
+  .replace(/[.,!?;:…“”"]/g, " ")
+  .replace(/\s+/g, " ").trim();
+
 const Page9_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [locked, setLocked] = useState(false);
   const [result, setResult] = useState([]);
   const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
     const updated = [...answers];
     updated[i] = val;
     setAnswers(updated);
@@ -20,7 +50,7 @@ const Page9_Q2 = () => {
   };
   const input = (i) => (
     <span className="relative">
-      <input
+      <input {...fieldKeys} aria-label={["How deep is the pool?", "How far did Frank swim?", "How much does it cost to swim for a day?", "How many times did Frank dive?"][i]} title={["How deep is the pool?", "How far did Frank swim?", "How much does it cost to swim for a day?", "How many times did Frank dive?"][i]} style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} placeholder="Type your answer"
         disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
@@ -99,14 +129,20 @@ const Page9_Q2 = () => {
     "It costs one dollar for a day.",
     "He sometimes dives fifty times in a day.",
   ];
-  const normalize = (str) => str.toLowerCase().replace(/\s+/g, " ").trim();
+  const normalize = normalizeAnswer;
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(modelAnswers);
     setLocked(true);
-  };
+  
+    setResult(correct.map(() => true));
+};
   // ✅ Check (فقط يتأكد إنو الطالب كتب)
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
+    setAnnouncement("Checking answers. Correct answers stay locked; incorrect answers can be changed.");
 
     // 🛑 VALIDATION (محسّنة)
     if (answers.some((a) => !a || !a.trim())) {
@@ -121,7 +157,7 @@ const Page9_Q2 = () => {
       const user = normalize(a);
 
       // 🔥 دعم multiple answers
-      const ok = correct[i].some((ans) => user.includes(normalize(ans)));
+      const ok = [...correct[i], modelAnswers[i]].some((ans) => user === normalize(ans));
 
       if (ok) correctCount++;
       return ok;
@@ -145,6 +181,7 @@ const Page9_Q2 = () => {
     // 🔔 ALERT TYPE
     if (correctCount === total) {
       setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -155,20 +192,23 @@ const Page9_Q2 = () => {
 
   // 🔄 Reset
   const reset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
     setResult([]); // 🔥 مهم
     setLocked(false);
   };
 
   return (
-    <div className="flex flex-col items-center p-8">
+    <div data-unit1-scope="Page9_Q2.jsx" className="flex flex-col items-center p-8">
+<AudioFeedback audio={audio} />
+<style>{`[data-unit1-scope="Page9_Q2.jsx"] input:focus-visible,[data-unit1-scope="Page9_Q2.jsx"] textarea:focus-visible,[data-unit1-scope="Page9_Q2.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
       <div className="div-forall" style={{gap:"20px"}}>
         {/* Title */}
-        <h5 className="header-title-page8 mb-2">
-          <span className="ex-A mr-2">E</span>
-          Listen, read, and answer.
-        </h5>
+        <ExerciseHeader sectionLetter="E" title={<>Listen, read, and answer.</>} subTitle="Listen once for the main idea, replay the needed part, then answer each question in a complete, concise response." />
         <QuestionAudioPlayer
+          pageId="sb_unit1_page9_q2"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={6.1}
@@ -176,25 +216,25 @@ const Page9_Q2 = () => {
         <div className="space-y-6 text-[18px] mt-5  mb-10">
           {/* 1 */}
           <div>
-            <div>1. How deep is the pool?</div>
+            <div><AudioText audio={audio} id="e-0" src={clip0} label="Hear question 1">1. How deep is the pool?</AudioText></div>
             {input(0)}
           </div>
 
           {/* 2 */}
           <div>
-            <div>2. How far did Frank swim?</div>
+            <div><AudioText audio={audio} id="e-1" src={clip1} label="Hear question 2">2. How far did Frank swim?</AudioText></div>
             {input(1)}
           </div>
 
           {/* 3 */}
           <div>
-            <div>3. How much does it cost to swim for a day?</div>
+            <div><AudioText audio={audio} id="e-2" src={clip2} label="Hear question 3">3. How much does it cost to swim for a day?</AudioText></div>
             {input(2)}
           </div>
 
           {/* 4 */}
           <div>
-            <div>4. How many times did Frank dive?</div>
+            <div><AudioText audio={audio} id="e-3" src={clip3} label="Hear question 4">4. How many times did Frank dive?</AudioText></div>
             {input(3)}
           </div>
         </div>
@@ -202,13 +242,13 @@ const Page9_Q2 = () => {
 
       {/* Buttons */}
       <div className="action-buttons-container mt-6">
-        <button className="try-again-button" onClick={reset}>
+        <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button type="button" aria-label="Show Answer" {...activationKeys} onClick={showAnswers} className="show-answer-btn">
           Show Answer
         </button>
-        <button className="check-button2" onClick={checkAnswers}>
+        <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -1,7 +1,46 @@
-import React, { useState } from "react";
+import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_001_The_clown_(unicycle_who_the_rode)_could_also_juggle.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_002_We_went_down_the_giant_slide_(meters_was_30_high_that).mp3";
+import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - D/Item_003_I_liked_the_clown_(chased_that_by_was_bull_the).mp3";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import ExerciseHeader from "../../ExerciseHeader";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit2_Page6_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
   const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -14,7 +53,8 @@ const Unit2_Page6_Q2 = () => {
   ];
 
   const handleChange = (i, val) => {
-    if (result[i] === true) return; // 🔒 لا تعدل الصح
+    if (locked || result[i] === true) return;
+    if (locked || result[i] === true) return; // 🔒 لا تعدل الصح
 
     const updated = [...answers];
     updated[i] = val;
@@ -33,8 +73,13 @@ const Unit2_Page6_Q2 = () => {
   // ====================
   const handleCheck = () => {
     if (locked) return;
+    audio.stop();
+    setAnnouncement(
+      "Answers checked. Correct answers stay locked; incorrect answers can be changed.",
+    );
 
     if (answers.some((a) => !a.trim())) {
+      setAnnouncement("Please complete all fields.");
       ValidationAlert.info("Please complete all fields.");
       return;
     }
@@ -42,7 +87,7 @@ const Unit2_Page6_Q2 = () => {
     let correctCount = 0;
 
     const res = answers.map((a, i) => {
-      const normalize = (str) => str.toLowerCase().replace(/[.,]/g, "").trim();
+      const normalize = normalizeAnswer;
 
       const ok = normalize(a) === normalize(correct[i]);
 
@@ -67,6 +112,7 @@ const Unit2_Page6_Q2 = () => {
 
     if (correctCount === total) {
       setLocked(true);
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -79,8 +125,10 @@ const Unit2_Page6_Q2 = () => {
   // 👀 SHOW
   // ====================
   const handleShow = () => {
+    audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
-    setResult([]);
+    setResult(correct.map(() => true));
     setLocked(true);
   };
 
@@ -88,6 +136,8 @@ const Unit2_Page6_Q2 = () => {
   // 🔄 RESET
   // ====================
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
     setResult([]);
     setLocked(false);
@@ -96,10 +146,21 @@ const Unit2_Page6_Q2 = () => {
   // 🎯 input
   const input = (i) => (
     <div className="relative mt-5">
-      <input
+      <input placeholder="Rewrite the sentence"
+        style={{
+          borderBottom:
+            locked || result[i] === true
+              ? "2px solid #16a34a"
+              : result[i] === false
+                ? "2px solid #ef4444"
+                : undefined,
+        }}
+        {...fieldKeys}
+        aria-label={["Item 1, rewrite the complete sentence about the clown and the unicycle, ordering the relative clause.","Item 2, rewrite the complete sentence about the giant slide, ordering the relative clause.","Item 3, rewrite the complete sentence about the clown chased by the bull, ordering the relative clause."][i]}
+        title={["Item 1, rewrite the complete sentence about the clown and the unicycle, ordering the relative clause.","Item 2, rewrite the complete sentence about the giant slide, ordering the relative clause.","Item 3, rewrite the complete sentence about the clown chased by the bull, ordering the relative clause."][i]}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
-        disabled={result[i] === true}
+        disabled={locked || result[i] === true}
         className={`w-full border-b-1 outline-none text-[#6D2980] font-bold
           ${result[i] === false ? "border-red-500" : "border-black"}
         `}
@@ -137,6 +198,7 @@ const Unit2_Page6_Q2 = () => {
 
   return (
     <div
+      data-exercise-scope="Unit2_Page6_Q2.jsx"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -144,55 +206,141 @@ const Unit2_Page6_Q2 = () => {
         padding: "30px",
       }}
     >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit2_Page6_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit2_Page6_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit2_Page6_Q2.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-7">
-          <span className="ex-A mr-2">D</span>
-          Put the relative clauses in the right order. Then rewrite the
-          sentences.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="D"
+          title={
+            <>
+              Put the relative clauses in the right order. Then rewrite the
+              sentences.
+            </>
+          }
+          subTitle="Task 1: Arrange the relative-clause parts in the correct order first. Task 2: Read the completed idea, then rewrite the whole sentence carefully."
+        />
 
         <div className="text-[20px] leading-9 flex flex-col gap-10 mt-12">
           {/* 1 */}
           <div>
             <span className="font-bold mr-4">1</span>
-            The clown{" "}
+            <AudioText
+              audio={audio}
+              id="fragment-0-0"
+              src={clip0}
+              label="Hear item 1"
+            >
+              The clown
+            </AudioText>{" "}
             <span className="text-[#12C8F9]">
-              (unicycle / who / the / rode)
+              <AudioText
+                audio={audio}
+                id="fragment-0-1"
+                src={clip0}
+                label="Hear item 1"
+              >
+                (unicycle / who / the / rode)
+              </AudioText>
             </span>{" "}
-            could also juggle.
+            <AudioText
+              audio={audio}
+              id="fragment-0-2"
+              src={clip0}
+              label="Hear item 1"
+            >
+              could also juggle.
+            </AudioText>
             {input(0)}
           </div>
 
           {/* 2 */}
           <div>
             <span className="font-bold mr-4">2</span>
-            We went down the giant slide{" "}
+            <AudioText
+              audio={audio}
+              id="fragment-1-3"
+              src={clip1}
+              label="Hear item 2"
+            >
+              We went down the giant slide
+            </AudioText>{" "}
             <span className="text-[#12C8F9]">
-              (meters / was / 30 / high / that)
+              <AudioText
+                audio={audio}
+                id="fragment-1-4"
+                src={clip1}
+                label="Hear item 2"
+              >
+                (meters / was / 30 / high / that)
+              </AudioText>
             </span>
             .{input(1)}
           </div>
 
           {/* 3 */}
           <div>
-            <span className="font-bold mr-4">3</span>I liked the clown{" "}
+            <span className="font-bold mr-4">3</span>
+            <AudioText
+              audio={audio}
+              id="fragment-2-5"
+              src={clip2}
+              label="Hear item 3"
+            >
+              I liked the clown
+            </AudioText>{" "}
             <span className="text-[#12C8F9]">
-              (chased / that / by / was / bull / the)
+              <AudioText
+                audio={audio}
+                id="fragment-2-6"
+                src={clip2}
+                label="Hear item 3"
+              >
+                (chased / that / by / was / bull / the)
+              </AudioText>
             </span>
             .{input(2)}
           </div>
         </div>
 
         <div className="action-buttons-container mt-6">
-          <button className="try-again-button" onClick={handleReset}>
+          <button
+            type="button"
+            aria-label="Start Again"
+            {...activationKeys}
+            ref={resetButtonRef}
+            className="try-again-button"
+            onClick={handleReset}
+          >
             Start Again ↻
           </button>
 
-          <button onClick={handleShow} className="show-answer-btn">
+          <button
+            type="button"
+            aria-label="Show Answer"
+            {...activationKeys}
+            onClick={handleShow}
+            className="show-answer-btn"
+          >
             Show Answer
           </button>
 
-          <button className="check-button2" onClick={handleCheck}>
+          <button
+            type="button"
+            aria-label="Check Answer"
+            {...activationKeys}
+            disabled={locked}
+            style={{ cursor: locked ? "not-allowed" : "pointer" }}
+            className="check-button2"
+            onClick={handleCheck}
+          >
             Check Answer ✓
           </button>
         </div>

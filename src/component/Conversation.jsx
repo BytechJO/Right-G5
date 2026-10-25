@@ -1,7 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import conversationBG from "../assets/imgs/conversation.svg";
 import QuestionAudioPlayer from "./QuestionAudioPlayer";
 import pauseBtn from "../assets/Page 01/Right Video Button.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat)
+      event.currentTarget.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
 
 const ConversationItem = React.memo(
   ({
@@ -122,11 +139,32 @@ const Conversation = ({
   captionTimings,
   video,
   imageWidth,
+  keyboardAccessible = false,
+  pageId,
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
+  const videoOpenRef = useRef(null),
+    videoCloseRef = useRef(null),
+    videoWasOpen = useRef(false);
+  useEffect(() => {
+    if (!keyboardAccessible) return;
+    if (showVideo) {
+      videoWasOpen.current = true;
+      videoCloseRef.current?.focus({ preventScroll: true });
+    } else if (videoWasOpen.current) {
+      videoWasOpen.current = false;
+      videoOpenRef.current?.focus({ preventScroll: true });
+    }
+  }, [showVideo, keyboardAccessible]);
   return (
-    <div className="w-[60%] mx-auto">
+    <div
+      className="w-[60%] mx-auto"
+      data-conversation-access={keyboardAccessible || undefined}
+    >
+      {/* {keyboardAccessible && (
+        // <style>{`[data-conversation-access] :focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+      )} */}
       {/* العنوان */}
       <div className="flex items-center gap-4 mb-12 mt-3">
         <h2
@@ -141,29 +179,41 @@ const Conversation = ({
           {title}
         </h2>
         <h2 className="text-black font-bold">Listen and read. Then say.</h2>
-      </div>
-      <div
-        className="pauseBtn-icon-CD-page4 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 90 90"
-          onClick={() => setShowVideo(true)}
+        <div
+          className="pauseBtn-icon-CD-page4 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
-          <image
-            className="svg-img"
-            href={pauseBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 90 90"
+            {...(keyboardAccessible
+              ? {
+                  role: "button",
+                  tabIndex: 0,
+                  "aria-label": "Open conversation video",
+                  "data-conversation-control": true,
+                  ...activationKeys,
+                }
+              : {})}
+            ref={videoOpenRef}
+            onClick={() => setShowVideo(true)}
+            style={{ overflow: "visible" }}
+          >
+            <image
+              className="svg-img"
+              href={pauseBtn}
+              x="0"
+              y="0"
+              width="90"
+              height="90"
+            />
+          </svg>
+        </div>
       </div>
+
       <QuestionAudioPlayer
+        pageId={pageId}
         src={sound}
         captions={captions}
         stopAtSecond={stopAtSecond}
@@ -189,6 +239,15 @@ const Conversation = ({
 
             {/* زر الإغلاق */}
             <button
+              type="button"
+              {...(keyboardAccessible
+                ? {
+                    "aria-label": "Close conversation video",
+                    "data-conversation-control": true,
+                    ...activationKeys,
+                  }
+                : {})}
+              ref={videoCloseRef}
               onClick={() => setShowVideo(false)}
               className="absolute top-0 right-2 text-black text-2xl font-bold hover:scale-110"
             >

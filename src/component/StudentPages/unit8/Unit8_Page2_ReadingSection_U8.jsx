@@ -4,6 +4,7 @@ import ComprehensionB from "./Unit8_Page2_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U8/PG 65/cd38pg65-reading.mp3";
+import readingTimings from "../../../assets/json/cd38pg65-reading.mp3.json";
 
 const ReadingSection_U8 = () => {
   const paragraphs = [
@@ -110,9 +111,13 @@ const ReadingSection_U8 = () => {
         }
         title="How Could Something That Big Disappear?"
         image={imgReading}
+        imageAlt="A black horse running through a grassy field."
         paragraphs={paragraphs}
         question="What could be some reasons why someone might have stolen the horse?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[{"printed":["helped","to","pack"],"spoken":["helped","","pack"]},{"printed":["tell","them","that","Cinderella"],"spoken":["tell","them","","Cinderella"]},{"printed":["never","get","Cinderella"],"spoken":["never","got","Cinderella"]}]}
+        pageId="sb_unit8_page65_reading"
         captions={captions}
         stopAtSecond={8.9}
       />

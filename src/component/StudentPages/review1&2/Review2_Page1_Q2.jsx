@@ -1,7 +1,35 @@
-import React, { useState } from "react";
+import clip0 from "../../../assets/audio/ClassBook/U2/Page 18 - B/Item_001_let's_sight.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U2/Page 18 - B/Item_002_not_much_fast.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U2/Page 18 - B/Item_003_keep_my_knees_on_the_ground.mp3";
+import { useExerciseAudio } from "../unit2/useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "../unit2/ExerciseAudioText";
+import ExerciseHeader from "../../ExerciseHeader";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault(); event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+};
+const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
+  .replace(/[‘’']/g, "")
+  .replace(/[.,!?;:…“”"–—-]/g, " ")
+  .replace(/\s+/g, " ").trim();
+
 
 const Review2_Page1_Q2 = () => {
+ const audio=useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const sentences = [
     ["let’s", "sight"],
     ["not", "much", "fast"],
@@ -16,25 +44,29 @@ const Review2_Page1_Q2 = () => {
   const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const normalize = (t) => t.toLowerCase().replace(/[.]/g, "").trim();
+  const normalize = normalizeAnswer;
 
   // 🎯 اختيار الكلمة
   const handleSelect = (i, wi) => {
+ audio.play(`word-${i}-${wi}`, [clip0,clip1,clip2][i]);
+    if (locked) return;
     if (result[i]?.word === true) return;
 
+    setAnnouncement(`Question ${i + 1}: ${sentences[i][wi]} selected.`);
     const updated = [...selected];
     updated[i] = wi;
     setSelected(updated);
 
     setResult((prev) => {
       const copy = [...prev];
-      if (copy[i]) copy[i].word = undefined;
+      if (copy[i]) copy[i] = {...copy[i], word:undefined};
       return copy;
     });
   };
 
   // ✍️ كتابة التصحيح
   const handleChange = (i, val) => {
+    if (locked) return;
     if (result[i]?.answer === true) return;
 
     const updated = [...answers];
@@ -43,7 +75,7 @@ const Review2_Page1_Q2 = () => {
 
     setResult((prev) => {
       const copy = [...prev];
-      if (copy[i]) copy[i].answer = undefined;
+      if (copy[i]) copy[i] = {...copy[i], answer:undefined};
       return copy;
     });
   };
@@ -51,9 +83,11 @@ const Review2_Page1_Q2 = () => {
   // ✅ CHECK
   const handleCheck = () => {
     if (locked) return;
+ audio.stop();
+    setAnnouncement("Answers checked. Correct selections and responses stay locked; incorrect parts can be changed.");
 
     if (answers.some((a) => !a.trim()) || selected.includes(null)) {
-      ValidationAlert.info("Complete all answers.");
+      setAnnouncement("Complete all answers."); ValidationAlert.info("Complete all answers.");
       return;
     }
 
@@ -79,6 +113,7 @@ const Review2_Page1_Q2 = () => {
 
     if (correctCount === total) {
       setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -89,14 +124,18 @@ const Review2_Page1_Q2 = () => {
 
   // 👀 SHOW
   const handleShow = () => {
+ audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setSelected(correctWordIndex);
     setAnswers(correctAnswer);
-    setResult([]);
+    setResult(correctAnswer.map(()=>({word:true,answer:true})));
     setLocked(true);
   };
 
   // 🔄 RESET
   const handleReset = () => {
+ audio.stop();
+    setAnnouncement("Selections, answers and feedback cleared.");
     setSelected([null, null, null]);
     setAnswers(["", "", ""]);
     setResult([]);
@@ -104,14 +143,14 @@ const Review2_Page1_Q2 = () => {
   };
 
   return (
-    <div style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
+    <div data-exercise-scope="Review2_Page1_Q2.jsx" style={{ padding: "30px", display: "flex", justifyContent: "center" }}>
+<AudioFeedback audio={audio} />
+<style>{`[data-exercise-scope="Review2_Page1_Q2.jsx"] input:focus-visible,[data-exercise-scope="Review2_Page1_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Review2_Page1_Q2.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
       <div className="div-forall">
-        <h5 className="header-title-page8 mb-27">
-          <span className="mr-3">B</span>
-          What’s wrong? Find the one word that is wrong in each expression and
+        <ExerciseHeader isReview sectionLetter="B" title={<>What’s wrong? Find the one word that is wrong in each expression and
           correct it.
-          <br /> Rewrite the expression.
-        </h5>
+          <br /> Rewrite the expression.</>} subTitle="Task 1: Find the one incorrect word in each expression first. Task 2: Rewrite the complete corrected expression, not only the replacement word." />
 
         {/* الجمل */}
         {sentences.map((sentence, i) => (
@@ -158,7 +197,7 @@ const Review2_Page1_Q2 = () => {
                 }}
               >
                 {sentence.map((word, wi) => (
-                  <span
+                  <span role="button" tabIndex={0} data-choice {...activationKeys} aria-label={`Question ${i + 1}, ${word}`} aria-pressed={selected[i] === wi} aria-disabled={locked || result[i]?.word === true}
                     key={wi}
                     onClick={() => handleSelect(i, wi)}
                     style={{
@@ -173,9 +212,10 @@ const Review2_Page1_Q2 = () => {
                             : "2px solid transparent",
                       borderRadius: "20px",
                       position: "relative",
-                    }}
+                    boxShadow:selected[i] === wi ? (result[i]?.word === true || locked ? "0 0 0 2px #16a34a" : result[i]?.word === false ? "0 0 0 2px #ef4444" : "0 0 0 2px #2563eb") : undefined,backgroundColor:selected[i] === wi ? "#dbeafe" : undefined,outline:audio.activeId===`word-${i}-${wi}`?"3px solid #2563eb":undefined,outlineOffset:2,borderColor:(selected[i]===wi)&&(locked||result[i]?.word===true)?"#16a34a":(selected[i]===wi)&&result[i]?.word===false?"#ef4444":undefined}}
                   >
                     {word}
+{audio.activeId === `word-${i}-${wi}` && <AudioSpeaker />}
 
                     {/* ❌ على الكلمة */}
                     {result[i]?.word === false && selected[i] === wi && (
@@ -210,22 +250,18 @@ const Review2_Page1_Q2 = () => {
 
               {/* 🔥 الانبوت */}
               <div style={{ position: "relative", flex: 1, minWidth: "250px" }}>
-                <input
+                <input placeholder="Correction" {...fieldKeys} aria-label={`Expression ${i + 1}, write the correction for: ${sentences[i].join(" ")}`} title={`Expression ${i + 1}, write the correction for: ${sentences[i].join(" ")}`}
                   value={answers[i]}
                   onChange={(e) => handleChange(i, e.target.value)}
-                  disabled={result[i]?.answer === true}
+                  disabled={locked || result[i]?.answer === true}
                   style={{
                     width: "100%",
-                    borderBottom:
-                      result[i]?.answer === false
-                        ? "1px solid red"
-                        : "1px solid black",
                     outline: "none",
                     fontSize: "18px",
                     color: "#6D2980",
                     fontWeight: "bold",
                     background: "transparent",
-                  }}
+                  borderBottom:locked || result[i]?.answer === true ? "2px solid #16a34a" : result[i]?.answer === false ? "2px solid #ef4444" : undefined}}
                 />
 
                 {/* ❌ على الانبوت */}
@@ -261,15 +297,15 @@ const Review2_Page1_Q2 = () => {
         ))}
         {/* buttons */}
         <div className="action-buttons-container">
-          <button className="try-again-button" onClick={handleReset}>
+          <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={handleReset}>
             Start Again ↻
           </button>
 
-          <button onClick={handleShow} className="show-answer-btn">
+          <button type="button" aria-label="Show Answer" {...activationKeys} onClick={handleShow} className="show-answer-btn">
             Show Answer
           </button>
 
-          <button className="check-button2" onClick={handleCheck}>
+          <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={handleCheck}>
             Check Answer ✓
           </button>
         </div>

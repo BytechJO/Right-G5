@@ -61,10 +61,10 @@ const Page2 = ({ goToUnit }) => {
   };
 
   return (
-    <div className="page1-img-wrapper"
+    <div data-page-access="Page2.jsx" role="group" aria-label="Contents, units 1 to 5" className="page1-img-wrapper"
       ref={imgRef}
         onClick={handleClick}
-      style={{ backgroundImage: `url(${page2})` }}>
+      style={{ backgroundImage: `url(${page2})` }}><style>{`[data-page-access="Page2.jsx"] [data-launcher]:focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img
         src={page2}
         alt="Book Index"
@@ -74,7 +74,7 @@ const Page2 = ({ goToUnit }) => {
       /> */}
 
       {clickableAreas.map((area, index) => (
-        <div
+        <div role="button" tabIndex={0} data-launcher aria-label={`Go to ${area.title}`} onKeyDown={(event)=>{if(event.key === "Enter" || event.key === " "){event.preventDefault();event.stopPropagation();if(!event.repeat)goToUnit(area.startIndex);}}} onKeyUp={(event)=>{if(event.key === "Enter" || event.key === " "){event.preventDefault();event.stopPropagation();}}}
           key={index}
           onClick={() => {  
             goToUnit(area.startIndex);

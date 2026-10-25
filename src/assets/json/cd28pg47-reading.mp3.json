@@ -1,0 +1,2252 @@
+{
+  "language_code": null,
+  "segments": [
+    {
+      "text": "Page 47 reading. Do you have a special friend? How often do you spend time with them? A Special Visitor. Today, Lori Beck is coming to visit me. I couldn't believe it. She hopes to become an Olympic show jumper. Our friendship started last year at horse camp. Lori went to the same camp, and we stayed in a cabin together. We became good friends. I grinned as I pulled the front door open. \"Lori, it's so good to see you.\" Lori was jumping up and down with excitement. \"Jenny, it's so great to be at your house.\" \"Today, we can go to the barn in the back. You will be able to meet my brother and my dad. You met my mom already, right?\" I asked. \"Yes, I met her when she came to pick you up from camp. She was really nice. I would love to meet the rest of your family, but I'd like a glass of water first,\" said Lori. ",
+      "start_time": 0.18,
+      "end_time": 52.0,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.18,
+          "end_time": 0.44
+        },
+        {
+          "text": " ",
+          "start_time": 0.44,
+          "end_time": 0.66
+        },
+        {
+          "text": "47",
+          "start_time": 0.66,
+          "end_time": 1.12
+        },
+        {
+          "text": " ",
+          "start_time": 1.12,
+          "end_time": 1.18
+        },
+        {
+          "text": "reading.",
+          "start_time": 1.18,
+          "end_time": 1.54
+        },
+        {
+          "text": " ",
+          "start_time": 1.54,
+          "end_time": 1.96
+        },
+        {
+          "text": "Do",
+          "start_time": 1.96,
+          "end_time": 2.06
+        },
+        {
+          "text": " ",
+          "start_time": 2.06,
+          "end_time": 2.12
+        },
+        {
+          "text": "you",
+          "start_time": 2.12,
+          "end_time": 2.24
+        },
+        {
+          "text": " ",
+          "start_time": 2.24,
+          "end_time": 2.28
+        },
+        {
+          "text": "have",
+          "start_time": 2.28,
+          "end_time": 2.4
+        },
+        {
+          "text": " ",
+          "start_time": 2.4,
+          "end_time": 2.44
+        },
+        {
+          "text": "a",
+          "start_time": 2.44,
+          "end_time": 2.48
+        },
+        {
+          "text": " ",
+          "start_time": 2.48,
+          "end_time": 2.56
+        },
+        {
+          "text": "special",
+          "start_time": 2.56,
+          "end_time": 2.88
+        },
+        {
+          "text": " ",
+          "start_time": 2.88,
+          "end_time": 2.94
+        },
+        {
+          "text": "friend?",
+          "start_time": 2.94,
+          "end_time": 3.24
+        },
+        {
+          "text": " ",
+          "start_time": 3.24,
+          "end_time": 3.6
+        },
+        {
+          "text": "How",
+          "start_time": 3.6,
+          "end_time": 3.76
+        },
+        {
+          "text": " ",
+          "start_time": 3.76,
+          "end_time": 3.82
+        },
+        {
+          "text": "often",
+          "start_time": 3.82,
+          "end_time": 4.08
+        },
+        {
+          "text": " ",
+          "start_time": 4.08,
+          "end_time": 4.14
+        },
+        {
+          "text": "do",
+          "start_time": 4.14,
+          "end_time": 4.22
+        },
+        {
+          "text": " ",
+          "start_time": 4.22,
+          "end_time": 4.26
+        },
+        {
+          "text": "you",
+          "start_time": 4.26,
+          "end_time": 4.36
+        },
+        {
+          "text": " ",
+          "start_time": 4.36,
+          "end_time": 4.42
+        },
+        {
+          "text": "spend",
+          "start_time": 4.42,
+          "end_time": 4.6
+        },
+        {
+          "text": " ",
+          "start_time": 4.6,
+          "end_time": 4.68
+        },
+        {
+          "text": "time",
+          "start_time": 4.68,
+          "end_time": 4.88
+        },
+        {
+          "text": " ",
+          "start_time": 4.88,
+          "end_time": 4.92
+        },
+        {
+          "text": "with",
+          "start_time": 4.92,
+          "end_time": 5.04
+        },
+        {
+          "text": " ",
+          "start_time": 5.04,
+          "end_time": 5.08
+        },
+        {
+          "text": "them?",
+          "start_time": 5.08,
+          "end_time": 5.3
+        },
+        {
+          "text": " ",
+          "start_time": 5.3,
+          "end_time": 5.64
+        },
+        {
+          "text": "A",
+          "start_time": 5.64,
+          "end_time": 5.7
+        },
+        {
+          "text": " ",
+          "start_time": 5.7,
+          "end_time": 5.82
+        },
+        {
+          "text": "Special",
+          "start_time": 5.82,
+          "end_time": 6.12
+        },
+        {
+          "text": " ",
+          "start_time": 6.12,
+          "end_time": 6.22
+        },
+        {
+          "text": "Visitor.",
+          "start_time": 6.22,
+          "end_time": 6.62
+        },
+        {
+          "text": " ",
+          "start_time": 6.62,
+          "end_time": 6.72
+        },
+        {
+          "text": "Today,",
+          "start_time": 7.68,
+          "end_time": 8.1
+        },
+        {
+          "text": " ",
+          "start_time": 8.1,
+          "end_time": 8.42
+        },
+        {
+          "text": "Lori",
+          "start_time": 8.42,
+          "end_time": 8.66
+        },
+        {
+          "text": " ",
+          "start_time": 8.66,
+          "end_time": 8.76
+        },
+        {
+          "text": "Beck",
+          "start_time": 8.76,
+          "end_time": 9.0
+        },
+        {
+          "text": " ",
+          "start_time": 9.0,
+          "end_time": 9.08
+        },
+        {
+          "text": "is",
+          "start_time": 9.08,
+          "end_time": 9.18
+        },
+        {
+          "text": " ",
+          "start_time": 9.18,
+          "end_time": 9.22
+        },
+        {
+          "text": "coming",
+          "start_time": 9.22,
+          "end_time": 9.44
+        },
+        {
+          "text": " ",
+          "start_time": 9.44,
+          "end_time": 9.48
+        },
+        {
+          "text": "to",
+          "start_time": 9.48,
+          "end_time": 9.56
+        },
+        {
+          "text": " ",
+          "start_time": 9.56,
+          "end_time": 9.6
+        },
+        {
+          "text": "visit",
+          "start_time": 9.6,
+          "end_time": 9.86
+        },
+        {
+          "text": " ",
+          "start_time": 9.86,
+          "end_time": 9.9
+        },
+        {
+          "text": "me.",
+          "start_time": 9.9,
+          "end_time": 10.08
+        },
+        {
+          "text": " ",
+          "start_time": 10.08,
+          "end_time": 10.52
+        },
+        {
+          "text": "I",
+          "start_time": 10.52,
+          "end_time": 10.58
+        },
+        {
+          "text": " ",
+          "start_time": 10.58,
+          "end_time": 10.64
+        },
+        {
+          "text": "couldn't",
+          "start_time": 10.64,
+          "end_time": 10.92
+        },
+        {
+          "text": " ",
+          "start_time": 10.92,
+          "end_time": 10.96
+        },
+        {
+          "text": "believe",
+          "start_time": 10.96,
+          "end_time": 11.3
+        },
+        {
+          "text": " ",
+          "start_time": 11.3,
+          "end_time": 11.36
+        },
+        {
+          "text": "it.",
+          "start_time": 11.36,
+          "end_time": 11.5
+        },
+        {
+          "text": " ",
+          "start_time": 11.5,
+          "end_time": 11.84
+        },
+        {
+          "text": "She",
+          "start_time": 11.84,
+          "end_time": 12.0
+        },
+        {
+          "text": " ",
+          "start_time": 12.0,
+          "end_time": 12.04
+        },
+        {
+          "text": "hopes",
+          "start_time": 12.04,
+          "end_time": 12.26
+        },
+        {
+          "text": " ",
+          "start_time": 12.26,
+          "end_time": 12.3
+        },
+        {
+          "text": "to",
+          "start_time": 12.3,
+          "end_time": 12.34
+        },
+        {
+          "text": " ",
+          "start_time": 12.34,
+          "end_time": 12.38
+        },
+        {
+          "text": "become",
+          "start_time": 12.38,
+          "end_time": 12.68
+        },
+        {
+          "text": " ",
+          "start_time": 12.68,
+          "end_time": 12.72
+        },
+        {
+          "text": "an",
+          "start_time": 12.72,
+          "end_time": 12.78
+        },
+        {
+          "text": " ",
+          "start_time": 12.78,
+          "end_time": 12.82
+        },
+        {
+          "text": "Olympic",
+          "start_time": 12.82,
+          "end_time": 13.14
+        },
+        {
+          "text": " ",
+          "start_time": 13.14,
+          "end_time": 13.26
+        },
+        {
+          "text": "show",
+          "start_time": 13.26,
+          "end_time": 13.48
+        },
+        {
+          "text": " ",
+          "start_time": 13.48,
+          "end_time": 13.54
+        },
+        {
+          "text": "jumper.",
+          "start_time": 13.54,
+          "end_time": 13.9
+        },
+        {
+          "text": " ",
+          "start_time": 13.9,
+          "end_time": 13.9
+        },
+        {
+          "text": "Our",
+          "start_time": 14.72,
+          "end_time": 14.9
+        },
+        {
+          "text": " ",
+          "start_time": 14.9,
+          "end_time": 14.96
+        },
+        {
+          "text": "friendship",
+          "start_time": 14.96,
+          "end_time": 15.38
+        },
+        {
+          "text": " ",
+          "start_time": 15.38,
+          "end_time": 15.46
+        },
+        {
+          "text": "started",
+          "start_time": 15.46,
+          "end_time": 15.8
+        },
+        {
+          "text": " ",
+          "start_time": 15.8,
+          "end_time": 15.86
+        },
+        {
+          "text": "last",
+          "start_time": 15.86,
+          "end_time": 16.14
+        },
+        {
+          "text": " ",
+          "start_time": 16.14,
+          "end_time": 16.2
+        },
+        {
+          "text": "year",
+          "start_time": 16.2,
+          "end_time": 16.379
+        },
+        {
+          "text": " ",
+          "start_time": 16.379,
+          "end_time": 16.46
+        },
+        {
+          "text": "at",
+          "start_time": 16.46,
+          "end_time": 16.58
+        },
+        {
+          "text": " ",
+          "start_time": 16.58,
+          "end_time": 16.62
+        },
+        {
+          "text": "horse",
+          "start_time": 16.62,
+          "end_time": 16.88
+        },
+        {
+          "text": " ",
+          "start_time": 16.88,
+          "end_time": 16.94
+        },
+        {
+          "text": "camp.",
+          "start_time": 16.94,
+          "end_time": 17.22
+        },
+        {
+          "text": " ",
+          "start_time": 17.22,
+          "end_time": 17.22
+        },
+        {
+          "text": "Lori",
+          "start_time": 17.7,
+          "end_time": 17.98
+        },
+        {
+          "text": " ",
+          "start_time": 17.98,
+          "end_time": 18.02
+        },
+        {
+          "text": "went",
+          "start_time": 18.02,
+          "end_time": 18.16
+        },
+        {
+          "text": " ",
+          "start_time": 18.16,
+          "end_time": 18.2
+        },
+        {
+          "text": "to",
+          "start_time": 18.2,
+          "end_time": 18.28
+        },
+        {
+          "text": " ",
+          "start_time": 18.28,
+          "end_time": 18.32
+        },
+        {
+          "text": "the",
+          "start_time": 18.32,
+          "end_time": 18.4
+        },
+        {
+          "text": " ",
+          "start_time": 18.4,
+          "end_time": 18.46
+        },
+        {
+          "text": "same",
+          "start_time": 18.46,
+          "end_time": 18.68
+        },
+        {
+          "text": " ",
+          "start_time": 18.68,
+          "end_time": 18.76
+        },
+        {
+          "text": "camp,",
+          "start_time": 18.76,
+          "end_time": 19.02
+        },
+        {
+          "text": " ",
+          "start_time": 19.02,
+          "end_time": 19.24
+        },
+        {
+          "text": "and",
+          "start_time": 19.24,
+          "end_time": 19.34
+        },
+        {
+          "text": " ",
+          "start_time": 19.34,
+          "end_time": 19.38
+        },
+        {
+          "text": "we",
+          "start_time": 19.38,
+          "end_time": 19.5
+        },
+        {
+          "text": " ",
+          "start_time": 19.5,
+          "end_time": 19.6
+        },
+        {
+          "text": "stayed",
+          "start_time": 19.6,
+          "end_time": 19.84
+        },
+        {
+          "text": " ",
+          "start_time": 19.84,
+          "end_time": 19.88
+        },
+        {
+          "text": "in",
+          "start_time": 19.88,
+          "end_time": 19.94
+        },
+        {
+          "text": " ",
+          "start_time": 19.94,
+          "end_time": 19.98
+        },
+        {
+          "text": "a",
+          "start_time": 19.98,
+          "end_time": 20.02
+        },
+        {
+          "text": " ",
+          "start_time": 20.02,
+          "end_time": 20.08
+        },
+        {
+          "text": "cabin",
+          "start_time": 20.08,
+          "end_time": 20.36
+        },
+        {
+          "text": " ",
+          "start_time": 20.36,
+          "end_time": 20.4
+        },
+        {
+          "text": "together.",
+          "start_time": 20.4,
+          "end_time": 20.78
+        },
+        {
+          "text": " ",
+          "start_time": 20.78,
+          "end_time": 21.18
+        },
+        {
+          "text": "We",
+          "start_time": 21.18,
+          "end_time": 21.28
+        },
+        {
+          "text": " ",
+          "start_time": 21.28,
+          "end_time": 21.32
+        },
+        {
+          "text": "became",
+          "start_time": 21.32,
+          "end_time": 21.64
+        },
+        {
+          "text": " ",
+          "start_time": 21.64,
+          "end_time": 21.7
+        },
+        {
+          "text": "good",
+          "start_time": 21.7,
+          "end_time": 21.86
+        },
+        {
+          "text": " ",
+          "start_time": 21.86,
+          "end_time": 21.92
+        },
+        {
+          "text": "friends.",
+          "start_time": 21.92,
+          "end_time": 22.32
+        },
+        {
+          "text": " ",
+          "start_time": 22.32,
+          "end_time": 22.32
+        },
+        {
+          "text": "I",
+          "start_time": 22.78,
+          "end_time": 22.86
+        },
+        {
+          "text": " ",
+          "start_time": 22.86,
+          "end_time": 22.92
+        },
+        {
+          "text": "grinned",
+          "start_time": 22.92,
+          "end_time": 23.2
+        },
+        {
+          "text": " ",
+          "start_time": 23.2,
+          "end_time": 23.24
+        },
+        {
+          "text": "as",
+          "start_time": 23.24,
+          "end_time": 23.32
+        },
+        {
+          "text": " ",
+          "start_time": 23.32,
+          "end_time": 23.4
+        },
+        {
+          "text": "I",
+          "start_time": 23.4,
+          "end_time": 23.52
+        },
+        {
+          "text": " ",
+          "start_time": 23.52,
+          "end_time": 23.58
+        },
+        {
+          "text": "pulled",
+          "start_time": 23.58,
+          "end_time": 23.76
+        },
+        {
+          "text": " ",
+          "start_time": 23.76,
+          "end_time": 23.78
+        },
+        {
+          "text": "the",
+          "start_time": 23.78,
+          "end_time": 23.86
+        },
+        {
+          "text": " ",
+          "start_time": 23.86,
+          "end_time": 23.92
+        },
+        {
+          "text": "front",
+          "start_time": 23.92,
+          "end_time": 24.1
+        },
+        {
+          "text": " ",
+          "start_time": 24.1,
+          "end_time": 24.16
+        },
+        {
+          "text": "door",
+          "start_time": 24.16,
+          "end_time": 24.34
+        },
+        {
+          "text": " ",
+          "start_time": 24.34,
+          "end_time": 24.44
+        },
+        {
+          "text": "open.",
+          "start_time": 24.44,
+          "end_time": 24.74
+        },
+        {
+          "text": " ",
+          "start_time": 24.74,
+          "end_time": 24.74
+        },
+        {
+          "text": "\"Lori,",
+          "start_time": 24.74,
+          "end_time": 26.86
+        },
+        {
+          "text": " ",
+          "start_time": 26.86,
+          "end_time": 27.02
+        },
+        {
+          "text": "it's",
+          "start_time": 27.02,
+          "end_time": 27.2
+        },
+        {
+          "text": " ",
+          "start_time": 27.2,
+          "end_time": 27.28
+        },
+        {
+          "text": "so",
+          "start_time": 27.28,
+          "end_time": 27.48
+        },
+        {
+          "text": " ",
+          "start_time": 27.48,
+          "end_time": 27.52
+        },
+        {
+          "text": "good",
+          "start_time": 27.52,
+          "end_time": 27.64
+        },
+        {
+          "text": " ",
+          "start_time": 27.64,
+          "end_time": 27.68
+        },
+        {
+          "text": "to",
+          "start_time": 27.68,
+          "end_time": 27.8
+        },
+        {
+          "text": " ",
+          "start_time": 27.8,
+          "end_time": 27.9
+        },
+        {
+          "text": "see",
+          "start_time": 27.92,
+          "end_time": 28.12
+        },
+        {
+          "text": " ",
+          "start_time": 28.12,
+          "end_time": 28.2
+        },
+        {
+          "text": "you.\"",
+          "start_time": 28.2,
+          "end_time": 28.48
+        },
+        {
+          "text": " ",
+          "start_time": 28.48,
+          "end_time": 28.48
+        },
+        {
+          "text": "Lori",
+          "start_time": 28.96,
+          "end_time": 29.2
+        },
+        {
+          "text": " ",
+          "start_time": 29.2,
+          "end_time": 29.24
+        },
+        {
+          "text": "was",
+          "start_time": 29.26,
+          "end_time": 29.4
+        },
+        {
+          "text": " ",
+          "start_time": 29.4,
+          "end_time": 29.46
+        },
+        {
+          "text": "jumping",
+          "start_time": 29.46,
+          "end_time": 29.76
+        },
+        {
+          "text": " ",
+          "start_time": 29.76,
+          "end_time": 29.84
+        },
+        {
+          "text": "up",
+          "start_time": 29.84,
+          "end_time": 29.94
+        },
+        {
+          "text": " ",
+          "start_time": 29.94,
+          "end_time": 29.96
+        },
+        {
+          "text": "and",
+          "start_time": 29.96,
+          "end_time": 30.06
+        },
+        {
+          "text": " ",
+          "start_time": 30.06,
+          "end_time": 30.1
+        },
+        {
+          "text": "down",
+          "start_time": 30.1,
+          "end_time": 30.28
+        },
+        {
+          "text": " ",
+          "start_time": 30.28,
+          "end_time": 30.32
+        },
+        {
+          "text": "with",
+          "start_time": 30.32,
+          "end_time": 30.42
+        },
+        {
+          "text": " ",
+          "start_time": 30.42,
+          "end_time": 30.46
+        },
+        {
+          "text": "excitement.",
+          "start_time": 30.46,
+          "end_time": 31.04
+        },
+        {
+          "text": " ",
+          "start_time": 31.04,
+          "end_time": 31.04
+        },
+        {
+          "text": "\"Jenny,",
+          "start_time": 31.04,
+          "end_time": 31.98
+        },
+        {
+          "text": " ",
+          "start_time": 31.98,
+          "end_time": 32.259
+        },
+        {
+          "text": "it's",
+          "start_time": 32.259,
+          "end_time": 32.42
+        },
+        {
+          "text": " ",
+          "start_time": 32.42,
+          "end_time": 32.5
+        },
+        {
+          "text": "so",
+          "start_time": 32.5,
+          "end_time": 32.78
+        },
+        {
+          "text": " ",
+          "start_time": 32.78,
+          "end_time": 32.84
+        },
+        {
+          "text": "great",
+          "start_time": 32.84,
+          "end_time": 33.04
+        },
+        {
+          "text": " ",
+          "start_time": 33.04,
+          "end_time": 33.1
+        },
+        {
+          "text": "to",
+          "start_time": 33.1,
+          "end_time": 33.2
+        },
+        {
+          "text": " ",
+          "start_time": 33.2,
+          "end_time": 33.26
+        },
+        {
+          "text": "be",
+          "start_time": 33.26,
+          "end_time": 33.34
+        },
+        {
+          "text": " ",
+          "start_time": 33.34,
+          "end_time": 33.38
+        },
+        {
+          "text": "at",
+          "start_time": 33.38,
+          "end_time": 33.48
+        },
+        {
+          "text": " ",
+          "start_time": 33.48,
+          "end_time": 33.52
+        },
+        {
+          "text": "your",
+          "start_time": 33.52,
+          "end_time": 33.62
+        },
+        {
+          "text": " ",
+          "start_time": 33.62,
+          "end_time": 33.68
+        },
+        {
+          "text": "house.\"",
+          "start_time": 33.68,
+          "end_time": 34.08
+        },
+        {
+          "text": " ",
+          "start_time": 34.08,
+          "end_time": 34.08
+        },
+        {
+          "text": "\"Today,",
+          "start_time": 34.08,
+          "end_time": 35.06
+        },
+        {
+          "text": " ",
+          "start_time": 35.06,
+          "end_time": 35.22
+        },
+        {
+          "text": "we",
+          "start_time": 35.22,
+          "end_time": 35.32
+        },
+        {
+          "text": " ",
+          "start_time": 35.32,
+          "end_time": 35.38
+        },
+        {
+          "text": "can",
+          "start_time": 35.38,
+          "end_time": 35.48
+        },
+        {
+          "text": " ",
+          "start_time": 35.48,
+          "end_time": 35.54
+        },
+        {
+          "text": "go",
+          "start_time": 35.54,
+          "end_time": 35.64
+        },
+        {
+          "text": " ",
+          "start_time": 35.64,
+          "end_time": 35.68
+        },
+        {
+          "text": "to",
+          "start_time": 35.68,
+          "end_time": 35.76
+        },
+        {
+          "text": " ",
+          "start_time": 35.76,
+          "end_time": 35.8
+        },
+        {
+          "text": "the",
+          "start_time": 35.8,
+          "end_time": 35.86
+        },
+        {
+          "text": " ",
+          "start_time": 35.86,
+          "end_time": 35.9
+        },
+        {
+          "text": "barn",
+          "start_time": 35.9,
+          "end_time": 36.18
+        },
+        {
+          "text": " ",
+          "start_time": 36.18,
+          "end_time": 36.22
+        },
+        {
+          "text": "in",
+          "start_time": 36.22,
+          "end_time": 36.28
+        },
+        {
+          "text": " ",
+          "start_time": 36.28,
+          "end_time": 36.32
+        },
+        {
+          "text": "the",
+          "start_time": 36.32,
+          "end_time": 36.36
+        },
+        {
+          "text": " ",
+          "start_time": 36.36,
+          "end_time": 36.42
+        },
+        {
+          "text": "back.",
+          "start_time": 36.42,
+          "end_time": 36.72
+        },
+        {
+          "text": " ",
+          "start_time": 36.72,
+          "end_time": 36.72
+        },
+        {
+          "text": "You",
+          "start_time": 37.14,
+          "end_time": 37.18
+        },
+        {
+          "text": " ",
+          "start_time": 37.18,
+          "end_time": 37.2
+        },
+        {
+          "text": "will",
+          "start_time": 37.2,
+          "end_time": 37.32
+        },
+        {
+          "text": " ",
+          "start_time": 37.32,
+          "end_time": 37.36
+        },
+        {
+          "text": "be",
+          "start_time": 37.36,
+          "end_time": 37.42
+        },
+        {
+          "text": " ",
+          "start_time": 37.42,
+          "end_time": 37.48
+        },
+        {
+          "text": "able",
+          "start_time": 37.48,
+          "end_time": 37.62
+        },
+        {
+          "text": " ",
+          "start_time": 37.62,
+          "end_time": 37.66
+        },
+        {
+          "text": "to",
+          "start_time": 37.66,
+          "end_time": 37.74
+        },
+        {
+          "text": " ",
+          "start_time": 37.74,
+          "end_time": 37.76
+        },
+        {
+          "text": "meet",
+          "start_time": 37.76,
+          "end_time": 37.9
+        },
+        {
+          "text": " ",
+          "start_time": 37.9,
+          "end_time": 37.94
+        },
+        {
+          "text": "my",
+          "start_time": 37.94,
+          "end_time": 38.06
+        },
+        {
+          "text": " ",
+          "start_time": 38.06,
+          "end_time": 38.1
+        },
+        {
+          "text": "brother",
+          "start_time": 38.1,
+          "end_time": 38.46
+        },
+        {
+          "text": " ",
+          "start_time": 38.46,
+          "end_time": 38.52
+        },
+        {
+          "text": "and",
+          "start_time": 38.52,
+          "end_time": 38.62
+        },
+        {
+          "text": " ",
+          "start_time": 38.62,
+          "end_time": 38.64
+        },
+        {
+          "text": "my",
+          "start_time": 38.64,
+          "end_time": 38.76
+        },
+        {
+          "text": " ",
+          "start_time": 38.76,
+          "end_time": 38.82
+        },
+        {
+          "text": "dad.",
+          "start_time": 38.82,
+          "end_time": 39.2
+        },
+        {
+          "text": " ",
+          "start_time": 39.2,
+          "end_time": 39.2
+        },
+        {
+          "text": "You",
+          "start_time": 39.56,
+          "end_time": 39.64
+        },
+        {
+          "text": " ",
+          "start_time": 39.64,
+          "end_time": 39.68
+        },
+        {
+          "text": "met",
+          "start_time": 39.68,
+          "end_time": 39.8
+        },
+        {
+          "text": " ",
+          "start_time": 39.8,
+          "end_time": 39.84
+        },
+        {
+          "text": "my",
+          "start_time": 39.84,
+          "end_time": 39.94
+        },
+        {
+          "text": " ",
+          "start_time": 39.94,
+          "end_time": 40.0
+        },
+        {
+          "text": "mom",
+          "start_time": 40.0,
+          "end_time": 40.16
+        },
+        {
+          "text": " ",
+          "start_time": 40.16,
+          "end_time": 40.2
+        },
+        {
+          "text": "already,",
+          "start_time": 40.2,
+          "end_time": 40.54
+        },
+        {
+          "text": " ",
+          "start_time": 40.54,
+          "end_time": 40.62
+        },
+        {
+          "text": "right?\"",
+          "start_time": 40.62,
+          "end_time": 40.8
+        },
+        {
+          "text": " ",
+          "start_time": 40.8,
+          "end_time": 40.8
+        },
+        {
+          "text": "I",
+          "start_time": 41.44,
+          "end_time": 41.5
+        },
+        {
+          "text": " ",
+          "start_time": 41.5,
+          "end_time": 41.6
+        },
+        {
+          "text": "asked.",
+          "start_time": 41.6,
+          "end_time": 41.94
+        },
+        {
+          "text": " ",
+          "start_time": 41.94,
+          "end_time": 41.94
+        },
+        {
+          "text": "\"Yes,",
+          "start_time": 41.94,
+          "end_time": 43.22
+        },
+        {
+          "text": " ",
+          "start_time": 43.22,
+          "end_time": 43.52
+        },
+        {
+          "text": "I",
+          "start_time": 43.52,
+          "end_time": 43.56
+        },
+        {
+          "text": " ",
+          "start_time": 43.56,
+          "end_time": 43.62
+        },
+        {
+          "text": "met",
+          "start_time": 43.62,
+          "end_time": 43.78
+        },
+        {
+          "text": " ",
+          "start_time": 43.78,
+          "end_time": 43.82
+        },
+        {
+          "text": "her",
+          "start_time": 43.82,
+          "end_time": 43.92
+        },
+        {
+          "text": " ",
+          "start_time": 43.92,
+          "end_time": 43.96
+        },
+        {
+          "text": "when",
+          "start_time": 43.96,
+          "end_time": 44.08
+        },
+        {
+          "text": " ",
+          "start_time": 44.08,
+          "end_time": 44.14
+        },
+        {
+          "text": "she",
+          "start_time": 44.14,
+          "end_time": 44.26
+        },
+        {
+          "text": " ",
+          "start_time": 44.26,
+          "end_time": 44.32
+        },
+        {
+          "text": "came",
+          "start_time": 44.32,
+          "end_time": 44.5
+        },
+        {
+          "text": " ",
+          "start_time": 44.5,
+          "end_time": 44.54
+        },
+        {
+          "text": "to",
+          "start_time": 44.54,
+          "end_time": 44.62
+        },
+        {
+          "text": " ",
+          "start_time": 44.62,
+          "end_time": 44.66
+        },
+        {
+          "text": "pick",
+          "start_time": 44.66,
+          "end_time": 44.8
+        },
+        {
+          "text": " ",
+          "start_time": 44.8,
+          "end_time": 44.82
+        },
+        {
+          "text": "you",
+          "start_time": 44.82,
+          "end_time": 44.9
+        },
+        {
+          "text": " ",
+          "start_time": 44.9,
+          "end_time": 44.94
+        },
+        {
+          "text": "up",
+          "start_time": 44.94,
+          "end_time": 45.02
+        },
+        {
+          "text": " ",
+          "start_time": 45.02,
+          "end_time": 45.04
+        },
+        {
+          "text": "from",
+          "start_time": 45.04,
+          "end_time": 45.2
+        },
+        {
+          "text": " ",
+          "start_time": 45.2,
+          "end_time": 45.26
+        },
+        {
+          "text": "camp.",
+          "start_time": 45.26,
+          "end_time": 45.56
+        },
+        {
+          "text": " ",
+          "start_time": 45.56,
+          "end_time": 45.92
+        },
+        {
+          "text": "She",
+          "start_time": 45.92,
+          "end_time": 46.04
+        },
+        {
+          "text": " ",
+          "start_time": 46.04,
+          "end_time": 46.1
+        },
+        {
+          "text": "was",
+          "start_time": 46.1,
+          "end_time": 46.24
+        },
+        {
+          "text": " ",
+          "start_time": 46.24,
+          "end_time": 46.28
+        },
+        {
+          "text": "really",
+          "start_time": 46.28,
+          "end_time": 46.54
+        },
+        {
+          "text": " ",
+          "start_time": 46.54,
+          "end_time": 46.6
+        },
+        {
+          "text": "nice.",
+          "start_time": 46.6,
+          "end_time": 46.98
+        },
+        {
+          "text": " ",
+          "start_time": 46.98,
+          "end_time": 46.98
+        },
+        {
+          "text": "I",
+          "start_time": 47.46,
+          "end_time": 47.5
+        },
+        {
+          "text": " ",
+          "start_time": 47.5,
+          "end_time": 47.52
+        },
+        {
+          "text": "would",
+          "start_time": 47.52,
+          "end_time": 47.66
+        },
+        {
+          "text": " ",
+          "start_time": 47.66,
+          "end_time": 47.76
+        },
+        {
+          "text": "love",
+          "start_time": 47.76,
+          "end_time": 47.94
+        },
+        {
+          "text": " ",
+          "start_time": 47.94,
+          "end_time": 48.0
+        },
+        {
+          "text": "to",
+          "start_time": 48.0,
+          "end_time": 48.08
+        },
+        {
+          "text": " ",
+          "start_time": 48.08,
+          "end_time": 48.12
+        },
+        {
+          "text": "meet",
+          "start_time": 48.12,
+          "end_time": 48.26
+        },
+        {
+          "text": " ",
+          "start_time": 48.26,
+          "end_time": 48.3
+        },
+        {
+          "text": "the",
+          "start_time": 48.3,
+          "end_time": 48.36
+        },
+        {
+          "text": " ",
+          "start_time": 48.36,
+          "end_time": 48.38
+        },
+        {
+          "text": "rest",
+          "start_time": 48.4,
+          "end_time": 48.56
+        },
+        {
+          "text": " ",
+          "start_time": 48.56,
+          "end_time": 48.6
+        },
+        {
+          "text": "of",
+          "start_time": 48.62,
+          "end_time": 48.66
+        },
+        {
+          "text": " ",
+          "start_time": 48.66,
+          "end_time": 48.7
+        },
+        {
+          "text": "your",
+          "start_time": 48.7,
+          "end_time": 48.78
+        },
+        {
+          "text": " ",
+          "start_time": 48.78,
+          "end_time": 48.84
+        },
+        {
+          "text": "family,",
+          "start_time": 48.84,
+          "end_time": 49.18
+        },
+        {
+          "text": " ",
+          "start_time": 49.18,
+          "end_time": 49.44
+        },
+        {
+          "text": "but",
+          "start_time": 49.44,
+          "end_time": 49.52
+        },
+        {
+          "text": " ",
+          "start_time": 49.52,
+          "end_time": 49.6
+        },
+        {
+          "text": "I'd",
+          "start_time": 49.6,
+          "end_time": 49.7
+        },
+        {
+          "text": " ",
+          "start_time": 49.7,
+          "end_time": 49.74
+        },
+        {
+          "text": "like",
+          "start_time": 49.74,
+          "end_time": 49.88
+        },
+        {
+          "text": " ",
+          "start_time": 49.88,
+          "end_time": 49.94
+        },
+        {
+          "text": "a",
+          "start_time": 49.94,
+          "end_time": 49.98
+        },
+        {
+          "text": " ",
+          "start_time": 49.98,
+          "end_time": 50.04
+        },
+        {
+          "text": "glass",
+          "start_time": 50.04,
+          "end_time": 50.26
+        },
+        {
+          "text": " ",
+          "start_time": 50.26,
+          "end_time": 50.3
+        },
+        {
+          "text": "of",
+          "start_time": 50.3,
+          "end_time": 50.38
+        },
+        {
+          "text": " ",
+          "start_time": 50.38,
+          "end_time": 50.44
+        },
+        {
+          "text": "water",
+          "start_time": 50.44,
+          "end_time": 50.68
+        },
+        {
+          "text": " ",
+          "start_time": 50.68,
+          "end_time": 50.76
+        },
+        {
+          "text": "first,\"",
+          "start_time": 50.76,
+          "end_time": 51.14
+        },
+        {
+          "text": " ",
+          "start_time": 51.14,
+          "end_time": 51.42
+        },
+        {
+          "text": "said",
+          "start_time": 51.42,
+          "end_time": 51.58
+        },
+        {
+          "text": " ",
+          "start_time": 51.58,
+          "end_time": 51.62
+        },
+        {
+          "text": "Lori.",
+          "start_time": 51.62,
+          "end_time": 52.0
+        },
+        {
+          "text": " ",
+          "start_time": 52.0,
+          "end_time": 52.0
+        }
+      ]
+    },
+    {
+      "text": "As I handed her the glass of water, I asked, \"Shall we go riding today?\" \"Riding is always my favorite thing to do. We might be able to try out the trail ride you told me about,\" answered Lori. As we walked towards the barn, we talked about which horse Lori might ride. Cinderella seemed like a good choice.",
+      "start_time": 53.5,
+      "end_time": 71.1,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "As",
+          "start_time": 53.5,
+          "end_time": 53.6
+        },
+        {
+          "text": " ",
+          "start_time": 53.6,
+          "end_time": 53.68
+        },
+        {
+          "text": "I",
+          "start_time": 53.68,
+          "end_time": 53.72
+        },
+        {
+          "text": " ",
+          "start_time": 53.72,
+          "end_time": 53.8
+        },
+        {
+          "text": "handed",
+          "start_time": 53.8,
+          "end_time": 54.06
+        },
+        {
+          "text": " ",
+          "start_time": 54.06,
+          "end_time": 54.1
+        },
+        {
+          "text": "her",
+          "start_time": 54.1,
+          "end_time": 54.22
+        },
+        {
+          "text": " ",
+          "start_time": 54.22,
+          "end_time": 54.26
+        },
+        {
+          "text": "the",
+          "start_time": 54.26,
+          "end_time": 54.34
+        },
+        {
+          "text": " ",
+          "start_time": 54.34,
+          "end_time": 54.38
+        },
+        {
+          "text": "glass",
+          "start_time": 54.38,
+          "end_time": 54.6
+        },
+        {
+          "text": " ",
+          "start_time": 54.6,
+          "end_time": 54.66
+        },
+        {
+          "text": "of",
+          "start_time": 54.66,
+          "end_time": 54.72
+        },
+        {
+          "text": " ",
+          "start_time": 54.72,
+          "end_time": 54.76
+        },
+        {
+          "text": "water,",
+          "start_time": 54.76,
+          "end_time": 55.02
+        },
+        {
+          "text": " ",
+          "start_time": 55.02,
+          "end_time": 55.24
+        },
+        {
+          "text": "I",
+          "start_time": 55.26,
+          "end_time": 55.3
+        },
+        {
+          "text": " ",
+          "start_time": 55.3,
+          "end_time": 55.4
+        },
+        {
+          "text": "asked,",
+          "start_time": 55.4,
+          "end_time": 55.7
+        },
+        {
+          "text": " ",
+          "start_time": 55.7,
+          "end_time": 55.7
+        },
+        {
+          "text": "\"Shall",
+          "start_time": 55.7,
+          "end_time": 56.38
+        },
+        {
+          "text": " ",
+          "start_time": 56.38,
+          "end_time": 56.42
+        },
+        {
+          "text": "we",
+          "start_time": 56.42,
+          "end_time": 56.52
+        },
+        {
+          "text": " ",
+          "start_time": 56.52,
+          "end_time": 56.58
+        },
+        {
+          "text": "go",
+          "start_time": 56.58,
+          "end_time": 56.72
+        },
+        {
+          "text": " ",
+          "start_time": 56.72,
+          "end_time": 56.78
+        },
+        {
+          "text": "riding",
+          "start_time": 56.78,
+          "end_time": 57.04
+        },
+        {
+          "text": " ",
+          "start_time": 57.04,
+          "end_time": 57.1
+        },
+        {
+          "text": "today?\"",
+          "start_time": 57.1,
+          "end_time": 57.36
+        },
+        {
+          "text": " ",
+          "start_time": 57.36,
+          "end_time": 57.36
+        },
+        {
+          "text": "\"Riding",
+          "start_time": 57.36,
+          "end_time": 58.26
+        },
+        {
+          "text": " ",
+          "start_time": 58.26,
+          "end_time": 58.32
+        },
+        {
+          "text": "is",
+          "start_time": 58.32,
+          "end_time": 58.44
+        },
+        {
+          "text": " ",
+          "start_time": 58.44,
+          "end_time": 58.54
+        },
+        {
+          "text": "always",
+          "start_time": 58.54,
+          "end_time": 58.78
+        },
+        {
+          "text": " ",
+          "start_time": 58.78,
+          "end_time": 58.82
+        },
+        {
+          "text": "my",
+          "start_time": 58.82,
+          "end_time": 59.0
+        },
+        {
+          "text": " ",
+          "start_time": 59.0,
+          "end_time": 59.08
+        },
+        {
+          "text": "favorite",
+          "start_time": 59.08,
+          "end_time": 59.42
+        },
+        {
+          "text": " ",
+          "start_time": 59.42,
+          "end_time": 59.46
+        },
+        {
+          "text": "thing",
+          "start_time": 59.46,
+          "end_time": 59.62
+        },
+        {
+          "text": " ",
+          "start_time": 59.62,
+          "end_time": 59.66
+        },
+        {
+          "text": "to",
+          "start_time": 59.66,
+          "end_time": 59.74
+        },
+        {
+          "text": " ",
+          "start_time": 59.74,
+          "end_time": 59.8
+        },
+        {
+          "text": "do.",
+          "start_time": 59.8,
+          "end_time": 60.04
+        },
+        {
+          "text": " ",
+          "start_time": 60.04,
+          "end_time": 60.4
+        },
+        {
+          "text": "We",
+          "start_time": 60.4,
+          "end_time": 60.52
+        },
+        {
+          "text": " ",
+          "start_time": 60.52,
+          "end_time": 60.56
+        },
+        {
+          "text": "might",
+          "start_time": 60.56,
+          "end_time": 60.68
+        },
+        {
+          "text": " ",
+          "start_time": 60.68,
+          "end_time": 60.72
+        },
+        {
+          "text": "be",
+          "start_time": 60.72,
+          "end_time": 60.78
+        },
+        {
+          "text": " ",
+          "start_time": 60.78,
+          "end_time": 60.84
+        },
+        {
+          "text": "able",
+          "start_time": 60.84,
+          "end_time": 60.98
+        },
+        {
+          "text": " ",
+          "start_time": 60.98,
+          "end_time": 61.02
+        },
+        {
+          "text": "to",
+          "start_time": 61.02,
+          "end_time": 61.12
+        },
+        {
+          "text": " ",
+          "start_time": 61.12,
+          "end_time": 61.2
+        },
+        {
+          "text": "try",
+          "start_time": 61.2,
+          "end_time": 61.4
+        },
+        {
+          "text": " ",
+          "start_time": 61.4,
+          "end_time": 61.46
+        },
+        {
+          "text": "out",
+          "start_time": 61.46,
+          "end_time": 61.56
+        },
+        {
+          "text": " ",
+          "start_time": 61.56,
+          "end_time": 61.62
+        },
+        {
+          "text": "the",
+          "start_time": 61.62,
+          "end_time": 61.7
+        },
+        {
+          "text": " ",
+          "start_time": 61.7,
+          "end_time": 61.78
+        },
+        {
+          "text": "trail",
+          "start_time": 61.78,
+          "end_time": 62.04
+        },
+        {
+          "text": " ",
+          "start_time": 62.04,
+          "end_time": 62.1
+        },
+        {
+          "text": "ride",
+          "start_time": 62.1,
+          "end_time": 62.3
+        },
+        {
+          "text": " ",
+          "start_time": 62.3,
+          "end_time": 62.34
+        },
+        {
+          "text": "you",
+          "start_time": 62.34,
+          "end_time": 62.44
+        },
+        {
+          "text": " ",
+          "start_time": 62.44,
+          "end_time": 62.5
+        },
+        {
+          "text": "told",
+          "start_time": 62.5,
+          "end_time": 62.74
+        },
+        {
+          "text": " ",
+          "start_time": 62.74,
+          "end_time": 62.78
+        },
+        {
+          "text": "me",
+          "start_time": 62.78,
+          "end_time": 62.86
+        },
+        {
+          "text": " ",
+          "start_time": 62.86,
+          "end_time": 62.92
+        },
+        {
+          "text": "about,\"",
+          "start_time": 62.92,
+          "end_time": 63.2
+        },
+        {
+          "text": " ",
+          "start_time": 63.2,
+          "end_time": 63.44
+        },
+        {
+          "text": "answered",
+          "start_time": 63.44,
+          "end_time": 63.74
+        },
+        {
+          "text": " ",
+          "start_time": 63.74,
+          "end_time": 63.78
+        },
+        {
+          "text": "Lori.",
+          "start_time": 63.78,
+          "end_time": 64.06
+        },
+        {
+          "text": " ",
+          "start_time": 64.06,
+          "end_time": 64.06
+        },
+        {
+          "text": "As",
+          "start_time": 65.04,
+          "end_time": 65.14
+        },
+        {
+          "text": " ",
+          "start_time": 65.14,
+          "end_time": 65.18
+        },
+        {
+          "text": "we",
+          "start_time": 65.18,
+          "end_time": 65.28
+        },
+        {
+          "text": " ",
+          "start_time": 65.28,
+          "end_time": 65.34
+        },
+        {
+          "text": "walked",
+          "start_time": 65.34,
+          "end_time": 65.66
+        },
+        {
+          "text": " ",
+          "start_time": 65.66,
+          "end_time": 65.72
+        },
+        {
+          "text": "towards",
+          "start_time": 65.72,
+          "end_time": 65.98
+        },
+        {
+          "text": " ",
+          "start_time": 65.98,
+          "end_time": 66.02
+        },
+        {
+          "text": "the",
+          "start_time": 66.02,
+          "end_time": 66.1
+        },
+        {
+          "text": " ",
+          "start_time": 66.1,
+          "end_time": 66.14
+        },
+        {
+          "text": "barn,",
+          "start_time": 66.14,
+          "end_time": 66.42
+        },
+        {
+          "text": " ",
+          "start_time": 66.42,
+          "end_time": 66.64
+        },
+        {
+          "text": "we",
+          "start_time": 66.64,
+          "end_time": 66.76
+        },
+        {
+          "text": " ",
+          "start_time": 66.76,
+          "end_time": 66.84
+        },
+        {
+          "text": "talked",
+          "start_time": 66.84,
+          "end_time": 67.08
+        },
+        {
+          "text": " ",
+          "start_time": 67.08,
+          "end_time": 67.16
+        },
+        {
+          "text": "about",
+          "start_time": 67.16,
+          "end_time": 67.38
+        },
+        {
+          "text": " ",
+          "start_time": 67.38,
+          "end_time": 67.42
+        },
+        {
+          "text": "which",
+          "start_time": 67.42,
+          "end_time": 67.62
+        },
+        {
+          "text": " ",
+          "start_time": 67.62,
+          "end_time": 67.68
+        },
+        {
+          "text": "horse",
+          "start_time": 67.68,
+          "end_time": 67.9
+        },
+        {
+          "text": " ",
+          "start_time": 67.9,
+          "end_time": 67.96
+        },
+        {
+          "text": "Lori",
+          "start_time": 67.96,
+          "end_time": 68.16
+        },
+        {
+          "text": " ",
+          "start_time": 68.16,
+          "end_time": 68.2
+        },
+        {
+          "text": "might",
+          "start_time": 68.2,
+          "end_time": 68.38
+        },
+        {
+          "text": " ",
+          "start_time": 68.38,
+          "end_time": 68.44
+        },
+        {
+          "text": "ride.",
+          "start_time": 68.44,
+          "end_time": 68.74
+        },
+        {
+          "text": " ",
+          "start_time": 68.74,
+          "end_time": 68.74
+        },
+        {
+          "text": "Cinderella",
+          "start_time": 69.22,
+          "end_time": 69.8
+        },
+        {
+          "text": " ",
+          "start_time": 69.8,
+          "end_time": 69.88
+        },
+        {
+          "text": "seemed",
+          "start_time": 69.88,
+          "end_time": 70.1
+        },
+        {
+          "text": " ",
+          "start_time": 70.1,
+          "end_time": 70.14
+        },
+        {
+          "text": "like",
+          "start_time": 70.14,
+          "end_time": 70.26
+        },
+        {
+          "text": " ",
+          "start_time": 70.26,
+          "end_time": 70.32
+        },
+        {
+          "text": "a",
+          "start_time": 70.32,
+          "end_time": 70.36
+        },
+        {
+          "text": " ",
+          "start_time": 70.36,
+          "end_time": 70.42
+        },
+        {
+          "text": "good",
+          "start_time": 70.42,
+          "end_time": 70.6
+        },
+        {
+          "text": " ",
+          "start_time": 70.6,
+          "end_time": 70.66
+        },
+        {
+          "text": "choice.",
+          "start_time": 70.66,
+          "end_time": 71.1
+        }
+      ]
+    }
+  ]
+}

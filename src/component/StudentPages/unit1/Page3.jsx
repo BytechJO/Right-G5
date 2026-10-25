@@ -58,12 +58,12 @@ const Page3 = ({ goToUnit }) => {
     // goToUnit(22);
   };
   return (
-    <div
+    <div data-page-access="Page3.jsx" role="group" aria-label="Contents, units 6 to 10"
       className="page1-img-wrapper"
       ref={imgRef}
       onClick={handleClick}
       style={{ backgroundImage: `url(${page3})` }}
-    >
+    ><style>{`[data-page-access="Page3.jsx"] [data-launcher]:focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img
         src={page3}
         alt="Book Index"
@@ -72,7 +72,7 @@ const Page3 = ({ goToUnit }) => {
         className="w-full h-full rounded-2xl shadow-lg"
       /> */}
       {clickableAreas.map((area, index) => (
-        <div
+        <div role="button" tabIndex={0} data-launcher aria-label={`Go to ${area.title}`} onKeyDown={(event)=>{if(event.key === "Enter" || event.key === " "){event.preventDefault();event.stopPropagation();if(!event.repeat)goToUnit(area.startIndex);}}} onKeyUp={(event)=>{if(event.key === "Enter" || event.key === " "){event.preventDefault();event.stopPropagation();}}}
           key={index}
           onClick={() => goToUnit(area.startIndex)}
           className="absolute cursor-pointer hover:scale-105 transition-all duration-150"

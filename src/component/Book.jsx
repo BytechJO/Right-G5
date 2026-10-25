@@ -39,12 +39,30 @@ import WorkBookNavigator from "./WorkBookPages/WorkBookNavigator";
 // import { postersVocabPages } from "./BookData/postersVocabPages";
 // import PosterVocabNavigator from "./PostersVocabPages/PosterVocabNavigator";
 import TeacherBook from "./TeacherBookPages/TeacherBook";
+const BOOK_TABS = new Set(["student", "work", "teacher", "flash"]);
+const getInitialActiveTab = () => {
+  const savedTab = localStorage.getItem("activeTab");
+  return BOOK_TABS.has(savedTab) ? savedTab : "student";
+};
+
+const getSavedPageIndex = (tab, includeLegacyValue = false) => {
+  const savedValue = localStorage.getItem(`pageIndex-${tab}`);
+  const valueToRead =
+    savedValue ??
+    (includeLegacyValue ? localStorage.getItem("pageIndex") : null);
+  const parsedValue = Number(valueToRead);
+
+  return Number.isInteger(parsedValue) && parsedValue >= 0 ? parsedValue : 0;
+};
 
 export default function Book() {
   // ===========================================================
   //                 📌 STATE
   // ===========================================================
-  const [pageIndex, setPageIndex] = useState(0);
+
+  const [pageIndex, setPageIndex] = useState(() =>
+    getSavedPageIndex(getInitialActiveTab(), true),
+  );
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem("activeTab") || "student";
   });
@@ -65,7 +83,8 @@ export default function Book() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [mobileTabsOpen, setMobileTabsOpen] = useState(false);
-
+  const menuButtonRef = useRef(null);
+  const iconKeyButtonRef = useRef(null);
   // ===========================================================
   //                 📌 PAGE LIST SELECTOR
   // ===========================================================
@@ -73,7 +92,7 @@ export default function Book() {
     student: studentPages(openPopup, goToUnit),
     work: workbookPages(openPopup, goToUnit),
     teacher: teacherPages.map((t) => <TeacherBook teacher={t} />),
-    poster: posters(openPopup),
+    flash: posters(openPopup), // ✅ تعديل 1: استدعاء كـ function مع openPopup
   }[activeTab];
 
   // ===========================================================
@@ -87,54 +106,68 @@ export default function Book() {
     setPopupOpen(false);
   }
 
+  const handleTabChange = (nextTab) => {
+    if (!BOOK_TABS.has(nextTab) || nextTab === activeTab) return;
+
+    setActiveTab(nextTab);
+    setPageIndex(getSavedPageIndex(nextTab));
+  };
+
   // ===========================================================
   //                 📌 RESIZE LISTENER
   // ===========================================================
   useEffect(() => {
-    const resize = () => {
-      const mobile = window.innerWidth <= 1200;
-      setIsMobile(mobile);
-
-      if (mobile) {
-        setViewMode("single"); // 🔥 إجبار الموبايل على single mode
-      }
-    };
-
+    const resize = () => setIsMobile(window.innerWidth <= 1200);
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
 
   useEffect(() => {
-    setPageIndex(0);
     setOffset({ x: 0, y: 0 });
     setZoom(1);
-    localStorage.setItem("activeTab", activeTab);
-    localStorage.setItem("pageIndex", pageIndex);
-    if (activeTab === "poster") {
-      setViewMode("single"); // بوستر = صفحة واحدة دائمًا
-    } else {
-      if (!isMobile) {
-        setViewMode("spread"); // لو الشاشة كبيرة → رجّع صفحتين
-      } else {
-        setViewMode("single"); // لو شاشة صغيرة → صفحة واحدة دائمًا
-      }
-    }
   }, [activeTab]);
+
+  useEffect(() => {
+    setViewMode(isMobile || activeTab === "flash" ? "single" : "spread");
+  }, [activeTab, isMobile]);
+
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+    localStorage.setItem(`pageIndex-${activeTab}`, String(pageIndex));
+
+    // إزالة المفتاح العام القديم بعد نقله إلى مفتاح القسم الحالي.
+    localStorage.removeItem("pageIndex");
+  }, [activeTab, pageIndex]);
+
+
+  useEffect(() => {
+    const lastAvailableIndex = Math.max(0, pages.length - 1);
+
+    if (pageIndex > lastAvailableIndex) {
+      setPageIndex(lastAvailableIndex);
+    }
+  }, [activeTab, pageIndex, pages.length]);
+
+
   useEffect(() => {
     if (viewMode === "spread" && !isMobile) {
-      const currentPageNumber = pageIndex + 1;
-
-      // لو فردية → رجّعها للي قبلها
-      if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
-        setPageIndex(pageIndex - 1);
-      }
+      setPageIndex((currentIndex) => {
+        const currentPageNumber = currentIndex + 1;
+        return currentPageNumber % 2 === 1 && currentPageNumber !== 1
+          ? currentIndex - 1
+          : currentIndex;
+      });
     }
-  }, [viewMode]);
+  }, [viewMode, isMobile]);
 
   // ===========================================================
   //                 📌 PAGE NAVIGATION
   // ===========================================================
   function goToUnit(index) {
+    if (activeTab === "work") {
+      goToPage(index);
+      return;
+    }
     setPageIndex(index - 1);
     // ===========================
     // ❌ التحقق من إدخال غير صحيح
@@ -320,9 +353,6 @@ export default function Book() {
     { id: 9, label: "Unit 9", start: 51, pages: 6 },
     { id: 10, label: "Unit 10", start: 57, pages: 6 },
   ];
-  const posterUnits = [
-    { id: 1, label: "Posters", start: 1, pages: posters().length },
-  ];
 
   const teacherUnits = [
     {
@@ -406,6 +436,15 @@ export default function Book() {
     },
   ];
 
+  const flashUnits = [
+    {
+      id: 1,
+      label: "Posters",
+      start: 1,
+      pages: posters(openPopup).length,
+    }, // ✅ تعديل 2: function call للحصول على length
+  ];
+
   // const posterUnits = [
   //   { id: 1, label: "Posters", start: 2, pages: posterPages.length },
   // ];
@@ -418,6 +457,7 @@ export default function Book() {
   //                 📌 PAGE RENDERER
   // ===========================================================
   function renderPage(content) {
+    // ✅ تعديل 3: حذف FlashCardViewer wrapper — PostersPage بيرجع مباشرة
     if (typeof content === "string") {
       return <img src={content} className="w-full h-full object-contain" />;
     }
@@ -428,17 +468,19 @@ export default function Book() {
   //                 📌 TABS DEFINITION
   // ===========================================================
   const tabs = [
-    { id: "student", label: "Student’s Book" },
+    { id: "student", label: "Student's Book" },
     { id: "work", label: "Workbook" },
-    { id: "teacher", label: "Teacher’s Book" },
-    { id: "poster", label: "Posters" },
+    { id: "teacher", label: "Teacher's Book" },
+    { id: "flash", label: "Posters" }, // ✅ تعديل 4: "Poster" → "flash" عشان يتطابق مع pages selector
+    // { id: "poster", label: "Grammar Poster" },
     // { id: "posterVocab", label: "Posters" },
   ];
   const sidebarUnits = {
     student: studentUnits,
     work: workbookUnits,
     teacher: teacherUnits,
-    poster: posterUnits,
+    flash: flashUnits,
+    // poster: posterUnits,
     // posterVocab: posterVocabUnits,
   }[activeTab];
 
@@ -463,14 +505,14 @@ export default function Book() {
   // const flashInfo = {
   //   cover: fcBookCover,
   //   title: "Right 1 flashcard",
-  //   pages: flashPages.length,
+  //   pages: postersPages.length,
   // };
 
-  const posterInfo = {
-    cover: "",
-    title: "Right 1 Grammar Poster",
-    pages: posters().length,
-  };
+  // const posterInfo = {
+  //   cover: posterBookCover,
+  //   title: "Right 1 Grammar Poster",
+  //   pages: posterPages.length,
+  // };
   // const posterVocabInfo = {
   //   cover: "",
   //   title: "Right 1 Posters",
@@ -481,7 +523,7 @@ export default function Book() {
     work: workbookInfo,
     teacher: teacherInfo,
     // flash: flashInfo,
-    poster: posterInfo,
+    // poster: posterInfo,
     // posterVocab: posterVocabInfo,
   };
   const isLastPage = pageIndex === pages.length - 1;
@@ -489,12 +531,12 @@ export default function Book() {
   // ===========================================================
   //                 📌 RENDER
   // ===========================================================
-  return (
+   return (
     <>
       {/* ===================== TOP NAV ===================== */}
       <TopNavbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         logo={logo}
         menuIcon={menu}
         tabs={tabs}
@@ -522,7 +564,16 @@ export default function Book() {
             height="30"
             viewBox="0 0 90 90"
             onClick={prevPage}
-            className="nav-btn absolute left-10 w-14 h-14 rounded-full flex items-center justify-center z-9999  transition"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                prevPage();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label="Previous page"
+            className="nav-btn absolute left-10 w-14 h-14 rounded-full flex items-center justify-center z-[9999] transition"
           >
             <image href={back} x="0" y="0" width="90" height="90" />
           </svg>
@@ -534,12 +585,20 @@ export default function Book() {
             height="30"
             viewBox="0 0 90 90"
             onClick={nextPage}
-            className="nav-btn absolute right-10 w-14 h-14 rounded-full  flex items-center justify-center z-99999999 transition"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                nextPage();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label="Next page"
+            className="nav-btn absolute right-10 w-14 h-14 rounded-full flex items-center justify-center z-[99999999] transition"
           >
             <image href={next} x="0" y="0" width="90" height="90" />
           </svg>
         )}
-
         {/* POSTERS ALWAYS SINGLE PAGE */}
         {isMobile ||
         activeTab === "poster" ||
@@ -593,6 +652,8 @@ export default function Book() {
         viewMode={viewMode}
         activeTab={activeTab}
         setViewMode={setViewMode}
+        menuButtonRef={menuButtonRef}
+        iconKeyButtonRef={iconKeyButtonRef}
         icons={{
           menu,
           home,
@@ -605,7 +666,7 @@ export default function Book() {
           openRightSidebar: () => setRightBarOpen(true),
           keyIcon: FaKey,
         }}
-        teacherPdf={teacherPdf} // 👈 جديد
+        teacherPdf={teacherPdf}
       />
 
       {/* ===================== LEFT SIDEBAR ===================== */}

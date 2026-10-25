@@ -4,6 +4,7 @@ import ComprehensionB from "./Unit9_Page2_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U9/PG 77/cd43pg77-reading.mp3";
+import readingTimings from "../../../assets/json/cd43pg77-reading.mp3.json";
 
 const ReadingSection_U9 = () => {
   const paragraphs = [
@@ -95,9 +96,12 @@ const ReadingSection_U9 = () => {
         }
         title="A Lot of “What Ifs?”"
         image={imgReading}
+        imageAlt="A black horse running through a grassy field."
         paragraphs={paragraphs}
         question="What do you think happened to Cinderella?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        pageId="sb_unit9_page77_reading"
         captions={captions}
         stopAtSecond={8.6}
       />

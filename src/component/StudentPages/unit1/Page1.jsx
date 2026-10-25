@@ -2,7 +2,7 @@ import page_1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late
 const Page1 = () => {
   return (
     <div
-      className="page1-img-wrapper"
+      className="page1-img-wrapper" role="img" aria-label="Right Grade 5 Class Book cover: a girl tending a garden."
       style={{ backgroundImage: `url(${page_1})` }}
     ></div>
   );

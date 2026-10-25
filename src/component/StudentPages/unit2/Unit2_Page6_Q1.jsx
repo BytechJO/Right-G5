@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_001_Who_goes_to_the_carnival_and_probably_wins_a_trophy_on_Friday.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_002_Who_is_helping_his_dad_with_the_car_engine.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_003_Who_gets_a_trophy_on_Tuesday.mp3";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
+import ExerciseHeader from "../../ExerciseHeader";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 8.svg";
 import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 9.svg";
@@ -7,7 +13,29 @@ import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the O
 import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 15/SVG/Asset 12.svg";
 import grammer_u1 from "../../../assets/audio/ClassBook/U2/PG 15/sound_P15.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault(); event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+};
+const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
+  .replace(/[‘’']/g, "")
+  .replace(/[.,!?;:…“”"–—-]/g, " ")
+  .replace(/\s+/g, " ").trim();
+
 const Page9_Q3 = () => {
+ const audio=useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
   const [locked, setLocked] = useState(false);
   const [result, setResult] = useState([]);
@@ -22,8 +50,9 @@ const Page9_Q3 = () => {
     },
   ];
   const handleChange = (i, val) => {
+    if (locked || result[i] === true) return;
     const updated = [...answers];
-    updated[i] = val.toLowerCase();
+    updated[i] = val;
     setAnswers(updated);
 
     // 🔥 امسح حالة الغلط أول ما يعدّل
@@ -36,7 +65,7 @@ const Page9_Q3 = () => {
 
   const input = (i) => (
     <span className="relative mx-2">
-      <input
+      <input style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} {...fieldKeys} aria-label={["Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?","Question 2, matching picture letter: Who is helping his dad with the car engine?","Question 3, matching picture letter: Who gets a trophy on Tuesday?","Question 4, matching picture letter: Who gets a trophy on Tuesday?","Question 5, matching picture letter: Who eats apple pie on his birthday?"][i]} title={["Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?","Question 2, matching picture letter: Who is helping his dad with the car engine?","Question 3, matching picture letter: Who gets a trophy on Tuesday?","Question 4, matching picture letter: Who gets a trophy on Tuesday?","Question 5, matching picture letter: Who eats apple pie on his birthday?"][i]}
         disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
@@ -81,8 +110,11 @@ const Page9_Q3 = () => {
   // ====================
   const checkAnswers = () => {
     if (locked) return;
+ audio.stop();
+    setAnnouncement("Answers checked. Correct answers stay locked; incorrect answers can be changed.");
 
     if (answers.some((a) => !a.trim())) {
+      setAnnouncement("Please complete all fields.");
       ValidationAlert.info("Please complete all fields.");
       return;
     }
@@ -90,7 +122,7 @@ const Page9_Q3 = () => {
     let correctCount = 0;
 
     const res = answers.map((a, i) => {
-      const ok = a === correct[i];
+      const ok = normalizeAnswer(a) === normalizeAnswer(correct[i]);
       if (ok) correctCount++;
       return ok;
     });
@@ -112,6 +144,7 @@ const Page9_Q3 = () => {
 
     if (correctCount === total) {
       setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -124,6 +157,8 @@ const Page9_Q3 = () => {
   // 👀 SHOW ANSWERS
   // ====================
   const showAnswers = () => {
+ audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
     setLocked(true);
     setResult([true, true, true, true, true]);
@@ -133,19 +168,21 @@ const Page9_Q3 = () => {
   // 🔄 RESET
   // ====================
   const reset = () => {
+ audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
     setLocked(false);
     setResult([]);
   };
 
   return (
-    <div className="p-8 flex flex-col items-center">
+    <div data-exercise-scope="Unit2_Page6_Q1.jsx" className="p-8 flex flex-col items-center">
+<AudioFeedback audio={audio} />
+<style>{`[data-exercise-scope="Unit2_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
         <div className="div-forall">
-        <h5 className="header-title-page8 mb-10">
-          <span className="ex-A mr-2">C</span>
-          Listen, read, and match
-        </h5>
-        <QuestionAudioPlayer
+        <ExerciseHeader sectionLetter="C" title={<>Listen, read, and match</>} subTitle="Start with one item, find the matching partner, then connect the pair before moving to the next one." />
+        <QuestionAudioPlayer pageId="sb_unit2_page6_q1"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={6.6}
@@ -155,24 +192,24 @@ const Page9_Q3 = () => {
           {/* LEFT */}
           <div className="space-y-25">
             <div>
-              {input(0)} <span className="font-bold mr-2">1</span> Who goes to
+              {input(0)} <span className="font-bold mr-2">1</span><AudioText audio={audio} id="fragment-0-0" src={clip0} label="Hear item 1"> Who goes to
               the carnival and probably wins a trophy on Friday?
-            </div>
+            </AudioText></div>
 
             <div>
-              {input(1)} <span className="font-bold mr-2 ">2</span> Who is
+              {input(1)} <span className="font-bold mr-2 ">2</span><AudioText audio={audio} id="fragment-1-1" src={clip1} label="Hear item 2"> Who is
               helping his dad with the car engine?
-            </div>
+            </AudioText></div>
 
             <div>
-              {input(2)} <span className="font-bold mr-2">3</span> Who gets a
+              {input(2)} <span className="font-bold mr-2">3</span><AudioText audio={audio} id="fragment-2-2" src={clip2} label="Hear item 3"> Who gets a
               trophy on Tuesday?
-            </div>
+            </AudioText></div>
 
             <div>
-              {input(3)} <span className="font-bold mr-2">4</span> Who gets a
+              {input(3)} <span className="font-bold mr-2">4</span><AudioText audio={audio} id="fragment-3-3" src={clip2} label="Hear item 4"> Who gets a
               trophy on Tuesday?
-            </div>
+            </AudioText></div>
 
             <div>
               {input(4)} <span className="font-bold mr-2">5</span> Who eats
@@ -184,7 +221,7 @@ const Page9_Q3 = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <img
                 src={img1}
-                alt=""
+                alt="A smiling boy with brown hair wearing a plaid shirt."
                 style={{ height: "80px", objectFit: "contain" }}
               />
             </div>
@@ -192,7 +229,7 @@ const Page9_Q3 = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <img
                 src={img2}
-                alt=""
+                alt="A girl with a ponytail and a red headband."
                 style={{ height: "80px", objectFit: "contain" }}
               />
             </div>
@@ -200,7 +237,7 @@ const Page9_Q3 = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <img
                 src={img3}
-                alt=""
+                alt="A smiling boy with short brown hair."
                 style={{ height: "80px", objectFit: "contain" }}
               />
             </div>
@@ -208,7 +245,7 @@ const Page9_Q3 = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <img
                 src={img4}
-                alt=""
+                alt="A smiling man with dark hair wearing a blue sweater."
                 style={{ height: "80px", objectFit: "contain" }}
               />
             </div>
@@ -216,7 +253,7 @@ const Page9_Q3 = () => {
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <img
                 src={img5}
-                alt=""
+                alt="A girl with dark curly hair and a purple headband."
                 style={{ height: "80px", objectFit: "contain" }}
               />
             </div>
@@ -226,15 +263,15 @@ const Page9_Q3 = () => {
 
       {/* Buttons */}
       <div className="action-buttons-container mt-6">
-        <button className="try-again-button" onClick={reset}>
+        <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button type="button" aria-label="Show Answer" {...activationKeys} onClick={showAnswers} className="show-answer-btn">
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

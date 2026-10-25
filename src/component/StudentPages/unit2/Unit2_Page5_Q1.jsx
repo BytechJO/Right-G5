@@ -1,8 +1,51 @@
-import React, { useState, useRef, useEffect } from "react";
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const actionKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+import clip0 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_001_A_pushmi-pullyu_is_a_make-believe_animal_that_has_a_head_at_both_ends_of.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_002_carnival.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_003_crazy.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_004_trims.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_005_giraffe.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_006_beg.mp3";
+import clip6 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_007_twisty.mp3";
+import clip7 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_008_couple.mp3";
+import clip8 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_009_still.mp3";
+import clip9 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_010_forward_and_backward.mp3";
+import clip10 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_011_a_fun_place_with_rides,_shows_and_games.mp3";
+import clip11 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_012_continuing_to_be.mp3";
+import clip12 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_013_cut.mp3";
+import clip13 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_014_ask.mp3";
+import clip14 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_015_wild,_amazing,_or_without_control.mp3";
+import clip15 from "../../../assets/audio/ClassBook/U2/Page 14 - A/Item_016_having_lots_of_turns.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText, AudioFeedback } from "./ExerciseAudioText";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
 import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 14/SVG/Asset 7.svg";
 const Unit2_Page5_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const questions = [
     {
       combined: "CARNIVALLITS",
@@ -55,251 +98,236 @@ const Unit2_Page5_Q1 = () => {
   const letterRefs = useRef(
     questions.map((q) => Array(q.combined.length).fill(null)),
   );
-  const [lockedParts, setLockedParts] = useState(
-    questions.map(() => ({
-      letters: false,
-      w1: false,
-      w2: false,
-    })),
-  );
-  const normalize = (t) => t.toLowerCase().trim();
-
-  /* ── Letter Box Handlers ── */
-
-  const onLetterInput = (qIdx, i, e) => {
-    if (locked || result[qIdx] === true) return;
-
-    const val = e.target.value
-      .replace(/[^a-zA-Z]/g, "")
-      .toUpperCase()
-      .slice(0, 1);
-
-    setLetterValues((prev) => {
-      const copy = prev.map((arr) => [...arr]);
-      copy[qIdx][i] = val;
-      return copy;
-    });
-
-    clearQuestionStyling(qIdx);
-
-    if (val) {
-      const next = letterRefs.current[qIdx][i + 1];
-      if (next) next.focus();
-    }
-  };
-
-  const onLetterKeydown = (qIdx, i, e) => {
-    if (e.key === "Backspace" && !letterValues[qIdx][i]) {
-      const prev = letterRefs.current[qIdx][i - 1];
-      if (prev) {
-        prev.focus();
-        setLetterValues((prev) => {
-          const copy = prev.map((arr) => [...arr]);
-          copy[qIdx][i - 1] = "";
-          return copy;
-        });
-      }
-      clearQuestionStyling(qIdx);
-    }
-    if (e.key === "ArrowLeft" && i > 0) {
-      letterRefs.current[qIdx][i - 1].focus();
-    }
-    if (e.key === "ArrowRight") {
-      const next = letterRefs.current[qIdx][i + 1];
-      if (next) next.focus();
-    }
-  };
-
-  const onLetterPaste = (qIdx, i, e) => {
-    e.preventDefault();
-    if (locked || result[qIdx] === true) return;
-
-    const text = (e.clipboardData || window.clipboardData)
-      .getData("text")
-      .replace(/[^a-zA-Z]/g, "")
-      .toUpperCase();
-
-    setLetterValues((prev) => {
-      const copy = prev.map((arr) => [...arr]);
-      for (let j = i; j < copy[qIdx].length && j - i < text.length; j++) {
-        copy[qIdx][j] = text[j - i];
-      }
-      return copy;
-    });
-
-    clearQuestionStyling(qIdx);
-
-    const focusIdx = Math.min(
-      i + text.length,
-      questions[qIdx].combined.length - 1,
+  const emptyFeedback = () =>
+    questions.map((q) => ({
+      letters: Array(q.combined.length).fill(null),
+      w1: null,
+      w2: null,
+    }));
+  const [feedback, setFeedback] = useState(emptyFeedback);
+  const lockedParts = feedback.map((row) => ({
+    letters: row.letters.every((value) => value === true),
+    w1: row.w1 === true,
+    w2: row.w2 === true,
+  }));
+  const normalize = (text) =>
+    text
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/[‘’']/g, "")
+      .replace(/[.,!?;:…“”"–—-]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  const isLetterLocked = (qIdx, i) =>
+    locked || feedback[qIdx].letters[i] === true;
+  const isWordLocked = (qIdx, field) =>
+    locked || feedback[qIdx][field === 1 ? "w1" : "w2"] === true;
+  const clearQuestionStyling = (qIdx, field, indices = []) => {
+    setResult((previous) =>
+      previous.map((value, index) => (index === qIdx ? null : value)),
     );
-    letterRefs.current[qIdx][focusIdx]?.focus();
+    setFeedback((previous) =>
+      previous.map((row, index) =>
+        index !== qIdx
+          ? row
+          : field === "letters"
+            ? {
+                ...row,
+                letters: row.letters.map((value, i) =>
+                  indices.includes(i) && value !== true ? null : value,
+                ),
+              }
+            : { ...row, [field]: row[field] === true ? true : null },
+      ),
+    );
   };
-
-  /* ── Word Input Handlers ── */
-
-  const onWordChange = (qIdx, field, val) => {
-    if (locked || result[qIdx] === true) return;
-    clearQuestionStyling(qIdx);
-
-    if (field === 1) {
-      setWord1Values((prev) => {
-        const copy = [...prev];
-        copy[qIdx] = val;
-        return copy;
-      });
-    } else {
-      setWord2Values((prev) => {
-        const copy = [...prev];
-        copy[qIdx] = val;
-        return copy;
-      });
-    }
+  const editableLetter = (qIdx, start, step = 1) => {
+    for (
+      let i = start;
+      i >= 0 && i < questions[qIdx].combined.length;
+      i += step
+    )
+      if (!isLetterLocked(qIdx, i)) return i;
+    return -1;
   };
-
-  /* ── Helpers ── */
-
-  const getCombinedValue = (qIdx) => letterValues[qIdx].join("").toLowerCase();
-
-  const clearQuestionStyling = (qIdx) => {
-    setResult((prev) => {
-      const copy = [...prev];
-      copy[qIdx] = null;
-      return copy;
-    });
+  const focusLetter = (qIdx, i) => {
+    if (i >= 0) letterRefs.current[qIdx][i]?.focus({ preventScroll: true });
   };
-
-  const getLetterStatus = (qIdx, i) => {
-    const r = result[qIdx];
-    if (r === true) return "correct";
-    if (r === false) {
-      return letterValues[qIdx][i] === questions[qIdx].combined[i]
-        ? "correct"
-        : "wrong";
-    }
-    return "";
+  const onLetterInput = (qIdx, i, event) => {
+    if (isLetterLocked(qIdx, i)) return;
+    const value = event.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1);
+    setLetterValues((previous) =>
+      previous.map((row, index) =>
+        index === qIdx
+          ? row.map((letter, at) => (at === i ? value : letter))
+          : row,
+      ),
+    );
+    clearQuestionStyling(qIdx, "letters", [i]);
+    if (value) focusLetter(qIdx, editableLetter(qIdx, i + 1));
   };
-
-  const getWordStatus = (qIdx, field) => {
-    const r = result[qIdx];
-    if (r === true) return "correct";
-    if (r === false) {
-      const val = field === 1 ? word1Values[qIdx] : word2Values[qIdx];
-      const correct =
-        field === 1 ? questions[qIdx].word1 : questions[qIdx].word2;
-      return normalize(val) === normalize(correct) ? "correct" : "wrong";
-    }
-    return "";
-  };
-
-  const isQuestionDisabled = (qIdx) => locked || result[qIdx] === true;
-
-  const usedWords = () => {
-    const set = new Set();
-
-    // الكلمات المكتوبة حالياً
-    word1Values.forEach((w) => {
-      if (w) set.add(w.toLowerCase().trim());
-    });
-
-    word2Values.forEach((w) => {
-      if (w) set.add(w.toLowerCase().trim());
-    });
-
-    return set;
-  };
-  /* ── Check ── */
-
-  const checkAnswers = () => {
-    if (locked) return;
-
-    let allFilled = true;
-    let fullyCorrect = 0;
-
-    const newResult = [...result];
-
-    const newLockedParts = [...lockedParts];
-
-    questions.forEach((q, idx) => {
-      const combined = getCombinedValue(idx);
-      const w1 = normalize(word1Values[idx]);
-      const w2 = normalize(word2Values[idx]);
-
-      if (!combined || !w1 || !w2) {
-        allFilled = false;
-        return;
-      }
-
-      const cOk = combined === q.combined.toLowerCase();
-      const w1Ok = w1 === q.word1.toLowerCase();
-      const w2Ok = w2 === q.word2.toLowerCase();
-
-      let questionScore = 0;
-
-      if (cOk) {
-        questionScore++;
-        newLockedParts[idx].letters = true;
-      }
-
-      if (w1Ok) {
-        questionScore++;
-        newLockedParts[idx].w1 = true;
-      }
-
-      if (w2Ok) {
-        questionScore++;
-        newLockedParts[idx].w2 = true;
-      }
-
-      fullyCorrect += questionScore;
-
-      // 🔥 هذا المهم
-      const allOk = cOk && w1Ok && w2Ok;
-      newResult[idx] = allOk ? true : false;
-    });
-
-    setLockedParts(newLockedParts);
-
-    if (!allFilled) {
-      ValidationAlert.info();
+  const onLetterKeydown = (qIdx, i, event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.stopPropagation();
       return;
     }
-
-    setResult(newResult);
-
-    const msg = `Score: ${fullyCorrect} / 12`;
-
-    if (fullyCorrect === 12) {
-      setLocked(true);
-      ValidationAlert.success(msg);
-    } else if (fullyCorrect === 0) {
-      ValidationAlert.error(msg);
-    } else {
-      ValidationAlert.warning(msg);
+    if (!["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(event.key))
+      return;
+    event.stopPropagation();
+    if (isLetterLocked(qIdx, i)) {
+      event.preventDefault();
+      return;
+    }
+    if (event.key === "Backspace" && !letterValues[qIdx][i]) {
+      event.preventDefault();
+      const previous = editableLetter(qIdx, i - 1, -1);
+      if (previous < 0) return;
+      setLetterValues((rows) =>
+        rows.map((row, index) =>
+          index === qIdx
+            ? row.map((letter, at) => (at === previous ? "" : letter))
+            : row,
+        ),
+      );
+      clearQuestionStyling(qIdx, "letters", [previous]);
+      focusLetter(qIdx, previous);
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      const step = event.key === "ArrowLeft" ? -1 : 1;
+      focusLetter(qIdx, editableLetter(qIdx, i + step, step));
     }
   };
-
-  /* ── Show Answers ── */
-
+  const onLetterPaste = (qIdx, i, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (isLetterLocked(qIdx, i)) return;
+    const text = event.clipboardData.getData("text").replace(/[^a-zA-Z]/g, "");
+    if (!text) return;
+    const changed = [];
+    setLetterValues((previous) =>
+      previous.map((row, index) =>
+        index !== qIdx
+          ? row
+          : row.map((letter, at) => {
+              if (at < i || at - i >= text.length || isLetterLocked(qIdx, at))
+                return letter;
+              return text[at - i];
+            }),
+      ),
+    );
+    for (
+      let at = i;
+      at < questions[qIdx].combined.length && at - i < text.length;
+      at++
+    )
+      if (!isLetterLocked(qIdx, at)) changed.push(at);
+    clearQuestionStyling(qIdx, "letters", changed);
+    const next = editableLetter(qIdx, i + text.length);
+    focusLetter(qIdx, next < 0 ? changed.at(-1) : next);
+  };
+  const onWordChange = (qIdx, field, value) => {
+    if (isWordLocked(qIdx, field)) return;
+    const update = (previous) =>
+      previous.map((word, index) => (index === qIdx ? value : word));
+    if (field === 1) setWord1Values(update);
+    else setWord2Values(update);
+    clearQuestionStyling(qIdx, field === 1 ? "w1" : "w2");
+  };
+  const getLetterStatus = (qIdx, i) =>
+    locked || feedback[qIdx].letters[i] === true
+      ? "correct"
+      : feedback[qIdx].letters[i] === false
+        ? "wrong"
+        : "";
+  const getWordStatus = (qIdx, field) =>
+    locked || feedback[qIdx][field === 1 ? "w1" : "w2"] === true
+      ? "correct"
+      : feedback[qIdx][field === 1 ? "w1" : "w2"] === false
+        ? "wrong"
+        : "";
+  const isQuestionDisabled = (qIdx) => locked || result[qIdx] === true;
+  const usedWords = () =>
+    new Set([...word1Values, ...word2Values].filter(Boolean).map(normalize));
+  const checkAnswers = () => {
+    if (locked) return;
+    audio.stop();
+    if (
+      letterValues.some((row) => row.some((letter) => !letter.trim())) ||
+      word1Values.some((word) => !normalize(word)) ||
+      word2Values.some((word) => !normalize(word))
+    ) {
+      const message =
+        "Please complete every letter box and both words for each item.";
+      setAnnouncement(message);
+      ValidationAlert.info(message);
+      return;
+    }
+    const next = questions.map((q, index) => ({
+      letters: feedback[index].letters.map(
+        (value, i) =>
+          value === true ||
+          letterValues[index][i].toUpperCase() === q.combined[i],
+      ),
+      w1:
+        feedback[index].w1 === true ||
+        normalize(word1Values[index]) === normalize(q.word1),
+      w2:
+        feedback[index].w2 === true ||
+        normalize(word2Values[index]) === normalize(q.word2),
+    }));
+    const groups = next.map((row) => row.letters.every(Boolean));
+    const score = next.reduce(
+      (total, row, i) =>
+        total + Number(groups[i]) + Number(row.w1) + Number(row.w2),
+      0,
+    );
+    setFeedback(next);
+    setResult(next.map((row, i) => groups[i] && row.w1 && row.w2));
+    const total = questions.length * 3,
+      message = `Score: ${score} / ${total}`;
+    setAnnouncement(
+      message +
+        ". " +
+        next
+          .map(
+            (row, i) =>
+              `Question ${i + 1}: combined word ${groups[i] ? "correct" : "not correct"}, first word ${row.w1 ? "correct" : "not correct"}, second word ${row.w2 ? "correct" : "not correct"}.`,
+          )
+          .join(" "),
+    );
+    if (score === total) {
+      setLocked(true);
+      resetButtonRef.current?.focus({ preventScroll: true });
+      ValidationAlert.success(message);
+    } else if (score === 0) ValidationAlert.error(message);
+    else ValidationAlert.warning(message);
+  };
   const showAnswers = () => {
+    audio.stop();
     setLocked(true);
-
     setLetterValues(questions.map((q) => q.combined.split("")));
     setWord1Values(questions.map((q) => q.word1));
     setWord2Values(questions.map((q) => q.word2));
-    setResult([true, true, true, true]);
+    setFeedback(
+      questions.map((q) => ({
+        letters: Array(q.combined.length).fill(true),
+        w1: true,
+        w2: true,
+      })),
+    );
+    setResult(questions.map(() => true));
+    setAnnouncement("Correct answers shown and locked.");
   };
-
-  /* ── Reset ── */
-
   const reset = () => {
+    audio.stop();
     setLetterValues(questions.map((q) => Array(q.combined.length).fill("")));
-    setWord1Values(["", "", "", ""]);
-    setWord2Values(["", "", "", ""]);
-    setResult([null, null, null, null]);
+    setWord1Values(questions.map(() => ""));
+    setWord2Values(questions.map(() => ""));
+    setFeedback(emptyFeedback());
+    setResult(questions.map(() => null));
     setLocked(false);
+    setAnnouncement("Answers, results and locks cleared.");
   };
-
   /* ── Styles ── */
 
   const letterBoxStyle = {
@@ -335,17 +363,28 @@ const Unit2_Page5_Q1 = () => {
   };
 
   const getStatusBorder = (status) => {
-    if (status === "correct") return "#black";
+    if (status === "correct") return "#16a34a";
     if (status === "wrong") return "#ef4444";
     return "#444";
   };
   const uw = usedWords();
   const spacing = ["32px", "80px", "70px", "70px"];
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-word-building="unit2-page5-q1"
+      className="flex flex-col items-center p-[30px]"
+    >
+      <style>{`[data-word-building="unit2-page5-q1"] input:focus-visible,[data-word-building="unit2-page5-q1"] [data-choice]:focus-visible{outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
-      className="div-forall"
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
       >
+        {announcement}
+      </div>
+      <AudioFeedback audio={audio} />
+      <div className="div-forall">
         {/* HEADER */}
         <div
           style={{
@@ -355,13 +394,18 @@ const Unit2_Page5_Q1 = () => {
             position: "relative",
           }}
         >
-          <span className="ex-A mr-5">A</span>
-          <div className="div-forall">
-            <h5 className="header-title-page8">
-              Make words for the pushmi-pullyu to read by adding the
-              <br />
-              letters of one word backwards to another word.
-            </h5>
+          <div className="flex flex-col justify-start">
+            <ExerciseHeader
+              sectionLetter="A"
+              title={
+                <>
+                  Make words for the pushmi-pullyu to read by adding the
+                  <br />
+                  letters of one word backwards to another word.
+                </>
+              }
+              subTitle="Read both clue meanings, reverse or combine the needed word parts, then type the new pushmi-pullyu word."
+            />
             <span
               style={{
                 fontSize: "20px",
@@ -369,16 +413,23 @@ const Unit2_Page5_Q1 = () => {
               }}
             >
               {" "}
-              A pushmi-pullyu is a make-believe animal that has a head at both
-              ends of its body.
+              <AudioText
+                audio={audio}
+                id="description"
+                src={clip0}
+                label="Hear the description of a pushmi-pullyu"
+              >
+                A pushmi-pullyu is a make-believe animal that has a head at both
+                ends of its body.
+              </AudioText>
             </span>
           </div>
           <img
             src={img}
-            alt="pushmi"
+            alt="An imaginary llama-like animal with a head at each end of its body."
             style={{
               position: "absolute", // لازم مع zIndex
-              right: "0",
+              right: "-123px",
               top: "0",
               width: "120px",
               height: "auto",
@@ -413,7 +464,25 @@ const Unit2_Page5_Q1 = () => {
                   : "none",
               }}
             >
-              {w}
+              <AudioText
+                audio={audio}
+                id={"bank-" + w}
+                src={
+                  {
+                    carnival: clip1,
+                    crazy: clip2,
+                    trims: clip3,
+                    giraffe: clip4,
+                    beg: clip5,
+                    twisty: clip6,
+                    couple: clip7,
+                    still: clip8,
+                  }[w]
+                }
+                label={"Hear " + w}
+              >
+                {w}
+              </AudioText>
             </span>
           ))}
         </div>
@@ -454,6 +523,10 @@ const Unit2_Page5_Q1 = () => {
                           return (
                             <input
                               key={i}
+                              aria-label={`Item ${idx + 1}, combined word, letter ${i + 1} of ${q.combined.length}`}
+                              title={`Item ${idx + 1}, combined word, letter ${i + 1} of ${q.combined.length}`}
+                              aria-invalid={status === "wrong"}
+                              onKeyUp={fieldKeys.onKeyUp}
                               ref={(el) => (letterRefs.current[idx][i] = el)}
                               type="text"
                               maxLength={1}
@@ -462,7 +535,7 @@ const Unit2_Page5_Q1 = () => {
                               onKeyDown={(e) => onLetterKeydown(idx, i, e)}
                               onPaste={(e) => onLetterPaste(idx, i, e)}
                               onFocus={(e) => e.target.select()}
-                              disabled={disabled || lockedParts[idx].letters}
+                              disabled={disabled || isLetterLocked(idx, i)}
                               style={{
                                 ...letterBoxStyle,
                                 borderBottomColor: getStatusBorder(status),
@@ -512,6 +585,10 @@ const Unit2_Page5_Q1 = () => {
                       >
                         <input
                           type="text"
+                          {...fieldKeys}
+                          aria-label={`Item ${idx + 1}, first word. Clue: ${q.clue1}`}
+                          title={`Item ${idx + 1}, first word. Clue: ${q.clue1}`}
+                          aria-invalid={getWordStatus(idx, 1) === "wrong"}
                           value={word1Values[idx]}
                           onChange={(e) => onWordChange(idx, 1, e.target.value)}
                           disabled={disabled || lockedParts[idx].w1}
@@ -556,7 +633,20 @@ const Unit2_Page5_Q1 = () => {
                             marginTop: "6px",
                           }}
                         >
-                          {q.clue1}
+                          {idx < 3 ? (
+                            <AudioText
+                              audio={audio}
+                              id={"clue-" + idx + "-1"}
+                              src={[clip10, clip12, clip14][idx]}
+                              label={
+                                "Hear the first clue for item " + (idx + 1)
+                              }
+                            >
+                              {q.clue1}
+                            </AudioText>
+                          ) : (
+                            q.clue1
+                          )}
                         </span>
                       </div>
 
@@ -568,13 +658,28 @@ const Unit2_Page5_Q1 = () => {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {idx === 0 ? "forward and" : "and"}
+                        {idx === 0 ? (
+                          <AudioText
+                            audio={audio}
+                            id="directions"
+                            src={clip9}
+                            label="Hear forward and backward"
+                          >
+                            forward and
+                          </AudioText>
+                        ) : (
+                          "and"
+                        )}
                       </span>
 
                       {/* COLUMN 2 */}
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <input
                           type="text"
+                          {...fieldKeys}
+                          aria-label={`Item ${idx + 1}, second word. Clue: ${q.clue2}`}
+                          title={`Item ${idx + 1}, second word. Clue: ${q.clue2}`}
+                          aria-invalid={getWordStatus(idx, 2) === "wrong"}
                           value={word2Values[idx]}
                           onChange={(e) => onWordChange(idx, 2, e.target.value)}
                           disabled={disabled || lockedParts[idx].w2}
@@ -619,14 +724,34 @@ const Unit2_Page5_Q1 = () => {
                             marginTop: "6px",
                           }}
                         >
-                          {q.clue2}
+                          {idx < 3 ? (
+                            <AudioText
+                              audio={audio}
+                              id={"clue-" + idx + "-2"}
+                              src={[clip11, clip13, clip15][idx]}
+                              label={
+                                "Hear the second clue for item " + (idx + 1)
+                              }
+                            >
+                              {q.clue2}
+                            </AudioText>
+                          ) : (
+                            q.clue2
+                          )}
                         </span>
                       </div>
 
                       {/* backward لأول سؤال */}
                       {idx === 0 && (
                         <span style={{ marginTop: "8px", color: "black" }}>
-                          backward
+                          <AudioText
+                            audio={audio}
+                            id="directions-backward"
+                            src={clip9}
+                            label="Hear forward and backward"
+                          >
+                            backward
+                          </AudioText>
                         </span>
                       )}
                     </div>
@@ -655,11 +780,38 @@ const Unit2_Page5_Q1 = () => {
       </div>
 
       {/* BUTTONS */}
-      <Button
-        handleShowAnswer={showAnswers}
-        handleStartAgain={reset}
-        checkAnswers={checkAnswers}
-      />
+      <div className="action-buttons-container">
+        <button
+          type="button"
+          aria-label="Start Again"
+          {...actionKeys}
+          ref={resetButtonRef}
+          onClick={reset}
+          className="try-again-button"
+        >
+          Start Again ↻
+        </button>
+        <button
+          type="button"
+          aria-label="Show Answer"
+          {...actionKeys}
+          onClick={showAnswers}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
+        </button>
+        <button
+          type="button"
+          aria-label="Check Answer"
+          {...actionKeys}
+          onClick={checkAnswers}
+          className="check-button2"
+          disabled={locked}
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+        >
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
 };

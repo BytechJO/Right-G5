@@ -3,6 +3,7 @@ import ComprehensionA from "./Unit7_Page2_ComprehensionA";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U7/PG 59/cd33pg59-reading.mp3";
+import readingTimings from "../../../assets/json/cd33pg59-reading.mp3.json";
 
 const ReadingSection_U7 = () => {
   const paragraphs = [
@@ -124,9 +125,13 @@ const ReadingSection_U7 = () => {
         }
         title="A Great Day With a Great Friend"
         image={imgReading}
+        imageAlt="A black horse running through a grassy field."
         paragraphs={paragraphs}
         question="Which part of the day do you think Jenny enjoys the most?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[{"printed":["as","fast","as","we","could","go"],"spoken":["as","fast","as","we","could",""]}]}
+        pageId="sb_unit7_page59_reading"
         captions={captions}
         stopAtSecond={7.1}
       />

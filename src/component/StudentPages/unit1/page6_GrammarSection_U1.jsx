@@ -33,6 +33,7 @@ const GrammarSection_U1 = () => {
       </div>
       <div className="w-[70%] mx-auto">
         <QuestionAudioPlayer
+          pageId="sb_unit1_page6_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={2}
@@ -42,7 +43,7 @@ const GrammarSection_U1 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt="Grammar examples explaining questions and answers with how."
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

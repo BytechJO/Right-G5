@@ -3,6 +3,7 @@ import ComprehensionA from "./Unit6_Page2_ComprehensionA";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U6/PG 47/cd28pg47-reading.mp3";
+import readingTimings from "../../../assets/json/cd28pg47-reading.mp3.json";
 
 const ReadingSection_U6 = () => {
   const paragraphs = [
@@ -92,9 +93,12 @@ const ReadingSection_U6 = () => {
         }
         title="A Special Visitor"
         image={imgReading}
+        imageAlt="A black horse running through a grassy field."
         paragraphs={paragraphs}
         question="Do you think Lori and Jenny will have a good day together? How can you tell?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        pageId="sb_unit6_page47_reading"
         captions={captions}
         stopAtSecond={5.3}
       />

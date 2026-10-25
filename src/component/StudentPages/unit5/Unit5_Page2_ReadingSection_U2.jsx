@@ -4,6 +4,7 @@ import ComprehensionA from "./Unit5_Page2_ComprehensionA";
 import ComprehensionB from "./Unit5_Page2_ComprehensionB";
 
 import readingAudio from "../../../assets/audio/ClassBook/U5/PG 41/cd23pg41-reading.mp3";
+import readingTimings from "../../../assets/json/cd23pg41-reading.mp3.json";
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 41/SVG/Asset 32.svg";
 
 const ReadingSection_U2 = () => {
@@ -186,9 +187,13 @@ const ReadingSection_U2 = () => {
         }
         title="Eating Out"
         image={imgReading}
+        imageAlt="A server carrying a plate of food beside three diners at a restaurant."
         paragraphs={paragraphs}
         question="Are you usually a polite customer? How could you improve?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[{"printed":["we'll","decide"],"spoken":["weall","decided"]}]}
+        pageId="sb_unit5_page41_reading"
         captions={captions}
         stopAtSecond={7.5}
         readingRef={readingRef}

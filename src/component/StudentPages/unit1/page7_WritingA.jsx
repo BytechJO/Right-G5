@@ -1,8 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault(); event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+};
+const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
+  .replace(/[‘’']/g, "")
+  .replace(/[.,!?;:…“”"]/g, " ")
+  .replace(/\s+/g, " ").trim();
+
 
 const WritingA = () => {
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState({
     who: "",
     what: "",
@@ -22,16 +43,11 @@ const WritingA = () => {
     how: "Maybe pulleys, or magnets, but no one really knows",
     why: "To build a castle",
   };
-  const normalize = (text) => {
-    return text
-      .trim() // حذف المسافات بالبداية والنهاية
-      .toLowerCase() // تجاهل الكابيتال
-      .replace(/\.$/, "") // حذف النقطة إذا كانت بالنهاية فقط
-      .replace(/\s+/g, " "); // توحيد المسافات
-  };
+  const normalize = normalizeAnswer;
   // ✅ CHECK
   const handleCheck = () => {
     if (locked) return;
+    setAnnouncement("Checking answers. Correct answers stay locked; incorrect answers can be changed.");
 
     const isEmpty = Object.values(answers).some((a) => !a || a.trim() === "");
 
@@ -68,6 +84,8 @@ const WritingA = () => {
   `;
 
     if (correct === total) {
+      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});
       ValidationAlert.success(msg);
     } else if (correct === 0) {
       ValidationAlert.error(msg);
@@ -78,6 +96,7 @@ const WritingA = () => {
 
   // 👁️ SHOW
   const handleShow = () => {
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correctAnswers);
     setErrors({}); // 🔥 يمسح كل الأخطاء
     setLocked(true); // 🔒 يقفل التعديل
@@ -85,6 +104,7 @@ const WritingA = () => {
 
   // 🔄 RESET
   const handleReset = () => {
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers({
       who: "",
       what: "",
@@ -99,13 +119,10 @@ const WritingA = () => {
 
   const renderInput = (key) => (
     <div className="relative w-full">
-      <input
+      <input {...fieldKeys} aria-label={`Article answer: ${key}`} title={`Article answer: ${key}`} style={{borderBottom:locked || errors[key] === false ? "2px solid #16a34a" : errors[key] === true ? "2px solid #ef4444" : undefined}} placeholder="Type your answer"
         value={answers[key]}
         disabled={locked || errors[key] === false}
-        onChange={(e) => {
-          const updated = { ...answers, [key]: e.target.value };
-          setAnswers(updated);
-        }}
+        onChange={(e) => { if (locked || errors[key] === false) return; setAnswers(previous => ({...previous,[key]:e.target.value}));setErrors(previous => {const next={...previous};delete next[key];return next;}); }}
         className={`border-b outline-none w-full text-[#6D2980] font-semibold pr-6
     ${errors[key] ? "border-red-500" : "border-black"}
   `}
@@ -140,13 +157,15 @@ const WritingA = () => {
     </div>
   );
   return (
-   <div
+   <div data-unit1-scope="page7_WritingA.jsx"
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
+<style>{`[data-unit1-scope="page7_WritingA.jsx"] input:focus-visible,[data-unit1-scope="page7_WritingA.jsx"] textarea:focus-visible,[data-unit1-scope="page7_WritingA.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
       <div className="div-forall">
       <h5 className="header-title-page8-read">
         <span className="ex-A-read mr-2">A</span>
@@ -197,14 +216,14 @@ const WritingA = () => {
       <div className="flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef}
             onClick={handleReset}
             className="flex items-center justify-center w-15 h-15 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} className="text-gray-700" />
-            </div>
-          </div>
+            </span>
+          </button>
 
           {/* Tooltip */}
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
@@ -214,14 +233,14 @@ const WritingA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Show Answer" {...activationKeys}
             onClick={handleShow}
             className="flex items-center justify-center w-15 h-15 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} className="text-gray-700" />
-            </div>
-          </div>
+            </span>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -230,14 +249,14 @@ const WritingA = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}}
             onClick={handleCheck}
             className="flex items-center justify-center w-15 h-15 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
-            <div className="bg-white p-3 rounded-full shadow">
+            <span className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} className="text-gray-700" />
-            </div>
-          </div>
+            </span>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer
