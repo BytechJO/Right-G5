@@ -120,6 +120,8 @@ const ReadingSection_U8 = () => {
         pageId="sb_unit8_page65_reading"
         captions={captions}
         stopAtSecond={8.9}
+        subTitle={"Press Play, follow the text as it is read, then pause or replay any part you need to hear again."}
+        headerTitle={"Listen and read along: How Could Something That Big Disappear?"}
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

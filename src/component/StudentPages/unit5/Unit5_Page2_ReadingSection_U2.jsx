@@ -199,6 +199,8 @@ const ReadingSection_U2 = () => {
         readingRef={readingRef}
         underlineMode={underlineMode}
         originalHtmlRef={originalHtmlRef}
+        headerTitle={"Listen and read along: Eating Out."}
+        subTitle={"Press Play, follow the text as it is read, then pause or replay any part you need to hear again."}
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

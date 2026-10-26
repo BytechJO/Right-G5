@@ -1,32 +1,66 @@
-import React, { useState } from "react";
+import React from "react";
 import page_6 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 45.png";
 // import song from "../../../assets/img_unit5/sounds-unit5/Pg15.Sing_Adult Lady.mp3";
-import audioBtn from "../../../assets/Page 01/Audio btn.svg";
+
 import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 import "./Unit5_Page6.css";
-
 const Unit5_Page6 = ({ openPopup }) => {
-
-
   return (
     <div
+      data-page-access={"unit5-page6"}
+      aria-label={"Unit 5 page 6"}
+      role={"group"}
       className="page1-img-wrapper"
-      style={{ backgroundImage: `url(${page_6})` }}
+      style={{
+        backgroundImage: `url(${page_6})`,
+      }}
     >
+      <style>{`[data-page-access="unit5-page6"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img src={page_6} /> */}
 
       <div
         className="click-icon-unit5-page6-1 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          aria-label={"Open exercise 1"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 48 })}
-          style={{ overflow: "visible" }}
+          onClick={() =>
+            openPopup("exercise", {
+              startIndex: 48,
+            })
+          }
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"
@@ -38,16 +72,47 @@ const Unit5_Page6 = ({ openPopup }) => {
       </div>
       <div
         className="click-icon-unit5-page6-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          aria-label={"Open exercise 2"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 49 })}
-          style={{ overflow: "visible" }}
+          onClick={() =>
+            openPopup("exercise", {
+              startIndex: 49,
+            })
+          }
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"
@@ -60,5 +125,4 @@ const Unit5_Page6 = ({ openPopup }) => {
     </div>
   );
 };
-
 export default Unit5_Page6;

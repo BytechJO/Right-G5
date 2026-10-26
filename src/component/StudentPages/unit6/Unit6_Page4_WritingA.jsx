@@ -1,7 +1,15 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 import { FaRedo, FaEye } from "react-icons/fa";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
 
-const Unit6_Page4_WritingA = () => {
+
+
+const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const correctAnswers = [
     "Can I come over to your house?",
     "We could go out and do a few things.",
@@ -16,21 +24,21 @@ const Unit6_Page4_WritingA = () => {
   const [locked, setLocked] = useState(false);
 
   // show
-  const handleShow = () => {
+  const handleShow = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers(correctAnswers);
 
     setLocked(true);
   };
 
   // reset
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", ""]);
 
     setLocked(false);
   };
 
   // update
-  const updateAnswer = (index, value) => {
+  const updateAnswer = (index, value) => {if(locked)return;
     const updated = [...answers];
 
     updated[index] = value;
@@ -39,7 +47,7 @@ const Unit6_Page4_WritingA = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit6_Page4_WritingA.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit6_Page4_WritingA.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page4_WritingA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page4_WritingA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-10 leading-relaxed">
         <span className="ex-A-read mr-2">A</span>
@@ -55,7 +63,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 1; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 1; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[0]}
                 disabled={locked}
@@ -79,7 +87,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 2; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 2; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked}
@@ -103,7 +111,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 3; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 3; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[2]}
                 disabled={locked}
@@ -127,7 +135,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 4; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 4; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[3]}
                 disabled={locked}
@@ -155,7 +163,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 5; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 5; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[4]}
                 disabled={locked}
@@ -181,7 +189,7 @@ const Unit6_Page4_WritingA = () => {
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input
+              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 6; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 6; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[5]}
                 disabled={locked}
@@ -204,14 +212,14 @@ const Unit6_Page4_WritingA = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -220,14 +228,14 @@ const Unit6_Page4_WritingA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer

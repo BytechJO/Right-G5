@@ -1,10 +1,61 @@
+import clip0 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_001_take_advantage_of.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_002_half_price.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_003_in_a_row.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_004_made_it.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_005_try_it_out.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_006_We_should_the_discount._Let's_buy_five.mp3";
+import clip6 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_007_Yes,_at_,_they_would_only_be_fifty_cents_each.mp3";
+import clip7 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_008_Hooray!_I_!_I_got_three_baskets.mp3";
+import clip8 from "../../../assets/audio/ClassBook/U6/Page 50 - B/Item_009_Good_job!_Now_can_I_I_want_to_see_if_I_can_win.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit5/ExerciseAudioText";
+import { SentenceGroup, SentencePart } from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import boxArrowRight from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 50/Asset 2.svg";
 import boxArrowleft from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 50/Asset 3.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit6_Page5_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const words = [
     "take advantage of",
     "half price",
@@ -24,12 +75,7 @@ const Unit6_Page5_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const [result, setResult] = useState([]);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
     if (locked || result[i] === true) return;
@@ -48,9 +94,16 @@ const Unit6_Page5_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(
+        String("Please complete all fields.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all fields."));
       return;
     }
 
@@ -82,16 +135,38 @@ const Unit6_Page5_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       correctAnswers[0][0],
       correctAnswers[1][0],
@@ -106,6 +181,8 @@ const Unit6_Page5_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
     setResult([]);
     setLocked(false);
@@ -113,6 +190,13 @@ const Unit6_Page5_Q2 = () => {
   const input = (i, width = "w-[220px]") => (
     <span className="relative inline-block  mb-2.5">
       <input
+        aria-invalid={!!(result[i] === false)}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        title={`Conversation blank ${i + 1}, use the expressions in the box`}
+        aria-label={`Conversation blank ${i + 1}, use the expressions in the box`}
+        {...fieldKeys}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
         disabled={locked || result[i] === true}
@@ -151,16 +235,30 @@ const Unit6_Page5_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit6_Page5_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit6_Page5_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page5_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page5_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"30px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span className="ex-A mr-2.5">B</span>
-          Read and complete the conversations.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="B"
+          title={<>Read and complete the conversations.</>}
+          subTitle="Read the whole sentence first, then choose the word that fits both the meaning and grammar before checking."
+        />
 
         {/* WORD BANK */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center">
           <div
             className="
               bg-[#E8DFF0]
@@ -173,7 +271,27 @@ const Unit6_Page5_Q2 = () => {
             "
           >
             {words.map((word, i) => (
-              <span key={i}>{word}</span>
+              <AudioText
+                label={`Hear ${word}`}
+                src={
+                  [
+                    clip0,
+                    clip1,
+                    clip2,
+                    clip3,
+                    clip4,
+                    clip5,
+                    clip6,
+                    clip7,
+                    clip8,
+                  ][i]
+                }
+                id={`bank-${i}`}
+                audio={audio}
+                key={i}
+              >
+                {word}
+              </AudioText>
             ))}
           </div>
         </div>
@@ -194,7 +312,13 @@ const Unit6_Page5_Q2 = () => {
               }}
             />
 
-            <div className="relative z-10 p-6">
+            <SentenceGroup
+              label={"Hear conversation 1"}
+              src={clip5}
+              id={"conversation-0"}
+              audio={audio}
+              className="relative z-10 p-6"
+            >
               <span className="absolute -left-8 top-3 font-bold text-[18px]">
                 1
               </span>
@@ -205,7 +329,7 @@ const Unit6_Page5_Q2 = () => {
               {input(0, "w-[220px]")}
 
               <p className="text-[18px]">the discount. Let’s buy five.</p>
-            </div>
+            </SentenceGroup>
           </div>
 
           {/* BOX 2 */}
@@ -222,7 +346,11 @@ const Unit6_Page5_Q2 = () => {
               }}
             />
 
-            <div
+            <SentenceGroup
+              label={"Hear conversation 2"}
+              src={clip6}
+              id={"conversation-1"}
+              audio={audio}
               style={{
                 position: "relative",
                 zIndex: 10,
@@ -241,7 +369,7 @@ const Unit6_Page5_Q2 = () => {
               <p className="text-[18px]">
                 , they would only be fifty cents each.
               </p>
-            </div>
+            </SentenceGroup>
           </div>
 
           {/* BOX 3 */}
@@ -259,7 +387,11 @@ const Unit6_Page5_Q2 = () => {
               }}
             />
 
-            <div
+            <SentenceGroup
+              label={"Hear conversation 3"}
+              src={clip7}
+              id={"conversation-2"}
+              audio={audio}
               style={{
                 position: "relative",
                 zIndex: 10,
@@ -295,7 +427,7 @@ const Unit6_Page5_Q2 = () => {
                   <span>.</span>
                 </div>
               </div>
-            </div>
+            </SentenceGroup>
           </div>
           {/* BOX 4 */}
           <div className="relative w-[420px] min-h-[170px]">
@@ -311,7 +443,11 @@ const Unit6_Page5_Q2 = () => {
               }}
             />
 
-            <div
+            <SentenceGroup
+              label={"Hear conversation 4"}
+              src={clip8}
+              id={"conversation-3"}
+              audio={audio}
               style={{
                 position: "relative",
                 zIndex: 10,
@@ -328,22 +464,43 @@ const Unit6_Page5_Q2 = () => {
               {input(4, "w-[220px]")}
 
               <p className="text-[18px]">? I want to see if I can win.</p>
-            </div>
+            </SentenceGroup>
           </div>
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

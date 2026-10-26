@@ -1,9 +1,21 @@
+import clip0 from "../../../assets/audio/ClassBook/U9/Page 80 - B/Item_001_!_many_people_yelled_as_the_winning_team,_in_their_bright_blue_shirts,_l.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U9/Page 80 - B/Item_002_There_was_a_of_people_leaving_as_some_raced_to_get_to_the_they_had_for_t.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U9/Page 80 - B/Item_003_The_game_had_started_at_noon,_so_some_people_still_had_to_return_to_work.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback,AudioSpeaker} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import grammer_u1 from "../../../assets/audio/ClassBook/U9/PG 80/cd45pg80-instruction.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-const Unit9_Page5_Q2 = () => {
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+
+const Unit9_Page5_Q2 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "Congratulations",
     "stadium",
@@ -30,12 +42,7 @@ const Unit9_Page5_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -56,10 +63,10 @@ const Unit9_Page5_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -90,17 +97,17 @@ const Unit9_Page5_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       "Congratulations",
       "stadium",
@@ -114,7 +121,7 @@ const Unit9_Page5_Q2 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
 
     setResult([]);
@@ -124,7 +131,7 @@ const Unit9_Page5_Q2 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(result[i] === false)} title={`Listening paragraph, missing vocabulary word ${i+1}`} aria-label={`Listening paragraph, missing vocabulary word ${i+1}`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -173,49 +180,42 @@ const Unit9_Page5_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Unit9_Page5_Q2.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit9_Page5_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit9_Page5_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit9_Page5_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            B
-          </span>
+        <ExerciseHeader sectionLetter="B" title={<>
+          
           Listen and write the missing vocabulary words in the blanks.
-        </h5>
-        <QuestionAudioPlayer
+        </>} subTitle="Listen for one missing word at a time, replay if needed, then type exactly the word you hear."/>
+        <QuestionAudioPlayer pageId="sb_unit9_page5_q2"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={8.1}
         />
         {/* PARAGRAPH */}
-        <div className="text-[20px] leading-[3.1]">
+        <div className="text-[20px] leading-[3.1]"><span role="group" aria-roledescription="sentence audio" aria-keyshortcuts="Enter Space" tabIndex={0} data-choice data-sentence-audio="listening-0" aria-label="Hear listening paragraph part 1" onKeyDown={event=>{if(event.target!==event.currentTarget||(event.key!=="Enter"&&event.key!==" "))return;event.preventDefault();event.stopPropagation();if(!event.repeat)audio.play("listening-0",clip0);}} onKeyUp={event=>{if(event.target===event.currentTarget&&(event.key==="Enter"||event.key===" ")){event.preventDefault();event.stopPropagation();}}} onClick={event=>{if(event.target.closest?.('input,textarea,select,button,[role="button"],[data-choice]')!==event.currentTarget)return;event.stopPropagation();audio.play("listening-0",clip0);}} style={{position:"relative",borderRadius:6,...(audio.activeId==="listening-0"?{boxShadow:"0 0 0 3px #2563eb",backgroundColor:"#dbeafe"}:{})}}>
           “{inputField(0, "w-[220px]")}!” many people yelled as the winning
           team, in their bright blue shirts, left the{" "}
           {inputField(1, "w-[250px]")}. It had been a great game.
           <br />
-          There was a {inputField(2, "w-[220px]")} of people leaving as some
+         {audio.activeId==="listening-0"&&<AudioSpeaker/>}</span><span role="group" aria-roledescription="sentence audio" aria-keyshortcuts="Enter Space" tabIndex={0} data-choice data-sentence-audio="listening-1" aria-label="Hear listening paragraph part 2" onKeyDown={event=>{if(event.target!==event.currentTarget||(event.key!=="Enter"&&event.key!==" "))return;event.preventDefault();event.stopPropagation();if(!event.repeat)audio.play("listening-1",clip1);}} onKeyUp={event=>{if(event.target===event.currentTarget&&(event.key==="Enter"||event.key===" ")){event.preventDefault();event.stopPropagation();}}} onClick={event=>{if(event.target.closest?.('input,textarea,select,button,[role="button"],[data-choice]')!==event.currentTarget)return;event.stopPropagation();audio.play("listening-1",clip1);}} style={{position:"relative",borderRadius:6,...(audio.activeId==="listening-1"?{boxShadow:"0 0 0 3px #2563eb",backgroundColor:"#dbeafe"}:{})}}> There was a {inputField(2, "w-[220px]")} of people leaving as some
           raced to get to the {inputField(3, "w-[250px]")} they had for that
-          afternoon. The game had started {inputField(4, "w-[240px]")} at noon,
+          afternoon.{audio.activeId==="listening-1"&&<AudioSpeaker/>}</span><span role="group" aria-roledescription="sentence audio" aria-keyshortcuts="Enter Space" tabIndex={0} data-choice data-sentence-audio="listening-2" aria-label="Hear listening paragraph part 3" onKeyDown={event=>{if(event.target!==event.currentTarget||(event.key!=="Enter"&&event.key!==" "))return;event.preventDefault();event.stopPropagation();if(!event.repeat)audio.play("listening-2",clip2);}} onKeyUp={event=>{if(event.target===event.currentTarget&&(event.key==="Enter"||event.key===" ")){event.preventDefault();event.stopPropagation();}}} onClick={event=>{if(event.target.closest?.('input,textarea,select,button,[role="button"],[data-choice]')!==event.currentTarget)return;event.stopPropagation();audio.play("listening-2",clip2);}} style={{position:"relative",borderRadius:6,...(audio.activeId==="listening-2"?{boxShadow:"0 0 0 3px #2563eb",backgroundColor:"#dbeafe"}:{})}}> The game had started {inputField(4, "w-[240px]")} at noon,
           so some people still had to return to work.
-        </div>
+        {audio.activeId==="listening-2"&&<AudioSpeaker/>}</span></div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

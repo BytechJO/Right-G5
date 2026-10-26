@@ -1,8 +1,50 @@
+import clip0 from "../../../assets/audio/ClassBook/U8/Page 69 - E/Item_001_know_answer_everyone.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U8/Page 69 - E/Item_002_somebody_Mary_see.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U8/Page 69 - E/Item_003_everybody_love_rainbow.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U8/Page 69 - E/Item_004_Steven_know_who_is_a_doctor_someone.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit8_Page6_Q3 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "Everyone knows the answer.",
     "Mary sees somebody.",
@@ -16,12 +58,7 @@ const Unit8_Page6_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -43,9 +80,16 @@ const Unit8_Page6_Q3 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -76,17 +120,39 @@ const Unit8_Page6_Q3 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "Everyone knows the answer.",
       "Mary sees somebody.",
@@ -100,6 +166,8 @@ const Unit8_Page6_Q3 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -110,6 +178,13 @@ const Unit8_Page6_Q3 = () => {
   const sentenceInput = (i) => (
     <span className="relative flex-1">
       <input
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={!!(result[i] === false)}
+        title={`Item ${i + 1}, write a sentence using the given words`}
+        aria-label={`Item ${i + 1}, write a sentence using the given words`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -158,27 +233,43 @@ const Unit8_Page6_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit8_Page6_Q3.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit8_Page6_Q3.jsx"] input:focus-visible,[data-exercise-scope="Unit8_Page6_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Unit8_Page6_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-18">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Make sentences from the words given.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="E"
+          title={<>Make sentences from the words given.</>}
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* QUESTIONS */}
         <div className="text-[18px] leading-[3.6] flex flex-col gap-8">
           <div className="flex items-center gap-4">
             <span className="font-bold">1</span>
 
-            <span>know/answer/everyone</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id="prompt-0"
+                src={clip0}
+                label="Hear prompt 1"
+              >
+                know/answer/everyone
+              </AudioText>
+            </span>
 
             {sentenceInput(0, "w-[520px]")}
           </div>
@@ -186,7 +277,16 @@ const Unit8_Page6_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold">2</span>
 
-            <span>somebody/Mary/see</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id="prompt-1"
+                src={clip1}
+                label="Hear prompt 2"
+              >
+                somebody/Mary/see
+              </AudioText>
+            </span>
 
             {sentenceInput(1, "w-[520px]")}
           </div>
@@ -194,7 +294,16 @@ const Unit8_Page6_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold">3</span>
 
-            <span>everybody/love/rainbow</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id="prompt-2"
+                src={clip2}
+                label="Hear prompt 3"
+              >
+                everybody/love/rainbow
+              </AudioText>
+            </span>
 
             {sentenceInput(2, "w-[520px]")}
           </div>
@@ -202,7 +311,16 @@ const Unit8_Page6_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold">4</span>
 
-            <span>Steven/know/who is a doctor/someone</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id="prompt-3"
+                src={clip3}
+                label="Hear prompt 4"
+              >
+                Steven/know/who is a doctor/someone
+              </AudioText>
+            </span>
 
             {sentenceInput(3, "w-[420px]")}
           </div>
@@ -211,15 +329,36 @@ const Unit8_Page6_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

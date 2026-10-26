@@ -1,3 +1,7 @@
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState, useRef } from "react";
 
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 17.svg";
@@ -6,8 +10,42 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Fo
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 9 What If Folder/Page 81/SVG/Asset 10.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit9_Page6_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "If it snows, we’ll have a snowball fight.",
     "If she reads the book, she’ll get an A on her paper.",
@@ -28,45 +66,40 @@ const Unit9_Page6_Q2 = () => {
 
   const inputRefs = useRef([]);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (qIndex, lineIndex, value) => {
     if (locked || result[qIndex] === true) return;
-
-    const updated = [...answers];
-
-    updated[qIndex][lineIndex] = value;
-
-    setAnswers(updated);
-
-    setResult((prev) => {
-      const copy = [...prev];
-
-      copy[qIndex] = undefined;
-
-      return copy;
+    setAnswers((previous) =>
+      previous.map((lines, i) =>
+        i === qIndex
+          ? lines.map((line, j) => (j === lineIndex ? value : line))
+          : lines,
+      ),
+    );
+    setResult((previous) => {
+      const next = [...previous];
+      next[qIndex] = undefined;
+      return next;
     });
-
-    // ينزل تلقائي للسطر الثاني
-    if (lineIndex === 0 && value.length >= 35) {
-      inputRefs.current[qIndex]?.focus();
-    }
   };
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((group) =>
       group.every((line) => !line.trim()),
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -100,17 +133,39 @@ const Unit9_Page6_Q2 = () => {
   `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       ["If it snows,", "we’ll have a snowball fight."],
       ["If she reads the book,", "she’ll get an A on her paper."],
@@ -127,6 +182,8 @@ const Unit9_Page6_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       ["", ""],
       ["", ""],
@@ -142,6 +199,13 @@ const Unit9_Page6_Q2 = () => {
   const lineInput = (qIndex, lineIndex, width) => (
     <span className="relative inline-block">
       <input
+        style={{
+          ...(result[qIndex] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={!!(result[qIndex] === false)}
+        title={`Picture ${qIndex + 1}, sentence line ${lineIndex + 1}; both lines form one answer`}
+        aria-label={`Picture ${qIndex + 1}, sentence line ${lineIndex + 1}; both lines form one answer`}
+        {...fieldKeys}
         ref={lineIndex === 1 ? (el) => (inputRefs.current[qIndex] = el) : null}
         type="text"
         value={answers[qIndex][lineIndex]}
@@ -189,20 +253,32 @@ const Unit9_Page6_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit9_Page6_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit9_Page6_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit9_Page6_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit9_Page6_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall " style={{gap:"30px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Look at each pair of pictures, and then write a sentence about them.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="E"
+          title={
+            <>
+              Look at each pair of pictures, and then write a sentence about
+              them.
+            </>
+          }
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* TOP ROW */}
         <div className="flex gap-20 mb-12">
@@ -210,7 +286,9 @@ const Unit9_Page6_Q2 = () => {
           <div>
             <img
               src={img1}
-              alt=""
+              alt={
+                "Snow falling around a snowman, and children throwing snowballs."
+              }
               style={{
                 width: "300px",
                 height: "auto",
@@ -232,7 +310,9 @@ const Unit9_Page6_Q2 = () => {
           <div>
             <img
               src={img2}
-              alt=""
+              alt={
+                "A girl reading a book in an armchair, and a sheet of paper marked A plus."
+              }
               style={{
                 width: "300px",
                 height: "auto",
@@ -257,7 +337,9 @@ const Unit9_Page6_Q2 = () => {
           <div>
             <img
               src={img3}
-              alt=""
+              alt={
+                "A girl speaking on a telephone, and two girls playing hopscotch."
+              }
               style={{
                 width: "300px",
                 height: "auto",
@@ -279,7 +361,9 @@ const Unit9_Page6_Q2 = () => {
           <div>
             <img
               src={img4}
-              alt=""
+              alt={
+                "A boy riding a bicycle, and a boy repairing a bicycle wheel."
+              }
               style={{
                 width: "300px",
                 height: "auto",
@@ -301,15 +385,36 @@ const Unit9_Page6_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

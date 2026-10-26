@@ -1,10 +1,18 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 48/SVG/Asset 7.svg";
 import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 48/SVG/Asset 8.svg";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit6_Page3_GrammarC = () => {
+
+const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const correctAnswers = [
     "Shall we go to the museum?",
     "Shall we go to the mountains?",
@@ -19,12 +27,10 @@ const Unit6_Page3_GrammarC = () => {
   const [locked, setLocked] = useState(false);
 
   // normalize
-  const normalize = (text) => {
-    return text.trim().toLowerCase().replace(/\s+/g, " ").replace(/[?.]/g, "");
-  };
+  const normalize = normalizeAnswer;
 
   // update
-  const updateAnswer = (index, value) => {
+  const updateAnswer = (index, value) => {if(locked||correctLocked[index])return;
     const updated = [...answers];
 
     updated[index] = value;
@@ -40,12 +46,12 @@ const Unit6_Page3_GrammarC = () => {
 
   // check
   const handleCheck = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const isEmpty = answers.some((a) => normalize(a) === "");
 
     if (isEmpty) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
 
       return;
     }
@@ -81,18 +87,18 @@ const Unit6_Page3_GrammarC = () => {
     `;
 
     if (score === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // show
-  const handleShow = () => {
+  const handleShow = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers(correctAnswers);
 
     setErrors([false, false]);
@@ -103,7 +109,7 @@ const Unit6_Page3_GrammarC = () => {
   };
 
   // reset
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", ""]);
 
     setErrors([false, false]);
@@ -114,7 +120,7 @@ const Unit6_Page3_GrammarC = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit6_Page3_GrammarC.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit6_Page3_GrammarC.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page3_GrammarC.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page3_GrammarC.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">C</span>
@@ -130,7 +136,7 @@ const Unit6_Page3_GrammarC = () => {
           {/* IMAGE */}
           <img
             src={img1}
-            alt="museum"
+            alt={"A museum building with columns and a sign reading Museum."}
             style={{
               width: "150px",
               height: "150px",
@@ -140,7 +146,7 @@ const Unit6_Page3_GrammarC = () => {
 
           {/* INPUT */}
           <div className="flex-1 mt-10 relative">
-            <input
+            <input aria-invalid={!!(errors[0])} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 1, write the question"} aria-label={"Picture 1, write the question"} {...fieldKeys}
               type="text"
               value={answers[0]}
               disabled={locked || correctLocked[0]}
@@ -185,7 +191,7 @@ const Unit6_Page3_GrammarC = () => {
           {/* IMAGE */}
           <img
             src={img2}
-            alt="mountains"
+            alt={"Snow-topped mountains and evergreen trees."}
             style={{
               width: "150px",
               height: "150px",
@@ -197,7 +203,7 @@ const Unit6_Page3_GrammarC = () => {
           <div className="flex-1 flex items-center mt-6">
             {/* first line */}
             <div className="relative w-full">
-              <input
+              <input aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 2, write the question"} aria-label={"Picture 2, write the question"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked || correctLocked[1]}
@@ -241,14 +247,14 @@ const Unit6_Page3_GrammarC = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -257,14 +263,14 @@ const Unit6_Page3_GrammarC = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -273,14 +279,14 @@ const Unit6_Page3_GrammarC = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

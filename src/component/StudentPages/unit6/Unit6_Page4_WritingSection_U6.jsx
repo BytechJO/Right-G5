@@ -24,7 +24,7 @@ const WritingSection_U6 = () => {
       <div className="flex flex-col w-[60%] mx-auto space-y-10">
         <img
           src={img}
-          alt=""
+          alt={"Two red telephone receivers connected by a coiled cord."}
           style={{ width: "auto", height: "100%", objectFit: "contain" }}
         />
         <WritingA />

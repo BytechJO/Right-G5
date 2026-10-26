@@ -32,7 +32,6 @@ import imgConversation3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 
 import imgConversation4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 5 What Would You Like to Read Folder/Page 40/SVG/Asset 8.svg";
 import wordJson from "../../../assets/json/cd21pg40-conversation_eng.json";
 import video from "../../../assets/videos/grade 5 unit 5 page 40.mp4";
-
 const Unit5_Page1 = ({ openPopup }) => {
   // ==================== conversation data ==================== //
   const data = [
@@ -201,11 +200,8 @@ const Unit5_Page1 = ({ openPopup }) => {
       captionsExample[3],
       captionsExample[4],
     ],
-
     [captionsExample[5], captionsExample[6], captionsExample[7]],
-
     [captionsExample[8], captionsExample[9]],
-
     [
       captionsExample[10],
       captionsExample[11],
@@ -215,7 +211,6 @@ const Unit5_Page1 = ({ openPopup }) => {
     ],
   ];
   const filteredSegments = wordJson.segments.slice(1);
-
   const Voc = [
     [
       filteredSegments[0]?.words || [],
@@ -223,15 +218,12 @@ const Unit5_Page1 = ({ openPopup }) => {
       filteredSegments[2]?.words || [],
       filteredSegments[3]?.words || [],
     ],
-
     [
       filteredSegments[4]?.words || [],
       filteredSegments[5]?.words || [],
       filteredSegments[6]?.words || [],
     ],
-
     [filteredSegments[7]?.words || [], filteredSegments[8]?.words || []],
-
     [
       filteredSegments[9]?.words || [],
       filteredSegments[10]?.words || [],
@@ -268,78 +260,225 @@ const Unit5_Page1 = ({ openPopup }) => {
       end: 4.38,
       text: "Page 40, Unit 5, Vocabulary. Listen and repeat.",
     },
-
     {
       start: 5.759,
       end: 8.659,
       text: "Find the words and expressions in the conversation above.",
     },
-
-    { start: 9.42, end: 11.039, text: "1. sharks." },
-    { start: 11.859, end: 13.579, text: "2. report." },
-    { start: 14.519, end: 16.52, text: "3. assignment." },
-    { start: 17.26, end: 19.339, text: "4. presentation." },
-    { start: 20.26, end: 22.139, text: "5. recipe." },
-
-    { start: 23.18, end: 25.76, text: "6. Mediterranean food." },
-    { start: 26.699, end: 28.739, text: "7. information." },
-    { start: 29.639, end: 31.519, text: "8. barbecue." },
-    { start: 32.419, end: 34.299, text: "9. librarian." },
-    { start: 35.139, end: 37.059, text: "10. shish kebab." },
-    { start: 37.899, end: 39.639, text: "11. both." },
-    { start: 40.54, end: 42.359, text: "12. entire." },
-
-    { start: 43.259, end: 45.639, text: "13. give a presentation." },
-    { start: 46.599, end: 49.059, text: "14. what would you like?" },
+    {
+      start: 9.42,
+      end: 11.039,
+      text: "1. sharks.",
+    },
+    {
+      start: 11.859,
+      end: 13.579,
+      text: "2. report.",
+    },
+    {
+      start: 14.519,
+      end: 16.52,
+      text: "3. assignment.",
+    },
+    {
+      start: 17.26,
+      end: 19.339,
+      text: "4. presentation.",
+    },
+    {
+      start: 20.26,
+      end: 22.139,
+      text: "5. recipe.",
+    },
+    {
+      start: 23.18,
+      end: 25.76,
+      text: "6. Mediterranean food.",
+    },
+    {
+      start: 26.699,
+      end: 28.739,
+      text: "7. information.",
+    },
+    {
+      start: 29.639,
+      end: 31.519,
+      text: "8. barbecue.",
+    },
+    {
+      start: 32.419,
+      end: 34.299,
+      text: "9. librarian.",
+    },
+    {
+      start: 35.139,
+      end: 37.059,
+      text: "10. shish kebab.",
+    },
+    {
+      start: 37.899,
+      end: 39.639,
+      text: "11. both.",
+    },
+    {
+      start: 40.54,
+      end: 42.359,
+      text: "12. entire.",
+    },
+    {
+      start: 43.259,
+      end: 45.639,
+      text: "13. give a presentation.",
+    },
+    {
+      start: 46.599,
+      end: 49.059,
+      text: "14. what would you like?",
+    },
     {
       start: 50.059,
       end: 53.18,
       text: "15. do you have anything available?",
     },
-    { start: 54.139, end: 56.659, text: "16. have in mind." },
-    { start: 57.539, end: 59.719, text: "17. here you go." },
-    { start: 60.719, end: 62.859, text: "18. start off." },
+    {
+      start: 54.139,
+      end: 56.659,
+      text: "16. have in mind.",
+    },
+    {
+      start: 57.539,
+      end: 59.719,
+      text: "17. here you go.",
+    },
+    {
+      start: 60.719,
+      end: 62.859,
+      text: "18. start off.",
+    },
     {
       start: 63.84,
       end: 66.519,
       text: "19. good luck to you both.",
     },
   ];
-
   const wordTimingsVoc = [
-    { start: 9.42, end: 11.039 },
-    { start: 11.859, end: 13.579 },
-    { start: 14.519, end: 16.52 },
-    { start: 17.26, end: 19.339 },
-    { start: 20.26, end: 22.139 },
-
-    { start: 23.18, end: 25.76 },
-    { start: 26.699, end: 28.739 },
-    { start: 29.639, end: 31.519 },
-    { start: 32.419, end: 34.299 },
-    { start: 35.139, end: 37.059 },
-    { start: 37.899, end: 39.639 },
-    { start: 40.54, end: 42.359 },
-
-    { start: 43.259, end: 45.639 },
-    { start: 46.599, end: 49.059 },
-    { start: 50.059, end: 53.18 },
-    { start: 54.139, end: 56.659 },
-    { start: 57.539, end: 59.719 },
-    { start: 60.719, end: 62.859 },
-    { start: 63.84, end: 66.519 },
+    {
+      start: 9.42,
+      end: 11.039,
+    },
+    {
+      start: 11.859,
+      end: 13.579,
+    },
+    {
+      start: 14.519,
+      end: 16.52,
+    },
+    {
+      start: 17.26,
+      end: 19.339,
+    },
+    {
+      start: 20.26,
+      end: 22.139,
+    },
+    {
+      start: 23.18,
+      end: 25.76,
+    },
+    {
+      start: 26.699,
+      end: 28.739,
+    },
+    {
+      start: 29.639,
+      end: 31.519,
+    },
+    {
+      start: 32.419,
+      end: 34.299,
+    },
+    {
+      start: 35.139,
+      end: 37.059,
+    },
+    {
+      start: 37.899,
+      end: 39.639,
+    },
+    {
+      start: 40.54,
+      end: 42.359,
+    },
+    {
+      start: 43.259,
+      end: 45.639,
+    },
+    {
+      start: 46.599,
+      end: 49.059,
+    },
+    {
+      start: 50.059,
+      end: 53.18,
+    },
+    {
+      start: 54.139,
+      end: 56.659,
+    },
+    {
+      start: 57.539,
+      end: 59.719,
+    },
+    {
+      start: 60.719,
+      end: 62.859,
+    },
+    {
+      start: 63.84,
+      end: 66.519,
+    },
   ];
-
   return (
     <div
+      data-page-access={"unit5-page1"}
+      aria-label={"Unit 5 page 1"}
+      role={"group"}
       className="page1-img-wrapper"
-      style={{ backgroundImage: `url(${page_1})` }}
+      style={{
+        backgroundImage: `url(${page_1})`,
+      }}
     >
+      <style>{`[data-page-access="unit5-page1"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page4-1 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          aria-label={"Open conversation"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -354,6 +493,8 @@ const Unit5_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Conversation
+                  pageId={"sb_unit5_page1_conversation"}
+                  keyboardAccessible={true}
                   title="Conversation"
                   items={data}
                   sound={longAudio}
@@ -368,9 +509,12 @@ const Unit5_Page1 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -383,9 +527,33 @@ const Unit5_Page1 = ({ openPopup }) => {
       </div>
       <div
         className="headset-icon-CD-page4-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          aria-label={"Open vocabulary"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -400,6 +568,8 @@ const Unit5_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Vocabulary
+                  pageId={"sb_unit5_page1_vocabulary"}
+                  keyboardAccessible={true}
                   title="VOCABULARY"
                   subtitle="Listen and repeat. Find the words and expressions in the conversation above."
                   sound={VocabularAudio}
@@ -432,9 +602,12 @@ const Unit5_Page1 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -447,9 +620,33 @@ const Unit5_Page1 = ({ openPopup }) => {
       </div>
       <div
         className="headset-icon-CD-page4-3 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", {
+                    bubbles: true,
+                  }),
+                );
+            }
+          }}
+          aria-label={"Open critical thinking"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -457,13 +654,17 @@ const Unit5_Page1 = ({ openPopup }) => {
             openPopup(
               "html",
               <CriticalThinking
+                keyboardAccessible={true}
                 title={"Why did Tomneed books about sharks?"}
               />,
             )
           }
-          style={{ overflow: "visible" }}
+          style={{
+            overflow: "visible",
+          }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"
@@ -477,5 +678,4 @@ const Unit5_Page1 = ({ openPopup }) => {
     </div>
   );
 };
-
 export default Unit5_Page1;

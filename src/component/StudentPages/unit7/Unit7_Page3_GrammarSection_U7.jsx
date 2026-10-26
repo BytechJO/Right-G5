@@ -30,7 +30,7 @@ const GrammarSection_U1 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit7_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={3.1}
@@ -40,7 +40,7 @@ const GrammarSection_U1 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt={"Present Progressive chart. Statement: subject, verb to be, ing verb, complement. The players are winning the first game. My brother is playing in the finals. Question: verb to be, subject, ing verb, complement. Are the players winning the first game? Is your brother playing in the finals?"}
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

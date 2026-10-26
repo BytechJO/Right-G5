@@ -1,8 +1,54 @@
+import clip0 from "../../../assets/audio/ClassBook/U6/Page 55 - E/Item_001_He_rides_his_bike_to_school_every_day._(He_is_going_to_start_next_week.).mp3";
+import clip1 from "../../../assets/audio/ClassBook/U6/Page 55 - E/Item_002_I_practice_baseball_before_the_game._(You're_saying_it's_important_and_n.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U6/Page 55 - E/Item_003_The_detectives_ask_all_the_people_involved_many_questions._(Ask_if_the_d.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U6/Page 55 - E/Item_004_My_sister_wants_some_water._(Ask_the_waiter_politely_for_her.).mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit5/ExerciseAudioText";
+import { SentenceGroup, SentencePart } from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review6_Page2_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       sentence: "He rides his bike to school every day.",
@@ -43,13 +89,7 @@ const Review6_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/[’']/g, "'")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
     if (locked || result[i] === true) return;
@@ -71,9 +111,16 @@ const Review6_Page2_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -104,17 +151,39 @@ const Review6_Page2_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "He will ride his bike to school every day.",
       "I must practice baseball before the game.",
@@ -128,6 +197,8 @@ const Review6_Page2_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -136,24 +207,39 @@ const Review6_Page2_Q1 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Review6_Page2_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review6_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review6_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review6_Page2_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall mb-10" style={{gap:"30px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Rewrite the sentence with a modal verb to change the meaning.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="E"
+          title={
+            <>Rewrite the sentence with a modal verb to change the meaning.</>
+          }
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-5">
           {questions.map((q, i) => (
-            <div
+            <SentenceGroup
+              label={`Hear sentence ${i + 1}`}
+              src={[clip0, clip1, clip2, clip3][i + 0]}
+              id={`sentence-${i}`}
+              audio={audio}
               key={i}
               className="
                   flex
@@ -175,6 +261,15 @@ const Review6_Page2_Q1 = () => {
                 {/* ANSWER */}
                 <div className="relative mt-4">
                   <input
+                    aria-invalid={!!(result[i] === false)}
+                    style={{
+                      ...(result[i] === true
+                        ? { borderBottomColor: "#16a34a" }
+                        : {}),
+                    }}
+                    title={`Sentence ${i + 1}, rewrite using a modal verb`}
+                    aria-label={`Sentence ${i + 1}, rewrite using a modal verb`}
+                    {...fieldKeys}
                     type="text"
                     value={answers[i]}
                     disabled={locked || result[i] === true}
@@ -223,22 +318,43 @@ const Review6_Page2_Q1 = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </SentenceGroup>
           ))}
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

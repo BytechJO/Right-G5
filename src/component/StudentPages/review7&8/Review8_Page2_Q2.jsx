@@ -1,8 +1,54 @@
+import clip5 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_006_I_remembered_reading_that_cats_like_anything_shiny_to_play_with,_and_tha.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_005_No_one_had_thought_that_the_thief_might_be_an_it_and_not_a_person.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_004_Hey,_everybody,_come_here!_I_yelled._Mew_had_my_mom's_necklace_on_the_ca.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_003_Suddenly,_I_noticed_she_had_stopped_following_me_and_was_playing._I_look.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_002_She_always_kept_it_on_a_necklace_holder_on_her_dresser,_but_it_was_gone.mp3";
+import clip0 from "../../../assets/audio/ClassBook/U8/Page 73 - E/Item_001_No_one_knew_how_the_necklace_had_disappeared,_but_someone_must_have_take.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioFeedback, AudioSpeaker } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review8_Page2_Q2 = () => {
+  const [lockedWords, setLockedWords] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]);
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const pronouns = [
     "No one",
     "someone",
@@ -145,6 +191,11 @@ const Review8_Page2_Q2 = () => {
     "cat!",
   ];
 
+  const correctPronounKeys = paragraphWords.flatMap((word, index) =>
+    pronouns.includes(word.replace(/[.,!?\u201c\u201d]/g, ""))
+      ? [word + "-" + index]
+      : [],
+  );
   const questions = [
     "a necklace",
     "Everybody in the family was helping to look for it.",
@@ -159,12 +210,7 @@ const Review8_Page2_Q2 = () => {
 
   const [selectedWords, setSelectedWords] = useState([]);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -185,95 +231,77 @@ const Review8_Page2_Q2 = () => {
   };
 
   const toggleWord = (word, index) => {
-    if (locked) return;
-
-    const cleanWord = word.replace(/[.,!?”“]/g, "");
-
-    if (!pronouns.includes(cleanWord)) return;
-
-    const key = `${word}-${index}`;
-
-    // إذا الكلمة محددة مسبقًا لا تسمح بإزالتها
-    if (selectedWords.includes(key)) return;
-
-    setSelectedWords((prev) => [...prev, key]);
+    const key = word + "-" + index;
+    if (locked || lockedWords.includes(key)) {
+      setAnnouncement("Correct selection is locked.");
+      return;
+    }
+    setSelectedWords((previous) =>
+      previous.includes(key)
+        ? previous.filter((item) => item !== key)
+        : [...previous, key],
+    );
+    setWrongWords((previous) => previous.filter((item) => item !== key));
+    setAnnouncement(
+      word + (selectedWords.includes(key) ? " deselected." : " selected."),
+    );
   };
   const checkAnswers = () => {
     if (locked) return;
-
-    // CHECK EMPTY INPUTS
-    if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info();
-
+    audio.stop();
+    if (answers.some((answer) => !answer.trim())) {
+      setAnnouncement("Please complete all fields.");
+      ValidationAlert.info("Please complete all fields.");
       return;
     }
-    if (selectedWords.length === 0) {
-      ValidationAlert.info();
-
+    if (!selectedWords.length) {
+      setAnnouncement("Please select the indefinite pronouns.");
+      ValidationAlert.info("Please select the indefinite pronouns.");
       return;
     }
-    // CHECK TEXT ANSWERS
-    let correctCount = 0;
-
-    const newResults = answers.map((a, i) => {
-      const ok = normalize(a) === normalize(questions[i]);
-
-      if (ok) correctCount++;
-
-      return ok;
-    });
-
-    setResult(newResults);
-
-    // CHECK PRONOUNS
-    const correctSelections = [];
-
-    paragraphWords.forEach((word, index) => {
-      const cleanWord = word.replace(/[.,!?”“]/g, "");
-
-      if (pronouns.includes(cleanWord)) {
-        correctSelections.push(`${word}-${index}`);
-      }
-    });
-
-    const correctChosen = selectedWords.filter((item) =>
-      correctSelections.includes(item),
+    const nextResults = answers.map(
+      (answer, index) => normalize(answer) === normalize(questions[index]),
     );
-    // SCORE
-    const pronounsScore = correctChosen.length;
-
-    const total = questions.length + correctSelections.length;
-
-    const totalCorrect = correctCount + pronounsScore;
-
-    const color =
-      totalCorrect === total ? "green" : totalCorrect === 0 ? "red" : "orange";
-
-    const msg = `
-    <div style="font-size:18px;text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${totalCorrect} / ${total}
-      </span>
-    </div>
-  `;
-
-    // SUCCESS
-    if (totalCorrect === total) {
-      setLocked(true);
-
-      ValidationAlert.success(msg);
-    }
-    // FAIL
-    else if (totalCorrect === 0) {
-      ValidationAlert.error(msg);
-    }
-    // PARTIAL
-    else {
-      ValidationAlert.warning(msg);
-    }
+    const correctChosen = selectedWords.filter((key) =>
+      correctPronounKeys.includes(key),
+    );
+    const wrong = selectedWords.filter(
+      (key) => !correctPronounKeys.includes(key),
+    );
+    const total = questions.length + correctPronounKeys.length;
+    const totalCorrect =
+      nextResults.filter(Boolean).length + correctChosen.length;
+    const complete = totalCorrect === total && !wrong.length;
+    if (complete) resetButtonRef.current?.focus({ preventScroll: true });
+    setResult(nextResults);
+    setLockedWords((previous) => [...new Set([...previous, ...correctChosen])]);
+    setWrongWords(wrong);
+    setLocked(complete);
+    setAnnouncement(
+      "Score " +
+        totalCorrect +
+        " out of " +
+        total +
+        ". " +
+        wrong.length +
+        " incorrect word selections. " +
+        (complete
+          ? "All answers are correct and locked."
+          : "You can change incorrect answers and select missing pronouns."),
+    );
+    const color = complete ? "green" : totalCorrect === 0 ? "red" : "orange";
+    const message = `<div style="font-size:18px;text-align:center;"><span style="color:${color};font-weight:bold;">Score: ${totalCorrect} / ${total}</span></div>`;
+    if (complete) ValidationAlert.success(message);
+    else if (totalCorrect === 0) ValidationAlert.error(message);
+    else ValidationAlert.warning(message);
   };
 
   const showAnswers = () => {
+    setLockedWords([...correctPronounKeys]);
+    setWrongWords([]);
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "a necklace",
       "Everybody in the family was helping to look for it.",
@@ -297,6 +325,10 @@ const Review8_Page2_Q2 = () => {
   };
 
   const handleReset = () => {
+    setLockedWords([]);
+    setWrongWords([]);
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
 
     setResult([]);
@@ -308,6 +340,13 @@ const Review8_Page2_Q2 = () => {
   const sentenceInput = (i) => (
     <span className="relative flex-1">
       <input
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={!!(result[i] === false)}
+        title={`Response ${i + 1}: ${["What was missing in the family house?", "Who was helping to look for it?", "Why had the necklace disappeared?"][i]}`}
+        aria-label={`Response ${i + 1}: ${["What was missing in the family house?", "Who was helping to look for it?", "Why had the necklace disappeared?"][i]}`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -356,22 +395,73 @@ const Review8_Page2_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Review8_Page2_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review8_Page2_Q2.jsx"] input:focus-visible,[data-exercise-scope="Review8_Page2_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Review8_Page2_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{ gap: "30px" }}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Read, and then follow the instructions or answer the questions.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="E"
+          title={
+            <>Read, and then follow the instructions or answer the questions.</>
+          }
+          subTitle={
+            <>
+              Task 1: Select the indefinite pronouns in the paragraph first.{" "}
+              <br /> Task 2: Then use the paragraph to answer each question in
+              the response fields.
+            </>
+          }
+        />
 
         {/* PARAGRAPH */}
         <div
+          onClick={(event) => {
+            if (event.target !== event.currentTarget) return;
+            const targets = Array.from(
+              event.currentTarget.querySelectorAll("[data-sentence-audio]"),
+            );
+            let best = null,
+              distance = Infinity;
+            targets.forEach((element, index) =>
+              Array.from(element.getClientRects()).forEach((rect) => {
+                const d =
+                  Math.max(
+                    rect.left - event.clientX,
+                    0,
+                    event.clientX - rect.right,
+                  ) **
+                    2 +
+                  Math.max(
+                    rect.top - event.clientY,
+                    0,
+                    event.clientY - rect.bottom,
+                  ) **
+                    2;
+                if (d < distance) {
+                  distance = d;
+                  best = index;
+                }
+              }),
+            );
+            if (best !== null)
+              audio.play(
+                "mystery-" + best,
+                [clip0, clip1, clip2, clip3, clip4, clip5][best],
+              );
+          }}
           style={{
             border: "2px solid #8D3DAF",
             borderRadius: "18px",
@@ -382,35 +472,638 @@ const Review8_Page2_Q2 = () => {
             marginBottom: "30px",
           }}
         >
-          {paragraphWords.map((word, index) => {
-            const key = `${word}-${index}`;
+          <>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-0"
+              aria-label="Hear mystery passage part 1"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-0", clip0);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-0", clip0);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-0"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(0, 18).map((word, offset) => {
+                const index = 0 + offset;
+                const key = `${word}-${index}`;
 
-            const selected = selectedWords.includes(key);
+                const selected = selectedWords.includes(key);
 
-            return (
-              <span
-                key={index}
-                onClick={() => toggleWord(word, index)}
-                style={{
-                  display: "inline-block",
-                  marginRight: "0px",
-                  marginBottom: "2px",
-                  padding: "0px 2px",
-                  borderRadius: "999px",
-                  cursor: locked ? "default" : "pointer",
-                  userSelect: "none",
-                  position: "relative",
-                  border: selected
-                    ? "2px solid #6D2980"
-                    : "2px solid transparent",
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
 
-                  transition: "0.2s",
-                }}
-              >
-                {word}
-              </span>
-            );
-          })}
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-0" && <AudioSpeaker />}
+            </span>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-1"
+              aria-label="Hear mystery passage part 2"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-1", clip1);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-1", clip1);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-1"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(18, 47).map((word, offset) => {
+                const index = 18 + offset;
+                const key = `${word}-${index}`;
+
+                const selected = selectedWords.includes(key);
+
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
+
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-1" && <AudioSpeaker />}
+            </span>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-2"
+              aria-label="Hear mystery passage part 3"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-2", clip2);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-2", clip2);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-2"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(47, 77).map((word, offset) => {
+                const index = 47 + offset;
+                const key = `${word}-${index}`;
+
+                const selected = selectedWords.includes(key);
+
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
+
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-2" && <AudioSpeaker />}
+            </span>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-3"
+              aria-label="Hear mystery passage part 4"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-3", clip3);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-3", clip3);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-3"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(77, 97).map((word, offset) => {
+                const index = 77 + offset;
+                const key = `${word}-${index}`;
+
+                const selected = selectedWords.includes(key);
+
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
+
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-3" && <AudioSpeaker />}
+            </span>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-4"
+              aria-label="Hear mystery passage part 5"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-4", clip4);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-4", clip4);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-4"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(97, 111).map((word, offset) => {
+                const index = 97 + offset;
+                const key = `${word}-${index}`;
+
+                const selected = selectedWords.includes(key);
+
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
+
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-4" && <AudioSpeaker />}
+            </span>
+            <span
+              role="group"
+              aria-roledescription="sentence audio"
+              aria-keyshortcuts="Enter Space"
+              tabIndex={0}
+              data-choice
+              data-sentence-audio="mystery-5"
+              aria-label="Hear mystery passage part 6"
+              onKeyDown={(event) => {
+                if (
+                  event.target !== event.currentTarget ||
+                  (event.key !== "Enter" && event.key !== " ")
+                )
+                  return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!event.repeat) audio.play("mystery-5", clip5);
+              }}
+              onKeyUp={(event) => {
+                if (
+                  event.target === event.currentTarget &&
+                  (event.key === "Enter" || event.key === " ")
+                ) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }}
+              onClick={(event) => {
+                if (
+                  event.target.closest?.(
+                    'input,textarea,select,button,[role="button"],[data-choice]',
+                  ) !== event.currentTarget
+                )
+                  return;
+                event.stopPropagation();
+                audio.play("mystery-5", clip5);
+              }}
+              style={{
+                position: "relative",
+                borderRadius: 6,
+                ...(audio.activeId === "mystery-5"
+                  ? {
+                      boxShadow: "0 0 0 3px #2563eb",
+                      backgroundColor: "#dbeafe",
+                    }
+                  : {}),
+              }}
+            >
+              {paragraphWords.slice(111, 130).map((word, offset) => {
+                const index = 111 + offset;
+                const key = `${word}-${index}`;
+
+                const selected = selectedWords.includes(key);
+
+                return (
+                  <span
+                    {...activationKeys}
+                    aria-label={
+                      word +
+                      (lockedWords.includes(key)
+                        ? ". Correct and locked."
+                        : wrongWords.includes(key)
+                          ? ". Not correct; activate to remove."
+                          : "")
+                    }
+                    aria-disabled={locked || lockedWords.includes(key)}
+                    aria-pressed={selected}
+                    data-choice={true}
+                    tabIndex={0}
+                    role={"button"}
+                    key={index}
+                    onClick={() => toggleWord(word, index)}
+                    style={{
+                      display: "inline-block",
+                      marginRight: "0px",
+                      marginBottom: "2px",
+                      padding: "0px 2px",
+                      borderRadius: "999px",
+                      cursor: locked ? "default" : "pointer",
+                      userSelect: "none",
+                      position: "relative",
+                      border: selected
+                        ? "2px solid #6D2980"
+                        : "2px solid transparent",
+
+                      transition: "0.2s",
+                      "--exercise-focus-radius": "999px",
+                      ...(selected
+                        ? {
+                            backgroundColor: "#dbeafe",
+                            ...(lockedWords.includes(key)
+                              ? { borderColor: "#16a34a" }
+                              : wrongWords.includes(key)
+                                ? { borderColor: "#D1232A" }
+                                : {}),
+                          }
+                        : {}),
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+              {audio.activeId === "mystery-5" && <AudioSpeaker />}
+            </span>
+          </>
         </div>
 
         {/* QUESTIONS */}
@@ -451,15 +1144,36 @@ const Review8_Page2_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

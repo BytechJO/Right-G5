@@ -1,3 +1,13 @@
+import clip0 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_001_album.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_002_orphanage.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_003_treasure.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_004_miss.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_005_jotting_down.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U7/Page 62 - A/Item_006_super.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -9,8 +19,42 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is V
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 62/SVG/Asset 15.svg";
 import img5 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 62/SVG/Asset 16.svg";
 import img6 from "../../../assets/imgs/pages/classbook/Right 5 Unit 7 Helen Is Visiting Grandma Folder/Page 62/SVG/Asset 17.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit7_Page5_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       image: img1,
@@ -49,7 +93,7 @@ const Unit7_Page5_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) => str.toLowerCase().trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -71,9 +115,16 @@ const Unit7_Page5_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -104,17 +155,39 @@ const Unit7_Page5_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "super",
       "album",
@@ -130,6 +203,8 @@ const Unit7_Page5_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -138,20 +213,27 @@ const Unit7_Page5_Q1 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit7_Page5_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit7_Page5_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit7_Page5_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit7_Page5_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"30px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-13">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
-          Look and match.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="A"
+          title={<>Look and match.</>}
+          subTitle="Start with one item, find the matching partner, then connect the pair before moving to the next one."
+        />
 
         {/* WORD BOX */}
         <div
@@ -169,28 +251,70 @@ const Unit7_Page5_Q1 = () => {
           }}
         >
           <span>
-            {" "}
-            <span className="font-bold mr-2">a</span> album
+            <AudioText
+              audio={audio}
+              id="bank-album"
+              src={clip0}
+              label="Hear album"
+            >
+              {" "}
+              <span className="font-bold mr-2">a</span> album
+            </AudioText>
           </span>
 
           <span>
-            <span className="font-bold mr-2">b</span> orphanage
+            <AudioText
+              audio={audio}
+              id="bank-orphanage"
+              src={clip1}
+              label="Hear orphanage"
+            >
+              <span className="font-bold mr-2">b</span> orphanage
+            </AudioText>
           </span>
 
           <span>
-            <span className="font-bold mr-2">c</span> treasure
+            <AudioText
+              audio={audio}
+              id="bank-treasure"
+              src={clip2}
+              label="Hear treasure"
+            >
+              <span className="font-bold mr-2">c</span> treasure
+            </AudioText>
           </span>
 
           <span>
-            <span className="font-bold mr-2">d </span>miss
+            <AudioText
+              audio={audio}
+              id="bank-miss"
+              src={clip3}
+              label="Hear miss"
+            >
+              <span className="font-bold mr-2">d </span>miss
+            </AudioText>
           </span>
 
           <span>
-            <span className="font-bold mr-2">e </span>jotting down
+            <AudioText
+              audio={audio}
+              id="bank-jotting down"
+              src={clip4}
+              label="Hear jotting down"
+            >
+              <span className="font-bold mr-2">e </span>jotting down
+            </AudioText>
           </span>
 
           <span>
-            <span className="font-bold mr-2">f </span>super
+            <AudioText
+              audio={audio}
+              id="bank-super"
+              src={clip5}
+              label="Hear super"
+            >
+              <span className="font-bold mr-2">f </span>super
+            </AudioText>
           </span>
         </div>
 
@@ -225,7 +349,16 @@ const Unit7_Page5_Q1 = () => {
               >
                 <img
                   src={q.image}
-                  alt=""
+                  alt={
+                    [
+                      "Four people giving a thumbs-up.",
+                      "An open photo album with family pictures.",
+                      "A hand writing on a sheet of paper with a pen.",
+                      "An open chest filled with jewelry and watches.",
+                      "Four children standing outside a yellow building.",
+                      "A girl reaching toward a framed photograph of a woman, with the woman pictured in a thought bubble.",
+                    ][i]
+                  }
                   style={{
                     width: "130px",
                     height: "130px",
@@ -235,6 +368,15 @@ const Unit7_Page5_Q1 = () => {
 
                 <div className="relative">
                   <input
+                    style={{
+                      ...(result[i] === true
+                        ? { borderBottomColor: "#16a34a" }
+                        : {}),
+                    }}
+                    aria-invalid={!!(result[i] === false)}
+                    title={`Picture ${i + 1}, matching vocabulary word from the box`}
+                    aria-label={`Picture ${i + 1}, matching vocabulary word from the box`}
+                    {...fieldKeys}
                     type="text"
                     value={answers[i]}
                     disabled={locked || result[i] === true}
@@ -290,15 +432,36 @@ const Unit7_Page5_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

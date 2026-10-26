@@ -25,7 +25,7 @@ const WritingSection_U7 = () => {
       <div className="flex flex-col w-[60%] mx-auto space-y-10">
         <img
           src={img}
-          alt=""
+          alt={"A magnifying glass."}
           style={{ width: "auto", height: "100%", objectFit: "contain" }}
         />
         <WritingA />

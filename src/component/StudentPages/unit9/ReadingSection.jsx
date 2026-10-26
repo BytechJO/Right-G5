@@ -4,6 +4,7 @@ import ReadingBG from "../../../assets/imgs/conversation.svg";
 import think from "../../../assets/imgs/pages/classbook/think.svg";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import Button from "../../Button";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const ReadingSection = ({
   mainTitle,
@@ -19,12 +20,17 @@ const ReadingSection = ({
   pageId,
   onTimeUpdate,
   imageAlt,
+    subTitle,
+  headerTitle,
 }) => {
   const { highlight, onTimeUpdate: updateReadingTime } = useReadingHighlight(
     wordTimings, timingAliases, true,
   );
   return (
     <div className="p-6 flex flex-col items-center ">
+      <div className="flex items-center gap-4 mb-4 w-[70%]">
+        <ExerciseHeader title={headerTitle} subTitle={subTitle} />
+      </div>
       <div className="flex items-center gap-4 mb-4 w-[60%]">
         <div
           className="px-4 py-1 font-bold text-black"

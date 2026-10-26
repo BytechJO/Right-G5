@@ -1,13 +1,59 @@
+import clip0 from "../../../assets/audio/ClassBook/U6/Page 53 - D/Item_001_Milton.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U6/Page 53 - D/Item_002_Kelly.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U6/Page 53 - D/Item_003_Andrew.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U6/Page 53 - D/Item_004_Jared.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit5/ExerciseAudioText";
+import { SentenceGroup, SentencePart } from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // LEFT TABLE IMAGES
 import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Untitled-12.png";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 // RIGHT TABLE IMAGES
 
 const Review5_Page2_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       answer:
@@ -35,13 +81,7 @@ const Review5_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/[’']/g, "'")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
     if (locked || result[i] === true) return;
@@ -63,9 +103,16 @@ const Review5_Page2_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(
+        String("Please complete all fields.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all fields."));
 
       return;
     }
@@ -96,17 +143,39 @@ const Review5_Page2_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       questions[0].answer,
       questions[1].answer,
@@ -120,6 +189,8 @@ const Review5_Page2_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -128,27 +199,42 @@ const Review5_Page2_Q1 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Review5_Page2_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review5_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review5_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review5_Page2_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          Read the chart and write sentences using{" "}
-          <span className="text-[#1DA1F2]">prefer</span> and{" "}
-          <span className="text-[#1DA1F2]">like</span>.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="D"
+          title={
+            <>
+              Read the chart and write sentences using{" "}
+              <span className="text-[#1DA1F2]">prefer</span> and{" "}
+              <span className="text-[#1DA1F2]">like</span>.
+            </>
+          }
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         <div className="flex justify-center mb-10">
           {/* RIGHT BIG IMAGE */}
           <img
             src={img2}
-            alt=""
+            alt={
+              "Preference chart. Milton: cross above a music performance, tick above an amusement park. Kelly: cross above an indoor restaurant, tick above outdoor tables. Andrew: cross above a playground, tick above a garden path. Jared: cross above a carousel, tick above a circus ring."
+            }
             style={{
               width: "500px",
               height: "auto",
@@ -161,6 +247,10 @@ const Review5_Page2_Q1 = () => {
         <div className="flex flex-col gap-8 mb-12">
           {questions.map((q, i) => (
             <div
+              label={`Hear ${["Milton", "Kelly", "Andrew", "Jared"][i]}`}
+              src={[clip0, clip1, clip2, clip3][i]}
+              id={`name-${i}`}
+              audio={audio}
               key={i}
               className="
                   flex
@@ -171,6 +261,15 @@ const Review5_Page2_Q1 = () => {
 
               <div className="relative flex-1">
                 <input
+                  aria-invalid={!!(result[i] === false)}
+                  style={{
+                    ...(result[i] === true
+                      ? { borderBottomColor: "#16a34a" }
+                      : {}),
+                  }}
+                  title={`Chart item ${i + 1}, write sentences using prefer and like`}
+                  aria-label={`Chart item ${i + 1}, write sentences using prefer and like`}
+                  {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || result[i] === true}
@@ -224,15 +323,36 @@ const Review5_Page2_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

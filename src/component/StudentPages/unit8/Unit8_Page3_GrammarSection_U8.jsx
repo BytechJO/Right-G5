@@ -30,7 +30,7 @@ const GrammarSection_U1 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit8_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={1.8}
@@ -40,7 +40,7 @@ const GrammarSection_U1 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt={"Indefinite pronouns chart. As subjects: Everyone cheered when Hannah made a goal. Did everyone cheer when Hannah made a goal? Anyone can buy a ticket at the gate. Can anyone buy a ticket at the gate? As complements: Harley saw someone on the field. Did Harley see someone on the field? I did not see anyone at practice. Did you see anyone at practice?"}
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

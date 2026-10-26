@@ -6,24 +6,24 @@ import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
 const Unit9_Page6 = ({ openPopup }) => {
   return (
-    <div
+    <div data-page-access={"Unit9_Page6.jsx"}
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_6})` }}
-    >
+    ><style>{`[data-page-access="Unit9_Page6.jsx"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img src={page_6} /> */}
 
       <div
         className="click-icon-unit9-page6-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} aria-label={"Open activity 1"} data-launcher={true} tabIndex={0} role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 91 })}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"
@@ -37,14 +37,14 @@ const Unit9_Page6 = ({ openPopup }) => {
         className="click-icon-unit9-page6-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} aria-label={"Open activity 2"} data-launcher={true} tabIndex={0} role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 92 })}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"

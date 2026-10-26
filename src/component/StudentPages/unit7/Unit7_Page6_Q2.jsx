@@ -1,9 +1,57 @@
+import { PassageAudio } from "../review3&4/PassageAudio";
+import clip0 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_001_David_and_his_little_brother,_Jimmy,_are_playing_basketball_in_their_bac.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_002_His_brother_does_not_like_this._He_walks_away_from_the_game._Are_you_lea.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_003_Not_me!_said_Jimmy._You_are_the_one_who_is_winning._I_am_losing._David_f.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_004_Jimmy_is_feeling_disappointed._Just_as_Jimmy_is_leaving,_David's_friend.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_005_Yes,_says_David._He_is_losing._He_does_not_like_to_lose._You_can_join_me.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_006_John_is_happy_that_David_invited_him._They_start_playing_basketball_toge.mp3";
+import clip6 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_007_David_is_playing_basketball_with_his_brother.mp3";
+import clip7 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_008_Jimmy_is_winning.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioFeedback } from "../unit5/ExerciseAudioText";
+import { SentenceGroup } from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import grammer_u1 from "../../../assets/audio/ClassBook/U7/PG 63/cd35pg63.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const Unit7_Page6_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       question: "David is playing basketball with his brother.",
@@ -72,7 +120,7 @@ const Unit7_Page6_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) => str.toLowerCase().trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -94,9 +142,16 @@ const Unit7_Page6_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please answer all questions.");
+      (setAnnouncement(
+        String("Please answer all questions.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please answer all questions."));
 
       return;
     }
@@ -127,17 +182,39 @@ const Unit7_Page6_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers(["true", "false", "true", "false"]);
 
     setResult([true, true, true, true]);
@@ -146,6 +223,8 @@ const Unit7_Page6_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -154,22 +233,35 @@ const Unit7_Page6_Q2 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Unit7_Page6_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit7_Page6_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit7_Page6_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit7_Page6_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-4">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          Listen, read, and write <span className="text-[#00AEEF]">true</span>{" "}
-          or <span className="text-[#00AEEF]">false</span>.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="D"
+          title={
+            <>
+              Listen, read, and write{" "}
+              <span className="text-[#00AEEF]">true</span> or{" "}
+              <span className="text-[#00AEEF]">false</span>.
+            </>
+          }
+          subTitle="Read or listen to each item carefully, then choose true or false only after checking the key detail."
+        />
         <QuestionAudioPlayer
+          pageId="sb_unit7_page6_q2"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={7.5}
@@ -187,24 +279,33 @@ const Unit7_Page6_Q2 = () => {
           }}
         >
           <p className="mb-6">
-            David and his little brother, Jimmy, are playing basketball in their
-            backyard. David is winning. His brother doesn’t like this. He walks
-            away from the game. “Are you leaving?” David asks. “I thought we
-            were having a great time.”
+            <PassageAudio
+              audio={audio}
+              id="story-0"
+              text="David and his little brother, Jimmy, are playing basketball in their backyard. David is winning. His brother doesn’t like this. He walks away from the game. “Are you leaving?” David asks. “I thought we were having a great time.”"
+              sources={[clip0, clip1]}
+              starts={["David and his l", "His brother"]}
+            />
           </p>
 
           <p className="mb-6">
-            “Not me!” said Jimmy. “You’re the one who is winning. I am losing.”
-            David feels bad for his brother. Jimmy is feeling disappointed. Just
-            as Jimmy is leaving, David’s friend John passes by. “Is your brother
-            leaving the game?”
+            <PassageAudio
+              audio={audio}
+              id="story-1"
+              text="“Not me!” said Jimmy. “You’re the one who is winning. I am losing.” David feels bad for his brother. Jimmy is feeling disappointed. Just as Jimmy is leaving, David’s friend John passes by. “Is your brother leaving the game?”"
+              sources={[clip2, clip3]}
+              starts={["“Not me!” said ", "Jimmy is feeling"]}
+            />
           </p>
 
           <p>
-            “Yes,” says David. “He is losing. He doesn’t like to lose. You can
-            join me if you like.” John is happy that David invited him. They
-            start playing basketball together. John is doing really well. David
-            is trying to beat him, but it seems like John is winning!
+            <PassageAudio
+              audio={audio}
+              id="story-2"
+              text="“Yes,” says David. “He is losing. He doesn’t like to lose. You can join me if you like.” John is happy that David invited him. They start playing basketball together. John is doing really well. David is trying to beat him, but it seems like John is winning!"
+              sources={[clip4, clip5]}
+              starts={["“Yes,” says Dav", "John is happy"]}
+            />
           </p>
         </div>
 
@@ -223,11 +324,28 @@ const Unit7_Page6_Q2 = () => {
               <span className="font-bold text-[18px] w-5">{i + 1}</span>
 
               {/* QUESTION */}
-              <div className="text-[18px] w-[470px]">{q.question}</div>
+              <SentenceGroup
+                label={`Hear statement ${i + 1}: ${q.question}`}
+                src={[clip6, clip7][i]}
+                id={`statement-${i}`}
+                audio={audio}
+                className="text-[18px] w-[470px]"
+              >
+                {q.question}
+              </SentenceGroup>
 
               {/* INPUT */}
               <div className="relative">
                 <input
+                  style={{
+                    ...(result[i] === true
+                      ? { borderBottomColor: "#16a34a" }
+                      : {}),
+                  }}
+                  aria-invalid={!!(result[i] === false)}
+                  title={`Statement ${i + 1}, write true or false: ${q.question}`}
+                  aria-label={`Statement ${i + 1}, write true or false: ${q.question}`}
+                  {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || result[i] === true}
@@ -283,15 +401,36 @@ const Unit7_Page6_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

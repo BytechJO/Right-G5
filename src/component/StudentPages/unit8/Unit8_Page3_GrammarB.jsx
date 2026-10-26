@@ -1,3 +1,6 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
@@ -9,8 +12,13 @@ import img2 from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride 
 // character + icon images
 import boyCheck from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 66/SVG/Asset 23.svg";
 import girlX from "../../../assets/imgs/pages/classbook/Right 5 Unit 8 Lets Ride In a Hot-Air Balloon Folder/Page 66/SVG/Asset 22.svg";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit8_Page3_GrammarB = () => {
+
+const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const correctAnswers = [
     {
       question: "Did Harley see anyone at the lake?",
@@ -62,17 +70,10 @@ const Unit8_Page3_GrammarB = () => {
   const [locked, setLocked] = useState(false);
 
   // normalize
-  const normalize = (text) => {
-    return text
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .replace(/[?.]/g, "")
-      .replace(/[’']/g, "");
-  };
+  const normalize = normalizeAnswer;
 
   // update
-  const updateAnswer = (index, field, value) => {
+  const updateAnswer = (index, field, value) => {if(locked||correctLocked[index][field])return;
     const updated = [...answers];
 
     updated[index] = {
@@ -95,7 +96,7 @@ const Unit8_Page3_GrammarB = () => {
   // check
   // check
   const handleCheck = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const isEmpty = answers.some(
       (item) =>
@@ -103,7 +104,7 @@ const Unit8_Page3_GrammarB = () => {
     );
 
     if (isEmpty) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
 
       return;
     }
@@ -154,18 +155,18 @@ const Unit8_Page3_GrammarB = () => {
   `;
 
     if (score === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // show
-  const handleShow = () => {
+  const handleShow = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers(correctAnswers);
 
     setErrors([
@@ -196,7 +197,7 @@ const Unit8_Page3_GrammarB = () => {
   };
 
   // reset
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       {
         question: "",
@@ -237,7 +238,7 @@ const Unit8_Page3_GrammarB = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit8_Page3_GrammarB.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit8_Page3_GrammarB.jsx"] input:focus-visible,[data-exercise-scope="Unit8_Page3_GrammarB.jsx"] textarea:focus-visible,[data-exercise-scope="Unit8_Page3_GrammarB.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">B</span>
@@ -254,7 +255,7 @@ const Unit8_Page3_GrammarB = () => {
           {/* left image */}
           <img
             src={img1}
-            alt=""
+            alt={"A man holding up a fish beside the water."}
             style={{
               width: "130px",
               height: "auto",
@@ -266,7 +267,7 @@ const Unit8_Page3_GrammarB = () => {
             {/* character image */}
             <img
               src={boyCheck}
-              alt=""
+              alt={"A smiling boy beside a tick indicating a yes answer."}
               style={{
                 width: "65px",
                 height: "auto",
@@ -276,7 +277,7 @@ const Unit8_Page3_GrammarB = () => {
 
             {/* question */}
             <div className="relative mb-5">
-              <input
+              <input style={{...(correctLocked[0].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].question)} title={"Picture 1, write the question using the shown clue"} aria-label={"Picture 1, write the question using the shown clue"} {...fieldKeys}
                 type="text"
                 value={answers[0].question}
                 disabled={locked || correctLocked[0].question}
@@ -314,7 +315,7 @@ const Unit8_Page3_GrammarB = () => {
 
             {/* answer */}
             <div className="relative">
-              <input
+              <input style={{...(correctLocked[0].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].answer)} title={"Picture 1, write the answer using the tick or cross"} aria-label={"Picture 1, write the answer using the tick or cross"} {...fieldKeys}
                 type="text"
                 value={answers[0].answer}
                 disabled={locked || correctLocked[0].answer}
@@ -360,7 +361,7 @@ const Unit8_Page3_GrammarB = () => {
           {/* left image */}
           <img
             src={img2}
-            alt=""
+            alt={"A person standing in a narrow boat and moving it with a long pole."}
             style={{
               width: "130px",
               height: "auto",
@@ -372,7 +373,7 @@ const Unit8_Page3_GrammarB = () => {
             {/* character image */}
             <img
               src={girlX}
-              alt=""
+              alt={"A girl beside a cross indicating a no answer."}
               style={{
                 height: "auto",
                 width: "65px",
@@ -382,7 +383,7 @@ const Unit8_Page3_GrammarB = () => {
 
             {/* question */}
             <div className="relative mb-5">
-              <input
+              <input style={{...(correctLocked[1].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].question)} title={"Picture 2, write the question using the shown clue"} aria-label={"Picture 2, write the question using the shown clue"} {...fieldKeys}
                 type="text"
                 value={answers[1].question}
                 disabled={locked || correctLocked[1].question}
@@ -420,7 +421,7 @@ const Unit8_Page3_GrammarB = () => {
 
             {/* answer */}
             <div className="relative">
-              <input
+              <input style={{...(correctLocked[1].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].answer)} title={"Picture 2, write the answer using the tick or cross"} aria-label={"Picture 2, write the answer using the tick or cross"} {...fieldKeys}
                 type="text"
                 value={answers[1].answer}
                 disabled={locked || correctLocked[1].answer}
@@ -463,14 +464,14 @@ const Unit8_Page3_GrammarB = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -479,14 +480,14 @@ const Unit8_Page3_GrammarB = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -495,14 +496,14 @@ const Unit8_Page3_GrammarB = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

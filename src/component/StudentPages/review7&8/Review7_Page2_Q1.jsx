@@ -1,8 +1,50 @@
+import clip0 from "../../../assets/audio/ClassBook/U8/Page 71 - C/Item_001_Mr._Johnson_cleans_the_restaurant.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U8/Page 71 - C/Item_002_Clara_rides_her_horse_today.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U8/Page 71 - C/Item_003_Mike_and_David_plant_the_seeds.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U8/Page 71 - C/Item_004_Tilly_chases_Lolo_around_the_tree.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review7_Page2_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "Mr. Johnson is cleaning the restaurant.",
     "Clara is riding her horse today.",
@@ -16,12 +58,7 @@ const Review7_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -43,9 +80,16 @@ const Review7_Page2_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -76,17 +120,39 @@ const Review7_Page2_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "Mr. Johnson is cleaning the restaurant.",
       "Clara is riding her horse today.",
@@ -100,6 +166,8 @@ const Review7_Page2_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -108,8 +176,15 @@ const Review7_Page2_Q1 = () => {
   };
 
   const sentenceInput = (i, width) => (
-    <span className="relative inline-block">
+    <span className="relative inline-block w-full">
       <input
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={!!(result[i] === false)}
+        title={`Sentence ${i + 1}, rewrite using the present progressive`}
+        aria-label={`Sentence ${i + 1}, rewrite using the present progressive`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -158,19 +233,30 @@ const Review7_Page2_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Review7_Page2_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review7_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review7_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review7_Page2_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall mb-10" style={{gap:"30px"}} >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            C
-          </span>
-          Read, and then write changing the verb to present progressive.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="C"
+          title={
+            <>Read, and then write changing the verb to present progressive.</>
+          }
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* QUESTIONS */}
         <div className="text-[18px] leading-[2.5] flex flex-col gap-6">
@@ -179,10 +265,19 @@ const Review7_Page2_Q1 = () => {
             <div className="flex items-center mb-1">
               <span className="font-bold w-10">1</span>
 
-              <span>Mr. Johnson cleans the restaurant.</span>
+              <span>
+                <AudioText
+                  audio={audio}
+                  id="clue-0"
+                  src={clip0}
+                  label="Mr. Johnson cleans the restaurant."
+                >
+                  Mr. Johnson cleans the restaurant.
+                </AudioText>
+              </span>
             </div>
 
-            <div className="ml-10">{sentenceInput(0, "w-[830px]")}</div>
+            <div className="ml-10">{sentenceInput(0, "w-[100%]")}</div>
           </div>
 
           {/* 2 */}
@@ -191,11 +286,20 @@ const Review7_Page2_Q1 = () => {
               <div className="flex items-center mb-1">
                 <span className="font-bold w-10">2</span>
 
-                <span>Clara rides her horse today.</span>
+                <span>
+                  <AudioText
+                    audio={audio}
+                    id="clue-1"
+                    src={clip1}
+                    label="Clara rides her horse today."
+                  >
+                    Clara rides her horse today.
+                  </AudioText>
+                </span>
               </div>
             </div>
 
-            <div className="ml-10">{sentenceInput(1, "w-[830px]")}</div>
+            <div className="ml-10">{sentenceInput(1, "w-[100%]")}</div>
           </div>
 
           {/* 3 */}
@@ -204,11 +308,20 @@ const Review7_Page2_Q1 = () => {
               <div className="flex items-center mb-1">
                 <span className="font-bold w-10">3</span>
 
-                <span>Mike and David plant the seeds.</span>
+                <span>
+                  <AudioText
+                    audio={audio}
+                    id="clue-2"
+                    src={clip2}
+                    label="Mike and David plant the seeds."
+                  >
+                    Mike and David plant the seeds.
+                  </AudioText>
+                </span>
               </div>
             </div>
 
-            <div className="ml-10">{sentenceInput(2, "w-[830px]")}</div>
+            <div className="ml-10">{sentenceInput(2, "w-[100%]")}</div>
           </div>
 
           {/* 4 */}
@@ -217,26 +330,56 @@ const Review7_Page2_Q1 = () => {
               <div className="flex items-center mb-1">
                 <span className="font-bold w-10">4</span>
 
-                <span>Tilly chases Lolo around the tree.</span>
+                <span>
+                  <AudioText
+                    audio={audio}
+                    id="clue-3"
+                    src={clip3}
+                    label="Tilly chases Lolo around the tree."
+                  >
+                    Tilly chases Lolo around the tree.
+                  </AudioText>
+                </span>
               </div>
             </div>
 
-            <div className="ml-10">{sentenceInput(3, "w-[830px]")}</div>
+            <div className="ml-10">{sentenceInput(3, "w-[100%]")}</div>
           </div>
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

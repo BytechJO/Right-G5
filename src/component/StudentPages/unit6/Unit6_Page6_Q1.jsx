@@ -1,9 +1,22 @@
+import clip0 from "../../../assets/audio/ClassBook/U6/Page 51 - D/Item_001_Where_does_Danny_want_to_go.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U6/Page 51 - D/Item_002_Why_doesn't_Danny_want_to_ride_on_the_roller_coaster.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U6/Page 51 - D/Item_003_What_does_Sam_like_to_do_at_the_carnival.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U6/Page 51 - D/Item_004_How_are_Danny_and_Sam_different.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import grammer_u1 from "../../../assets/audio/ClassBook/U6/PG 51/cd30pg51.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-const Unit6_Page6_Q1 = () => {
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+
+const Unit6_Page6_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "Where does Danny want to go?",
 
@@ -57,12 +70,7 @@ const Unit6_Page6_Q1 = () => {
 
   const [result, setResult] = useState([]);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
     if (locked || result[i] === true) return;
@@ -83,10 +91,10 @@ const Unit6_Page6_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
 
       return;
     }
@@ -119,17 +127,17 @@ const Unit6_Page6_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       correctAnswers[0][0],
       correctAnswers[1][0],
@@ -142,7 +150,7 @@ const Unit6_Page6_Q1 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -151,21 +159,14 @@ const Unit6_Page6_Q1 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Unit6_Page6_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit6_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page6_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-4">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
+        <ExerciseHeader sectionLetter="D" title={<>
+          
           Listen to the story, and then answer the questions.
-        </h5>
-        <QuestionAudioPlayer
+        </>} subTitle="Listen once for the main idea, replay the needed part, then answer each question in a complete, concise response."/>
+        <QuestionAudioPlayer pageId="sb_unit6_page6_q1"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={7.2}
@@ -173,7 +174,7 @@ const Unit6_Page6_Q1 = () => {
         {/* BIG CONTAINER */}
         <div className="flex flex-col gap-4">
           {questions.map((q, i) => (
-            <div
+            <SentenceGroup label={`Hear sentence ${i+1}`} src={[clip0,clip1,clip2,clip3][i+0]} id={`sentence-${i}`} audio={audio}
               key={i}
               className="
                   flex
@@ -206,7 +207,7 @@ const Unit6_Page6_Q1 = () => {
                 </div>
 
                 {/* ANSWER */}
-                <input
+                <input aria-invalid={!!(result[i]===false)} style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || result[i] === true}
@@ -268,22 +269,22 @@ const Unit6_Page6_Q1 = () => {
                   </span>
                 )}
               </div>
-            </div>
+            </SentenceGroup>
           ))}
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -1,8 +1,16 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit6_Page2_ComprehensionA = () => {
+
+const Unit6_Page2_ComprehensionA = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   // =========================
   // CORRECT ANSWERS
   // =========================
@@ -77,58 +85,25 @@ const Unit6_Page2_ComprehensionA = () => {
   // =========================
   // NORMALIZE
   // =========================
-  const normalize = (text) => {
-    return (
-      text
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .replace(/[?.]/g, "")
-
-        // contractions
-        .replace(/can’t/g, "cannot")
-        .replace(/can't/g, "cannot")
-
-        .replace(/won’t/g, "will not")
-        .replace(/won't/g, "will not")
-
-        .replace(/shan’t/g, "shall not")
-        .replace(/shan't/g, "shall not")
-
-        .replace(/n’t/g, " not")
-    );
-  };
+  const normalize = normalizeAnswer;
 
   // =========================
   // UPDATE INPUT
   // =========================
-  const updateAnswer = (rowIndex, cellIndex, value) => {
-    const updated = [...answers];
-
-    updated[rowIndex][cellIndex].value = value;
-
-    setAnswers(updated);
-
-    // remove error instantly
-    const updatedErrors = [...errors];
-
-    updatedErrors[rowIndex][cellIndex] = false;
-
-    setErrors(updatedErrors);
-  };
+  const updateAnswer = (rowIndex,cellIndex,value)=>{if(locked||lockedInputs[rowIndex][cellIndex])return;setAnswers(previous=>previous.map((row,r)=>r===rowIndex?row.map((cell,c)=>c===cellIndex?{...cell,value}:cell):row));setErrors(previous=>previous.map((row,r)=>r===rowIndex?row.map((error,c)=>c===cellIndex?false:error):row));};
 
   // =========================
   // CHECK ANSWERS
   // =========================
   const handleCheck = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const isEmpty = answers.some((row) =>
       row.some((cell) => cell.type === "input" && normalize(cell.value) === ""),
     );
 
     if (isEmpty) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
       return;
     }
 
@@ -167,7 +142,7 @@ const Unit6_Page2_ComprehensionA = () => {
     setLockedInputs(updatedLocked);
 
     if (score === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
     }
 
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
@@ -181,18 +156,18 @@ const Unit6_Page2_ComprehensionA = () => {
   `;
 
     if (score === total) {
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // =========================
   // SHOW ANSWERS
   // =========================
-  const handleShow = () => {
+  const handleShow = () => {setLockedInputs(previous=>previous.map(row=>row.map(()=>true)));audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     const filledAnswers = answers.map((row, rowIndex) =>
       row.map((cell, cellIndex) => ({
         ...cell,
@@ -216,7 +191,7 @@ const Unit6_Page2_ComprehensionA = () => {
   // =========================
   // RESET
   // =========================
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(initialData);
 
     setErrors([
@@ -239,7 +214,7 @@ const Unit6_Page2_ComprehensionA = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit6_Page2_ComprehensionA.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit6_Page2_ComprehensionA.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page2_ComprehensionA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page2_ComprehensionA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-8 leading-normal">
         <span className="ex-A-read mr-2">A</span>
@@ -286,7 +261,7 @@ const Unit6_Page2_ComprehensionA = () => {
                 ) : (
                   <>
                     {/* INPUT */}
-                    <input
+                    <input aria-invalid={!!(errors[rowIndex][cellIndex])} style={{...(lockedInputs[rowIndex][cellIndex]?{borderBottomColor:"#16a34a"}:{}),...(lockedInputs[rowIndex][cellIndex]?{boxShadow:"inset 0 -2px #16a34a"}:{})}} title={`Row ${rowIndex+1}, ${["verb phrase","modal verb","negative contraction"][cellIndex]}; clue: ${answers[rowIndex].filter(cell=>cell.type==="fixed").map(cell=>cell.value).join(", ")}`} aria-label={`Row ${rowIndex+1}, ${["verb phrase","modal verb","negative contraction"][cellIndex]}; clue: ${correctAnswers[rowIndex][0]}`} {...fieldKeys}
                       type="text"
                       value={cell.value}
                       placeholder="Write here.."
@@ -342,14 +317,14 @@ const Unit6_Page2_ComprehensionA = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* RESET */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -358,14 +333,14 @@ const Unit6_Page2_ComprehensionA = () => {
 
         {/* SHOW */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -374,14 +349,14 @@ const Unit6_Page2_ComprehensionA = () => {
 
         {/* CHECK */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

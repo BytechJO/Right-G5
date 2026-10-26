@@ -101,6 +101,8 @@ const ReadingSection_U6 = () => {
         pageId="sb_unit6_page47_reading"
         captions={captions}
         stopAtSecond={5.3}
+        headerTitle={"Listen and read along: A Special Visitor."}
+        subTitle={"Press Play, follow the text as it is read, then pause or replay any part you need to hear again."}
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

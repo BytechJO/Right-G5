@@ -1,8 +1,59 @@
+import clip9 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_010_should_not.mp3";
+import clip8 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_009_mustn't.mp3";
+import clip7 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_008_I'd.mp3";
+import clip6 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_007_will_not.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_006_they_would.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_005_she'll.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_004_you'd.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U6/Page 51 - E/Item_003_cannot.mp3";
+
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit5/ExerciseAudioText";
+import { SentenceGroup, SentencePart } from "../unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit6_Page6_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const leftTable = [
     {
       long: "cannot",
@@ -71,8 +122,7 @@ const Unit6_Page6_Q2 = () => {
 
   const [result, setResult] = useState([]);
 
-  const normalize = (str) =>
-    str.toLowerCase().replace(/[’.']/g, "'").replace(/\s+/g, " ").trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
     if (locked || result[i] === true) return;
@@ -94,9 +144,16 @@ const Unit6_Page6_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     if (answers.some((a) => !a.trim())) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(
+        String("Please complete all fields.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all fields."));
 
       return;
     }
@@ -127,17 +184,39 @@ const Unit6_Page6_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers(allQuestions.map((q) => q.answer));
 
     setResult([true, true, true, true, true, true, true, true]);
@@ -146,6 +225,8 @@ const Unit6_Page6_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", "", "", ""]);
 
     setResult([]);
@@ -220,6 +301,18 @@ const Unit6_Page6_Q2 = () => {
                 {item.side === "long" ? (
                   <>
                     <input
+                      aria-invalid={!!(result[idx] === false)}
+                      style={{
+                        ...(result[idx] === true
+                          ? { borderBottomColor: "#16a34a" }
+                          : {}),
+                        ...(result[idx] === true
+                          ? { boxShadow: "inset 0 -2px #16a34a" }
+                          : {}),
+                      }}
+                      title={`Row ${idx + 1}, write the ${item.side === "long" ? "long form" : "contraction"} of ${item.long || item.contraction}`}
+                      aria-label={`Row ${idx + 1}, write the ${item.side === "long" ? "long form" : "contraction"} of ${item.long || item.contraction}`}
+                      {...fieldKeys}
                       type="text"
                       value={answers[idx]}
                       disabled={locked || result[idx] === true}
@@ -265,7 +358,18 @@ const Unit6_Page6_Q2 = () => {
                     )}
                   </>
                 ) : (
-                  item.long
+                  <AudioText
+                    audio={audio}
+                    id={`clue-${idx}`}
+                    src={
+                      [clip2, clip4, clip6, clip8, clip3, clip5, clip7, clip9][
+                        idx
+                      ]
+                    }
+                    label={`Hear ${item.long || item.contraction}`}
+                  >
+                    {item.long}
+                  </AudioText>
                 )}
               </td>
 
@@ -284,6 +388,18 @@ const Unit6_Page6_Q2 = () => {
                 {item.side === "contraction" ? (
                   <>
                     <input
+                      aria-invalid={!!(result[idx] === false)}
+                      style={{
+                        ...(result[idx] === true
+                          ? { borderBottomColor: "#16a34a" }
+                          : {}),
+                        ...(result[idx] === true
+                          ? { boxShadow: "inset 0 -2px #16a34a" }
+                          : {}),
+                      }}
+                      title={`Row ${idx + 1}, write the ${item.side === "long" ? "long form" : "contraction"} of ${item.long || item.contraction}`}
+                      aria-label={`Row ${idx + 1}, write the ${item.side === "long" ? "long form" : "contraction"} of ${item.long || item.contraction}`}
+                      {...fieldKeys}
                       type="text"
                       value={answers[idx]}
                       disabled={locked || result[idx] === true}
@@ -329,7 +445,18 @@ const Unit6_Page6_Q2 = () => {
                     )}
                   </>
                 ) : (
-                  item.contraction
+                  <AudioText
+                    audio={audio}
+                    id={`clue-${idx}`}
+                    src={
+                      [clip2, clip4, clip6, clip8, clip3, clip5, clip7, clip9][
+                        idx
+                      ]
+                    }
+                    label={`Hear ${item.long || item.contraction}`}
+                  >
+                    {item.contraction}
+                  </AudioText>
                 )}
               </td>
             </tr>
@@ -340,20 +467,29 @@ const Unit6_Page6_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit6_Page6_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit6_Page6_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit6_Page6_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit6_Page6_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-25">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Write either the long form or the contraction for each item.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="E"
+          title={
+            <>Write either the long form or the contraction for each item.</>
+          }
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         {/* TABLES */}
         <div className="flex justify-center gap-12">
@@ -365,15 +501,36 @@ const Unit6_Page6_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

@@ -130,10 +130,19 @@ const ReadingSection_U7 = () => {
         question="Which part of the day do you think Jenny enjoys the most?"
         sound={readingAudio}
         wordTimings={readingTimings}
-        timingAliases={[{"printed":["as","fast","as","we","could","go"],"spoken":["as","fast","as","we","could",""]}]}
+        timingAliases={[
+          {
+            printed: ["as", "fast", "as", "we", "could", "go"],
+            spoken: ["as", "fast", "as", "we", "could", ""],
+          },
+        ]}
         pageId="sb_unit7_page59_reading"
         captions={captions}
         stopAtSecond={7.1}
+        subTitle={
+          "Press Play, follow the text as it is read, then pause or replay any part you need to hear again."
+        }
+        headerTitle={"Listen and read along: A Great Day With a Great Friend!"}
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">
