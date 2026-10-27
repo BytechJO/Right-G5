@@ -72,7 +72,7 @@ const Page9_Q1 = () => {
 
   const input = (i, width = "w-[130px]") => (
     <span className="relative inline-block mx-1">
-      <input {...fieldKeys} aria-label={`Item ${Math.floor(i / 2) + 1}, ${i % 2 === 0 ? "question adjective" : "answer"}`} title={`Item ${Math.floor(i / 2) + 1}, ${i % 2 === 0 ? "question adjective" : "answer"}`} style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} placeholder="Type your answer"
+      <input {...fieldKeys} aria-label={`Item ${Math.floor(i / 2) + 1}, ${i % 2 === 0 ? "question adjective" : "answer"}`} title={`Item ${Math.floor(i / 2) + 1}, ${i % 2 === 0 ? "question adjective" : "answer"}`} style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} placeholder={i%2===0?"Word":"Answer"}
         disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}

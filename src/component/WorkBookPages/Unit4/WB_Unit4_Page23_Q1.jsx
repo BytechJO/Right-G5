@@ -1,8 +1,45 @@
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
 
 const WB_Unit4_Page23_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const answers = [
     ["n", "o", "t", " ", "m", "e"],
     ["j", "e", "a", "n", "s"],
@@ -61,13 +98,26 @@ const WB_Unit4_Page23_Q1 = () => {
   const [locked, setLocked] = useState(false);
 
   const inputRefs = useRef([]);
+  const focusFrame = useRef(null);
+  const cancelFocus = () => {
+    if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    focusFrame.current = null;
+  };
+  React.useEffect(
+    () => () => {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    },
+    [],
+  );
 
   const handleChange = (qIndex, inputIndex, value) => {
     if (locked || results[qIndex] === true) return;
 
     const char = value.slice(-1).toLowerCase();
 
-    const updated = [...studentAnswers];
+    const updated = studentAnswers.map((row) =>
+      Array.isArray(row) ? [...row] : row,
+    );
 
     updated[qIndex][inputIndex] = char;
 
@@ -83,7 +133,9 @@ const WB_Unit4_Page23_Q1 = () => {
 
     // move next
     if (char) {
-      setTimeout(() => {
+      cancelFocus();
+      focusFrame.current = requestAnimationFrame(() => {
+        focusFrame.current = null;
         let next = inputIndex + 1;
 
         while (answers[qIndex][next] === " ") {
@@ -91,31 +143,49 @@ const WB_Unit4_Page23_Q1 = () => {
         }
 
         inputRefs.current[qIndex]?.[next]?.focus();
-      }, 0);
+      });
     }
   };
 
   const handleBackspace = (e, qIndex, inputIndex) => {
+    if (e.key === "Enter" || e.key === " ") e.stopPropagation();
+    if (locked || results[qIndex] === true) return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      e.stopPropagation();
+      cancelFocus();
+      const step = e.key === "ArrowLeft" ? -1 : 1;
+      let next = inputIndex + step;
+      while (answers[qIndex][next] === " ") next += step;
+      inputRefs.current[qIndex]?.[next]?.focus();
+    }
     if (e.key === "Backspace" && !studentAnswers[qIndex][inputIndex]) {
+      e.preventDefault();
+      e.stopPropagation();
+      cancelFocus();
       let prev = inputIndex - 1;
-
-      while (answers[qIndex][prev] === " ") {
-        prev--;
-      }
-
+      while (answers[qIndex][prev] === " ") prev--;
       inputRefs.current[qIndex]?.[prev]?.focus();
     }
   };
 
   const checkAnswers = () => {
     if (locked) return;
+    cancelFocus();
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((word, qIndex) =>
       word.some((char, i) => answers[qIndex][i] !== " " && !char),
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -148,17 +218,40 @@ const WB_Unit4_Page23_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    cancelFocus();
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResults([true, true, true, true, true, true]);
@@ -167,6 +260,9 @@ const WB_Unit4_Page23_Q1 = () => {
   };
 
   const handleReset = () => {
+    cancelFocus();
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(
       answers.map((word) => word.map((char) => (char === " " ? " " : ""))),
     );
@@ -175,29 +271,40 @@ const WB_Unit4_Page23_Q1 = () => {
 
     setLocked(false);
 
-    setTimeout(() => {
+    cancelFocus();
+    focusFrame.current = requestAnimationFrame(() => {
+      focusFrame.current = null;
       inputRefs.current[0]?.[0]?.focus();
-    }, 0);
+    });
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px]">
+    <div
+      data-exercise-scope={"WB_Unit4_Page23_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit4_Page23_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit4_Page23_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit4_Page23_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px]" style={{gap:"40px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-[13vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            F
-          </span>
-          Use the code to find the words.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="F"
+          title={<>Use the code to find the words.</>}
+          subTitle="Decode one symbol or number at a time with the key, then reread the full word to catch any incorrect letter."
+        />
 
         {/* QUESTIONS */}
-        <div className="grid grid-cols-3 gap-x-10 gap-y-10 mb-15">
+        <div className="flex w-full justify-center">
+        <div className="grid grid-cols-2 gap-x-10 gap-y-10">
           {answers.map((word, qIndex) => (
             <div key={qIndex} className="flex items-start gap-3">
               <span className="font-bold">{qIndex + 1}</span>
@@ -223,6 +330,17 @@ const WB_Unit4_Page23_Q1 = () => {
                         className="relative  flex flex-col items-center"
                       >
                         <input
+                          onChange={(e) =>
+                            handleChange(qIndex, inputIndex, e.target.value)
+                          }
+                          aria-invalid={results[qIndex] === false}
+                          style={{
+                            borderBottomColor:
+                              results[qIndex] === true ? "#16a34a" : undefined,
+                          }}
+                          title={`Word ${qIndex + 1}, letter ${inputIndex + 1}, code ${items[qIndex][inputIndex]}`}
+                          aria-label={`Word ${qIndex + 1}, letter ${inputIndex + 1}, code ${items[qIndex][inputIndex]}`}
+                          {...fieldKeys}
                           ref={(el) => {
                             if (!inputRefs.current[qIndex]) {
                               inputRefs.current[qIndex] = [];
@@ -235,9 +353,7 @@ const WB_Unit4_Page23_Q1 = () => {
                           value={studentAnswers[qIndex][inputIndex]}
                           disabled={locked || results[qIndex] === true}
                           onFocus={(e) => e.target.select()}
-                          onInput={(e) =>
-                            handleChange(qIndex, inputIndex, e.target.value)
-                          }
+                          onInput={undefined}
                           onKeyDown={(e) =>
                             handleBackspace(e, qIndex, inputIndex)
                           }
@@ -296,7 +412,7 @@ const WB_Unit4_Page23_Q1 = () => {
             </div>
           ))}
         </div>
-
+</div>
         {/* CODE BOX */}
         <div
           style={{
@@ -326,15 +442,36 @@ const WB_Unit4_Page23_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

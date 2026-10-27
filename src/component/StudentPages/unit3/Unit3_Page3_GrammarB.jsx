@@ -230,7 +230,7 @@ const GrammarB = () => {
   // UI helpers
   const input = (q, i) => (
     <span className="u3gb-field">
-      <input
+      <input placeholder={"Word"}
         style={{
           borderBottomColor:
             locked || result[q]?.inputs?.[i] === true

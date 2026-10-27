@@ -189,7 +189,7 @@ const Unit6_Page5_Q2 = () => {
   };
   const input = (i, width = "w-[220px]") => (
     <span className="relative inline-block  mb-2.5">
-      <input
+      <input placeholder={"Expression"}
         aria-invalid={!!(result[i] === false)}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),

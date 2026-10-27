@@ -334,7 +334,7 @@ const Unit6_Page2_Q1 = () => {
                   {q}
                 </div>
 
-                <input
+                <input placeholder={"Word"}
                   aria-invalid={!!(result[i] === false)}
                   style={{
                     ...(result[i] === true

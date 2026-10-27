@@ -144,7 +144,7 @@ const Unit7_Page2_ComprehensionA = () => {const audio=useExerciseAudio();const r
 
             {/* answer line 1 */}
             <div className="relative">
-              <input style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0])} title={"Question 1, name the two horses and say which is faster"} aria-label={"Question 1, name the two horses and say which is faster"} {...fieldKeys}
+              <input placeholder={"Your answer"} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0])} title={"Question 1, name the two horses and say which is faster"} aria-label={"Question 1, name the two horses and say which is faster"} {...fieldKeys}
                 type="text"
                 value={answers[0]}
                 disabled={locked || correctLocked[0]}
@@ -198,7 +198,7 @@ const Unit7_Page2_ComprehensionA = () => {const audio=useExerciseAudio();const r
 
             {/* answer */}
             <div className="relative">
-              <input style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1])} title={"Question 2, how old are Jenny and Lori?"} aria-label={"Question 2, how old are Jenny and Lori?"} {...fieldKeys}
+              <input placeholder={"Your answer"} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1])} title={"Question 2, how old are Jenny and Lori?"} aria-label={"Question 2, how old are Jenny and Lori?"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked || correctLocked[1]}

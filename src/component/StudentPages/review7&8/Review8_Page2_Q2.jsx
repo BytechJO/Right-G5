@@ -339,7 +339,7 @@ const Review8_Page2_Q2 = () => {
 
   const sentenceInput = (i) => (
     <span className="relative flex-1">
-      <input
+      <input placeholder={"Your answer"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

@@ -63,7 +63,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 1; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 1; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 1; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 1; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[0]}
                 disabled={locked}
@@ -87,7 +87,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 2; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 2; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 2; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 2; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked}
@@ -111,7 +111,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 3; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 3; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 3; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 3; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[2]}
                 disabled={locked}
@@ -135,7 +135,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 4; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 4; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 4; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 4; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[3]}
                 disabled={locked}
@@ -163,7 +163,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 5; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 5; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 5; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 5; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[4]}
                 disabled={locked}
@@ -189,7 +189,7 @@ const Unit6_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
             <span className="text-[#27aae1] font-medium">Person A:</span>
 
             <div className="flex-1">
-              <input style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 6; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 6; use the surrounding replies"} {...fieldKeys}
+              <input placeholder={"Your reply"} style={{...(locked?{borderBottomColor:"#16a34a"}:{})}} title={"Phone conversation, Person A, response 6; use the surrounding replies"} aria-label={"Phone conversation, Person A, response 6; use the surrounding replies"} {...fieldKeys}
                 type="text"
                 value={answers[5]}
                 disabled={locked}

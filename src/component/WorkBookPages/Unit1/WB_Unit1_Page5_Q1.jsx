@@ -1,8 +1,77 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 5 - E/Item_001_ac_u_ly.mp3";
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 5 - E/Item_002_ot_b_k.mp3";
+import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 5 - E/Item_003_ta_vi_g.mp3";
+import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 5 - E/Item_004_p_l_w.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
 
 const WB_Unit1_Page5_Q1 = () => {
+  const letterKey = (event, row, col) => {
+    if (event.key === "Tab") return;
+    const move = (r, c) => {
+      const node = inputsRef.current[`${r}-${c}`];
+      if (node && !node.disabled) {
+        node.focus({ preventScroll: true });
+        node.select();
+      }
+    };
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat) move(row, col + 1);
+      return;
+    }
+    if (
+      ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.key === "ArrowLeft") move(row, col - 1);
+      if (event.key === "ArrowRight") move(row, col + 1);
+      if (event.key === "ArrowUp" && row > 0)
+        move(row - 1, Math.min(col, questions[row - 1].length - 1));
+      if (event.key === "ArrowDown" && row + 1 < questions.length)
+        move(row + 1, Math.min(col, questions[row + 1].length - 1));
+    }
+    if (event.key === "Backspace" && !answers[row][col]) {
+      event.preventDefault();
+      event.stopPropagation();
+      move(row, col - 1);
+    }
+    if (event.key === "Delete" || event.key === "Backspace")
+      event.stopPropagation();
+  };
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const inputsRef = useRef({});
   const questions = [
     ["t", "a", "l"],
@@ -24,23 +93,22 @@ const WB_Unit1_Page5_Q1 = () => {
 
   const handleChange = (wordIndex, letterIndex, value) => {
     if (locked || result[`${wordIndex}-${letterIndex}`] === true) return;
-
-    const updated = [...answers];
-
-    updated[wordIndex][letterIndex] = value.slice(-1);
-
-    setAnswers(updated);
-
-    setResult((prev) => ({
-      ...prev,
+    const char = value.slice(-1);
+    if (char && !/^[a-z]$/i.test(char)) return;
+    setAnswers((previous) =>
+      previous.map((row, r) =>
+        r === wordIndex
+          ? row.map((v, c) => (c === letterIndex ? char : v))
+          : row,
+      ),
+    );
+    setResult((previous) => ({
+      ...previous,
       [`${wordIndex}-${letterIndex}`]: undefined,
     }));
-
-    // auto move
-    if (value) {
+    if (char) {
       const next = inputsRef.current[`${wordIndex}-${letterIndex + 1}`];
-
-      if (next) {
+      if (next && !next.disabled) {
         next.focus();
         next.select();
       }
@@ -49,13 +117,20 @@ const WB_Unit1_Page5_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((group) =>
       group.some((letter) => !letter.trim()),
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -92,17 +167,39 @@ const WB_Unit1_Page5_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       ["t", "a", "l"],
       ["n", "e", "o", "o"],
@@ -124,6 +221,8 @@ const WB_Unit1_Page5_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       ["", "", ""],
       ["", "", "", ""],
@@ -139,6 +238,15 @@ const WB_Unit1_Page5_Q1 = () => {
   const letterBox = (wordIndex, letterIndex) => (
     <span className="relative inline-block">
       <input
+        style={{
+          ...(result[`${wordIndex}-${letterIndex}`] === true
+            ? { borderBottomColor: "#16a34a" }
+            : {}),
+        }}
+        aria-invalid={result[`${wordIndex}-${letterIndex}`] === false}
+        title={`Word ${wordIndex + 1}, missing letter ${letterIndex + 1} of ${questions[wordIndex].length}`}
+        aria-label={`Word ${wordIndex + 1}, missing letter ${letterIndex + 1} of ${questions[wordIndex].length}`}
+        {...fieldKeys}
         type="text"
         ref={(el) => (inputsRef.current[`${wordIndex}-${letterIndex}`] = el)}
         maxLength={1}
@@ -163,6 +271,7 @@ const WB_Unit1_Page5_Q1 = () => {
               : "border-black"
           }
         `}
+        onKeyDown={(event) => letterKey(event, wordIndex, letterIndex)}
       />
 
       {result[`${wordIndex}-${letterIndex}`] === false && (
@@ -193,25 +302,39 @@ const WB_Unit1_Page5_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall ">
+    <div
+      data-exercise-scope={"WB_Unit1_Page5_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page5_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page5_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page5_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall " style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-22">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Write the missing letters.
-        </h5>
+        <ExerciseHeader
+          subTitle="Say the whole word quietly, use the clue to identify the missing letters, then reread the completed spelling."
+          isWorkbook
+          sectionLetter="E"
+          title={<>Write the missing letters.</>}
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15 text-[20px]">
           {/* 1 */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <SentenceGroup
+            label={"Hear incomplete word 1"}
+            src={clip0}
+            id={"spelling-0"}
+            audio={audio}
+            className="flex items-center gap-2 flex-wrap"
+          >
             <span className="font-bold mr-3">1</span>
 
             <span>a c</span>
@@ -222,14 +345,19 @@ const WB_Unit1_Page5_Q1 = () => {
 
             {letterBox(0, 1)}
 
-
             {letterBox(0, 2)}
 
             <span>l y</span>
-          </div>
+          </SentenceGroup>
 
           {/* 2 */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <SentenceGroup
+            label={"Hear incomplete word 2"}
+            src={clip1}
+            id={"spelling-1"}
+            audio={audio}
+            className="flex items-center gap-2 flex-wrap"
+          >
             <span className="font-bold mr-3">2</span>
 
             {letterBox(1, 0)}
@@ -243,10 +371,16 @@ const WB_Unit1_Page5_Q1 = () => {
             {letterBox(1, 2)}
             {letterBox(1, 3)}
             <span>k</span>
-          </div>
+          </SentenceGroup>
 
           {/* 3 */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <SentenceGroup
+            label={"Hear incomplete word 3"}
+            src={clip2}
+            id={"spelling-2"}
+            audio={audio}
+            className="flex items-center gap-2 flex-wrap"
+          >
             <span className="font-bold mr-3">3</span>
 
             {letterBox(2, 0)}
@@ -260,10 +394,16 @@ const WB_Unit1_Page5_Q1 = () => {
             {letterBox(2, 2)}
 
             <span>g</span>
-          </div>
+          </SentenceGroup>
 
           {/* 4 */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <SentenceGroup
+            label={"Hear incomplete word 4"}
+            src={clip3}
+            id={"spelling-3"}
+            audio={audio}
+            className="flex items-center gap-2 flex-wrap"
+          >
             <span className="font-bold mr-3">4</span>
 
             <span>p</span>
@@ -275,22 +415,42 @@ const WB_Unit1_Page5_Q1 = () => {
 
             {letterBox(3, 2)}
             <span>w</span>
-
-          </div>
+          </SentenceGroup>
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

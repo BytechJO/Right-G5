@@ -1,8 +1,16 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit10_Page3_GrammarC = () => {
+
+const Unit10_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const correctAnswers = [
     "riding bikes a lot",
     {
@@ -49,16 +57,9 @@ const Unit10_Page3_GrammarC = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (text) => {
-    return text
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .replace(/[?.!,]/g, "")
-      .replace(/[’']/g, "");
-  };
+  const normalize = normalizeAnswer;
 
-  const updateAnswer = (index, value) => {
+  const updateAnswer = (index, value) => {if(locked||correctLocked[index])return;
     const updated = [...answers];
     updated[index] = value;
     setAnswers(updated);
@@ -68,7 +69,7 @@ const Unit10_Page3_GrammarC = () => {
     setErrors(updatedErrors);
   };
 
-  const updateSplitAnswer = (field, value) => {
+  const updateSplitAnswer = (field, value) => {if(locked||correctLocked[1][field])return;
     const updated = [...answers];
 
     updated[1] = {
@@ -89,7 +90,7 @@ const Unit10_Page3_GrammarC = () => {
   };
 
   const handleCheck = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const isEmpty =
       normalize(answers[0]) === "" ||
@@ -100,7 +101,7 @@ const Unit10_Page3_GrammarC = () => {
       normalize(answers[4]) === "";
 
     if (isEmpty) {
-      ValidationAlert.info("Please complete all fields.");
+      (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
       return;
     }
 
@@ -188,16 +189,16 @@ const Unit10_Page3_GrammarC = () => {
   `;
 
     if (score === total) {
-      setLocked(true);
-      ValidationAlert.success(msg);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const handleShow = () => {
+  const handleShow = () => {setErrors([false,{first:false,second:false},false,false,false]);audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       correctAnswers[0],
       {
@@ -223,7 +224,7 @@ const Unit10_Page3_GrammarC = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       "",
       {
@@ -265,10 +266,10 @@ const Unit10_Page3_GrammarC = () => {
     error,
     isCorrect,
     onChange,
-    extraClass = "flex-1",
+    extraClass = "flex-1", label,
   ) => (
     <div className={`${extraClass} relative`}>
-      <input
+      <input placeholder={label.includes("opening")?"Opening":label.includes("complete the question")?"Complete...":"Question"} style={{...(isCorrect?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!error} title={label} aria-label={label} {...fieldKeys}
         type="text"
         value={value}
         disabled={locked || isCorrect}
@@ -305,7 +306,7 @@ const Unit10_Page3_GrammarC = () => {
   );
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit10_Page3_GrammarC.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit10_Page3_GrammarC.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page3_GrammarC.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page3_GrammarC.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">C</span>
@@ -326,9 +327,8 @@ const Unit10_Page3_GrammarC = () => {
 
           <span>Were they</span>
 
-          {renderInput(answers[0], errors[0], correctLocked[0], (e) =>
-            updateAnswer(0, e.target.value),
-          )}
+          {renderInput(answers[0],errors[0],correctLocked[0],(e) =>
+            updateAnswer(0, e.target.value),undefined,"Sentence 2, complete the question after Were they")}
 
           <span>during the summer?</span>
         </div>
@@ -337,49 +337,35 @@ const Unit10_Page3_GrammarC = () => {
         <div className="flex gap-4 items-center">
           <span className="font-bold">3</span>
 
-          {renderInput(
-            answers[1].first,
-            errors[1].first,
-            correctLocked[1].first,
-            (e) => updateSplitAnswer("first", e.target.value),
-            "w-[140px]",
-          )}
+          {renderInput(answers[1].first,errors[1].first,correctLocked[1].first,(e) => updateSplitAnswer("first", e.target.value),"w-[140px]","Sentence 3, question opening before we reading")}
 
           <span>we reading</span>
 
-          {renderInput(
-            answers[1].second,
-            errors[1].second,
-            correctLocked[1].second,
-            (e) => updateSplitAnswer("second", e.target.value),
-          )}
+          {renderInput(answers[1].second,errors[1].second,correctLocked[1].second,(e) => updateSplitAnswer("second", e.target.value),undefined,"Sentence 3, complete the question after we reading")}
         </div>
 
         {/* 4 */}
         <div className="flex gap-4 items-start">
           <span className="font-bold">4</span>
 
-          {renderInput(answers[2], errors[2], correctLocked[2], (e) =>
-            updateAnswer(2, e.target.value),
-          )}
+          {renderInput(answers[2],errors[2],correctLocked[2],(e) =>
+            updateAnswer(2, e.target.value),undefined,"Sentence 4, rewrite the sentence as a question")}
         </div>
 
         {/* 5 */}
         <div className="flex gap-4 items-start">
           <span className="font-bold">5</span>
 
-          {renderInput(answers[3], errors[3], correctLocked[3], (e) =>
-            updateAnswer(3, e.target.value),
-          )}
+          {renderInput(answers[3],errors[3],correctLocked[3],(e) =>
+            updateAnswer(3, e.target.value),undefined,"Sentence 5, rewrite the sentence as a question")}
         </div>
 
         {/* 6 */}
         <div className="flex gap-4 items-start">
           <span className="font-bold">6</span>
 
-          {renderInput(answers[4], errors[4], correctLocked[4], (e) =>
-            updateAnswer(4, e.target.value),
-          )}
+          {renderInput(answers[4],errors[4],correctLocked[4],(e) =>
+            updateAnswer(4, e.target.value),undefined,"Sentence 6, rewrite the sentence as a question")}
         </div>
       </div>
 
@@ -387,14 +373,14 @@ const Unit10_Page3_GrammarC = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -403,14 +389,14 @@ const Unit10_Page3_GrammarC = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -419,14 +405,14 @@ const Unit10_Page3_GrammarC = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

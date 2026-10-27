@@ -43,7 +43,7 @@ setAnnouncement("Answers, feedback and locks cleared.");
   };
 
   const input = (row, col) => (
-    <input {...fieldKeys} title={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`} aria-label={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`}
+    <input placeholder={"Detail"} {...fieldKeys} title={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`} aria-label={`${["Mike","Gary","Joe"][row]}, write two things you know about him, starting with He is`}
       value={answers[row][col]}
       onChange={(e) => handleChange(row, col, e.target.value)}
       style={{

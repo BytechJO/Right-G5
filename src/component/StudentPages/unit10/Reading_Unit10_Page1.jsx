@@ -1,3 +1,5 @@
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioFeedback } from "../unit5/ExerciseAudioText";
 import page24 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 92.png";
 import React, { useEffect, useState } from "react";
 import "./Reading_Unit10_Page2.css";
@@ -11,14 +13,12 @@ import audioBtn from "../../../assets/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/Page 01/Right Video Button.svg";
 import video3 from "../../../assets/videos/grade 5 unit 10 reading page 92-93.mp4";
 
-const Reading_Unit10_Page1 = ({
-  openPopup,
-  audioRef,
-  activeAudio,
-  setActiveAudio,
-}) => {
+const Reading_Unit10_Page1 = ({ openPopup, audioRef, setActiveAudio }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const audio = useExerciseAudio();
+  React.useEffect(() => {
+    if (audio.activeId === null) setActiveAudio(null);
+  }, [audio.activeId, setActiveAudio]);
   useEffect(() => {
     setActiveAudio(null);
   }, [setActiveAudio]);
@@ -96,69 +96,58 @@ const Reading_Unit10_Page1 = ({
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
   const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
-
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAudio(null);
-      };
-    }
+    audio.play(soundPath, soundPath);
+    setHoveredAreaIndex(null);
   };
 
   return (
     <div
+      data-story-access={"unit10-story1"}
+      aria-label={
+        "A Perfect Pet for Aunt Jessie, panels 1 to 4. Children consider how to spend their earnings from caring for cats, then visit Aunt Jessie."
+      }
+      role={"group"}
       className="page1-img-wrapper"
       onClick={handleImageClick}
       style={{ backgroundImage: `url(${page24})` }}
     >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-story-access="unit10-story1"] [data-choice]:focus-visible,[data-story-access="unit10-story1"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img
         src={page24}
         style={{ display: "block" }}
         onClick={handleImageClick}
       /> */}
 
-      {clickableAreas.map((area, index) => (
-        <div
-          key={index}
-          className={`clickable-area ${
-            hoveredAreaIndex === index || activeAudio === `page1-${index}`
-              ? "highlight"
-              : ""
-          }`}
-          style={{
-            position: "absolute",
-            left: `${area.x1}%`,
-            top: `${area.y1}%`,
-            width: `${area.x2 - area.x1}%`,
-            height: `${area.y2 - area.y1}%`,
-          }}
-          onClick={() => {
-            setActiveAudio(`page1-${index}`);
-            playSound(area.sound);
-          }}
-          onMouseEnter={() => {
-            if (!isPlaying) setHoveredAreaIndex(index);
-          }}
-          onMouseLeave={() => {
-            if (!isPlaying) setHoveredAreaIndex(null);
-          }}
-        ></div>
-      ))}
-
       <div
         className="headset-icon-CD-unit2-page11-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          aria-label={"Open story audio"}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => {
+            audio.stop();
             if (audioRef.current) {
               audioRef.current.pause();
               audioRef.current.currentTime = 0;
@@ -173,7 +162,11 @@ const Reading_Unit10_Page1 = ({
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captions} />
+                <AudioWithCaption
+                  pageId={"sb_unit10_page92_reading"}
+                  src={sound1}
+                  captions={captions}
+                />
               </div>,
             );
           }}
@@ -195,10 +188,30 @@ const Reading_Unit10_Page1 = ({
         style={{ overflow: "visible" }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          aria-label={"Open story video"}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => {
+            audio.stop();
             if (audioRef.current) {
               audioRef.current.pause();
               audioRef.current.currentTime = 0;
@@ -243,6 +256,44 @@ const Reading_Unit10_Page1 = ({
           />
         </svg>
       </div>
+
+      {clickableAreas.map((area, index) => (
+        <div
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat) event.currentTarget.click();
+            }
+          }}
+          aria-label={`Hear A Perfect Pet for Aunt Jessie, panel ${index + 1}`}
+          data-choice={true}
+          tabIndex={0}
+          role={"button"}
+          key={index}
+          className={`clickable-area ${hoveredAreaIndex === index || audio.activeId === area.sound ? "highlight" : ""}`}
+          style={{
+            position: "absolute",
+            left: `${area.x1}%`,
+            top: `${area.y1}%`,
+            width: `${area.x2 - area.x1}%`,
+            height: `${area.y2 - area.y1}%`,
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            setActiveAudio(`page1-${index}`);
+            playSound(area.sound);
+          }}
+          onMouseEnter={() => setHoveredAreaIndex(index)}
+          onMouseLeave={() => setHoveredAreaIndex(null)}
+        ></div>
+      ))}
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

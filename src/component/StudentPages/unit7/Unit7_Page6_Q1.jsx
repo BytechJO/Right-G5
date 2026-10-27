@@ -337,7 +337,7 @@ const Unit7_Page6_Q1 = () => {
 
               {/* INPUT */}
               <div className="relative">
-                <input
+                <input placeholder={"Verb phrase"}
                   style={{
                     ...(result[i] === true
                       ? { borderBottomColor: "#16a34a" }

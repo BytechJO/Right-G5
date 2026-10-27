@@ -300,7 +300,7 @@ const Unit6_Page6_Q2 = () => {
               >
                 {item.side === "long" ? (
                   <>
-                    <input
+                    <input placeholder={item.side==="long"?"Long form":"Contraction"}
                       aria-invalid={!!(result[idx] === false)}
                       style={{
                         ...(result[idx] === true
@@ -387,7 +387,7 @@ const Unit6_Page6_Q2 = () => {
               >
                 {item.side === "contraction" ? (
                   <>
-                    <input
+                    <input placeholder={item.side==="long"?"Long form":"Contraction"}
                       aria-invalid={!!(result[idx] === false)}
                       style={{
                         ...(result[idx] === true

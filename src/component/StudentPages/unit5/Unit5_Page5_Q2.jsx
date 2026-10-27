@@ -262,7 +262,7 @@ const Unit5_Page5_Q2 = () => {
                     rows={2}
                     value={answers[i]}
                     disabled={locked || result[i] === true}
-                    placeholder="Write here..."
+                    placeholder={"Your polite request"}
                     onChange={(e) => handleChange(i, e.target.value)}
                     style={{
                       outline: "none",

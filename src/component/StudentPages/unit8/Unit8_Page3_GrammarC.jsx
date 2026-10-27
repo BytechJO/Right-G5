@@ -147,7 +147,7 @@ const Unit8_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
             <span className="font-bold">{i + 1}</span>
             {/* input */}
             <div className="flex-1 relative">
-              <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, use ${hints[i]}`} aria-label={`Sentence ${i+1}, use ${hints[i]}`} {...fieldKeys}
+              <input placeholder={"Sentence"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, use ${hints[i]}`} aria-label={`Sentence ${i+1}, use ${hints[i]}`} {...fieldKeys}
                 type="text"
                 value={answer}
                 disabled={locked || correctLocked[i]}

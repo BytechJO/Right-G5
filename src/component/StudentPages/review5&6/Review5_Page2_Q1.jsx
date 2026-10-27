@@ -260,7 +260,7 @@ const Review5_Page2_Q1 = () => {
               <span className="font-bold text-[20px] w-6">{i + 1}</span>
 
               <div className="relative flex-1">
-                <input
+                <input placeholder={"Sentence"}
                   aria-invalid={!!(result[i] === false)}
                   style={{
                     ...(result[i] === true

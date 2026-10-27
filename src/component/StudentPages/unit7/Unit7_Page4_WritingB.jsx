@@ -42,7 +42,7 @@ const Unit7_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
           <span>Lori said,</span>
 
           <div className="flex-1">
-            <input title={"Conversation line 1, what Lori said; include quotation marks"} aria-label={"Conversation line 1, what Lori said; include quotation marks"} {...fieldKeys}
+            <input placeholder={"Reply with quotes"} title={"Conversation line 1, what Lori said; include quotation marks"} aria-label={"Conversation line 1, what Lori said; include quotation marks"} {...fieldKeys}
               type="text"
               value={answers[0]}
               onChange={(e) => updateAnswer(0, e.target.value)}
@@ -54,7 +54,7 @@ const Unit7_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         {/* 2 */}
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <input title={"Conversation line 2, what Jenny answered; include quotation marks"} aria-label={"Conversation line 2, what Jenny answered; include quotation marks"} {...fieldKeys}
+            <input placeholder={"Reply with quotes"} title={"Conversation line 2, what Jenny answered; include quotation marks"} aria-label={"Conversation line 2, what Jenny answered; include quotation marks"} {...fieldKeys}
               type="text"
               value={answers[1]}
               onChange={(e) => updateAnswer(1, e.target.value)}
@@ -68,7 +68,7 @@ const Unit7_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         {/* 3 */}
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <input title={"Conversation line 3, what she asked; include quotation marks"} aria-label={"Conversation line 3, what she asked; include quotation marks"} {...fieldKeys}
+            <input placeholder={"Reply with quotes"} title={"Conversation line 3, what she asked; include quotation marks"} aria-label={"Conversation line 3, what she asked; include quotation marks"} {...fieldKeys}
               type="text"
               value={answers[2]}
               onChange={(e) => updateAnswer(2, e.target.value)}
@@ -84,7 +84,7 @@ const Unit7_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
           <span>Jenny remarked,</span>
 
           <div className="flex-1">
-            <input title={"Conversation line 4, what Jenny remarked; include quotation marks"} aria-label={"Conversation line 4, what Jenny remarked; include quotation marks"} {...fieldKeys}
+            <input placeholder={"Reply with quotes"} title={"Conversation line 4, what Jenny remarked; include quotation marks"} aria-label={"Conversation line 4, what Jenny remarked; include quotation marks"} {...fieldKeys}
               type="text"
               value={answers[3]}
               onChange={(e) => updateAnswer(3, e.target.value)}

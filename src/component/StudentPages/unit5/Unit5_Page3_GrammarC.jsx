@@ -130,7 +130,7 @@ const Unit4_Page5_GrammarC = () => {
 
 
             <div className="ml-7 relative">
-              <input style={{
+              <input placeholder={"Question"} style={{
             ...(correctLocked[i] ? {
               borderBottomColor: "#16a34a"
             } : {})

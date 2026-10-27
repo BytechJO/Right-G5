@@ -305,7 +305,7 @@ const Unit6_Page5_Q1 = () => {
 
                 {/* INPUT */}
                 <div className="relative mx-2">
-                  <input
+                  <input placeholder={"Word"}
                     aria-invalid={!!(result[i] === false)}
                     style={{
                       ...(result[i] === true

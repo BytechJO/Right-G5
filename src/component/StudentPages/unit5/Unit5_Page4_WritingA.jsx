@@ -84,7 +84,7 @@ const Unit4_Page6_SpeakingA = () => {
                   please get a
                 </span>
 
-                <input {...fieldKeys} title={"Situation 3, food you would politely ask the server to bring instead"} aria-label={"Situation 3, food you would politely ask the server to bring instead"} type="text" value={foodAnswer} onChange={e => setFoodAnswer(e.target.value)} className="border-b border-[#00AEEF] outline-none w-[140px] mx-2 bg-transparent text-[#6D2980] font-semibold text-center" />
+                <input placeholder={"Food"} {...fieldKeys} title={"Situation 3, food you would politely ask the server to bring instead"} aria-label={"Situation 3, food you would politely ask the server to bring instead"} type="text" value={foodAnswer} onChange={e => setFoodAnswer(e.target.value)} className="border-b border-[#00AEEF] outline-none w-[140px] mx-2 bg-transparent text-[#6D2980] font-semibold text-center" />
 
                 <span>instead?</span>
               </div>}
@@ -95,7 +95,7 @@ const Unit4_Page6_SpeakingA = () => {
                 {item.label}
               </span>
 
-              <input {...fieldKeys} title={`Situation ${i + 1}, your polite ${item.label.replace(":", "")} reply: ${item.text}`} aria-label={`Situation ${i + 1}, your polite ${item.label.replace(":", "")} reply: ${item.text}`} type="text" value={answers[i]} onChange={e => updateAnswer(i, e.target.value)} className="border-b border-black outline-none flex-1 px-2 bg-transparent text-[#6D2980] font-semibold" />
+              <input placeholder={"Your polite reply"} {...fieldKeys} title={`Situation ${i + 1}, your polite ${item.label.replace(":", "")} reply: ${item.text}`} aria-label={`Situation ${i + 1}, your polite ${item.label.replace(":", "")} reply: ${item.text}`} type="text" value={answers[i]} onChange={e => updateAnswer(i, e.target.value)} className="border-b border-black outline-none flex-1 px-2 bg-transparent text-[#6D2980] font-semibold" />
             </div>
           </div>)}
       </div>

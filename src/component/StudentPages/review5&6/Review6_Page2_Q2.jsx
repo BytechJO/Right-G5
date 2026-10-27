@@ -281,7 +281,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It could be</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 1"}
                 aria-label={"Your poem, response 1"}
                 {...fieldKeys}
@@ -315,7 +315,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It might be</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 2"}
                 aria-label={"Your poem, response 2"}
                 {...fieldKeys}
@@ -349,7 +349,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Might it be a</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 3"}
                 aria-label={"Your poem, response 3"}
                 {...fieldKeys}
@@ -383,7 +383,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It couldn’t be a</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 4"}
                 aria-label={"Your poem, response 4"}
                 {...fieldKeys}
@@ -417,7 +417,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Will you</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 5"}
                 aria-label={"Your poem, response 5"}
                 {...fieldKeys}
@@ -451,7 +451,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Would you</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 6"}
                 aria-label={"Your poem, response 6"}
                 {...fieldKeys}
@@ -485,7 +485,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>No, let’s</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 7"}
                 aria-label={"Your poem, response 7"}
                 {...fieldKeys}
@@ -519,7 +519,7 @@ const Review6_Page2_Q1 = () => {
             >
               <span>I know!</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 8"}
                 aria-label={"Your poem, response 8"}
                 {...fieldKeys}
@@ -547,7 +547,7 @@ const Review6_Page2_Q1 = () => {
             <div className="flex items-end text-[18px]">
               <span>We could</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 9"}
                 aria-label={"Your poem, response 9"}
                 {...fieldKeys}
@@ -573,7 +573,7 @@ const Review6_Page2_Q1 = () => {
             <div className="flex items-end text-[18px]">
               <span>By</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 10"}
                 aria-label={"Your poem, response 10"}
                 {...fieldKeys}
@@ -601,7 +601,7 @@ const Review6_Page2_Q1 = () => {
             <div className="flex items-end text-[18px]">
               <span>But then we might</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 11"}
                 aria-label={"Your poem, response 11"}
                 {...fieldKeys}
@@ -627,7 +627,7 @@ const Review6_Page2_Q1 = () => {
             <div className="flex items-end text-[18px]">
               <span>Of trying</span>
 
-              <input
+              <input placeholder={"Your line"}
                 title={"Your poem, response 12"}
                 aria-label={"Your poem, response 12"}
                 {...fieldKeys}

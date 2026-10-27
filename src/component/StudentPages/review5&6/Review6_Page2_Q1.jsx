@@ -260,7 +260,7 @@ const Review6_Page2_Q1 = () => {
 
                 {/* ANSWER */}
                 <div className="relative mt-4">
-                  <input
+                  <input placeholder={"Sentence"}
                     aria-invalid={!!(result[i] === false)}
                     style={{
                       ...(result[i] === true

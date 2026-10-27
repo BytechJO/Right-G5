@@ -207,7 +207,7 @@ const Unit6_Page6_Q1 = () => {const audio=useExerciseAudio();const resetButtonRe
                 </div>
 
                 {/* ANSWER */}
-                <input aria-invalid={!!(result[i]===false)} style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
+                <input placeholder={"Your answer"} aria-invalid={!!(result[i]===false)} style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || result[i] === true}

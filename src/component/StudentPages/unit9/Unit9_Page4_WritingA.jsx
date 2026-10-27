@@ -52,7 +52,7 @@ const Unit9_Page4_WritingA = () => {const audio=useExerciseAudio();const resetBu
               <p className="mb-5 leading-relaxed">{question}</p>
 
               {/* answer */}
-              <input title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
+              <input placeholder={"Your answer"} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
                 type="text"
                 value={answers[i]}
                 onChange={(e) => updateAnswer(i, e.target.value)}

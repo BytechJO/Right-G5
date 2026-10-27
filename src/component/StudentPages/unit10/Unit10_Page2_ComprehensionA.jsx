@@ -1,8 +1,100 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit10_Page2_ComprehensionA = () => {
+
+const Unit10_Page2_ComprehensionA = () => {  const [activeCell, setActiveCell] = useState("0-3");
+  const focusFrame = React.useRef(null);
+  const cancelFocus = () => {
+    if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    focusFrame.current = null;
+  };
+  const cellWords = (row, col) =>
+    words.filter((word) =>
+      Array.from(word.word).some(
+        (_, i) =>
+          (word.dir === "down" ? word.row + i : word.row) === row &&
+          (word.dir === "across" ? word.col + i : word.col) === col,
+      ),
+    );
+  const cellLocked = (row, col) =>
+    locked || cellWords(row, col).some((word) => result[word.key] === true);
+  const moveCell = (row, col, dr, dc) => {
+    let r = row + dr,
+      c = col + dc;
+    while (r >= 0 && r < 10 && c >= 0 && c < 12) {
+      if (isCellActive(r, c) && !cellLocked(r, c)) {
+        const key = r + "-" + c;
+        setActiveCell(key);
+        cancelFocus();
+        focusFrame.current = requestAnimationFrame(() => {
+          focusFrame.current = null;
+          inputsRef.current[key]?.focus({ preventScroll: true });
+        });
+        return;
+      }
+      r += dr;
+      c += dc;
+    }
+  };
+  const cellKey = (event, row, col) => {
+    if (event.key === "Tab") return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat) {
+        const next = direction === "across" ? "down" : "across";
+        setDirection(next);
+        setAnnouncement(
+          "Writing " + next + ". Arrow keys move between available letters.",
+        );
+      }
+      return;
+    }
+    const steps = {
+      ArrowLeft: [0, -1],
+      ArrowRight: [0, 1],
+      ArrowUp: [-1, 0],
+      ArrowDown: [1, 0],
+    };
+    if (steps[event.key]) {
+      event.preventDefault();
+      event.stopPropagation();
+      const [dr, dc] = steps[event.key];
+      setDirection(dr ? "down" : "across");
+      moveCell(row, col, dr, dc);
+      return;
+    }
+    if (event.key === "Backspace" || event.key === "Delete") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat && !cellLocked(row, col)) {
+        handleChange(row, col, "");
+        if (event.key === "Backspace")
+          moveCell(
+            row,
+            col,
+            direction === "across" ? 0 : -1,
+            direction === "across" ? -1 : 0,
+          );
+      }
+    }
+  };
+  React.useEffect(
+    () => () => {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    },
+    [],
+  );
+
+const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const [result, setResult] = useState({});
   const [locked, setLocked] = useState(false);
   const inputsRef = React.useRef({});
@@ -20,29 +112,31 @@ const Unit10_Page2_ComprehensionA = () => {
     { key: "d4", word: "cheery", row: 2, col: 1, dir: "down" },
     { key: "a5", word: "neighed", row: 5, col: 0, dir: "across" },
   ];
-  const normalize = (str) => str.toLowerCase().trim();
+  const normalize = normalizeAnswer;
 
   // ✅ change
   const handleChange = (row, col, value) => {
-    if (locked) return;
-
-    const newGrid = grid.map((r) => [...r]);
-    newGrid[row][col] = value;
-    setGrid(newGrid);
-
-    if (value) {
-      let next = null;
-
-      if (direction === "across") {
-        next = inputsRef.current[`${row}-${col + 1}`];
-      }
-
-      if (direction === "down") {
-        next = inputsRef.current[`${row + 1}-${col}`];
-      }
-
-      if (next) next.focus();
-    }
+    if (cellLocked(row, col)) return;
+    const letter = value.slice(-1);
+    if (letter && !/^[a-z]$/i.test(letter)) return;
+    setGrid((previous) =>
+      previous.map((line, r) =>
+        r === row ? line.map((v, c) => (c === col ? letter : v)) : line,
+      ),
+    );
+    setResult((previous) => {
+      const next = { ...previous };
+      for (const word of cellWords(row, col))
+        if (next[word.key] !== true) delete next[word.key];
+      return next;
+    });
+    if (letter)
+      moveCell(
+        row,
+        col,
+        direction === "across" ? 0 : 1,
+        direction === "across" ? 1 : 0,
+      );
   };
 
   // ✅ check active cell
@@ -58,8 +152,8 @@ const Unit10_Page2_ComprehensionA = () => {
   };
 
   // ✅ check answers
-  const checkAnswers = () => {
-    if (locked) return;
+  const checkAnswers = () => {cancelFocus();
+    if (locked) return;audio.stop();
 
     // تحقق تعبئة
     for (let w of words) {
@@ -68,7 +162,7 @@ const Unit10_Page2_ComprehensionA = () => {
         const c = w.dir === "across" ? w.col + i : w.col;
 
         if (!grid[r][c]) {
-          ValidationAlert.info("Please complete all fields.");
+          (setAnnouncement(String("Please complete all fields.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all fields."));
           return;
         }
       }
@@ -108,17 +202,17 @@ const Unit10_Page2_ComprehensionA = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
-      ValidationAlert.success(msg);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // ✅ show answers
-  const showAnswers = () => {
+  const showAnswers = () => {cancelFocus();audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     const newGrid = grid.map((r) => [...r]);
 
     words.forEach((w) => {
@@ -130,12 +224,12 @@ const Unit10_Page2_ComprehensionA = () => {
       }
     });
 
-    setResult({});
+    setResult(Object.fromEntries(words.map(word=>[word.key,true])));
     setGrid(newGrid);
     setLocked(true);
   };
 
-  const reset = () => {
+  const reset = () => {setActiveCell("0-3");setDirection("across");cancelFocus();audio.stop();setAnnouncement("Answers and feedback cleared.");
     setGrid(
       Array(10)
         .fill("")
@@ -155,7 +249,7 @@ const Unit10_Page2_ComprehensionA = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit10_Page2_ComprehensionA.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit10_Page2_ComprehensionA.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page2_ComprehensionA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page2_ComprehensionA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-10">
         <span className="ex-A-read mr-2">A</span>
@@ -247,7 +341,7 @@ const Unit10_Page2_ComprehensionA = () => {
                   )}
 
                   {active && (
-                    <input
+                    <input style={{...(cellWords(row,col).some(w=>result[w.key]===true)?{boxShadow:"inset 0 0 0 2px #16a34a"}:{})}} aria-invalid={!cellLocked(row,col)&&cellWords(row,col).some(w=>result[w.key]===false)} title={`Crossword row ${row+1}, column ${col+1}`} aria-label={`Crossword row ${row+1}, column ${col+1}. ${cellWords(row,col).map(word=>word.dir+" "+word.key).join("; ")}`} onKeyDown={event=>cellKey(event,row,col)} tabIndex={activeCell===`${row}-${col}`?0:-1} onKeyUp={fieldKeys.onKeyUp}
                       ref={(el) => (inputsRef.current[`${row}-${col}`] = el)}
                       onClick={() => {
                         if (inputsRef.current[`${row}-${col + 1}`]) {
@@ -256,24 +350,10 @@ const Unit10_Page2_ComprehensionA = () => {
                           setDirection("down");
                         }
                       }}
-                      onFocus={(e) => e.target.select()} // 🔥 المهم
+                      onFocus={event=>{setActiveCell(`${row}-${col}`);event.target.select();}} // 🔥 المهم
                       value={grid[row][col]}
                       maxLength={1}
-                      disabled={
-                        locked ||
-                        words.some((w) => {
-                          if (result[w.key] !== true) return false;
-
-                          for (let i = 0; i < w.word.length; i++) {
-                            const r = w.dir === "down" ? w.row + i : w.row;
-                            const c = w.dir === "across" ? w.col + i : w.col;
-
-                            if (r === row && c === col) return true;
-                          }
-
-                          return false;
-                        })
-                      }
+                      disabled={cellLocked(row,col)}
                       onChange={(e) =>
                         handleChange(row, col, e.target.value.toLowerCase())
                       }
@@ -317,14 +397,14 @@ const Unit10_Page2_ComprehensionA = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={reset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -333,14 +413,14 @@ const Unit10_Page2_ComprehensionA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={showAnswers}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -349,14 +429,14 @@ const Unit10_Page2_ComprehensionA = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={checkAnswers}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

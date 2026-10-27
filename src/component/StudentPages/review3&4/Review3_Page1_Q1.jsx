@@ -175,7 +175,7 @@ const Review3_Page1_Q1 = () => {
         position: "relative",
       }}
     >
-      <input
+      <input placeholder={"Word"}
         {...fieldKeys}
         aria-invalid={errors[i]}
         title={`Sentence ${i + 1}, word from the bank: ${sentences[i].before} blank ${sentences[i].after}`}

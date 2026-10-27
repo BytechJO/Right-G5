@@ -1,8 +1,59 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_001_mirror.mp3";
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_002_alarm.mp3";
+import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_003_counting.mp3";
+import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_004_right_away.mp3";
+import clip4 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_005_Uh-oh!.mp3";
+import clip5 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_006_I_dropped_my_papers_on_the_floor.mp3";
+import clip6 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_007_I_did_not_hear_the_go_off_at_7_00_a.m.mp3";
+import clip7 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_008_Look_at_your_face_in_the.mp3";
+import clip8 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_009_I_know_you_need_it_fast,_so_I_will_do_it.mp3";
+import clip9 from "../../../assets/audio/Workbook/Unit 1/Page 3 - A/Item_010_He_was_the_number_of_apples_in_the_basket.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit1_Page3_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = ["Uh-oh!", "alarm", "mirror", "right away", "counting"];
 
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
@@ -11,12 +62,7 @@ const WB_Unit1_Page3_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -38,11 +84,18 @@ const WB_Unit1_Page3_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -73,17 +126,39 @@ const WB_Unit1_Page3_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers(["Uh-oh!", "alarm", "mirror", "right away", "counting"]);
 
     setResult([true, true, true, true, true]);
@@ -92,6 +167,8 @@ const WB_Unit1_Page3_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
 
     setResult([]);
@@ -102,6 +179,14 @@ const WB_Unit1_Page3_Q1 = () => {
   const inputField = (i, width) => (
     <span className="relative inline-block">
       <input
+        placeholder={"Word / phrase"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Sentence ${i + 1}, vocabulary word or expression from the boxes`}
+        aria-label={`Sentence ${i + 1}, vocabulary word or expression from the boxes`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -158,28 +243,51 @@ const WB_Unit1_Page3_Q1 = () => {
         textAlign: "center",
       }}
     >
-      {word}
+      <AudioText
+        audio={audio}
+        id={`bank-${word}`}
+        src={
+          {
+            mirror: clip0,
+            alarm: clip1,
+            counting: clip2,
+            "right away": clip3,
+            "Uh-oh!": clip4,
+          }[word]
+        }
+        label={`Hear ${word}`}
+      >
+        {word}
+      </AudioText>
     </div>
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"WB_Unit1_Page3_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page3_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page3_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page3_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div className="div-forall text-[18px]">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-17">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
-          Read and write.
-        </h5>
+        <ExerciseHeader
+          subTitle="Read the full sentence first, then choose the word or expression that fits both the meaning and grammar."
+          isWorkbook
+          sectionLetter="A"
+          title={<>Read and write.</>}
+        />
 
         {/* WORD BOXES */}
-        <div className="flex gap-5 mb-12 flex-wrap">
+        <div className="flex gap-5 mb-7 flex-wrap">
           {wordBox("mirror")}
           {wordBox("alarm")}
           {wordBox("counting")}
@@ -190,16 +298,28 @@ const WB_Unit1_Page3_Q1 = () => {
         {/* QUESTIONS */}
         <div className="flex flex-col gap-10">
           {/* 1 */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <SentenceGroup
+            label={"Hear sentence 1"}
+            src={clip5}
+            id={"sentence-0"}
+            audio={audio}
+            className="flex items-center gap-3 flex-wrap"
+          >
             <span className="font-bold">1</span>
 
             {inputField(0, "w-[180px]")}
 
             <span>I dropped my papers on the floor.</span>
-          </div>
+          </SentenceGroup>
 
           {/* 2 */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <SentenceGroup
+            label={"Hear sentence 2"}
+            src={clip6}
+            id={"sentence-1"}
+            audio={audio}
+            className="flex items-center gap-3 flex-wrap"
+          >
             <span className="font-bold">2</span>
 
             <span>I did not hear the</span>
@@ -207,10 +327,16 @@ const WB_Unit1_Page3_Q1 = () => {
             {inputField(1, "w-[180px]")}
 
             <span>go off at 7:00 a.m.</span>
-          </div>
+          </SentenceGroup>
 
           {/* 3 */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <SentenceGroup
+            label={"Hear sentence 3"}
+            src={clip7}
+            id={"sentence-2"}
+            audio={audio}
+            className="flex items-center gap-3 flex-wrap"
+          >
             <span className="font-bold">3</span>
 
             <span>Look at your face in the</span>
@@ -218,10 +344,16 @@ const WB_Unit1_Page3_Q1 = () => {
             {inputField(2, "w-[170px]")}
 
             <span>.</span>
-          </div>
+          </SentenceGroup>
 
           {/* 4 */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <SentenceGroup
+            label={"Hear sentence 4"}
+            src={clip8}
+            id={"sentence-3"}
+            audio={audio}
+            className="flex items-center gap-3 flex-wrap"
+          >
             <span className="font-bold">4</span>
 
             <span>I know you need it fast, so I will do it</span>
@@ -229,10 +361,16 @@ const WB_Unit1_Page3_Q1 = () => {
             {inputField(3, "w-[180px]")}
 
             <span>.</span>
-          </div>
+          </SentenceGroup>
 
           {/* 5 */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <SentenceGroup
+            label={"Hear sentence 5"}
+            src={clip9}
+            id={"sentence-4"}
+            audio={audio}
+            className="flex items-center gap-3 flex-wrap"
+          >
             <span className="font-bold">5</span>
 
             <span>He was</span>
@@ -240,21 +378,42 @@ const WB_Unit1_Page3_Q1 = () => {
             {inputField(4, "w-[180px]")}
 
             <span>the number of apples in the basket.</span>
-          </div>
+          </SentenceGroup>
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

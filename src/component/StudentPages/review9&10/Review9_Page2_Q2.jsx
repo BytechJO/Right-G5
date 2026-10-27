@@ -1,8 +1,21 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 89 - E/Item_001_,_we_can_play_soccer_at_the_field.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 89 - E/Item_002_,_Victor_will_be_in_first_place.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 89 - E/Item_003_I'll_go_with_you_tomorrow.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 89 - E/Item_004_Susan_can_go_swimming.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 89/SVG/Asset 13.svg";
-const Review9_Page2_Q2 = () => {
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+
+const Review9_Page2_Q2 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "If we finish our homework",
     "If he pushes himself hard enough",
@@ -16,12 +29,7 @@ const Review9_Page2_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -42,12 +50,12 @@ const Review9_Page2_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -78,17 +86,17 @@ const Review9_Page2_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       "If we finish our homework",
       "If he pushes himself hard enough",
@@ -101,7 +109,7 @@ const Review9_Page2_Q2 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -111,7 +119,7 @@ const Review9_Page2_Q2 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"If / when clause"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Sentence ${i+1}, write an if or when clause`} aria-label={`Sentence ${i+1}, write an if or when clause`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -158,41 +166,32 @@ const Review9_Page2_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Review9_Page2_Q2.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Review9_Page2_Q2.jsx"] input:focus-visible,[data-exercise-scope="Review9_Page2_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Review9_Page2_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div
         className="div-forall "
         style={{
-          minHeight: "63vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+         gap:"50px"
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 ">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
+        <ExerciseHeader isReview sectionLetter="E" title={<>
+          
           Write an <span className="text-[#1ea7ff]">if</span> or{" "}
           <span className="text-[#1ea7ff]">when</span> clause for the sentences
           below.
-        </h5>
+        </>} subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."/>
 
         {/* QUESTIONS + IMAGE */}
         <div className="flex flex-row gap-3 text-[18px] ">
           {/* LEFT SIDE */}
-          <div className="flex flex-col gap-15">
+          <div className="flex flex-col gap-10">
             {/* 1 */}
             <div className="flex items-center gap-4 flex-wrap">
               <span className="font-bold">1</span>
 
               {inputField(0, "w-[330px]")}
 
-              <span>, we can play soccer at the field.</span>
+              <span><AudioText audio={audio} id={"audio-0"} src={clip0} label={"Hear , we can play soccer at the field."}>, we can play soccer at the field.</AudioText></span>
             </div>
 
             {/* 2 */}
@@ -201,14 +200,14 @@ const Review9_Page2_Q2 = () => {
 
               {inputField(1, "w-[340px]")}
 
-              <span>, Victor will be in first place.</span>
+              <span><AudioText audio={audio} id={"audio-1"} src={clip1} label={"Hear , Victor will be in first place."}>, Victor will be in first place.</AudioText></span>
             </div>
 
             {/* 3 */}
             <div className="flex items-center gap-4 flex-wrap">
               <span className="font-bold">3</span>
 
-              <span>I’ll go with you tomorrow</span>
+              <span><AudioText audio={audio} id={"audio-2"} src={clip2} label={"Hear I’ll go with you tomorrow"}>I’ll go with you tomorrow</AudioText></span>
 
               {inputField(2, "w-[260px]")}
             </div>
@@ -217,7 +216,7 @@ const Review9_Page2_Q2 = () => {
             <div className="flex items-center gap-4 flex-wrap">
               <span className="font-bold">4</span>
 
-              <span>Susan can go swimming</span>
+              <span><AudioText audio={audio} id={"audio-3"} src={clip3} label={"Hear Susan can go swimming"}>Susan can go swimming</AudioText></span>
 
               {inputField(3, "w-[360px]")}
             </div>
@@ -226,7 +225,7 @@ const Review9_Page2_Q2 = () => {
           {/* IMAGE */}
           <img
             src={img}
-            alt="soccer"
+            alt={"A child kicking a soccer ball toward a goalkeeper beside a net."}
             style={{
               width: "250px",
               height: "auto",
@@ -238,15 +237,15 @@ const Review9_Page2_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -177,7 +177,7 @@ const Unit8_Page6_Q3 = () => {
 
   const sentenceInput = (i) => (
     <span className="relative flex-1">
-      <input
+      <input placeholder={"Sentence"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

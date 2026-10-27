@@ -30,7 +30,7 @@ const WritingC = () => {const audio=useExerciseAudio();const resetButtonRef=Reac
         value={text}
         onChange={(e) => setText(e.target.value)}
         className="w-full h-[120px] border border-gray-300 p-2 mt-3 outline-none resize-none"
-        placeholder="Write your paragraph here..."
+        placeholder={"Write your mystery here..."}
       />
 
       {/* Reset Icon */}

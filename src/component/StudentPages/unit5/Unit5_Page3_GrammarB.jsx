@@ -89,7 +89,7 @@ const Unit4_Page5_GrammarB = () => {
 
             {/* INPUT + TEXT */}
             <div className="relative flex-1 flex items-center">
-              <input style={{
+              <input placeholder={"Sentence"} style={{
             ...(correctLocked[i] ? {
               borderBottomColor: "#16a34a"
             } : {})

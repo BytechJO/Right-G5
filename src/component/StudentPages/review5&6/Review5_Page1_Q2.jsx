@@ -414,7 +414,7 @@ const Review5_Page1_Q2 = () => {
 
                   {/* CORRECTION */}
                   <div className="relative">
-                    <input
+                    <input placeholder={"Correction"}
                       aria-invalid={!!(result[i]?.correction === false)}
                       style={{
                         ...(result[i]?.correction === true

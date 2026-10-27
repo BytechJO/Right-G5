@@ -137,7 +137,7 @@ const Review1_Page2_Q3 = () => {
   // 🎯 input
   const input = (i, width = "300px") => (
     <span style={{ position: "relative", marginLeft: "6px" }}>
-      <input
+      <input placeholder={"Answer"}
         {...fieldKeys}
         aria-label={
           [

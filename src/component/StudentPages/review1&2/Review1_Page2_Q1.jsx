@@ -162,7 +162,7 @@ const Page_D_Questions = () => {
   // 🎯 input
   const input = (i, field, width = "350px") => (
     <span className="relative inline-block mx-2">
-      <input
+      <input placeholder={field==="q"?"Question":"Answer"}
         {...fieldKeys}
         aria-label={
           [

@@ -212,7 +212,7 @@ const Unit7_Page5_Q2 = () => {
                 </SentenceGroup>
 
                 <div className="relative">
-                  <input
+                  <input placeholder={"Sentence"}
                     style={{
                       ...(result[i] === true
                         ? { borderBottomColor: "#16a34a" }

@@ -177,7 +177,7 @@ const Review7_Page2_Q1 = () => {
 
   const sentenceInput = (i, width) => (
     <span className="relative inline-block w-full">
-      <input
+      <input placeholder={"Sentence"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

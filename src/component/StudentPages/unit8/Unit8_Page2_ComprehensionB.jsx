@@ -90,7 +90,7 @@ const Unit8_Page2_ComprehensionB = () => {const audio=useExerciseAudio();const r
       <div className="grid grid-cols-5 gap-6">
         {answers.map((answer, i) => (
           <div key={i} className="relative">
-            <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Word ${i+1}, combine parts from the box to make an indefinite pronoun`} aria-label={`Word ${i+1}, combine parts from the box to make an indefinite pronoun`} {...fieldKeys}
+            <input placeholder={"Pronoun"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Word ${i+1}, combine parts from the box to make an indefinite pronoun`} aria-label={`Word ${i+1}, combine parts from the box to make an indefinite pronoun`} {...fieldKeys}
               type="text"
               value={answer}
               disabled={locked || correctLocked[i]}

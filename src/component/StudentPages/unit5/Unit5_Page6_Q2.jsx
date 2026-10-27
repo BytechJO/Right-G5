@@ -263,7 +263,7 @@ const Unit5_Page6_Q2 = () => {
               <div className="text-[18px] flex-1">{q}</div>
               {/* ANSWER INPUT */}
               <div className="relative">
-                <input style={{
+                <input placeholder={"True/false"} style={{
               ...(result[i] === true ? {
                 borderColor: "#16a34a"
               } : {})

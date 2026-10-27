@@ -184,7 +184,7 @@ const Unit9_Page2_ComprehensionB = () => {const audio=useExerciseAudio();const r
 
               {/* input */}
               <div className="relative flex-1">
-                <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, missing word: ${sentences[i].before} … ${sentences[i].after}`} aria-label={`Sentence ${i+1}, missing word: ${sentences[i].before} … ${sentences[i].after}`} {...fieldKeys}
+                <input placeholder={"Word"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, missing word: ${sentences[i].before} … ${sentences[i].after}`} aria-label={`Sentence ${i+1}, missing word: ${sentences[i].before} … ${sentences[i].after}`} {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || correctLocked[i]}

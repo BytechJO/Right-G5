@@ -184,7 +184,7 @@ const Review5_Page2_Q3 = () => {
 
   const renderInput = (index) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Word"}
         aria-invalid={!!(result[index] === false)}
         title={`Poem blank ${index + 1}, use words from the box`}
         aria-label={`Poem blank ${index + 1}, use words from the box`}

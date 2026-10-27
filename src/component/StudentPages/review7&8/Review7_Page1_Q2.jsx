@@ -172,7 +172,7 @@ const Review7_Page1_Q2 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"True/false"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

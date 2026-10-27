@@ -355,7 +355,7 @@ const Review3_Page1_Q3 = () => {
                 ...(leftLocked[index] ? {
                   borderBottomColor: "#16a34a"
                 } : {})
-              }} {...fieldKeys} aria-invalid={leftErrors[index]} title={`Ladder rung ${index + 1}, left missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, left missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || leftLocked[index]} value={item.leftWord} placeholder="write here" onChange={e => handleChange(index, "left", e.target.value)} className={`w-[5vw] border-b bg-transparent text-center text-[18px] font-semibold outline-none placeholder:text-[1vw]
+              }} {...fieldKeys} aria-invalid={leftErrors[index]} title={`Ladder rung ${index + 1}, left missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, left missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || leftLocked[index]} value={item.leftWord} placeholder={"Word"} onChange={e => handleChange(index, "left", e.target.value)} className={`w-[5vw] border-b bg-transparent text-center text-[18px] font-semibold outline-none placeholder:text-[1vw]
 
                       ${leftErrors[index] ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
                     `} />
@@ -378,7 +378,7 @@ const Review3_Page1_Q3 = () => {
                 ...(rightLocked[index] ? {
                   borderBottomColor: "#16a34a"
                 } : {})
-              }} {...fieldKeys} aria-invalid={rightErrors[index]} title={`Ladder rung ${index + 1}, right missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, right missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || rightLocked[index]} value={item.rightWord} placeholder="write here" onChange={e => handleChange(index, "right", e.target.value)} className={`w-[5vw] border-b bg-transparent text-center text-[18px] font-semibold outline-none placeholder:text-[1vw]
+              }} {...fieldKeys} aria-invalid={rightErrors[index]} title={`Ladder rung ${index + 1}, right missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, right missing word: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || rightLocked[index]} value={item.rightWord} placeholder={"Word"} onChange={e => handleChange(index, "right", e.target.value)} className={`w-[5vw] border-b bg-transparent text-center text-[18px] font-semibold outline-none placeholder:text-[1vw]
 
                       ${rightErrors[index] ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
                     `} />
@@ -401,7 +401,7 @@ const Review3_Page1_Q3 = () => {
                 ...(answerLocked[index] ? {
                   borderBottomColor: "#16a34a"
                 } : {})
-              }} {...fieldKeys} aria-invalid={answerErrors[index]} title={`Ladder rung ${index + 1}, write the complete expression: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, write the complete expression: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || answerLocked[index]} value={item.answer} placeholder="write here" onChange={e => handleChange(index, "answer", e.target.value)} className={`w-[10vw] border-b bg-transparent text-center text-[20px] font-semibold outline-none placeholder:text-[1vw]
+              }} {...fieldKeys} aria-invalid={answerErrors[index]} title={`Ladder rung ${index + 1}, write the complete expression: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} aria-label={`Ladder rung ${index + 1}, write the complete expression: ${item.missingLeft ? "blank" : item.leftWord} ${item.missingRight ? "blank" : item.rightWord}`} type="text" disabled={locked || answerLocked[index]} value={item.answer} placeholder={"Expression"} onChange={e => handleChange(index, "answer", e.target.value)} className={`w-[10vw] border-b bg-transparent text-center text-[20px] font-semibold outline-none placeholder:text-[1vw]
 
                     ${answerErrors[index] ? "border-red-500 text-[#6D2980]" : "border-black text-[#6D2980]"}
                   `} />

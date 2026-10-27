@@ -1,146 +1,352 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 4 - D/Item_001_pancakes.mp3";
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 4 - D/Item_002_notebook.mp3";
+import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 4 - D/Item_003_mirror.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 4/SVG/Asset 1.svg";
 import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 4/SVG/Asset 2.svg";
 import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 4/SVG/Asset 3.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
 
 const WB_Unit1_Page4_Q2 = () => {
-  const [selectedImg, setSelectedImg] = useState(null);
-  const [matches, setMatches] = useState({});
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
-  const [validatedMatches, setValidatedMatches] = useState({});
-  const imageRefs = useRef([]);
-  const sentenceRefs = useRef([]);
-  const containerRef = useRef(null);
-
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const images = [
     { id: 0, img: img1 },
     { id: 1, img: img2 },
     { id: 2, img: img3 },
   ];
-
   const sentences = [
     { id: 0, text: "mirror" },
     { id: 1, text: "pancakes" },
     { id: 2, text: "notebook" },
   ];
-
   const correct = {
     0: 2,
     1: 0,
     2: 1,
   };
-
-  const selectImage = (id) => {
-    if (showResult && validatedMatches[id] === correct[id]) return;
-
-    setSelectedImg(id);
-
-    // أول ما يبدأ يعدل شيل التقييم القديم
-    setValidatedMatches((prev) => {
-      const updated = { ...prev };
-      delete updated[id];
-      return updated;
+  const imageDescriptions = [
+    "A closed brown notebook.",
+    "An oval mirror above two drawers.",
+    "A stack of pancakes with chocolate topping and red fruit.",
+  ];
+  const [matches, setMatches] = useState({}),
+    [pairResults, setPairResults] = useState({}),
+    [selection, setSelection] = useState(null),
+    [preview, setPreview] = useState(null),
+    [locked, setLocked] = useState(false);
+  const leftControlRefs = useRef({}),
+    rightControlRefs = useRef({}),
+    imageRefs = useRef([]),
+    sentenceRefs = useRef([]),
+    containerRef = useRef(null),
+    focusFrame = useRef(null);
+  const [, setGeometry] = useState(0);
+  const mapping = correct,
+    leftIds = images.map((item) => item.id),
+    rightIds = sentences.map((item) => item.id);
+  const clearSelection = () => {
+    cancelFocus();
+    setSelection(null);
+    setPreview(null);
+  };
+  const selectedImg = selection?.side === "left" ? selection.id : null;
+  const showResult = locked || Object.keys(pairResults).length > 0;
+  const validatedMatches = Object.fromEntries(
+    Object.keys(pairResults).map((id) => [id, matches[id]]),
+  );
+  const describe = (side, id) =>
+    side === "left" ? imageDescriptions[id] : sentences[id].text;
+  const cancelFocus = () => {
+    if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    focusFrame.current = null;
+  };
+  const queueFocus = (callback) => {
+    cancelFocus();
+    focusFrame.current = requestAnimationFrame(() => {
+      focusFrame.current = null;
+      callback();
     });
   };
-
-  const selectSentence = (id) => {
-    if (selectedImg === null) return;
-
-    // إذا الصورة مثبتة صح لا تعدلها
-    if (showResult && validatedMatches[selectedImg] === correct[selectedImg]) {
-      setSelectedImg(null);
-      return;
-    }
-
-    // إذا الجملة مثبتة صح لا تستخدمها
-    const alreadyCorrectlyUsed =
-      showResult &&
-      Object.entries(validatedMatches).some(
-        ([imgId, sentId]) =>
-          Number(sentId) === id &&
-          correct[imgId] === Number(sentId) &&
-          Number(imgId) !== selectedImg,
+  const leftLocked = (id) => locked || pairResults[id] === true;
+  const rightLocked = (id) =>
+    locked ||
+    Object.entries(matches).some(
+      ([key, value]) => value === id && pairResults[key] === true,
+    );
+  const resultDescription = (side, id) => {
+    const source =
+      side === "left"
+        ? id
+        : Object.keys(matches).find((key) => matches[key] === id);
+    if (isLocked(side, id)) return ". Correct and locked.";
+    if (source !== undefined && pairResults[source] === false)
+      return ". Not correct. Choose another partner.";
+    if (source !== undefined && Object.hasOwn(matches, source))
+      return ". Connected, not checked.";
+    return ". Not connected.";
+  };
+  const isLocked = (side, id) =>
+    side === "left" ? leftLocked(id) : rightLocked(id);
+  const focusSide = (side, showPreview = false, currentMatches = matches) => {
+    const available = (side === "left" ? leftIds : rightIds).filter(
+      (id) => !isLocked(side, id),
+    );
+    const id =
+      available.find((id) =>
+        side === "left"
+          ? !Object.hasOwn(currentMatches, id)
+          : !Object.values(currentMatches).includes(id),
+      ) ?? available[0];
+    if (id !== undefined) {
+      if (showPreview)
+        setPreview({
+          side,
+          id,
+        });
+      (side === "left" ? leftControlRefs : rightControlRefs).current[id]?.focus(
+        {
+          preventScroll: true,
+        },
       );
-
-    if (alreadyCorrectlyUsed) {
+    }
+  };
+  const connect = (leftId, rightId, keyboard) => {
+    if (leftLocked(leftId) || rightLocked(rightId)) return;
+    const affected = [
+      String(leftId),
+      ...Object.keys(matches).filter(
+        (key) => matches[key] === rightId && !leftLocked(key),
+      ),
+    ];
+    const nextMatches = { ...matches };
+    affected.forEach((key) => delete nextMatches[key]);
+    nextMatches[leftId] = rightId;
+    setMatches(nextMatches);
+    setPairResults((previous) => {
+      const next = {
+        ...previous,
+      };
+      affected.forEach((key) => delete next[key]);
+      return next;
+    });
+    clearSelection();
+    setAnnouncement(
+      `${describe("left", leftId)} connected to ${describe("right", rightId)}. Correct checked pairs stay locked.`,
+    );
+    if (keyboard) queueFocus(() => focusSide("right", false, nextMatches));
+  };
+  const choose = (side, id, keyboard = false) => {
+    if (side === "right")
+      audio.play(`match-word-${id}`, [clip2, clip0, clip1][id]);
+    if (isLocked(side, id)) {
+      setAnnouncement(`${id}. This match is correct and locked.`);
       return;
     }
-
-    setMatches((prev) => {
-      const updated = { ...prev };
-
-      // احذف الربط القديم لنفس الكلمة
-      Object.keys(updated).forEach((imgKey) => {
-        // إذا الكلمة مستخدمة بصورة ثانية
-        if (updated[imgKey] === id) {
-          // إذا الصورة مثبتة صح لا تحذفها
-          if (showResult && validatedMatches[imgKey] === correct[imgKey]) {
-            return;
-          }
-
-          // غير هيك احذف الربط القديم
-          delete updated[imgKey];
-        }
-      });
-
-      updated[selectedImg] = id;
-
-      return updated;
+    cancelFocus();
+    if (selection?.side === side && selection.id === id) {
+      clearSelection();
+      setAnnouncement("Match cancelled.");
+      return;
+    }
+    if (selection && selection.side !== side) {
+      connect(
+        side === "left" ? id : selection.id,
+        side === "right" ? id : selection.id,
+        keyboard,
+      );
+      return;
+    }
+    setSelection({
+      side,
+      id,
     });
-
-    setSelectedImg(null);
+    setPreview(null);
+    setAnnouncement(
+      `${describe(side, id)} selected. Choose its matching partner, or press Escape to cancel.`,
+    );
+    if (keyboard)
+      queueFocus(() => focusSide(side === "left" ? "right" : "left", true));
+  };
+  const endpointKey = (event, side, id) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat) choose(side, id, true);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      const source = selection;
+      clearSelection();
+      setAnnouncement("Match cancelled.");
+      if (source)
+        (source.side === "left" ? leftControlRefs : rightControlRefs).current[
+          source.id
+        ]?.focus({
+          preventScroll: true,
+        });
+    } else if (
+      ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      const ids = (side === "left" ? leftIds : rightIds).filter(
+        (id) => !isLocked(side, id),
+      );
+      if (!ids.length) return;
+      const step =
+        event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+      (side === "left" ? leftControlRefs : rightControlRefs).current[
+        ids[(ids.indexOf(id) + step + ids.length) % ids.length]
+      ]?.focus({
+        preventScroll: true,
+      });
+    }
+  };
+  const previewAt = (side, id) => {
+    if (selection && selection.side !== side && !isLocked(side, id))
+      setPreview({ side, id });
   };
   const checkAnswers = () => {
     if (locked) return;
-
-    if (Object.keys(matches).length !== images.length) {
-      ValidationAlert.info("Please match all.");
+    audio.stop();
+    clearSelection();
+    if (!leftIds.every((id) => Object.hasOwn(matches, id))) {
+      setAnnouncement("Please match all items.");
+      ValidationAlert.info("Please match all items.");
       return;
     }
-
-    let correctCount = 0;
-
-    Object.entries(matches).forEach(([imgId, sentId]) => {
-      if (correct[imgId] === sentId) correctCount++;
-    });
-
-    const total = images.length;
-
-    const message = `
-        Score: ${correctCount} / ${total}
-  `;
-
-    if (correctCount === total) {
+    const next = Object.fromEntries(
+      leftIds.map((id) => [
+        id,
+        pairResults[id] === true || matches[id] === mapping[id],
+      ]),
+    );
+    setPairResults(next);
+    const score = Object.values(next).filter(Boolean).length,
+      total = leftIds.length;
+    const message = `Score: ${score} / ${total}`;
+    setAnnouncement(
+      message +
+        (score === total
+          ? ". All matches are correct and locked."
+          : ". Incorrect pairs can be changed."),
+    );
+    if (score === total) {
+      resetButtonRef.current?.focus({
+        preventScroll: true,
+      });
       setLocked(true);
       ValidationAlert.success(message);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(message);
-    } else {
-      ValidationAlert.warning(message);
-    }
-    setValidatedMatches(matches);
-    setShowResult(true);
+    } else if (score === 0) ValidationAlert.error(message);
+    else ValidationAlert.warning(message);
   };
-
   const showAnswers = () => {
-    setMatches(correct);
+    audio.stop();
+    clearSelection();
+    setMatches({ ...mapping });
+    setPairResults(Object.fromEntries(leftIds.map((id) => [id, true])));
     setLocked(true);
-    setShowResult(true);
+    setAnnouncement("Correct matches shown and locked.");
   };
-
   const reset = () => {
-    setSelectedImg(null);
-    setValidatedMatches({});
+    audio.stop();
+    clearSelection();
     setMatches({});
-    setShowResult(false);
+    setPairResults({});
     setLocked(false);
+    setAnnouncement("Matches and feedback cleared.");
   };
-
+  const anchor = (side, id) => {
+    const element = (side === "left" ? imageRefs : sentenceRefs).current[id],
+      container = containerRef.current;
+    if (!element || !container) return null;
+    const r = element.getBoundingClientRect(),
+      b = container.getBoundingClientRect();
+    if (!b.width || !b.height) return null;
+    return {
+      x: (r.left + r.width / 2 - b.left) * (container.clientWidth / b.width),
+      y: (r.top + r.height / 2 - b.top) * (container.clientHeight / b.height),
+    };
+  };
+  const line = (leftId, rightId, dashed = false) => {
+    const a = anchor("left", leftId),
+      b = anchor("right", rightId);
+    return a && b ? (
+      <line
+        key={
+          (dashed ? "preview-" : "line-") +
+          String(leftId) +
+          "-" +
+          String(rightId)
+        }
+        x1={a.x}
+        y1={a.y}
+        x2={b.x}
+        y2={b.y}
+        stroke={
+          dashed
+            ? "#2563eb"
+            : pairResults[leftId] === true
+              ? "#16a34a"
+              : pairResults[leftId] === false
+                ? "#ef4444"
+                : "#6D2980"
+        }
+        strokeWidth="2.5"
+        strokeDasharray={dashed ? "6 3" : undefined}
+        strokeLinecap="round"
+      />
+    ) : null;
+  };
+  React.useEffect(
+    () => () => {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+      focusFrame.current = null;
+    },
+    [],
+  );
+  React.useEffect(() => {
+    const refresh = () => setGeometry((value) => value + 1);
+    const observer =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(refresh)
+        : null;
+    if (containerRef.current) observer?.observe(containerRef.current);
+    window.addEventListener("resize", refresh);
+    window.addEventListener("scroll", refresh, true);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", refresh);
+      window.removeEventListener("scroll", refresh, true);
+    };
+  }, []);
   return (
     <div
+      data-exercise-scope={"WB_Unit1_Page4_Q2.jsx"}
       ref={containerRef}
       style={{
         display: "flex",
@@ -150,6 +356,16 @@ const WB_Unit1_Page4_Q2 = () => {
         position: "relative",
       }}
     >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page4_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page4_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page4_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall"
         style={{
@@ -158,10 +374,12 @@ const WB_Unit1_Page4_Q2 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8  mb-12">
-          <span className="ex-A mr-2.5">D</span>
-          Look, read, and match.{" "}
-        </h5>
+        <ExerciseHeader
+          subTitle="Start with one item, find the partner that matches its meaning or picture, then connect the pair before moving on."
+          isWorkbook
+          sectionLetter="D"
+          title={<>Look, read, and match. </>}
+        />
 
         <div className="w-full flex flex-col items-center gap-50">
           {/* 🔥 الصور فوق */}
@@ -169,10 +387,30 @@ const WB_Unit1_Page4_Q2 = () => {
             {images.map((img, i) => (
               <div
                 key={i}
-                onClick={() => selectImage(i)}
+                onClick={() => choose("left", i)}
                 className="relative  flex flex-col items-center gap-2 cursor-pointer transition"
               >
                 <img
+                  onLoad={() => setGeometry((v) => v + 1)}
+                  onMouseLeave={() => setPreview(null)}
+                  onMouseEnter={() => previewAt("left", i)}
+                  onFocus={() => previewAt("left", i)}
+                  onKeyUp={activationKeys.onKeyUp}
+                  onKeyDown={(event) => endpointKey(event, "left", i)}
+                  aria-pressed={
+                    selection?.side === "left" && selection.id === i
+                  }
+                  aria-disabled={leftLocked(i)}
+                  aria-label={
+                    imageDescriptions[i] + resultDescription("left", i)
+                  }
+                  data-choice={true}
+                  tabIndex={0}
+                  role={"button"}
+                  ref={(node) => {
+                    leftControlRefs.current[i] = node;
+                  }}
+                  alt={imageDescriptions[i]}
                   src={img.img}
                   style={{
                     width: "200px",
@@ -186,6 +424,10 @@ const WB_Unit1_Page4_Q2 = () => {
                     padding: "4px",
                     backgroundColor:
                       selectedImg === i ? "#6d2980" : "transparent",
+                    ...(leftLocked(i)
+                      ? { outline: "2px solid #16a34a", outlineOffset: 2 }
+                      : {}),
+                    "--exercise-focus-radius": "12px",
                   }}
                 />
                 {showResult &&
@@ -231,7 +473,7 @@ const WB_Unit1_Page4_Q2 = () => {
             {sentences.map((sent, i) => (
               <div
                 key={i}
-                onClick={() => selectSentence(i)}
+                onClick={() => choose("right", i)}
                 className="relative flex flex-col items-center cursor-pointer "
               >
                 {/* 🔥 الدوت */}
@@ -246,9 +488,47 @@ const WB_Unit1_Page4_Q2 = () => {
                 ></div>
 
                 {/* 🔥 البوكس */}
-                <div className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]">
+                <div
+                  style={{
+                    outline: rightLocked(i)
+                      ? "2px solid #16a34a"
+                      : selection?.side === "right" && selection.id === i
+                        ? "3px solid #2563eb"
+                        : undefined,
+                    outlineOffset: 2,
+                    backgroundColor:
+                      selection?.side === "right" && selection.id === i
+                        ? "#dbeafe"
+                        : undefined,
+                    ...(audio.activeId === `match-word-${i}`
+                      ? {
+                          boxShadow: "0 0 0 3px #2563eb",
+                          backgroundColor: "#dbeafe",
+                        }
+                      : {}),
+                    "--exercise-focus-radius": "16px",
+                  }}
+                  onMouseLeave={() => setPreview(null)}
+                  onMouseEnter={() => previewAt("right", i)}
+                  onFocus={() => previewAt("right", i)}
+                  onKeyUp={activationKeys.onKeyUp}
+                  onKeyDown={(event) => endpointKey(event, "right", i)}
+                  aria-pressed={
+                    selection?.side === "right" && selection.id === i
+                  }
+                  aria-disabled={rightLocked(i)}
+                  aria-label={sent.text + resultDescription("right", i)}
+                  data-choice={true}
+                  tabIndex={0}
+                  role={"button"}
+                  ref={(node) => {
+                    rightControlRefs.current[i] = node;
+                  }}
+                  className="relative px-4 py-2 rounded-2xl text-sm text-center transition text-[20px]"
+                >
                   <span className="font-bold mr-3">{i + 1}</span>
                   {sent.text}
+                  {audio.activeId === `match-word-${i}` && <AudioSpeaker />}
                 </div>
               </div>
             ))}
@@ -256,48 +536,52 @@ const WB_Unit1_Page4_Q2 = () => {
         </div>
       </div>
 
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        {Object.entries(matches).map(([imgId, sentId], i) => {
-          const imgDot = imageRefs.current[imgId];
-          const sentDot = sentenceRefs.current[sentId];
-
-          if (!imgDot || !sentDot || !containerRef.current) return null;
-
-          const imgRect = imgDot.getBoundingClientRect();
-          const sentRect = sentDot.getBoundingClientRect();
-          const containerRect = containerRef.current.getBoundingClientRect();
-
-          const x1 = sentRect.left + sentRect.width / 2 - containerRect.left;
-          const y1 = sentRect.top + sentRect.height / 2 - containerRect.top;
-
-          const x2 = imgRect.left + imgRect.width / 2 - containerRect.left;
-          const y2 = imgRect.top + imgRect.height / 2 - containerRect.top;
-          return (
-            <g key={i}>
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke="#6d2980"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </g>
-          );
-        })}
+      <svg
+        focusable={"false"}
+        aria-hidden={true}
+        className="absolute top-0 left-0 w-full h-full pointer-events-none"
+      >
+        {Object.entries(matches).map(([id, target]) => line(id, target))}
+        {selection && preview && selection.side !== preview.side
+          ? line(
+              selection.side === "left" ? selection.id : preview.id,
+              selection.side === "right" ? selection.id : preview.id,
+              true,
+            )
+          : null}
       </svg>
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={reset}
+        >
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          onClick={showAnswers}
+          className="show-answer-btn"
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

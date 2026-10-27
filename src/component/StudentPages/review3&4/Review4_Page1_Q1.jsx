@@ -63,7 +63,7 @@ const Review4_Page1_Q1 = () => {
   };
   const input = (i, width = "w-[210px]") => (
     <span className="relative inline-block mx-1">
-      <input
+      <input placeholder={"Word"}
         style={{
           ...(result[i] === true
             ? {

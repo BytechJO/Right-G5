@@ -48,7 +48,7 @@ const Review4_Page2_Q1 = () => {
     setResult(previous => previous.map((v, j) => j === i ? undefined : v));
   };
   const input = (i, width = "w-[520px]") => <span className="relative inline-block mx-1">
-      <input style={{
+      <input placeholder={"Sentence"} style={{
       ...(result[i] === true ? {
         borderBottomColor: "#16a34a"
       } : {})

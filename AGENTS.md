@@ -1116,3 +1116,9 @@ Reference: `src/component/Book.jsx`.
   matching/drag/audio simulations. A browser inventory was empty during this work;
   mouse/touch, visual preservation, audible playback and screen-reader behavior
   were not verified on a real browser/device.
+
+## Workbook input labels and placeholders ? user agreement
+
+- In every requested Workbook exercise, give each input, textarea and answer area a persistent meaningful label (visible label or aria-label), including read-only answer fields. Keep the related clue visible.
+- Add a concise, question-appropriate placeholder where it helps. It supplements the label and must not reveal the answer. Skip placeholders for single-letter cells, small number/letter matching fields, drag/drop areas, or other fields where they do not fit or add value; their labels remain mandatory.
+- Preserve Workbook colors, dimensions, styling, original content, model answers and grading. Reuse the approved exercise-type references and existing verified Workbook audio. Do not invent assets or map ambiguous recordings by guessing.

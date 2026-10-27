@@ -188,7 +188,7 @@ const ComprehensionA = () => {
                         <input {...fieldKeys} aria-label={`Record ${i + 1}, ${field}`} title={`Record ${i + 1}, ${field}`} style={{borderBottom:locked || errors[i]?.[field] === false ? "2px solid #16a34a" : errors[i]?.[field] === true ? "2px solid #ef4444" : undefined}}
                           disabled={locked || errors[i]?.[field] === false}
                           value={answers[i][field] || ""}
-                          placeholder="Type here..."
+                          placeholder={({record:"Record",who:"Name",what:"Achievement",when:"Date"})[field]}
                           onChange={(e) =>
                             handleChange(i, field, e.target.value)
                           }

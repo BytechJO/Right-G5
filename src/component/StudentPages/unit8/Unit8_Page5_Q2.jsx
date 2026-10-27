@@ -201,7 +201,7 @@ const Unit8_Page5_Q2 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Pronoun"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

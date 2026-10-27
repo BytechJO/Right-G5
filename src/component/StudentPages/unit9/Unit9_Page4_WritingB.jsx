@@ -52,7 +52,7 @@ const Unit9_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         <div className="flex items-center gap-3">
           <span className="min-w-[25px]">If</span>
 
-          <input title={"If poem, condition line 1"} aria-label={"If poem, condition line 1"} {...fieldKeys}
+          <input placeholder={"Your condition"} title={"If poem, condition line 1"} aria-label={"If poem, condition line 1"} {...fieldKeys}
             type="text"
             value={answers[0]}
             onChange={(e) => updateAnswer(0, e.target.value)}
@@ -64,7 +64,7 @@ const Unit9_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         <div className="flex items-center gap-3">
           <span className="min-w-[25px]">If</span>
 
-          <input title={"If poem, condition line 2"} aria-label={"If poem, condition line 2"} {...fieldKeys}
+          <input placeholder={"Your condition"} title={"If poem, condition line 2"} aria-label={"If poem, condition line 2"} {...fieldKeys}
             type="text"
             value={answers[1]}
             onChange={(e) => updateAnswer(1, e.target.value)}
@@ -76,7 +76,7 @@ const Unit9_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         <div className="flex items-center gap-3">
           <span className="min-w-[25px]">If</span>
 
-          <input title={"If poem, condition line 3"} aria-label={"If poem, condition line 3"} {...fieldKeys}
+          <input placeholder={"Your condition"} title={"If poem, condition line 3"} aria-label={"If poem, condition line 3"} {...fieldKeys}
             type="text"
             value={answers[2]}
             onChange={(e) => updateAnswer(2, e.target.value)}
@@ -88,7 +88,7 @@ const Unit9_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
         <div className="flex items-center gap-3">
           <span className="min-w-[45px]">Then</span>
 
-          <input title={"If poem, Then result line"} aria-label={"If poem, Then result line"} {...fieldKeys}
+          <input placeholder={"Your result"} title={"If poem, Then result line"} aria-label={"If poem, Then result line"} {...fieldKeys}
             type="text"
             value={answers[3]}
             onChange={(e) => updateAnswer(3, e.target.value)}

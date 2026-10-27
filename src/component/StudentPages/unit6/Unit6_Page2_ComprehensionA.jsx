@@ -264,7 +264,7 @@ const Unit6_Page2_ComprehensionA = () => {const audio=useExerciseAudio();const r
                     <input aria-invalid={!!(errors[rowIndex][cellIndex])} style={{...(lockedInputs[rowIndex][cellIndex]?{borderBottomColor:"#16a34a"}:{}),...(lockedInputs[rowIndex][cellIndex]?{boxShadow:"inset 0 -2px #16a34a"}:{})}} title={`Row ${rowIndex+1}, ${["verb phrase","modal verb","negative contraction"][cellIndex]}; clue: ${answers[rowIndex].filter(cell=>cell.type==="fixed").map(cell=>cell.value).join(", ")}`} aria-label={`Row ${rowIndex+1}, ${["verb phrase","modal verb","negative contraction"][cellIndex]}; clue: ${correctAnswers[rowIndex][0]}`} {...fieldKeys}
                       type="text"
                       value={cell.value}
-                      placeholder="Write here.."
+                      placeholder={["Verb phrase","Modal verb","Contraction"][cellIndex]}
                       disabled={locked || lockedInputs[rowIndex][cellIndex]}
                       onChange={(e) =>
                         updateAnswer(rowIndex, cellIndex, e.target.value)

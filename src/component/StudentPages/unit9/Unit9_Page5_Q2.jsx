@@ -131,7 +131,7 @@ const Unit9_Page5_Q2 = () => {const audio=useExerciseAudio();const resetButtonRe
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(result[i] === false)} title={`Listening paragraph, missing vocabulary word ${i+1}`} aria-label={`Listening paragraph, missing vocabulary word ${i+1}`} {...fieldKeys}
+      <input placeholder={"Word"} style={{...(result[i] === true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(result[i] === false)} title={`Listening paragraph, missing vocabulary word ${i+1}`} aria-label={`Listening paragraph, missing vocabulary word ${i+1}`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}

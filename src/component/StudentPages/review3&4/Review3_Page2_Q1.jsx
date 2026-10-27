@@ -58,7 +58,7 @@ const Review3_Page2_Q1 = () => {
     setLocked(false);
   };
   const input = (i, width = "w-[180px]") => <span className="relative inline-block mx-1">
-      <input style={{
+      <input placeholder={"Word"} style={{
       ...(result[i] === true ? {
         borderBottomColor: "#16a34a"
       } : {})

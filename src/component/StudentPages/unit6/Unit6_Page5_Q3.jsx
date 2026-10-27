@@ -252,7 +252,7 @@ const Unit6_Page5_Q3 = () => {
 
               {/* INPUT */}
               <div className="relative flex-1">
-                <input
+                <input placeholder={"Sentence"}
                   aria-invalid={!!(result[i] === false)}
                   style={{
                     ...(result[i] === true

@@ -234,7 +234,7 @@ const Unit5_Page6_Q1 = () => {
                   position: "relative",
                 }}
               >
-                <input
+                <input placeholder={"Question / statement"}
                   {...fieldKeys}
                   aria-invalid={!!(result[i] === false)}
                   title={`Item ${i + 1}, reorder these words into a polite question or statement: ${scrambled[i]}`}

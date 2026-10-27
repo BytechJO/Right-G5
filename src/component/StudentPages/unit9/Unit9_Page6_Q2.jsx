@@ -198,7 +198,7 @@ const Unit9_Page6_Q2 = () => {
 
   const lineInput = (qIndex, lineIndex, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={lineIndex===0?"Sentence":"Continue..."}
         style={{
           ...(result[qIndex] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

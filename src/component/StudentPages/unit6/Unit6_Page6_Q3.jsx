@@ -260,7 +260,7 @@ const Unit6_Page6_Q3 = () => {
 
                 {/* INPUT */}
                 <div className="relative">
-                  <input
+                  <input placeholder={"Sentence"}
                     aria-invalid={!!(result[i] === false)}
                     style={{
                       ...(result[i] === true

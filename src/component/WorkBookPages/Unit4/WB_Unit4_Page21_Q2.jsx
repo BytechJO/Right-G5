@@ -1,8 +1,64 @@
+import soundB11 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_011_You_don't_need_to_go_left_or_right.mp3";
+import soundB10 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_010_The_mall_is.mp3";
+import soundB8 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_008_and_went_in_different_directions._Then_we_all_met_again_in_the_food_cour.mp3";
+import soundB9 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_009_We.mp3";
+import soundB7 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_007_!I_just_need_to_tie_my_shoelaces_before_we_go_inside.mp3";
+import soundB5 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_005_to_the_mall.mp3";
+import soundB6 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_006_Let's.mp3";
+import soundB4 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_004_atiw_a_imunte.mp3";
+import soundB3 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_003_ehda_eovr.mp3";
+import soundB2 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_002_rtasigth_aedah.mp3";
+import soundB1 from "../../../assets/audio/Workbook/Unit 4/Page 21 - B/Item_001_slpti_pu.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit4_Page21_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const unscrambleAnswers = [
     "split up",
     "straight ahead",
@@ -34,12 +90,7 @@ const WB_Unit4_Page21_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleUnscrambleChange = (i, value) => {
     if (locked || unscrambleResults[i] === true) return;
@@ -79,13 +130,20 @@ const WB_Unit4_Page21_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = [...unscrambleInputs, ...sentenceInputs].some(
       (a) => !a.trim(),
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -126,17 +184,39 @@ const WB_Unit4_Page21_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setUnscrambleInputs(unscrambleAnswers);
 
     setSentenceInputs(sentenceAnswers);
@@ -149,6 +229,8 @@ const WB_Unit4_Page21_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setUnscrambleInputs(["", "", "", ""]);
 
     setSentenceInputs(["", "", "", ""]);
@@ -160,9 +242,21 @@ const WB_Unit4_Page21_Q2 = () => {
     setLocked(false);
   };
 
-  const inputField = (value, onChange, isWrong, disabled, width = "250px") => (
+  const inputField = (
+    value,
+    onChange,
+    isWrong,
+    disabled,
+    width = "250px",
+    label,
+  ) => (
     <div className="relative inline-block">
       <input
+        aria-invalid={isWrong}
+        placeholder={"Expression"}
+        title={label}
+        aria-label={label}
+        {...fieldKeys}
         type="text"
         value={value}
         disabled={disabled}
@@ -181,6 +275,7 @@ const WB_Unit4_Page21_Q2 = () => {
         `}
         style={{
           width,
+          borderBottomColor: disabled ? "#16a34a" : undefined,
         }}
       />
 
@@ -211,26 +306,36 @@ const WB_Unit4_Page21_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"WB_Unit4_Page21_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit4_Page21_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit4_Page21_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit4_Page21_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
-        className="div-forall text-[18px]"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
       >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] mb-12">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            B
-          </span>
-          Unscramble and write. Then use them to fill in the blanks for the
-          sentences below.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="B"
+          title={
+            <>
+              Unscramble and write. Then use them to fill in the blanks for the
+              sentences below.
+            </>
+          }
+          subTitle="Unscramble each expression first, then reuse the completed expressions in the sentence blanks so the meaning stays consistent."
+        />
 
         {/* UNSCRAMBLE */}
-        <div className="flex flex-col gap-5 mb-13">
+        <div className="flex flex-col gap-5 mb-5">
           {scrambledWords.map((word, index) => (
             <div key={index} className="flex items-center gap-4">
               <span
@@ -238,7 +343,14 @@ const WB_Unit4_Page21_Q2 = () => {
                   letterSpacing: "4px",
                 }}
               >
-                {word}
+                <AudioText
+                  audio={audio}
+                  id={`scramble-${index}`}
+                  src={[soundB1, soundB2, soundB3, soundB4][index]}
+                  label={`Hear scrambled expression ${index + 1}`}
+                >
+                  {word}
+                </AudioText>
               </span>
 
               {inputField(
@@ -247,6 +359,7 @@ const WB_Unit4_Page21_Q2 = () => {
                 unscrambleResults[index] === false,
                 locked || unscrambleResults[index] === true,
                 "520px",
+                `Unscramble expression ${index + 1}: ${scrambledWords[index]}`,
               )}
             </div>
           ))}
@@ -258,7 +371,16 @@ const WB_Unit4_Page21_Q2 = () => {
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-bold">1</span>
 
-            <span>Let’s</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-0"}
+                src={soundB6}
+                label={"Hear Let’s"}
+              >
+                Let’s
+              </AudioText>
+            </span>
 
             {inputField(
               sentenceInputs[0],
@@ -266,9 +388,19 @@ const WB_Unit4_Page21_Q2 = () => {
               sentenceResults[0] === false,
               locked || sentenceResults[0] === true,
               "360px",
+              `Complete sentence 1 using an expression above`,
             )}
 
-            <span>to the mall.</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-1"}
+                src={soundB5}
+                label={"Hear to the mall."}
+              >
+                to the mall.
+              </AudioText>
+            </span>
           </div>
 
           {/* 2 */}
@@ -281,16 +413,37 @@ const WB_Unit4_Page21_Q2 = () => {
               sentenceResults[1] === false,
               locked || sentenceResults[1] === true,
               "220px",
+              `Complete sentence 2 using an expression above`,
             )}
 
-            <span>! I just need to tie my shoelaces before we go inside.</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-2"}
+                src={soundB7}
+                label={
+                  "Hear ! I just need to tie my shoelaces before we go inside."
+                }
+              >
+                ! I just need to tie my shoelaces before we go inside.
+              </AudioText>
+            </span>
           </div>
 
           {/* 3 */}
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-bold">3</span>
 
-            <span>We</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-3"}
+                src={soundB9}
+                label={"Hear We"}
+              >
+                We
+              </AudioText>
+            </span>
 
             {inputField(
               sentenceInputs[2],
@@ -298,11 +451,21 @@ const WB_Unit4_Page21_Q2 = () => {
               sentenceResults[2] === false,
               locked || sentenceResults[2] === true,
               "320px",
+              `Complete sentence 3 using an expression above`,
             )}
 
             <span>
-              and went in different directions. Then we all met again in the
-              food court.
+              <AudioText
+                audio={audio}
+                id={"fragment-4"}
+                src={soundB8}
+                label={
+                  "Hear and went in different directions. Then we all met again in the food court."
+                }
+              >
+                and went in different directions. Then we all met again in the
+                food court.
+              </AudioText>
             </span>
           </div>
 
@@ -310,7 +473,16 @@ const WB_Unit4_Page21_Q2 = () => {
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-bold">4</span>
 
-            <span>The mall is</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-5"}
+                src={soundB10}
+                label={"Hear The mall is"}
+              >
+                The mall is
+              </AudioText>
+            </span>
 
             {inputField(
               sentenceInputs[3],
@@ -318,24 +490,55 @@ const WB_Unit4_Page21_Q2 = () => {
               sentenceResults[3] === false,
               locked || sentenceResults[3] === true,
               "250px",
+              `Complete sentence 4 using an expression above`,
             )}
 
-            <span>. You don’t need to go left or right.</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-6"}
+                src={soundB11}
+                label={"Hear . You don’t need to go left or right."}
+              >
+                . You don’t need to go left or right.
+              </AudioText>
+            </span>
           </div>
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

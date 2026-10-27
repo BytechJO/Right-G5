@@ -67,7 +67,7 @@ const WritingB = () => {
           {/* Topic */}
           <div className="flex items-center gap-2">
             <span>Topic:</span>
-            <input {...fieldKeys} aria-label={"Your topic: topic"} title={"Your topic: topic"}
+            <input placeholder={"Your topic"} {...fieldKeys} aria-label={"Your topic: topic"} title={"Your topic: topic"}
               value={answers.topic}
               onChange={(e) => handleChange("topic", e.target.value)}
               className={inputStyle}
@@ -77,7 +77,7 @@ const WritingB = () => {
           {/* Who */}
           <div className="flex items-center gap-2">
             <span>Who?</span>
-            <input {...fieldKeys} aria-label={"Your topic: who"} title={"Your topic: who"}
+            <input placeholder={"People"} {...fieldKeys} aria-label={"Your topic: who"} title={"Your topic: who"}
               value={answers.who}
               onChange={(e) => handleChange("who", e.target.value)}
               className={inputStyle}
@@ -87,7 +87,7 @@ const WritingB = () => {
           {/* What */}
           <div className="flex items-center gap-2">
             <span>What?</span>
-            <input {...fieldKeys} aria-label={"Your topic: what"} title={"Your topic: what"}
+            <input placeholder={"Event"} {...fieldKeys} aria-label={"Your topic: what"} title={"Your topic: what"}
               value={answers.what}
               onChange={(e) => handleChange("what", e.target.value)}
               className={inputStyle}
@@ -98,7 +98,7 @@ const WritingB = () => {
           <div className="flex gap-6">
             <div className="flex items-center gap-2 flex-1">
               <span>When?</span>
-              <input {...fieldKeys} aria-label={"Your topic: when"} title={"Your topic: when"}
+              <input placeholder={"Time"} {...fieldKeys} aria-label={"Your topic: when"} title={"Your topic: when"}
                 value={answers.when}
                 onChange={(e) => handleChange("when", e.target.value)}
                 className={inputStyle}
@@ -107,7 +107,7 @@ const WritingB = () => {
 
             <div className="flex items-center gap-2 flex-1">
               <span>Where?</span>
-              <input {...fieldKeys} aria-label={"Your topic: where"} title={"Your topic: where"}
+              <input placeholder={"Place"} {...fieldKeys} aria-label={"Your topic: where"} title={"Your topic: where"}
                 value={answers.where}
                 onChange={(e) => handleChange("where", e.target.value)}
                 className={inputStyle}
@@ -119,7 +119,7 @@ const WritingB = () => {
           <div className="flex gap-6">
             <div className="flex items-center gap-2 flex-1">
               <span>How?</span>
-              <input {...fieldKeys} aria-label={"Your topic: how"} title={"Your topic: how"}
+              <input placeholder={"How it happened"} {...fieldKeys} aria-label={"Your topic: how"} title={"Your topic: how"}
                 value={answers.how}
                 onChange={(e) => handleChange("how", e.target.value)}
                 className={inputStyle}
@@ -128,7 +128,7 @@ const WritingB = () => {
 
             <div className="flex items-center gap-2 flex-1">
               <span>Why?</span>
-              <input {...fieldKeys} aria-label={"Your topic: why"} title={"Your topic: why"}
+              <input placeholder={"Reason"} {...fieldKeys} aria-label={"Your topic: why"} title={"Your topic: why"}
                 value={answers.why}
                 onChange={(e) => handleChange("why", e.target.value)}
                 className={inputStyle}

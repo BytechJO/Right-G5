@@ -43,6 +43,7 @@ button {
   display: flex;
   flex-direction: column;
   width: 60%;
+  gap: 30px;
   justify-content: flex-start;
 }
 .tooltip-text {
@@ -195,13 +196,11 @@ img {
   transform: scale(1.05);
 }
 
-
 .pauseBtn-icon-CD-vedio {
   width: 30px;
   height: 30px;
   cursor: pointer;
 }
-
 
 .page1-img-wrapper-flashcard {
   width: 100%;
@@ -432,6 +431,7 @@ img {
   gap: 20px;
   width: calc(100% - 40px);
   justify-content: center;
+  z-index: 99;
 }
 
 .check-button2,
@@ -569,13 +569,13 @@ img {
     width: 22px;
     height: 23px;
   }
-  .div-forall{
+  .div-forall {
     width: 75%;
   }
 }
 
 @media screen and (max-width: 1367px) and (max-height: 1024px) {
- .page1-img-wrapper,
+  .page1-img-wrapper,
   .page1-img-wrapper-flashcard,
   .page1-img-wrapper-teacher {
     width: 100%;
@@ -598,8 +598,6 @@ img {
     height: 90px !important;
     width: 75px !important;
   } */
-
- 
 }
 @media (max-width: 1024px) {
   .page1-img-wrapper,
@@ -623,7 +621,6 @@ img {
     font-size: 18px;
     min-width: 120px;
   }
- 
 }
 
 @media (max-width: 820px) {
@@ -646,8 +643,6 @@ img {
     height: 140px;
     width: 120px;
   } */
-
-
 
   .exercise-image-div {
     flex-wrap: wrap !important;

@@ -277,7 +277,7 @@ const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
             {/* question */}
             <div className="relative mb-5">
-              <input style={{...(correctLocked[0].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].question)} title={"Picture 1, write the question using the shown clue"} aria-label={"Picture 1, write the question using the shown clue"} {...fieldKeys}
+              <input placeholder={"Question"} style={{...(correctLocked[0].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].question)} title={"Picture 1, write the question using the shown clue"} aria-label={"Picture 1, write the question using the shown clue"} {...fieldKeys}
                 type="text"
                 value={answers[0].question}
                 disabled={locked || correctLocked[0].question}
@@ -315,7 +315,7 @@ const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
             {/* answer */}
             <div className="relative">
-              <input style={{...(correctLocked[0].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].answer)} title={"Picture 1, write the answer using the tick or cross"} aria-label={"Picture 1, write the answer using the tick or cross"} {...fieldKeys}
+              <input placeholder={"Short answer"} style={{...(correctLocked[0].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0].answer)} title={"Picture 1, write the answer using the tick or cross"} aria-label={"Picture 1, write the answer using the tick or cross"} {...fieldKeys}
                 type="text"
                 value={answers[0].answer}
                 disabled={locked || correctLocked[0].answer}
@@ -383,7 +383,7 @@ const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
             {/* question */}
             <div className="relative mb-5">
-              <input style={{...(correctLocked[1].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].question)} title={"Picture 2, write the question using the shown clue"} aria-label={"Picture 2, write the question using the shown clue"} {...fieldKeys}
+              <input placeholder={"Question"} style={{...(correctLocked[1].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].question)} title={"Picture 2, write the question using the shown clue"} aria-label={"Picture 2, write the question using the shown clue"} {...fieldKeys}
                 type="text"
                 value={answers[1].question}
                 disabled={locked || correctLocked[1].question}
@@ -421,7 +421,7 @@ const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
             {/* answer */}
             <div className="relative">
-              <input style={{...(correctLocked[1].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].answer)} title={"Picture 2, write the answer using the tick or cross"} aria-label={"Picture 2, write the answer using the tick or cross"} {...fieldKeys}
+              <input placeholder={"Short answer"} style={{...(correctLocked[1].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1].answer)} title={"Picture 2, write the answer using the tick or cross"} aria-label={"Picture 2, write the answer using the tick or cross"} {...fieldKeys}
                 type="text"
                 value={answers[1].answer}
                 disabled={locked || correctLocked[1].answer}

@@ -262,7 +262,7 @@ const Unit4_Page2_ComprehensionA = () => {
         {sentences.map((s, i) => <div key={i} className="flex items-center gap-6">
             {/* TRUE / FALSE */}
             <div className="relative">
-              <input style={{
+              <input placeholder={"True/false"} style={{
             ...(correctLocked[i]?.tf ? {
               borderBottomColor: "#16a34a"
             } : {})
@@ -302,7 +302,7 @@ const Unit4_Page2_ComprehensionA = () => {
 
             {/* CORRECTION */}
             <div className="relative">
-              <input style={{
+              <input placeholder={"Correction"} style={{
             ...(correctLocked[i]?.correction ? {
               borderBottomColor: "#16a34a"
             } : {})

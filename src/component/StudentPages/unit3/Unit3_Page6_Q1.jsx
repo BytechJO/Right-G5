@@ -179,7 +179,7 @@ const Unit3_Page6_Q1 = () => {
   // 🎯 input
   const input = (row, col) => (
     <span className="relative inline-block mx-2">
-      <input
+      <input placeholder={"Word"}
         style={{
           borderBottomColor:
             locked || result[row] === true

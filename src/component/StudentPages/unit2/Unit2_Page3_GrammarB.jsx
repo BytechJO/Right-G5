@@ -65,7 +65,7 @@ const GrammarB = () => {
           >
             cousin
           </span>
-          <input {...fieldKeys} aria-label={"Sentence 1, add a relative clause about my cousin."} title={"Sentence 1, add a relative clause about my cousin."}
+          <input placeholder={"Relative clause"} {...fieldKeys} aria-label={"Sentence 1, add a relative clause about my cousin."} title={"Sentence 1, add a relative clause about my cousin."}
             disabled={locked || result[0] === true}
             value={answers[0]}
             onChange={(e) => handleChange(0, e.target.value)}
@@ -89,7 +89,7 @@ const GrammarB = () => {
             friends
           </span>
           ,
-          <input {...fieldKeys} aria-label={"Sentence 2, add a relative clause about one of my friends."} title={"Sentence 2, add a relative clause about one of my friends."}
+          <input placeholder={"Relative clause"} {...fieldKeys} aria-label={"Sentence 2, add a relative clause about one of my friends."} title={"Sentence 2, add a relative clause about one of my friends."}
             disabled={locked || result[1] === true}
             value={answers[1]}
             onChange={(e) => handleChange(1, e.target.value)}
@@ -112,7 +112,7 @@ const GrammarB = () => {
             giraffe
           </span>
           ,
-          <input {...fieldKeys} aria-label={"Sentence 3, add a relative clause about the baby giraffe."} title={"Sentence 3, add a relative clause about the baby giraffe."}
+          <input placeholder={"Relative clause"} {...fieldKeys} aria-label={"Sentence 3, add a relative clause about the baby giraffe."} title={"Sentence 3, add a relative clause about the baby giraffe."}
             disabled={locked || result[2] === true}
             value={answers[2]}
             onChange={(e) => handleChange(2, e.target.value)}
@@ -138,7 +138,7 @@ const GrammarB = () => {
             </span>
           </span>
 
-          <input {...fieldKeys} aria-label={"Sentence 4, add a relative clause about the Ferris wheel."} title={"Sentence 4, add a relative clause about the Ferris wheel."}
+          <input placeholder={"Relative clause"} {...fieldKeys} aria-label={"Sentence 4, add a relative clause about the Ferris wheel."} title={"Sentence 4, add a relative clause about the Ferris wheel."}
             disabled={locked || result[3] === true}
             value={answers[3]}
             onChange={(e) => handleChange(3, e.target.value)}

@@ -162,7 +162,7 @@ const Unit8_Page2_ComprehensionA = () => {const audio=useExerciseAudio();const r
                 i === 1 || i === 2 ? " w-full" : "flex-1"
               }`}
             >
-              <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
+              <input placeholder={"Your answer"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Question ${i+1}: ${questions[i]}`} aria-label={`Question ${i+1}: ${questions[i]}`} {...fieldKeys}
                 type="text"
                 value={answers[i]}
                 disabled={locked || correctLocked[i]}

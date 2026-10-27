@@ -200,7 +200,7 @@ const Unit8_Page5_Q1 = () => {
   };
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Word / phrase"}
         style={{
           ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
         }}

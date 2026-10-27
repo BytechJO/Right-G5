@@ -148,7 +148,7 @@ const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
 
           {/* INPUT */}
           <div className="flex-1 mt-10 relative">
-            <input style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0])} title={"Picture 1, write a sentence about the activity"} aria-label={"Picture 1, write a sentence about the activity"} {...fieldKeys}
+            <input placeholder={"Sentence"} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[0])} title={"Picture 1, write a sentence about the activity"} aria-label={"Picture 1, write a sentence about the activity"} {...fieldKeys}
               type="text"
               value={answers[0]}
               disabled={locked || correctLocked[0]}
@@ -205,7 +205,7 @@ const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
           <div className="flex-1 flex items-center mt-6">
             {/* first line */}
             <div className="relative w-full">
-              <input style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1])} title={"Picture 2, write a sentence about the activity"} aria-label={"Picture 2, write a sentence about the activity"} {...fieldKeys}
+              <input placeholder={"Sentence"} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[1])} title={"Picture 2, write a sentence about the activity"} aria-label={"Picture 2, write a sentence about the activity"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked || correctLocked[1]}
@@ -263,7 +263,7 @@ const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
           <div className="flex-1 flex items-center mt-6">
             {/* first line */}
             <div className="relative w-full">
-              <input style={{...(correctLocked[2]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[2])} title={"Picture 3, write a sentence about the activity"} aria-label={"Picture 3, write a sentence about the activity"} {...fieldKeys}
+              <input placeholder={"Sentence"} style={{...(correctLocked[2]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[2])} title={"Picture 3, write a sentence about the activity"} aria-label={"Picture 3, write a sentence about the activity"} {...fieldKeys}
                 type="text"
                 value={answers[2]}
                 disabled={locked || correctLocked[2]}

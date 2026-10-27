@@ -55,7 +55,7 @@ const Unit4_Page2_ComprehensionB = () => {
               Why do most parents work?
             </div>
 
-            <input {...fieldKeys} title={"Why do most parents work?"} aria-label={"Why do most parents work?"} type="text" value={answers[0]} onChange={e => updateAnswer(0, e.target.value)} className="w-full border-b border-black outline-none text-[#6D2980] font-bold px-2 py-1 bg-transparent" />
+            <input placeholder={"Your answer"} {...fieldKeys} title={"Why do most parents work?"} aria-label={"Why do most parents work?"} type="text" value={answers[0]} onChange={e => updateAnswer(0, e.target.value)} className="w-full border-b border-black outline-none text-[#6D2980] font-bold px-2 py-1 bg-transparent" />
           </div>
 
           {/* Q2 */}
@@ -65,7 +65,7 @@ const Unit4_Page2_ComprehensionB = () => {
               Do you think being a parent is a hard job? Why?
             </div>
 
-            <input {...fieldKeys} title={"Do you think being a parent is a hard job? Why?"} aria-label={"Do you think being a parent is a hard job? Why?"} type="text" value={answers[1]} onChange={e => updateAnswer(1, e.target.value)} className="w-full border-b border-black outline-none text-[#6D2980] font-bold px-2 py-1 bg-transparent" />
+            <input placeholder={"Your answer"} {...fieldKeys} title={"Do you think being a parent is a hard job? Why?"} aria-label={"Do you think being a parent is a hard job? Why?"} type="text" value={answers[1]} onChange={e => updateAnswer(1, e.target.value)} className="w-full border-b border-black outline-none text-[#6D2980] font-bold px-2 py-1 bg-transparent" />
           </div>
         </div>
 

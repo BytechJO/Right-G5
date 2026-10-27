@@ -65,7 +65,7 @@ const Review4_Page1_Q3 = () => {
   };
   const input = (i) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Sentence"}
         style={{
           ...(result[i] === true
             ? {

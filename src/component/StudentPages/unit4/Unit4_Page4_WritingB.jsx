@@ -55,7 +55,7 @@ const Unit4_Page4_WritingB = () => {
             <span className="mr-2 whitespace-nowrap">{starter}</span>
 
             {/* INPUT */}
-            <input {...fieldKeys} title={`Activity ${i + 1}, complete: ${starter}`} aria-label={`Activity ${i + 1}, complete: ${starter}`} type="text" value={answers[i]} onChange={e => updateAnswer(i, e.target.value)} className="border-b border-black outline-none flex-1 px-2 bg-transparent text-[#6D2980] font-bold" />
+            <input placeholder={"Sentence"} {...fieldKeys} title={`Activity ${i + 1}, complete: ${starter}`} aria-label={`Activity ${i + 1}, complete: ${starter}`} type="text" value={answers[i]} onChange={e => updateAnswer(i, e.target.value)} className="border-b border-black outline-none flex-1 px-2 bg-transparent text-[#6D2980] font-bold" />
 
             {/* DOT */}
             <span className="ml-1">.</span>

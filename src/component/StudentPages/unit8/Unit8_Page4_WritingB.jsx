@@ -37,7 +37,7 @@ const Unit8_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
             <span>Main characters in the story and what they’re like:</span>
 
             <div className="flex-1 min-w-[250px]">
-              <input title={"Main characters and what they are like, first line"} aria-label={"Main characters and what they are like, first line"} {...fieldKeys}
+              <input placeholder={"Main characters"} title={"Main characters and what they are like, first line"} aria-label={"Main characters and what they are like, first line"} {...fieldKeys}
                 type="text"
                 value={answers[0]}
                 onChange={(e) => updateAnswer(0, e.target.value)}
@@ -46,7 +46,7 @@ const Unit8_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
             </div>
           </div>
 
-          <input title={"Main characters and what they are like, continued"} aria-label={"Main characters and what they are like, continued"} {...fieldKeys}
+          <input placeholder={"Continue..."} title={"Main characters and what they are like, continued"} aria-label={"Main characters and what they are like, continued"} {...fieldKeys}
             ref={secondInputRef}
             type="text"
             value={answers[1]}
@@ -60,7 +60,7 @@ const Unit8_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
           <span>The main problem, or mystery:</span>
 
           <div className="flex-1 min-w-[250px]">
-            <input title={"What disappeared in the mystery"} aria-label={"What disappeared in the mystery"} {...fieldKeys}
+            <input placeholder={"Missing item"} title={"What disappeared in the mystery"} aria-label={"What disappeared in the mystery"} {...fieldKeys}
               type="text"
               value={answers[2]}
               onChange={(e) => updateAnswer(2, e.target.value)}
@@ -82,41 +82,41 @@ const Unit8_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
 
           <div className="grid grid-cols-2 gap-x-16 gap-y-8">
             {/* left */}
-            <input title={"Mystery clue 1"} aria-label={"Mystery clue 1"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 1"} aria-label={"Mystery clue 1"} {...fieldKeys}
               type="text"
               value={answers[3]}
               onChange={(e) => updateAnswer(3, e.target.value)}
               className="border-b border-black outline-none w-full text-[#7A2D91] text-[18px] font-semibold px-2 bg-transparent"
             />
             {/* right */}
-            <input title={"Mystery clue 2"} aria-label={"Mystery clue 2"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 2"} aria-label={"Mystery clue 2"} {...fieldKeys}
               type="text"
               value={answers[4]}
               onChange={(e) => updateAnswer(4, e.target.value)}
               className="border-b border-black outline-none w-full text-[#7A2D91] text-[18px] font-semibold px-2 bg-transparent"
             />
             {/* left */}
-            <input title={"Mystery clue 3"} aria-label={"Mystery clue 3"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 3"} aria-label={"Mystery clue 3"} {...fieldKeys}
               type="text"
               value={answers[5]}
               onChange={(e) => updateAnswer(5, e.target.value)}
               className="border-b border-black outline-none w-full text-[#7A2D91] text-[18px] font-semibold px-2 bg-transparent"
             />
             {/* right */}
-            <input title={"Mystery clue 4"} aria-label={"Mystery clue 4"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 4"} aria-label={"Mystery clue 4"} {...fieldKeys}
               type="text"
               value={answers[6]}
               onChange={(e) => updateAnswer(6, e.target.value)}
               className="border-b border-black outline-none w-full text-[#7A2D91] text-[18px] font-semibold px-2 bg-transparent"
             />{" "}
-            <input title={"Mystery clue 5"} aria-label={"Mystery clue 5"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 5"} aria-label={"Mystery clue 5"} {...fieldKeys}
               type="text"
               value={answers[7]}
               onChange={(e) => updateAnswer(7, e.target.value)}
               className="border-b border-black outline-none w-full text-[#7A2D91] text-[18px] font-semibold px-2 bg-transparent"
             />
             {/* right */}
-            <input title={"Mystery clue 6"} aria-label={"Mystery clue 6"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 6"} aria-label={"Mystery clue 6"} {...fieldKeys}
               type="text"
               value={answers[8]}
               onChange={(e) => updateAnswer(8, e.target.value)}
@@ -130,7 +130,7 @@ const Unit8_Page4_WritingB = () => {const audio=useExerciseAudio();const resetBu
           <span>How the mystery is solved:</span>
 
           <div className="flex-1 min-w-[250px]">
-            <input title={"Mystery clue 7"} aria-label={"Mystery clue 7"} {...fieldKeys}
+            <input placeholder={"Clue"} title={"Mystery clue 7"} aria-label={"Mystery clue 7"} {...fieldKeys}
               type="text"
               value={answers[9]}
               onChange={(e) => updateAnswer(9, e.target.value)}

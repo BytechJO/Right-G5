@@ -58,7 +58,7 @@ const WritingA = () => {
       <div className="flex items-center gap-3 mt-15">
         <span className="font-bold">1</span>
         <span className="whitespace-nowrap">Character’s name:</span>
-        <input {...fieldKeys} aria-label={"Character’s name"} title={"Character’s name"}
+        <input placeholder={"Name"} {...fieldKeys} aria-label={"Character’s name"} title={"Character’s name"}
           value={answers.name}
           onChange={(e) => handleChange("name", e.target.value)}
           className="flex-1 border-b border-black outline-none bg-transparent text-[#6D2980] font-bold"
@@ -72,7 +72,7 @@ const WritingA = () => {
           <span>What does the character think about?</span>
         </div>
 
-        <input {...fieldKeys} aria-label={"What does the character think about?"} title={"What does the character think about?"}
+        <input placeholder={"Thoughts"} {...fieldKeys} aria-label={"What does the character think about?"} title={"What does the character think about?"}
           value={answers.think}
           onChange={(e) => handleChange("think", e.target.value)}
           className="w-full border-b border-black outline-none bg-transparent text-[#6D2980] font-bold"
@@ -86,7 +86,7 @@ const WritingA = () => {
           <span>What do they look like?</span>
         </div>
 
-        <input {...fieldKeys} aria-label={"What does the character look like?"} title={"What does the character look like?"}
+        <input placeholder={"Appearance"} {...fieldKeys} aria-label={"What does the character look like?"} title={"What does the character look like?"}
           value={answers.look}
           onChange={(e) => handleChange("look", e.target.value)}
           className="w-full border-b border-black outline-none bg-transparent text-[#6D2980] font-bold"
@@ -100,7 +100,7 @@ const WritingA = () => {
           <span>Other information about your character:</span>
         </div>
 
-        <input {...fieldKeys} aria-label={"Other information about the character"} title={"Other information about the character"}
+        <input placeholder={"Other details"} {...fieldKeys} aria-label={"Other information about the character"} title={"Other information about the character"}
           value={answers.other}
           onChange={(e) => handleChange("other", e.target.value)}
           className="w-full border-b border-black outline-none bg-transparent text-[#6D2980] font-bold"

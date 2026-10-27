@@ -367,7 +367,7 @@ const Unit7_Page5_Q1 = () => {
                 />
 
                 <div className="relative">
-                  <input
+                  <input placeholder={"Word"}
                     style={{
                       ...(result[i] === true
                         ? { borderBottomColor: "#16a34a" }

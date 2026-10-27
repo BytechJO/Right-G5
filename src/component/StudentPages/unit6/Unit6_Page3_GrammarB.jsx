@@ -212,7 +212,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
           <span className="font-bold">1</span>
 
           <div className="relative flex-1">
-            <input aria-invalid={!!(errors[0])} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 1, write using can"} aria-label={"Sentence 1, write using can"} {...fieldKeys}
+            <input placeholder={"Sentence"} aria-invalid={!!(errors[0])} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 1, write using can"} aria-label={"Sentence 1, write using can"} {...fieldKeys}
               type="text"
               value={answers[0].full}
               disabled={locked || correctLocked[0]}
@@ -262,7 +262,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
           <div className="flex items-center flex-1 gap-2 relative">
             {/* first blank */}
-            <input aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 2, first blank, using shall"} aria-label={"Sentence 2, first blank, using shall"} {...fieldKeys}
+            <input placeholder={"Opening"} aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 2, first blank, using shall"} aria-label={"Sentence 2, first blank, using shall"} {...fieldKeys}
               type="text"
               value={answers[1].part1}
               disabled={locked || correctLocked[1]}
@@ -280,7 +280,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
             <span>we go</span>
 
             {/* second blank */}
-            <input aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 2, second blank: we go ... bakery?"} aria-label={"Sentence 2, second blank: we go ... bakery?"} {...fieldKeys}
+            <input placeholder={"Complete..."} aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 2, second blank: we go ... bakery?"} aria-label={"Sentence 2, second blank: we go ... bakery?"} {...fieldKeys}
               type="text"
               value={answers[1].part2}
               disabled={locked || correctLocked[1]}
@@ -334,7 +334,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
           <span>I</span>
 
           <div className="relative flex-1">
-            <input aria-invalid={!!(errors[2])} style={{...(correctLocked[2]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 3, complete using could"} aria-label={"Sentence 3, complete using could"} {...fieldKeys}
+            <input placeholder={"Complete..."} aria-invalid={!!(errors[2])} style={{...(correctLocked[2]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 3, complete using could"} aria-label={"Sentence 3, complete using could"} {...fieldKeys}
               type="text"
               value={answers[2].part1}
               disabled={locked || correctLocked[2]}
@@ -387,7 +387,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
           <span>I</span>
 
           <div className="relative flex-1">
-            <input aria-invalid={!!(errors[3])} style={{...(correctLocked[3]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 4, complete using might"} aria-label={"Sentence 4, complete using might"} {...fieldKeys}
+            <input placeholder={"Complete..."} aria-invalid={!!(errors[3])} style={{...(correctLocked[3]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 4, complete using might"} aria-label={"Sentence 4, complete using might"} {...fieldKeys}
               type="text"
               value={answers[3].part1}
               disabled={locked || correctLocked[3]}
@@ -438,7 +438,7 @@ const Unit6_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
           <span className="font-bold">5</span>
 
           <div className="relative flex-1">
-            <input aria-invalid={!!(errors[4])} style={{...(correctLocked[4]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 5, complete using may"} aria-label={"Sentence 5, complete using may"} {...fieldKeys}
+            <input placeholder={"Complete..."} aria-invalid={!!(errors[4])} style={{...(correctLocked[4]?{borderBottomColor:"#16a34a"}:{})}} title={"Sentence 5, complete using may"} aria-label={"Sentence 5, complete using may"} {...fieldKeys}
               type="text"
               value={answers[4].part1}
               disabled={locked || correctLocked[4]}

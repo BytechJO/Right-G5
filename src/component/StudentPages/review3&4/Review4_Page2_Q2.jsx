@@ -123,7 +123,7 @@ const Review4_Page2_Q2 = () => {
   };
   const input = (i) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Your answer"}
         style={{
           ...(result[i] === true
             ? {

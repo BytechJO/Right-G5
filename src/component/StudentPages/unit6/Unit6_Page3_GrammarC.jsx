@@ -146,7 +146,7 @@ const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
 
           {/* INPUT */}
           <div className="flex-1 mt-10 relative">
-            <input aria-invalid={!!(errors[0])} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 1, write the question"} aria-label={"Picture 1, write the question"} {...fieldKeys}
+            <input placeholder={"Question"} aria-invalid={!!(errors[0])} style={{...(correctLocked[0]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 1, write the question"} aria-label={"Picture 1, write the question"} {...fieldKeys}
               type="text"
               value={answers[0]}
               disabled={locked || correctLocked[0]}
@@ -203,7 +203,7 @@ const Unit6_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
           <div className="flex-1 flex items-center mt-6">
             {/* first line */}
             <div className="relative w-full">
-              <input aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 2, write the question"} aria-label={"Picture 2, write the question"} {...fieldKeys}
+              <input placeholder={"Question"} aria-invalid={!!(errors[1])} style={{...(correctLocked[1]?{borderBottomColor:"#16a34a"}:{})}} title={"Picture 2, write the question"} aria-label={"Picture 2, write the question"} {...fieldKeys}
                 type="text"
                 value={answers[1]}
                 disabled={locked || correctLocked[1]}

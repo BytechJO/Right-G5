@@ -232,7 +232,7 @@ const Unit7_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
               <p className="mb-2">{word}</p>
 
               <div className="relative">
-                <input style={{...(correctLocked[i].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i].question)} title={`Item ${i+1}, reorder into a question: ${words[i]}`} aria-label={`Item ${i+1}, reorder into a question: ${words[i]}`} {...fieldKeys}
+                <input placeholder={"Question"} style={{...(correctLocked[i].question?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i].question)} title={`Item ${i+1}, reorder into a question: ${words[i]}`} aria-label={`Item ${i+1}, reorder into a question: ${words[i]}`} {...fieldKeys}
                   type="text"
                   value={answers[i].question}
                   disabled={locked || correctLocked[i].question}
@@ -276,7 +276,7 @@ const Unit7_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
 
             {/* ANSWER SIDE */}
             <div className="relative">
-              <input style={{...(correctLocked[i].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i].answer)} title={`Item ${i+1}, write the short answer using the displayed tick or cross`} aria-label={`Item ${i+1}, write the short answer using the displayed tick or cross`} {...fieldKeys}
+              <input placeholder={"Short answer"} style={{...(correctLocked[i].answer?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i].answer)} title={`Item ${i+1}, write the short answer using the displayed tick or cross`} aria-label={`Item ${i+1}, write the short answer using the displayed tick or cross`} {...fieldKeys}
                 type="text"
                 value={answers[i].answer}
                 disabled={locked || correctLocked[i].answer}

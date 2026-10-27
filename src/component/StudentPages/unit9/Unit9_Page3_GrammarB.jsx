@@ -167,7 +167,7 @@ const Unit8_Page3_GrammarB = () => {const audio=useExerciseAudio();const resetBu
               </p>
 
               <div className="relative">
-                <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, reorder these words: ${scrambled[i]}`} aria-label={`Sentence ${i+1}, reorder these words: ${scrambled[i]}`} {...fieldKeys}
+                <input placeholder={"Sentence"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, reorder these words: ${scrambled[i]}`} aria-label={`Sentence ${i+1}, reorder these words: ${scrambled[i]}`} {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={

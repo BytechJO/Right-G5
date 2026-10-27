@@ -1,8 +1,38 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_001_face.mp3";
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_002_actually.mp3";
+import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_003_on_one_side.mp3";
+import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_004_mirror.mp3";
+import clip4 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_005_reviewing.mp3";
+import clip5 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_006_uh-oh.mp3";
+import clip6 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_007_fell_asleep.mp3";
+import clip7 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_008_pillow.mp3";
+import clip8 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_009_figure.mp3";
+import clip9 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_010_I_rested_my_head_on_my_fluffy_and.mp3";
+import clip10 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_011_Only_to_wake_up_to_a_voice_so_deep,.mp3";
+import clip11 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_012_It_was_a_man_with_a_scar_of_his.mp3";
+import clip12 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_013_The_other_side_was_covered_with_lace.mp3";
+import clip13 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_014_Who_are_you_I_asked_with_fear.mp3";
+import clip14 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_015_He_replied,_I_came_to_help_you_here.mp3";
+import clip15 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_016_I_saw_you_your_textbook_in_school.mp3";
+import clip16 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_017_I_came_to_give_you_the_right_tool,.mp3";
+import clip17 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_018_To_the_answers_to_the_questions,.mp3";
+import clip18 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_019_That_might_be_on_your_examinations.mp3";
+import clip19 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_020_I_said,_But_look_at_your.mp3";
+import clip20 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_021_That's_not_a_face_of_a.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit1_Page4_Q1 = () => {
+
+const WB_Unit1_Page4_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "pillow",
     "fell asleep",
@@ -21,12 +51,7 @@ const WB_Unit1_Page4_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -47,12 +72,12 @@ const WB_Unit1_Page4_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -83,17 +108,17 @@ const WB_Unit1_Page4_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       "pillow",
       "fell asleep",
@@ -111,7 +136,7 @@ const WB_Unit1_Page4_Q1 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", "", "", "", ""]);
 
     setResult([]);
@@ -121,7 +146,7 @@ const WB_Unit1_Page4_Q1 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Word / phrase"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Poem blank ${i+1}, use a word or expression from the boxes`} aria-label={`Poem blank ${i+1}, use a word or expression from the boxes`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -177,26 +202,19 @@ const WB_Unit1_Page4_Q1 = () => {
         minWidth: "120px",
         textAlign: "center",
       }}
-    >
+    ><AudioText audio={audio} id={`bank-${word}`} src={({face:clip0,actually:clip1,"on one side":clip2,mirror:clip3,reviewing:clip4,"uh-oh":clip5,"fell asleep":clip6,pillow:clip7,figure:clip8})[word]} label={`Hear ${word}`}>
       {word}
-    </div>
+    </AudioText></div>
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit1_Page4_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit1_Page4_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page4_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page4_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall">
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-8">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            C
-          </span>
+        <ExerciseHeader subTitle="Read the full sentence first, then choose the word or expression that fits both the meaning and grammar." isWorkbook sectionLetter="C" title={<>
+          
           Read and write.
-        </h5>
+        </>}/>
 
         {/* WORD BOXES */}
         <div className="flex flex-wrap justify-center gap-4 mb-7">
@@ -213,7 +231,7 @@ const WB_Unit1_Page4_Q1 = () => {
 
         {/* STORY */}
         <div className=" text-[17px] leading-[2.2] mb-7">
-          <div className="flex flex-wrap items-center gap-2 ">
+          <SentenceGroup label={"Hear poem line 1"} src={clip9} id={"poem-line-0"} audio={audio} className="flex flex-wrap items-center gap-2 ">
             <span>I rested my head on my fluffy</span>
 
             {inputField(0, "w-[170px]")}
@@ -223,11 +241,11 @@ const WB_Unit1_Page4_Q1 = () => {
             {inputField(1, "w-[170px]")}
 
             <span>,</span>
-          </div>
+          </SentenceGroup>
 
-          <div>Only to wake up to a voice so deep,</div>
+          <SentenceGroup label={"Hear poem line 2"} src={clip10} id={"poem-line-1"} audio={audio}>Only to wake up to a voice so deep,</SentenceGroup>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <SentenceGroup label={"Hear poem line 3"} src={clip11} id={"poem-line-2"} audio={audio} className="flex flex-wrap items-center gap-2">
             <span>It was a man with a scar</span>
 
             {inputField(2, "w-[170px]")}
@@ -237,43 +255,43 @@ const WB_Unit1_Page4_Q1 = () => {
             {inputField(3, "w-[140px]")}
 
             <span>,</span>
-          </div>
+          </SentenceGroup>
 
-          <div>The other side was covered with lace.</div>
+          <SentenceGroup label={"Hear poem line 4"} src={clip12} id={"poem-line-3"} audio={audio}>The other side was covered with lace.</SentenceGroup>
 
-          <div>“Who are you?” I asked with fear.</div>
+          <SentenceGroup label={"Hear poem line 5"} src={clip13} id={"poem-line-4"} audio={audio}>“Who are you?” I asked with fear.</SentenceGroup>
 
-          <div>He replied, “I came to help you here.</div>
+          <SentenceGroup label={"Hear poem line 6"} src={clip14} id={"poem-line-5"} audio={audio}>He replied, “I came to help you here.</SentenceGroup>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <SentenceGroup label={"Hear poem line 7"} src={clip15} id={"poem-line-6"} audio={audio} className="flex flex-wrap items-center gap-2">
             <span>I saw you</span>
 
             {inputField(4, "w-[170px]")}
 
             <span>your textbook in school.</span>
-          </div>
+          </SentenceGroup>
 
-          <div>I came to give you the right tool,</div>
+          <SentenceGroup label={"Hear poem line 8"} src={clip16} id={"poem-line-7"} audio={audio}>I came to give you the right tool,</SentenceGroup>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <SentenceGroup label={"Hear poem line 9"} src={clip17} id={"poem-line-8"} audio={audio} className="flex flex-wrap items-center gap-2">
             <span>To</span>
 
             {inputField(5, "w-[150px]")}
 
             <span>the answers to the questions,</span>
-          </div>
+          </SentenceGroup>
 
-          <div>That might be on your examinations.”</div>
+          <SentenceGroup label={"Hear poem line 10"} src={clip18} id={"poem-line-9"} audio={audio}>That might be on your examinations.”</SentenceGroup>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <SentenceGroup label={"Hear poem line 11"} src={clip19} id={"poem-line-10"} audio={audio} className="flex flex-wrap items-center gap-2">
             <span>I said, “But look at your face in the</span>
 
             {inputField(6, "w-[170px]")}
 
             <span>.</span>
-          </div>
+          </SentenceGroup>
 
-          <div>That’s not a face of a teacher.”</div>
+          <SentenceGroup label={"Hear poem line 12"} src={clip20} id={"poem-line-11"} audio={audio}>That’s not a face of a teacher.”</SentenceGroup>
 
           <div className="flex flex-wrap items-center gap-2">
             <span>He said, “</span>
@@ -299,15 +317,15 @@ const WB_Unit1_Page4_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -150,7 +150,7 @@ const Unit9_Page3_GrammarC = () => {const audio=useExerciseAudio();const resetBu
 
               {/* answer */}
               <div className="relative">
-                <input style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, rewrite in the opposite order: ${questions[i]}`} aria-label={`Sentence ${i+1}, rewrite in the opposite order: ${questions[i]}`} {...fieldKeys}
+                <input placeholder={"Rewritten sentence"} style={{...(correctLocked[i]?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(errors[i])} title={`Sentence ${i+1}, rewrite in the opposite order: ${questions[i]}`} aria-label={`Sentence ${i+1}, rewrite in the opposite order: ${questions[i]}`} {...fieldKeys}
                   type="text"
                   value={answers[i]}
                   disabled={locked || correctLocked[i]}

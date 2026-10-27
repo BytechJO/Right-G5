@@ -173,7 +173,7 @@ const Unit7_Page6_Q3 = () => {
 
             {/* INPUT */}
             <div className="flex-1 mt-10 relative">
-              <input
+              <input placeholder={"Question"}
                 style={{
                   ...(correctLocked[0] ? { borderBottomColor: "#16a34a" } : {}),
                 }}
@@ -237,7 +237,7 @@ const Unit7_Page6_Q3 = () => {
             <div className="flex-1 flex items-center mt-6">
               {/* first line */}
               <div className="relative w-full">
-                <input
+                <input placeholder={"Question"}
                   style={{
                     ...(correctLocked[1]
                       ? { borderBottomColor: "#16a34a" }
@@ -304,7 +304,7 @@ const Unit7_Page6_Q3 = () => {
             <div className="flex-1 flex items-center mt-6">
               {/* first line */}
               <div className="relative w-full">
-                <input
+                <input placeholder={"Question"}
                   style={{
                     ...(correctLocked[2]
                       ? { borderBottomColor: "#16a34a" }

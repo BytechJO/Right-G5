@@ -584,7 +584,7 @@ const Unit2_Page5_Q1 = () => {
                           position: "relative",
                         }}
                       >
-                        <input
+                        <input placeholder={"Word 1"}
                           type="text"
                           {...fieldKeys}
                           aria-label={`Item ${idx + 1}, first word. Clue: ${q.clue1}`}
@@ -675,7 +675,7 @@ const Unit2_Page5_Q1 = () => {
 
                       {/* COLUMN 2 */}
                       <div style={{ display: "flex", flexDirection: "column" }}>
-                        <input
+                        <input placeholder={"Word 2"}
                           type="text"
                           {...fieldKeys}
                           aria-label={`Item ${idx + 1}, second word. Clue: ${q.clue2}`}

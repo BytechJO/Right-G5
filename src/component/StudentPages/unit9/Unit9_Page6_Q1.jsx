@@ -285,7 +285,7 @@ const Unit9_Page6_Q1 = () => {
 
   const sentenceInput = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Complete sentence"}
         style={{
           ...(sentenceResult[i] === true
             ? { borderBottomColor: "#16a34a" }

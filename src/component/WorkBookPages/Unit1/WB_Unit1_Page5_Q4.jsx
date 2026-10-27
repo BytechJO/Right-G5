@@ -1,8 +1,61 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_001_late.mp3";
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_002_How.mp3";
+import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_003_am.mp3";
+import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_004_deep.mp3";
+import clip4 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_005_is.mp3";
+import clip5 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_006_an.mp3";
+import clip6 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_007_ocean.mp3";
+import clip7 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_008_far.mp3";
+import clip8 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_009_house.mp3";
+import clip9 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_010_your.mp3";
+import clip10 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_011_long.mp3";
+import clip11 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_012_hair.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit1_Page5_Q4 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "How late am I?",
     "How deep is this ocean?",
@@ -23,12 +76,7 @@ const WB_Unit1_Page5_Q4 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -50,11 +98,18 @@ const WB_Unit1_Page5_Q4 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -85,17 +140,39 @@ const WB_Unit1_Page5_Q4 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "How late am I?",
       "How deep is this ocean?",
@@ -109,6 +186,8 @@ const WB_Unit1_Page5_Q4 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -119,6 +198,14 @@ const WB_Unit1_Page5_Q4 = () => {
   const inputField = (i) => (
     <div className="relative flex-1">
       <input
+        placeholder={"Question"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Item ${i + 1}, unscramble the How question`}
+        aria-label={`Item ${i + 1}, unscramble the How question`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -165,20 +252,28 @@ const WB_Unit1_Page5_Q4 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall ">
+    <div
+      data-exercise-scope={"WB_Unit1_Page5_Q4.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page5_Q4.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page5_Q4.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page5_Q4.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall " style={{gap:"80px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-25">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            H
-          </span>
-          Unscramble and write.
-        </h5>
+        <ExerciseHeader
+          subTitle="Say the correct word, expression, or sentence first, then reorder it and check spelling, capitalization, and punctuation."
+          isWorkbook
+          sectionLetter="H"
+          title={<>Unscramble and write.</>}
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15 text-[18px]">
@@ -188,7 +283,35 @@ const WB_Unit1_Page5_Q4 = () => {
 
               <div className="flex items-center gap-8 min-w-[380px]">
                 {words.map((word, index) => (
-                  <span key={index}>{word}</span>
+                  <span key={index}>
+                    {word.toLowerCase().replace(/\?/g, "") !== "i" ? (
+                      <AudioText
+                        audio={audio}
+                        id={`scrambled-${i}-${index}`}
+                        src={
+                          {
+                            late: clip0,
+                            how: clip1,
+                            am: clip2,
+                            deep: clip3,
+                            is: clip4,
+                            an: clip5,
+                            ocean: clip6,
+                            far: clip7,
+                            house: clip8,
+                            your: clip9,
+                            long: clip10,
+                            hair: clip11,
+                          }[word.toLowerCase().replace(/\?/g, "")]
+                        }
+                        label={`Hear ${word}`}
+                      >
+                        {word}
+                      </AudioText>
+                    ) : (
+                      word
+                    )}
+                  </span>
                 ))}
               </div>
 
@@ -200,15 +323,36 @@ const WB_Unit1_Page5_Q4 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

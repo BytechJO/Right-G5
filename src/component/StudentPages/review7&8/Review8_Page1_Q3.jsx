@@ -201,7 +201,7 @@ const Review8_Page1_Q3 = () => {
         {...fieldKeys}
         type="text"
         value={answers[i]}
-        placeholder="type here..."
+        placeholder={"Pronoun"}
         disabled={locked || result[i] === true}
         onChange={(e) => handleChange(i, e.target.value)}
         className={`

@@ -379,7 +379,7 @@ const Unit4_Page5_Q3 = () => {
                   position: "relative",
                 }}
               >
-                <input
+                <input placeholder={"Correction"}
                   {...fieldKeys}
                   aria-invalid={!!errors[i]?.correction}
                   title={`Item ${i + 1}, correct the underlined word or phrase if false: ${q.text}`}

@@ -43,7 +43,7 @@ const Page8_Q1 = () => {
     setAnswers(["", "", "", "", ""]);
   };
   const input = (i, width = "w-[120px]") => (
-    <input
+    <input placeholder={"Word"}
       {...fieldKeys}
       aria-label={`Conversation summary, blank ${i + 1}`}
       title={`Conversation summary, blank ${i + 1}`}

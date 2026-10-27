@@ -279,7 +279,7 @@ const Review6_Page1_Q2 = () => {
 
                 {/* INPUT */}
                 <div className="relative inline-block">
-                  <input
+                  <input placeholder={"Word or phrase"}
                     aria-invalid={!!(result[i] === false)}
                     title={`Sentence ${i + 1}, vocabulary word or expression`}
                     aria-label={`Sentence ${i + 1}, vocabulary word or expression`}

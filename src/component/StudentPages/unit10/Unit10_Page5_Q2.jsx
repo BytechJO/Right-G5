@@ -1,8 +1,46 @@
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit10_Page5_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = ["enormous", "lively", "variety", "flexible", "appealing"];
 
   const [answers, setAnswers] = useState(
@@ -16,48 +54,79 @@ const Unit10_Page5_Q2 = () => {
   const inputRefs = useRef([]);
 
   const handleChange = (questionIndex, charIndex, value) => {
-    if (locked) return;
-
+    if (locked || result[questionIndex] === true) return;
     const char = value.slice(-1);
-
-    const updated = [...answers];
-
-    updated[questionIndex][charIndex] = char;
-
-    setAnswers(updated);
-
-    setResult([]);
-
+    setAnswers((previous) =>
+      previous.map((word, i) =>
+        i === questionIndex
+          ? word.map((old, j) => (j === charIndex ? char : old))
+          : word,
+      ),
+    );
+    setResult((previous) => {
+      const next = [...previous];
+      next[questionIndex] = undefined;
+      return next;
+    });
     if (char) {
-      const nextRef = inputRefs.current[`${questionIndex}-${charIndex + 1}`];
-
-      if (nextRef) {
-        nextRef.focus();
-
-        nextRef.select();
-      }
+      const next = inputRefs.current[`${questionIndex}-${charIndex + 1}`];
+      next?.focus();
+      next?.select();
     }
   };
 
-  const handleBackspace = (e, questionIndex, charIndex) => {
-    if (e.key === "Backspace" && !answers[questionIndex][charIndex]) {
-      if (inputRefs.current[`${questionIndex}-${charIndex - 1}`]) {
-        inputRefs.current[`${questionIndex}-${charIndex - 1}`].focus();
-      }
+  const handleBackspace = (event, questionIndex, charIndex) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.stopPropagation();
+      return;
     }
+    if (event.key === "Backspace" || event.key === "Delete")
+      event.stopPropagation();
+    if (locked || result[questionIndex] === true) return;
+    let target = charIndex,
+      targetQuestion = questionIndex;
+    if (event.key === "ArrowLeft") target = Math.max(0, charIndex - 1);
+    else if (event.key === "ArrowRight")
+      target = Math.min(questions[questionIndex].length - 1, charIndex + 1);
+    else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      const delta = event.key === "ArrowDown" ? 1 : -1;
+      let row = questionIndex + delta;
+      while (row >= 0 && row < questions.length && result[row] === true)
+        row += delta;
+      if (row >= 0 && row < questions.length) {
+        targetQuestion = row;
+        target = Math.min(charIndex, questions[row].length - 1);
+      }
+    } else if (event.key === "Home") target = 0;
+    else if (event.key === "End") target = questions[questionIndex].length - 1;
+    else if (event.key === "Backspace" && !answers[questionIndex][charIndex])
+      target = Math.max(0, charIndex - 1);
+    else return;
+    event.preventDefault();
+    event.stopPropagation();
+    const element = inputRefs.current[`${targetQuestion}-${target}`];
+    element?.focus();
+    element?.select();
   };
 
-  const normalize = (arr) => arr.join("").toLowerCase().trim();
+  const normalize = (arr) => normalizeAnswer(arr.join(""));
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((word) =>
       word.some((letter) => !letter.trim()),
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -88,17 +157,39 @@ const Unit10_Page5_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers(questions.map((q) => q.split("")));
 
     setResult([true, true, true, true, true]);
@@ -107,6 +198,8 @@ const Unit10_Page5_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(questions.map((q) => Array(q.length).fill("")));
 
     setResult([]);
@@ -115,7 +208,20 @@ const Unit10_Page5_Q2 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Unit10_Page5_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit10_Page5_Q2.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page5_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page5_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall"
         style={{
@@ -126,18 +232,16 @@ const Unit10_Page5_Q2 = () => {
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 ">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            B
-          </span>
-          Which vocabulary words have you not written yet? Write them here in
-          the order <br /> they are on the list.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="B"
+          title={
+            <>
+              Which vocabulary words have you not written yet? Write them here
+              in the order they are on the list.
+            </>
+          }
+          subTitle="Review the vocabulary words you already used in Exercise A, then enter only the remaining words in list order."
+        />
 
         {/* QUESTIONS */}
         <div className="grid grid-cols-2 gap-y-18 gap-x-20">
@@ -151,6 +255,15 @@ const Unit10_Page5_Q2 = () => {
                 {word.split("").map((_, charIndex) => (
                   <div key={charIndex} className="relative">
                     <input
+                      style={{
+                        ...(result[qIndex] === true
+                          ? { borderBottomColor: "#16a34a" }
+                          : {}),
+                      }}
+                      aria-invalid={result[qIndex] === false}
+                      title={`Vocabulary word ${qIndex + 1}, letter ${charIndex + 1} of ${word.length}; remaining words in vocabulary list order`}
+                      aria-label={`Vocabulary word ${qIndex + 1}, letter ${charIndex + 1} of ${word.length}; remaining words in vocabulary list order`}
+                      {...fieldKeys}
                       ref={(el) =>
                         (inputRefs.current[`${qIndex}-${charIndex}`] = el)
                       }
@@ -213,15 +326,36 @@ const Unit10_Page5_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>
