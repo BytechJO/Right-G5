@@ -5,15 +5,15 @@ import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
 const WB_Unit5_Page29 = ({ openPopup }) => {
   return (
-    <div
+    <div aria-label={"Workbook Unit 5, page 32"} role={"group"} data-page-access={"WB_Unit5_Page32.jsx"}
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_1})` }}
-    >
+    ><style>{`[data-page-access="WB_Unit5_Page32.jsx"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="q12-5 hover:scale-110 transition "
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} aria-label={"Open activity 1"} data-launcher={true} tabIndex={0} role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -21,7 +21,7 @@ const WB_Unit5_Page29 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
           // className="click-icon-page8-2 hover:scale-110 transition"
         >
-          <image
+          <image aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"

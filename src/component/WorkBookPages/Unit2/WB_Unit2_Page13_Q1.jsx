@@ -48,6 +48,15 @@ const normalizeAnswer = (text) =>
     .replace(/\s+/g, " ")
     .trim();
 const WB_Unit2_Page13_Q1 = () => {
+  const returnToStory = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const story = event.currentTarget.closest('[data-exercise-scope]')?.querySelector('[data-return-story]');
+    if (!story) return;
+    story.focus({ preventScroll: true });
+    story.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  };
+
   const audio = useExerciseAudio();
   const resetButtonRef = React.useRef(null);
   const [announcement, setAnnouncement] = React.useState("");
@@ -426,7 +435,7 @@ const WB_Unit2_Page13_Q1 = () => {
 
         {/* STORY */}
         <div className="flex gap-8 items-start mb-12">
-          <SentenceGroup
+          <SentenceGroup data-return-story={true}
             label={"Hear the story about Wendy and the carnival"}
             src={[soundJ1, soundJ2, soundJ3, soundJ5, soundJ6, soundJ7]}
             id={"story"}
@@ -476,12 +485,12 @@ const WB_Unit2_Page13_Q1 = () => {
               >
                 <span className="font-bold mr-2">1</span>
                 Underline the relative clauses in the story.
-                <HiArrowUpCircle
+                <HiArrowUpCircle onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)returnToStory(event);}} onClick={returnToStory} aria-label={"Return to the story above"} data-return-arrow={true} data-choice={true} tabIndex={0} role={"button"}
                   style={{
                     color: "#6D2980",
                     fontSize: "26px",
                     flexShrink: 0,
-                  }}
+                  cursor:"pointer",borderRadius:"50%","--exercise-focus-radius":"50%"}}
                 />
               </AudioText>
             </span>

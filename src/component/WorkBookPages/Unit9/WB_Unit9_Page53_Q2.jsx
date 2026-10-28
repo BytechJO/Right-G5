@@ -1,8 +1,29 @@
+import soundF12 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_012_If_we_go_to_the_beach,.mp3";
+import soundF11 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_011_when_we_go_on_a_picnic.mp3";
+import soundF10 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_010_When_the_rain_stops,.mp3";
+import soundF9 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_009_we_can_go_out_and_play.mp3";
+import soundF8 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_008_We_could_make_a_snowman.mp3";
+import soundF7 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_007_we_might_travel_to_a_cooler_country.mp3";
+import soundF6 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_006_Karen_can_bring_the_desserts.mp3";
+import soundF5 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_005_we_can_collect_seashells.mp3";
+import soundF4 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_004_When_Gary_learns_how_to_ride_a_bike,.mp3";
+import soundF3 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_003_he_will_join_us_in_a_bike_race.mp3";
+import soundF2 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_002_if_it_snows_tomorrow.mp3";
+import soundF1 from "../../../assets/audio/Workbook/Unit 9/Page 53 - F/Item_001_If_this_summer_gets_too_hot,.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit9_Page53_Q2 = () => {
+
+const WB_Unit9_Page53_Q2 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const leftSide = [
     "If this summer gets too hot,",
 
@@ -88,12 +109,7 @@ const WB_Unit9_Page53_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’',]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // MATCH INPUT
@@ -144,14 +160,14 @@ const WB_Unit9_Page53_Q2 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmptyMatch = matches.some((a) => !a.trim());
 
     const hasEmptySentence = studentAnswers.some((a) => !a.trim());
 
     if (hasEmptyMatch || hasEmptySentence) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -172,9 +188,9 @@ const WB_Unit9_Page53_Q2 = () => {
 
     const normalizedCorrectAnswers = sentenceAnswers.map((s) => normalize(s));
 
-    const usedAnswers = [];
+    const usedAnswers = studentAnswers.flatMap((answer,i)=>sentenceResult[i]===true?[normalizedCorrectAnswers.indexOf(normalize(answer))]:[]);
 
-    const newSentenceResults = studentAnswers.map((answer) => {
+    const newSentenceResults = studentAnswers.map((answer, slot) => {
       const normalizedAnswer = normalize(answer);
 
       const matchedIndex = normalizedCorrectAnswers.findIndex(
@@ -182,10 +198,10 @@ const WB_Unit9_Page53_Q2 = () => {
           !usedAnswers.includes(i) && normalizedAnswer === correct,
       );
 
-      const ok = matchedIndex !== -1;
+      const ok = sentenceResult[slot]===true || matchedIndex !== -1;
 
       if (ok) {
-        usedAnswers.push(matchedIndex);
+        if(matchedIndex!==-1)usedAnswers.push(matchedIndex);
         correctCount++;
       }
 
@@ -209,13 +225,13 @@ const WB_Unit9_Page53_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -223,7 +239,7 @@ const WB_Unit9_Page53_Q2 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setMatches(correctMatches);
 
     setStudentAnswers(sentenceAnswers);
@@ -239,7 +255,7 @@ const WB_Unit9_Page53_Q2 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setMatches(["", "", "", "", "", ""]);
 
     setStudentAnswers(["", "", "", "", "", ""]);
@@ -257,7 +273,7 @@ const WB_Unit9_Page53_Q2 = () => {
 
   const matchInput = (i) => (
     <div className="relative inline-block">
-      <input
+      <input style={{borderBottomColor:(matchResult[i]===true)?"#16a34a":(matchResult[i]===false)?"#D1232A":undefined}} aria-invalid={matchResult[i]===false} title={`Match ${i+1}: ${leftSide[i]}. Enter the ending letter a to f.`} aria-label={`Match ${i+1}: ${leftSide[i]}. Enter the ending letter a to f.`} {...fieldKeys}
         type="text"
         maxLength={1}
         value={matches[i]}
@@ -287,7 +303,7 @@ const WB_Unit9_Page53_Q2 = () => {
 
   const sentenceInput = (i) => (
     <div className="relative w-full">
-      <input
+      <input style={{borderBottomColor:(sentenceResult[i]===true)?"#16a34a":(sentenceResult[i]===false)?"#D1232A":undefined}} placeholder={"Complete sentence"} aria-invalid={sentenceResult[i]===false} title={`Complete matched sentence ${i+1}: use the clauses above`} aria-label={`Complete matched sentence ${i+1}: use the clauses above`} {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || sentenceResult[i] === true}
@@ -334,21 +350,14 @@ const WB_Unit9_Page53_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit9_Page53_Q2.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit9_Page53_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit9_Page53_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit9_Page53_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            F
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="F" title={<>
+          
           Read, match, and write.
-        </h5>
+        </>} subTitle="Match each condition with the result that makes logical sense first, then write the complete paired sentence below." />
 
         {/* MATCHING */}
 
@@ -357,13 +366,13 @@ const WB_Unit9_Page53_Q2 = () => {
 
           <div className="flex flex-col gap-5">
             {leftSide.map((sentence, index) => (
-              <div key={index} className="flex items-start gap-3">
+              <SentenceGroup label={`Hear beginning ${index+1}: ${sentence}`} src={[soundF1,soundF4,soundF6,soundF8,soundF10,soundF12][index]} id={`left-${index}`} audio={audio} key={index} className="flex items-start gap-3">
                 {matchInput(index)}
 
                 <span className="font-bold">{index + 1}</span>
 
                 <span>{sentence}</span>
-              </div>
+              </SentenceGroup>
             ))}
           </div>
 
@@ -371,11 +380,11 @@ const WB_Unit9_Page53_Q2 = () => {
 
           <div className="flex flex-col gap-5">
             {rightSide.map((item, index) => (
-              <div key={index} className="flex items-start gap-3">
+              <SentenceGroup label={`Hear ending ${item.letter}: ${item.text}`} src={[soundF2,soundF3,soundF5,soundF7,soundF9,soundF11][index]} id={`right-${index}`} audio={audio} key={index} className="flex items-start gap-3">
                 <span className="font-bold">{item.letter}</span>
 
                 <span>{item.text}</span>
-              </div>
+              </SentenceGroup>
             ))}
           </div>
         </div>
@@ -396,15 +405,15 @@ const WB_Unit9_Page53_Q2 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

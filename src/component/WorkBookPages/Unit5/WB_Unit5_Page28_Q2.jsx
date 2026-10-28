@@ -1,8 +1,49 @@
+import soundD3 from "../../../assets/audio/Workbook/Unit 5/Page 28 - D/Item_003_I_need_more_milk.mp3";
+import soundD2 from "../../../assets/audio/Workbook/Unit 5/Page 28 - D/Item_002_I_want_to_go_to_the_store.mp3";
+import soundD1 from "../../../assets/audio/Workbook/Unit 5/Page 28 - D/Item_001_I_want_to_place_an_order.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page28_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const answers = [
     "Can I make an order, please?",
     "May I go to the store, please?",
@@ -21,12 +62,7 @@ const WB_Unit5_Page28_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -48,11 +84,18 @@ const WB_Unit5_Page28_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -83,17 +126,39 @@ const WB_Unit5_Page28_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResult([true, true, true]);
@@ -102,6 +167,8 @@ const WB_Unit5_Page28_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", ""]);
 
     setResult([]);
@@ -112,6 +179,14 @@ const WB_Unit5_Page28_Q2 = () => {
   const inputField = (i) => (
     <div className="relative flex-1">
       <input
+        style={{
+          borderBottomColor: result[i] === true ? "#16a34a" : undefined,
+        }}
+        aria-invalid={result[i] === false}
+        placeholder={"Polite request"}
+        title={`Write a polite request for sentence ${i + 1}: ${sentences[i]}`}
+        aria-label={`Write a polite request for sentence ${i + 1}: ${sentences[i]}`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -129,7 +204,6 @@ const WB_Unit5_Page28_Q2 = () => {
 
           ${result[i] === false ? "border-[#D1232A]" : "border-black"}
         `}
-      
       />
 
       {result[i] === false && (
@@ -159,31 +233,49 @@ const WB_Unit5_Page28_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[20px]">
+    <div
+      data-exercise-scope={"WB_Unit5_Page28_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page28_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page28_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page28_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[20px]" style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-[12vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          Make <span className="text-[#00AEEF]">polite requests</span>  from the
-          statements below.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="D"
+          title={
+            <>
+              Make <span className="text-[#00AEEF]">polite requests</span> from
+              the statements below.
+            </>
+          }
+          subTitle="Identify the direct request first, then rewrite it with an appropriate polite form while keeping the original meaning."
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15">
           {sentences.map((sentence, index) => (
             <div key={index} className="w-full">
-              <div className="flex gap-3 mb-3">
+              <SentenceGroup
+                label={`Hear statement ${index + 1}: ${sentence}`}
+                src={[soundD1, soundD2, soundD3][index]}
+                id={`prompt-${index}`}
+                audio={audio}
+                className="flex gap-3 mb-3"
+              >
                 <span className="font-bold w-5">{index + 1}</span>
 
                 <span>{sentence}</span>
-              </div>
+              </SentenceGroup>
 
               <div className="pl-8">{inputField(index)}</div>
             </div>
@@ -193,15 +285,36 @@ const WB_Unit5_Page28_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

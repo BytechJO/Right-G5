@@ -1,8 +1,62 @@
+import soundC9 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_009_snowman._(make).mp3";
+import soundC8 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_008_While_the_snow_fell,_she.mp3";
+import soundC7 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_007_their_favorite_songs._(sing).mp3";
+import soundC6 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_006_They.mp3";
+import soundC5 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_005_all_day_long._(study).mp3";
+import soundC4 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_004_We.mp3";
+import soundC3 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_003_soccer_in_the_field._(play).mp3";
+import soundC2 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_002_You.mp3";
+import soundC1 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_001_on_the_couch_last_night._(sleep).mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit_Test_Q27 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       before: "You",
@@ -51,12 +105,7 @@ const WB_Unit_Test_Q27 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -86,11 +135,18 @@ const WB_Unit_Test_Q27 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -121,13 +177,32 @@ const WB_Unit_Test_Q27 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -136,6 +211,9 @@ const WB_Unit_Test_Q27 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(questions.map((q) => q.answer));
 
     setResult([true, true, true, true, true]);
@@ -148,6 +226,8 @@ const WB_Unit_Test_Q27 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", ""]);
 
     setResult([]);
@@ -162,6 +242,19 @@ const WB_Unit_Test_Q27 = () => {
   const inputField = (i) => (
     <div className="relative flex-1 min-w-[140px]">
       <input
+        style={{
+          borderBottomColor:
+            result[i] === true
+              ? "#16a34a"
+              : result[i] === false
+                ? "#D1232A"
+                : undefined,
+        }}
+        placeholder={"was / were + verb-ing"}
+        aria-invalid={result[i] === false}
+        title={`Sentence ${i + 1}: ${questions[i].before} ___ ${questions[i].after}. Use the past progressive.`}
+        aria-label={`Sentence ${i + 1}: ${questions[i].before} ___ ${questions[i].after}. Use the past progressive.`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -208,22 +301,34 @@ const WB_Unit_Test_Q27 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit10_Page58_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit10_Page58_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit10_Page58_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit10_Page58_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full" style={{gap:"50px"}}>
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[10vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            C
-          </span>
-          Read and write the{" "}
-          <span className="text-[#00AEEF]">past progressive tense.</span>
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="C"
+          title={
+            <>
+              Read and write the{" "}
+              <span className="text-[#00AEEF]">past progressive tense.</span>
+            </>
+          }
+          subTitle="Match the subject with was or were, add the -ing verb, and check that the sentence describes an action in progress in the past."
+        />
 
         {/* QUESTIONS */}
 
@@ -244,7 +349,20 @@ const WB_Unit_Test_Q27 = () => {
 
               {/* BEFORE */}
 
-              <span>{q.before}</span>
+              <span>
+                {[soundC2, soundC4, null, soundC6, soundC8][index] ? (
+                  <AudioText
+                    audio={audio}
+                    id={`before-${index}`}
+                    src={[soundC2, soundC4, null, soundC6, soundC8][index]}
+                    label={"Hear " + q.before}
+                  >
+                    {q.before}
+                  </AudioText>
+                ) : (
+                  q.before
+                )}
+              </span>
 
               {/* INPUT */}
 
@@ -252,7 +370,20 @@ const WB_Unit_Test_Q27 = () => {
 
               {/* AFTER */}
 
-              <span>{q.after}</span>
+              <span>
+                {[soundC1, soundC3, soundC5, soundC7, soundC9][index] ? (
+                  <AudioText
+                    audio={audio}
+                    id={`after-${index}`}
+                    src={[soundC1, soundC3, soundC5, soundC7, soundC9][index]}
+                    label={"Hear " + q.after}
+                  >
+                    {q.after}
+                  </AudioText>
+                ) : (
+                  q.after
+                )}
+              </span>
             </div>
           ))}
         </div>
@@ -261,15 +392,36 @@ const WB_Unit_Test_Q27 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

@@ -41,6 +41,15 @@ const fieldKeys = {
 };
 const normalizeAnswer = text => text.normalize("NFKC").toLowerCase().replace(/[‘’']/g, "").replace(/[.,!?;:…“”"–—-]/g, " ").replace(/\s+/g, " ").trim();
 const WB_Unit3_Page19_Q1 = () => {
+  const returnToStory = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const story = event.currentTarget.closest('[data-exercise-scope]')?.querySelector('[data-return-story]');
+    if (!story) return;
+    story.focus({ preventScroll: true });
+    story.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  };
+
   const audio = useExerciseAudio();
   const resetButtonRef = React.useRef(null);
   const [announcement, setAnnouncement] = React.useState("");
@@ -220,7 +229,7 @@ const WB_Unit3_Page19_Q1 = () => {
         </>} subTitle="Read the whole passage once, return to the sentence that contains the answer, then write a short response based on the text." />
 
         {/* STORY */}
-        <SentenceGroup label={"Hear the story about Sarah and her family at the picnic"} src={[soundI1, soundI2, soundI3, soundI4, soundI5, soundI6, soundI7]} id={"picnic-story"} audio={audio} className="mb-10">
+        <SentenceGroup data-return-story={true} label={"Hear the story about Sarah and her family at the picnic"} src={[soundI1, soundI2, soundI3, soundI4, soundI5, soundI6, soundI7]} id={"picnic-story"} audio={audio} className="mb-10">
           {storyWords.map((word, index) => <React.Fragment key={index}>
               {renderStoryWord(word, index)}{" "}
             </React.Fragment>)}
@@ -234,11 +243,11 @@ const WB_Unit3_Page19_Q1 = () => {
               <span className="flex items-center gap-2"><AudioText audio={audio} id={"fragment-0"} src={soundI8} label={"Hear Circle the linking verbs in the story."}>
                 <span className="font-bold mr-2">1</span>
                 Circle the linking verbs in the story.
-                <HiArrowUpCircle style={{
+                <HiArrowUpCircle onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)returnToStory(event);}} onClick={returnToStory} aria-label={"Return to the story above"} data-return-arrow={true} data-choice={true} tabIndex={0} role={"button"} style={{
                   color: "#6D2980",
                   fontSize: "26px",
                   flexShrink: 0
-                }} />
+                ,cursor:"pointer",borderRadius:"50%","--exercise-focus-radius":"50%"}} />
               </AudioText></span>
             </div>
           </div>

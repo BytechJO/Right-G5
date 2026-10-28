@@ -1,11 +1,53 @@
+import soundI4 from "../../../assets/audio/Workbook/Unit 5/Page 30 - I/Item_004_We_ordered_some_shish_kebab_for_dinner.mp3";
+import soundI3 from "../../../assets/audio/Workbook/Unit 5/Page 30 - I/Item_003_The_both_class_went_to_the_field_trip.mp3";
+import soundI2 from "../../../assets/audio/Workbook/Unit 5/Page 30 - I/Item_002_The_teacher_gave_us_a_new_class_assignment.mp3";
+import soundI1 from "../../../assets/audio/Workbook/Unit 5/Page 30 - I/Item_001_The_information_in_the_library_gave_me_all_the_books_I_requested.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import trueImg from "../../../assets/imgs/true.svg";
 import falseImg from "../../../assets/imgs/false.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page30_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       status: "false",
@@ -54,12 +96,7 @@ const WB_Unit5_Page30_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE MARK
@@ -68,6 +105,7 @@ const WB_Unit5_Page30_Q2 = () => {
   const handleMark = (i, value) => {
     if (locked || result[i]?.mark === true) return;
 
+    setAnnouncement(`Sentence ${i + 1}: ${value} selected.`);
     const updatedMarks = [...marks];
 
     updatedMarks[i] = value;
@@ -108,7 +146,10 @@ const WB_Unit5_Page30_Q2 = () => {
     setResult((prev) => {
       const copy = [...prev];
 
-      copy[i] = undefined;
+      copy[i] =
+        prev[i]?.mark === true
+          ? { mark: true, correction: undefined, row: undefined }
+          : undefined;
 
       return copy;
     });
@@ -120,11 +161,18 @@ const WB_Unit5_Page30_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmptyMark = marks.some((m) => !m);
 
     if (hasEmptyMark) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -134,9 +182,15 @@ const WB_Unit5_Page30_Q2 = () => {
     );
 
     if (hasMissingCorrection) {
-      ValidationAlert.info(
-        "Please write the correct vocabulary word for X answers.",
-      );
+      (setAnnouncement(
+        String("Please write the correct vocabulary word for X answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info(
+          "Please write the correct vocabulary word for X answers.",
+        ));
 
       return;
     }
@@ -190,13 +244,32 @@ const WB_Unit5_Page30_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -205,6 +278,9 @@ const WB_Unit5_Page30_Q2 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setMarks(["false", "true", "false", "true"]);
 
     setAnswers(["librarian", "", "entire", ""]);
@@ -243,6 +319,8 @@ const WB_Unit5_Page30_Q2 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setMarks(["", "", "", ""]);
 
     setAnswers(["", "", "", ""]);
@@ -266,6 +344,10 @@ const WB_Unit5_Page30_Q2 = () => {
 
     return (
       <button
+        aria-label={`Sentence ${i + 1}: ${value}`}
+        aria-pressed={active}
+        data-choice={true}
+        {...activationKeys}
         type="button"
         disabled={locked || result[i]?.mark === true}
         onClick={() => handleMark(i, value)}
@@ -273,16 +355,24 @@ const WB_Unit5_Page30_Q2 = () => {
         style={{
           width: "34px",
           height: "34px",
-          border:"1px solid #6D2980" ,
+          border: "1px solid #6D2980",
           borderRadius: "6px",
           background: "transparent",
           cursor: locked || result[i]?.mark === true ? "default" : "pointer",
+          backgroundColor: active ? "#dbeafe" : undefined,
+          borderColor:
+            active && result[i]?.mark !== undefined
+              ? result[i].mark
+                ? "#16a34a"
+                : "#D1232A"
+              : "#6D2980",
         }}
       >
         {active && (
           <img
+            aria-hidden={true}
             src={img}
-            alt={value}
+            alt={""}
             style={{
               width: "24px",
               height: "24px",
@@ -324,6 +414,17 @@ const WB_Unit5_Page30_Q2 = () => {
   const inputField = (i, width = "240px") => (
     <div className="relative inline-block">
       <input
+        style={{
+          borderBottomColor:
+            marks[i] === "false" && result[i]?.correction === true
+              ? "#16a34a"
+              : undefined,
+        }}
+        aria-invalid={marks[i] === "false" && result[i]?.correction === false}
+        placeholder={"Correct word"}
+        title={`Sentence ${i + 1}: write the correction when false`}
+        aria-label={`Sentence ${i + 1}: write the correction when false`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i]?.row === true || marks[i] === "true"}
@@ -374,22 +475,41 @@ const WB_Unit5_Page30_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit5_Page30_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page30_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full"> 
         {/* TITLE */}
 
-        <div className="header-title-page8 mb-[12vh]">
-          <span className="ex-A mr-2">I</span>
-          <div style={{ display: "block" }}>
-            Read and write <span className="text-[#D1252B]">✓</span> or{" "}
-            <span className="text-[#D1252B]">✕</span> to show if the underlined
-            word is used for your correctly.
-            <div style={{ marginTop: "4px" }}>
-              Write the correct vocabulary word if the underlined word is
-              incorrect.
-            </div>
-          </div>
-        </div>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="I"
+          title={
+            <>
+              <div style={{ display: "block" }}>
+                Read and write <span className="text-[#D1252B]">✓</span> or{" "}
+                <span className="text-[#D1252B]">✕</span> to show if the
+                underlined word is used for your correctly.
+                <div style={{ marginTop: "4px" }}>
+                  Write the correct vocabulary word if the underlined word is
+                  incorrect.
+                </div>
+              </div>
+            </>
+          }
+          subTitle="Check the underlined vocabulary in context; if it is wrong, replace only that word with the correct vocabulary item."
+        />
 
         {/* QUESTIONS */}
 
@@ -398,7 +518,13 @@ const WB_Unit5_Page30_Q2 = () => {
             <div key={index} className="w-full">
               {/* ROW */}
 
-              <div className="flex items-center gap-6 w-full whitespace-nowrap">
+              <SentenceGroup
+                label={`Hear sentence ${index + 1}`}
+                src={[soundI1, soundI2, soundI3, soundI4][index]}
+                id={`sentence-${index}`}
+                audio={audio}
+                className="flex items-center gap-6 w-full whitespace-nowrap"
+              >
                 {/* BOXES */}
                 <div className="flex items-center gap-2">
                   {markBox(index, "true", trueImg)}
@@ -414,7 +540,7 @@ const WB_Unit5_Page30_Q2 = () => {
 
                 {/* INPUT */}
                 <div className="flex-1">{inputField(index)}</div>
-              </div>
+              </SentenceGroup>
             </div>
           ))}
         </div>
@@ -423,15 +549,36 @@ const WB_Unit5_Page30_Q2 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

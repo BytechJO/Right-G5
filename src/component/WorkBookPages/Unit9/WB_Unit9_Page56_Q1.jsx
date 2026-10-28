@@ -1,11 +1,25 @@
+import soundJ5 from "../../../assets/audio/Workbook/Unit 9/Page 56 - J/Item_005_Ben_will_ring_his_friend_later_today.mp3";
+import soundJ4 from "../../../assets/audio/Workbook/Unit 9/Page 56 - J/Item_004_Jane_went_to_the_congratulations_today._She_is_going_to_see_a_game.mp3";
+import soundJ3 from "../../../assets/audio/Workbook/Unit 9/Page 56 - J/Item_003_Let's_begin_the_school_year_and_see_how_it_goes.mp3";
+import soundJ2 from "../../../assets/audio/Workbook/Unit 9/Page 56 - J/Item_002_I_have_mowing_!_We_are_going_to_a_field_trip_tomorrow!.mp3";
+import soundJ1 from "../../../assets/audio/Workbook/Unit 9/Page 56 - J/Item_001_I_got_new_braces_for_my_teeth.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import trueImg from "../../../assets/imgs/true.svg";
 import falseImg from "../../../assets/imgs/false.svg";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit9_Page56_Q1 = () => {
+
+const WB_Unit9_Page56_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     {
       status: "true",
@@ -53,20 +67,15 @@ const WB_Unit9_Page56_Q1 = () => {
     </>,
   ];
 
-  const [marks, setMarks] = useState(["", "", "", ""]);
+  const [marks, setMarks] = useState(Array(questions.length).fill(""));
 
-  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [answers, setAnswers] = useState(Array(questions.length).fill(""));
 
   const [result, setResult] = useState([]);
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE MARK
@@ -115,7 +124,7 @@ const WB_Unit9_Page56_Q1 = () => {
     setResult((prev) => {
       const copy = [...prev];
 
-      copy[i] = undefined;
+      copy[i] = prev[i]?.mark===true?{mark:true}:undefined;
 
       return copy;
     });
@@ -126,12 +135,12 @@ const WB_Unit9_Page56_Q1 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmptyMark = marks.some((m) => !m);
 
     if (hasEmptyMark) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -141,9 +150,9 @@ const WB_Unit9_Page56_Q1 = () => {
     );
 
     if (hasMissingCorrection) {
-      ValidationAlert.info(
+      (setAnnouncement(String("Please write the correct vocabulary word for X answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info(
         "Please write the correct vocabulary word for X answers.",
-      );
+      ));
 
       return;
     }
@@ -197,13 +206,13 @@ const WB_Unit9_Page56_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -211,36 +220,12 @@ const WB_Unit9_Page56_Q1 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setMarks(["true", "false", "true", "false", "true"]);
 
     setAnswers(["", "great news", "", "stadium", ""]);
 
-    setResult([
-      {
-        mark: true,
-        correction: true,
-        row: true,
-      },
-
-      {
-        mark: true,
-        correction: true,
-        row: true,
-      },
-
-      {
-        mark: true,
-        correction: true,
-        row: true,
-      },
-
-      {
-        mark: true,
-        correction: true,
-        row: true,
-      },
-    ]);
+    setResult(questions.map(()=>({mark:true,correction:true,row:true})));
 
     setLocked(true);
   };
@@ -249,10 +234,10 @@ const WB_Unit9_Page56_Q1 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
-    setMarks(["", "", "", ""]);
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
+    setMarks(Array(questions.length).fill(""));
 
-    setAnswers(["", "", "", ""]);
+    setAnswers(Array(questions.length).fill(""));
 
     setResult([]);
 
@@ -272,7 +257,7 @@ const WB_Unit9_Page56_Q1 = () => {
         (value === "false" && marks[i] === "false"));
 
     return (
-      <button
+      <button {...activationKeys} aria-pressed={active} aria-label={`Sentence ${i+1}: ${value==="true"?"true":"false"}${result[i]?.mark===true?", correct and locked":""}`} data-choice={true}
         type="button"
         disabled={locked || result[i]?.mark === true}
         onClick={() => handleMark(i, value)}
@@ -282,14 +267,13 @@ const WB_Unit9_Page56_Q1 = () => {
           height: "34px",
           border: "1px solid #6D2980",
           borderRadius: "6px",
-          background: "transparent",
           cursor: locked || result[i]?.mark === true ? "default" : "pointer",
-        }}
+        background:active?"#dbeafe":"transparent",borderColor:active&&result[i]?.mark===true?"#16a34a":showError?"#D1232A":"#6D2980"}}
       >
         {active && (
-          <img
+          <img aria-hidden={true}
             src={img}
-            alt={value}
+            alt={""}
             style={{
               width: "24px",
               height: "24px",
@@ -330,7 +314,7 @@ const WB_Unit9_Page56_Q1 = () => {
 
   const inputField = (i) => (
     <div className="relative w-full">
-      <input
+      <input style={{borderBottomColor:(marks[i]==="false"&&result[i]?.correction===true)?"#16a34a":(marks[i]==="false"&&result[i]?.correction===false)?"#D1232A":undefined}} placeholder={"Correct word / phrase"} aria-invalid={marks[i]==="false"&&result[i]?.correction===false} title={`Sentence ${i+1}: correct the underlined expression if false`} aria-label={`Sentence ${i+1}: correct the underlined expression if false`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i]?.row === true || marks[i] === "true"}
@@ -381,17 +365,17 @@ const WB_Unit9_Page56_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit9_Page56_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit9_Page56_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit9_Page56_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit9_Page56_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <div className="header-title-page8 mb-[13vh]">
-          <span className="ex-A mr-2">J</span>
+        <ExerciseHeader isWorkbook sectionLetter="J" title={<>
+          
           Read and write <span className="text-[#D1252B]">✓</span> or{" "}
           <span className="text-[#D1252B]">✕</span> For{" "}
           <span className="text-[#D1252B]">✕</span>, write the correct word or
           expression.
-        </div>
+        </>} subTitle="Judge the underlined vocabulary or expression in context; for X, replace only the incorrect part." />
 
         {/* QUESTIONS */}
 
@@ -400,7 +384,7 @@ const WB_Unit9_Page56_Q1 = () => {
             <div key={index} className="w-full">
               {/* ROW */}
 
-              <div className="flex items-end gap-4 w-full">
+              <SentenceGroup label={`Hear sentence ${index+1}`} src={[soundJ1,soundJ2,soundJ3,soundJ4,soundJ5][index]} id={`sentence-${index}`} audio={audio} className="flex items-end gap-4 w-full">
                 {/* BOXES */}
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -420,7 +404,7 @@ const WB_Unit9_Page56_Q1 = () => {
                 {/* INPUT */}
 
                 <div className="flex-1">{inputField(index, "100%")}</div>
-              </div>
+              </SentenceGroup>
             </div>
           ))}
         </div>
@@ -429,15 +413,15 @@ const WB_Unit9_Page56_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

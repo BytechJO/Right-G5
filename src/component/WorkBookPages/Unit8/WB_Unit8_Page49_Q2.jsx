@@ -1,8 +1,31 @@
+import soundK11 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_011_air.mp3";
+import soundK14 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_014_games.mp3";
+import soundK10 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_010_rain.mp3";
+import soundK13 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_013_over.mp3";
+import soundK9 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_009_like.mp3";
+import soundK8 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_008_balloon.mp3";
+import soundK12 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_012_scape.mp3";
+import soundK6 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_006_bow.mp3";
+import soundK5 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_005_looks.mp3";
+import soundK4 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_004_land.mp3";
+import soundK3 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_003_fly.mp3";
+import soundK2 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_002_board.mp3";
+import soundK1 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_001_hot.mp3";
+import soundK7 from "../../../assets/audio/Workbook/Unit 8/Page 49 - K/Item_007_ants.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit8_Page49_Q2 = () => {
+
+const WB_Unit8_Page49_Q2 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const wordBank = [
     "ants",
     "hot",
@@ -43,14 +66,7 @@ const WB_Unit8_Page49_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/\bgames\b/g, "game")
-      .replace(/\bants\b/g, "ant")
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = text=>normalizeAnswer(text).replace(/\bgames\b/g,"game").replace(/\bants\b/g,"ant");
 
   // ------------------------
   // HANDLE INPUT
@@ -79,12 +95,12 @@ const WB_Unit8_Page49_Q2 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -93,9 +109,9 @@ const WB_Unit8_Page49_Q2 = () => {
 
     const normalizedCorrect = answers.map(normalize);
 
-    const usedAnswers = [];
+    const usedAnswers=studentAnswers.flatMap((a,i)=>result[i]===true?[normalizedCorrect.indexOf(normalize(a))]:[]);
 
-    const newResults = studentAnswers.map((answer) => {
+    const newResults = studentAnswers.map((answer,slot) => {
       const normalizedStudent = normalize(answer);
 
       const foundIndex = normalizedCorrect.findIndex(
@@ -103,10 +119,10 @@ const WB_Unit8_Page49_Q2 = () => {
           correct === normalizedStudent && !usedAnswers.includes(index),
       );
 
-      const ok = foundIndex !== -1;
+      const ok = result[slot]===true || foundIndex !== -1;
 
       if (ok) {
-        usedAnswers.push(foundIndex);
+        if(foundIndex!==-1)usedAnswers.push(foundIndex);
 
         correctCount++;
       }
@@ -130,13 +146,13 @@ const WB_Unit8_Page49_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -144,7 +160,7 @@ const WB_Unit8_Page49_Q2 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setStudentAnswers(answers);
 
     setResult([true, true, true, true, true, true]);
@@ -156,7 +172,7 @@ const WB_Unit8_Page49_Q2 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -170,7 +186,7 @@ const WB_Unit8_Page49_Q2 = () => {
 
   const inputField = (i) => (
     <div className="relative w-full">
-      <input
+      <input style={{borderBottomColor:(result[i]===true)?"#16a34a":(result[i]===false)?"#D1232A":undefined}} aria-invalid={result[i]===false} placeholder={"Word / phrase"} title={`Vocabulary expression ${i+1}: combine parts from the visible bank`} aria-label={`Vocabulary expression ${i+1}: combine parts from the visible bank`} {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -217,21 +233,14 @@ const WB_Unit8_Page49_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit8_Page49_Q2.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit8_Page49_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit8_Page49_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit8_Page49_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[12vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            K
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="K" title={<>
+          
           Write words and expressions from the words given below.
-        </h5>
+        </>} subTitle="Combine only the supplied word parts into real vocabulary words or expressions, then check each completed item against the list." />
 
         {/* WORD BANK */}
 
@@ -245,7 +254,7 @@ const WB_Unit8_Page49_Q2 = () => {
         >
           <div className="grid grid-cols-7 gap-x-8 gap-y-3">
             {wordBank.map((word, index) => (
-              <span key={index}>{word}</span>
+              <span key={index}><AudioText audio={audio} id={`bank-${index}`} src={[soundK7,soundK1,soundK2,soundK3,soundK4,soundK5,soundK6,soundK12,soundK8,soundK9,soundK13,soundK10,soundK14,soundK11][index]} label={`Hear ${word}`}>{word}</AudioText></span>
             ))}
           </div>
         </div>
@@ -262,15 +271,15 @@ const WB_Unit8_Page49_Q2 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

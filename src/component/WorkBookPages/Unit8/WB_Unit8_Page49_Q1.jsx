@@ -1,3 +1,10 @@
+import soundJ7 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_007_2_Nobody_brought_cake.mp3";
+import soundJ6 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_006_1_No_one_brought_chips.mp3";
+import soundJ1 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_001_Helen_and_her_friends_went_on_a_field_trip._Everyone_packed_their_backpa.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -5,7 +12,12 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 // IMAGES
 // IMAGE
 import mainImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 49/Asset 18.svg";
-const WB_Unit8_Page49_Q1 = () => {
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+
+const WB_Unit8_Page49_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     {
       sentence: "No one brought chips.",
@@ -57,12 +69,7 @@ const WB_Unit8_Page49_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -91,12 +98,12 @@ const WB_Unit8_Page49_Q1 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -127,13 +134,13 @@ const WB_Unit8_Page49_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -141,7 +148,7 @@ const WB_Unit8_Page49_Q1 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setStudentAnswers(questions.map((q) => q.correct));
 
     setResult([true, true, true, true, true, true]);
@@ -153,7 +160,7 @@ const WB_Unit8_Page49_Q1 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -167,7 +174,7 @@ const WB_Unit8_Page49_Q1 = () => {
 
   const inputField = (i) => (
     <div className="relative inline-block">
-      <input
+      <input style={{borderBottomColor:(result[i]===true)?"#16a34a":(result[i]===false)?"#D1232A":undefined,...(result[i]===true?{borderColor:"#16a34a"}:result[i]===false?{borderColor:"#D1232A"}:{})}} aria-invalid={result[i]===false}  title={`Statement ${i+1}: ${questions[i].sentence} Write true or false.`} aria-label={`Statement ${i+1}: ${questions[i].sentence} Write true or false.`} {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -215,29 +222,22 @@ const WB_Unit8_Page49_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit8_Page49_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit8_Page49_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit8_Page49_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit8_Page49_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-6 leading-[1.4]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            J
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="J" title={<>
+          
           Look, read, and write <span className="text-[#00AEEF]">true</span>or
           <span className="text-[#00AEEF]">false</span>.
-        </h5>
+        </>} subTitle="Compare every statement with the backpack chart before choosing true or false; do not rely on memory from earlier items." />
 
         {/* TOP TEXT */}
 
-        <div className=" leading-normal">
+        <div className=" leading-normal"><AudioText audio={audio} id={"fragment-0"} src={soundJ1} label={"Hear Helen and her friends went on a field trip. Everyone packed their backpack for the trip."}>
           Helen and her friends went on a field trip. Everyone packed their
           backpack for the trip.
-        </div>
+        </AudioText></div>
 
         {/* IMAGE BOX */}
         <div
@@ -248,7 +248,7 @@ const WB_Unit8_Page49_Q1 = () => {
         >
           <img
             src={mainImg}
-            alt=""
+            alt={"Food chart with columns Helen, Kelly, James and Mike. Every column shows water and a filled bun. Helen and Kelly have chips; Helen, James and Mike have cookies."}
             style={{
               width: "100%",
               height: "auto",
@@ -262,13 +262,13 @@ const WB_Unit8_Page49_Q1 = () => {
 
         <div className="grid grid-cols-2 gap-y-6 gap-x-10 mb-10">
           {questions.map((q, index) => (
-            <div key={index} className="flex items-center gap-3">
+            <SentenceGroup label={`Hear statement ${index+1}: ${q.sentence}`} src={[soundJ6,soundJ7,null,null,null,null][index]} id={`sentence-${index}`} audio={audio} key={index} className="flex items-center gap-3">
               {inputField(index)}
 
               <span className="font-bold">{index + 1}</span>
 
               <span>{q.sentence}</span>
-            </div>
+            </SentenceGroup>
           ))}
         </div>
       </div>
@@ -276,15 +276,15 @@ const WB_Unit8_Page49_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

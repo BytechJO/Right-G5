@@ -1,11 +1,52 @@
+import soundG3 from "../../../assets/audio/Workbook/Unit 5/Page 29 - G/Item_003_Help_me_solve_this_math_question.mp3";
+import soundG2 from "../../../assets/audio/Workbook/Unit 5/Page 29 - G/Item_002_Where_is_the_bathroom.mp3";
+import soundG1 from "../../../assets/audio/Workbook/Unit 5/Page 29 - G/Item_001_I_would_like_a_cup_of_milk,_please.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import trueImg from "../../../assets/imgs/true.svg";
 import falseImg from "../../../assets/imgs/false.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page29_Q3 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       status: "true",
@@ -39,20 +80,16 @@ const WB_Unit5_Page29_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE MARK
   // ------------------------
 
   const handleMark = (i, value) => {
-    if (locked || result[i]?.row === true) return;
+    if (locked || result[i]?.mark === true) return;
 
+    setAnnouncement(`Sentence ${i + 1}: ${value} selected.`);
     const updatedMarks = [...marks];
 
     updatedMarks[i] = value;
@@ -93,7 +130,10 @@ const WB_Unit5_Page29_Q3 = () => {
     setResult((prev) => {
       const copy = [...prev];
 
-      copy[i] = undefined;
+      copy[i] =
+        prev[i]?.mark === true
+          ? { mark: true, correction: undefined, row: undefined }
+          : undefined;
 
       return copy;
     });
@@ -105,11 +145,18 @@ const WB_Unit5_Page29_Q3 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmptyMark = marks.some((m) => !m);
 
     if (hasEmptyMark) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -120,7 +167,15 @@ const WB_Unit5_Page29_Q3 = () => {
     );
 
     if (hasMissingCorrection) {
-      ValidationAlert.info("Please write the correct sentence for X answers.");
+      (setAnnouncement(
+        String("Please write the correct sentence for X answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info(
+          "Please write the correct sentence for X answers.",
+        ));
 
       return;
     }
@@ -174,13 +229,32 @@ const WB_Unit5_Page29_Q3 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -189,6 +263,9 @@ const WB_Unit5_Page29_Q3 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setMarks(["true", "false", "false"]);
 
     setAnswers([
@@ -225,6 +302,8 @@ const WB_Unit5_Page29_Q3 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setMarks(["", "", ""]);
 
     setAnswers(["", "", ""]);
@@ -248,6 +327,10 @@ const WB_Unit5_Page29_Q3 = () => {
 
     return (
       <button
+        aria-label={`Sentence ${i + 1}: ${value}`}
+        aria-pressed={active}
+        data-choice={true}
+        {...activationKeys}
         type="button"
         disabled={locked || result[i]?.mark === true}
         onClick={() => handleMark(i, value)}
@@ -255,16 +338,24 @@ const WB_Unit5_Page29_Q3 = () => {
         style={{
           width: "34px",
           height: "34px",
-          border:  "1px solid #6D2980" ,
+          border: "1px solid #6D2980",
           borderRadius: "6px",
           background: "transparent",
           cursor: locked || result[i]?.mark === true ? "default" : "pointer",
+          backgroundColor: active ? "#dbeafe" : undefined,
+          borderColor:
+            active && result[i]?.mark !== undefined
+              ? result[i].mark
+                ? "#16a34a"
+                : "#D1232A"
+              : "#6D2980",
         }}
       >
         {active && (
           <img
+            aria-hidden={true}
             src={img}
-            alt={value}
+            alt={""}
             style={{
               width: "24px",
               height: "24px",
@@ -306,6 +397,11 @@ const WB_Unit5_Page29_Q3 = () => {
   const inputField = (i, width = "100%") => (
     <div className="relative w-full">
       <input
+        aria-invalid={marks[i] === "false" && result[i]?.correction === false}
+        placeholder={"Polite request"}
+        title={`Sentence ${i + 1}: write the correction when false`}
+        aria-label={`Sentence ${i + 1}: write the correction when false`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i]?.row === true || marks[i] === "true"}
@@ -329,6 +425,10 @@ const WB_Unit5_Page29_Q3 = () => {
         `}
         style={{
           width,
+          borderBottomColor:
+            marks[i] === "false" && result[i]?.correction === true
+              ? "#16a34a"
+              : undefined,
         }}
       />
 
@@ -359,33 +459,51 @@ const WB_Unit5_Page29_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit5_Page29_Q3.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page29_Q3.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page29_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page29_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full" style={{gap:"50px"}}>
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[12vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            G
-          </span>
-          Write <span className="text-[#D1252B]">✓</span> or{" "}
-          <span className="text-[#D1252B]">✕</span>. For
-          <span className="text-[#D1252B]">✕</span> , rewrite the sentence as a{" "}
-          <span className="text-[#00AEEF]">polite request</span>.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="G"
+          title={
+            <>
+              Write <span className="text-[#D1252B]">✓</span> or{" "}
+              <span className="text-[#D1252B]">✕</span>. For
+              <span className="text-[#D1252B]">✕</span> , rewrite the sentence
+              as a <span className="text-[#00AEEF]">polite request</span>.
+            </>
+          }
+          subTitle="Decide whether each request is polite first; for every X, rewrite it using a polite form such as could, would, or please."
+        />
 
         {/* QUESTIONS */}
 
-        <div className="flex flex-col gap-[10vh]">
+        <div className="flex flex-col gap-[7vh]">
           {sentences.map((sentence, index) => (
             <div key={index} className="w-full">
               {/* ROW */}
 
-              <div className="flex items-center gap-4 mb-4 flex-wrap">
+              <SentenceGroup
+                label={`Hear sentence ${index + 1}: ${sentence}`}
+                src={[soundG1, soundG2, soundG3][index]}
+                id={`sentence-${index}`}
+                audio={audio}
+                className="flex items-center gap-4 mb-4 flex-wrap"
+              >
                 {/* BOXES */}
 
                 <div className="flex items-center gap-2">
@@ -401,7 +519,7 @@ const WB_Unit5_Page29_Q3 = () => {
                 {/* SENTENCE */}
 
                 <span>{sentence}</span>
-              </div>
+              </SentenceGroup>
 
               {/* INPUT */}
 
@@ -414,15 +532,36 @@ const WB_Unit5_Page29_Q3 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

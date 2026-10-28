@@ -1,8 +1,25 @@
+import soundA11 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_011_You_have_an_a_long_way_to_go_house._It's_huge!.mp3";
+import soundA10 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_010_You_must_be_so_tired_after_studying_for_so_long,_acres.mp3";
+import soundA9 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_009_That_was_a_very_enormous_performance!.mp3";
+import soundA8 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_008_I_like_to_eat_a_symphony_of_fruit.mp3";
+import soundA7 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_007_huh.mp3";
+import soundA3 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_003_variety.mp3";
+import soundA2 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_002_enormous.mp3";
+import soundA1 from "../../../assets/audio/Workbook/Unit 10/Page 57 - A/Item_001_lively.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit10_Page57_Q1 = () => {
+
+const WB_Unit10_Page57_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const wordBank = ["lively", "enormous", "variety", "huh"];
 
   const questions = [
@@ -89,12 +106,7 @@ const WB_Unit10_Page57_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -123,12 +135,12 @@ const WB_Unit10_Page57_Q1 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -159,13 +171,13 @@ const WB_Unit10_Page57_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -173,7 +185,7 @@ const WB_Unit10_Page57_Q1 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setStudentAnswers(questions.map((q) => q.answer));
 
     setResult([true, true, true, true]);
@@ -185,7 +197,7 @@ const WB_Unit10_Page57_Q1 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -199,7 +211,7 @@ const WB_Unit10_Page57_Q1 = () => {
 
   const inputField = (i) => (
     <div className="relative w-full">
-      <input
+      <input style={{borderBottomColor:(result[i]===true)?"#16a34a":(result[i]===false)?"#D1232A":undefined}} placeholder={"Corrected sentence"} aria-invalid={result[i]===false} title={`Rewrite sentence ${i+1}, replacing its underlined expression. Use the word bank above.`} aria-label={`Rewrite sentence ${i+1}, replacing its underlined expression. Use the word bank above.`} {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -246,21 +258,14 @@ const WB_Unit10_Page57_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit10_Page57_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit10_Page57_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit10_Page57_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit10_Page57_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[6vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="A" title={<>
+          
           Read, change, and write.
-        </h5>
+        </>} subTitle="Locate the incorrect word or phrase first, then rewrite only what is needed and reread the whole sentence." />
 
         {/* WORD BANK */}
 
@@ -268,9 +273,7 @@ const WB_Unit10_Page57_Q1 = () => {
           className="
             flex
             justify-center
-            gap-14
-            mb-12
-          "
+            gap-14"
         >
           {wordBank.map((word, index) => (
             <div
@@ -287,24 +290,24 @@ const WB_Unit10_Page57_Q1 = () => {
                 justify-center
                 text-[18px]
               "
-            >
+            ><AudioText audio={audio} id={`bank-${index}`} src={[soundA1,soundA2,soundA3,soundA7][index]} label={`Hear ${word}`}>
               {word}
-            </div>
+            </AudioText></div>
           ))}
         </div>
 
         {/* QUESTIONS */}
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
           {questions.map((q, index) => (
             <div key={index}>
               {/* QUESTION */}
 
-              <div className="flex gap-4 mb-3">
+              <SentenceGroup label={`Hear sentence ${index+1}`} src={[soundA8,soundA9,soundA10,soundA11][index]} id={`sentence-${index}`} audio={audio} className="flex gap-4 mb-3">
                 <span className="font-bold">{index + 1}</span>
 
                 <div className="leading-[1.8]">{q.sentence}</div>
-              </div>
+              </SentenceGroup>
 
               {/* INPUT */}
 
@@ -317,15 +320,15 @@ const WB_Unit10_Page57_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

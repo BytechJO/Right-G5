@@ -1,8 +1,49 @@
+import soundJ10 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_010_(_have_in_mind_give_a_presentation_).mp3";
+import soundJ9 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_009_have_the_right_books_for_both_of_you!_Follow_me_and_I'll_show_you_what.mp3";
+import soundJ8 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_008_Librarian.mp3";
+import soundJ7 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_007_(_recipe_sharks_)_books_so_I_can_make_food.mp3";
+import soundJ6 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_006_Harley_I'm_looking_for.mp3";
+import soundJ5 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_005_to_read.mp3";
+import soundJ4 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_004_(_Good_luck_to_you_both_What_would_you_like_).mp3";
+import soundJ3 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_003_Librarian_Okay._How_about_you.mp3";
+import soundJ2 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_002_Tom_I_have_to.mp3";
+import soundJ1 from "../../../assets/audio/Workbook/Unit 5/Page 30 - J/Item_001_(_information_give_a_presentation_)_in_front_of_the_class.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback, AudioSpeaker } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page30_Q3 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       speaker: "Tom:",
@@ -60,12 +101,7 @@ const WB_Unit5_Page30_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // SELECT OPTION
@@ -74,6 +110,7 @@ const WB_Unit5_Page30_Q3 = () => {
   const handleSelect = (i, option) => {
     if (locked || result[i] === true) return;
 
+    setAnnouncement(`Sentence ${i + 1}: ${option} selected.`);
     const updated = [...selectedAnswers];
 
     updated[i] = option;
@@ -95,11 +132,18 @@ const WB_Unit5_Page30_Q3 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = selectedAnswers.some((a) => !a);
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -130,13 +174,32 @@ const WB_Unit5_Page30_Q3 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -145,6 +208,9 @@ const WB_Unit5_Page30_Q3 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setSelectedAnswers(questions.map((q) => q.correct));
 
     setResult([true, true, true, true]);
@@ -157,6 +223,8 @@ const WB_Unit5_Page30_Q3 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setSelectedAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -168,22 +236,56 @@ const WB_Unit5_Page30_Q3 = () => {
   // OPTION BUTTON
   // ------------------------
 
-  return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    // Keep each recording attached to its actual printed fragment, not each choice.
+  const dialogueAudio = [
+    { lead: soundJ2, choices: soundJ1, choicesIncludeEnding: true },
+    { lead: soundJ3, choices: soundJ4, ending: soundJ5 },
+    { lead: soundJ6, choices: soundJ7, choicesIncludeEnding: true },
+    { speaker: soundJ8, lead: soundJ9, choices: soundJ10 },
+  ];
+  const fragmentProps = (id, src, label, first = true) => ({
+    "data-audio-fragment": id,
+    "data-choice": first || undefined,
+    role: first ? "button" : undefined,
+    tabIndex: first ? 0 : undefined,
+    "aria-label": first ? label : undefined,
+    onClick: (event) => { event.stopPropagation(); audio.play(id, src); },
+    onKeyDown: first ? (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault(); event.stopPropagation();
+      if (!event.repeat) audio.play(id, src);
+    } : undefined,
+    onKeyUp: first ? activationKeys.onKeyUp : undefined,
+  });
+  const fragmentStyle = (id) => ({
+    position: "relative", cursor: "pointer", borderRadius: 6,
+    ...(audio.activeId === id ? { backgroundColor: "#dbeafe", boxShadow: "0 0 0 3px #2563eb" } : {}),
+  });
+
+return (
+    <div
+      data-exercise-scope={"WB_Unit5_Page30_Q3.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page30_Q3.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall"  style={{gap:"50px"}}>
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[12vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            J
-          </span>
-          Read and circle.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="J"
+          title={<>Read and circle.</>}
+          subTitle="Read all choices before selecting; choose only the option that makes the full sentence or expression correct."
+        />
 
         {/* QUESTIONS */}
 
@@ -191,15 +293,30 @@ const WB_Unit5_Page30_Q3 = () => {
           {questions.map((question, index) => (
             <div key={index} className="text-[18px] ">
               {/* LINE */}
-              <div className="flex flex-wrap items-center">
+              <SentenceGroup
+                label={`Hear dialogue line ${index + 1}, including its two choices`}
+                src={
+                  [
+                    [soundJ2, soundJ1],
+                    [soundJ3, soundJ4, soundJ5],
+                    [soundJ6, soundJ7],
+                    [soundJ8, soundJ9, soundJ10],
+                  ][index]
+                }
+                id={`dialogue-${index}`}
+                audio={audio}
+                className="flex flex-wrap items-center"
+              >
                 {/* NUMBER */}
-                <span className="font-bold mr-3 w-5">{index + 1}</span>
+                <span style={{...fragmentStyle(dialogueAudio[index].speaker?`speaker-${index}`:`prefix-${index}`)}} {...fragmentProps(dialogueAudio[index].speaker?`speaker-${index}`:`prefix-${index}`,dialogueAudio[index].speaker || dialogueAudio[index].lead,`Hear ${question.speaker} ${dialogueAudio[index].speaker?"":question.before}`,false)} className="font-bold mr-3 w-5">{index + 1}</span>
                 {/* SPEAKER */}
-                <span className="font-bold mr-1">{question.speaker}</span>
+                <span style={{...fragmentStyle(dialogueAudio[index].speaker?`speaker-${index}`:`prefix-${index}`)}} {...fragmentProps(dialogueAudio[index].speaker?`speaker-${index}`:`prefix-${index}`,dialogueAudio[index].speaker || dialogueAudio[index].lead,`Hear ${question.speaker}`,!!dialogueAudio[index].speaker)} className="font-bold mr-1">{question.speaker}{dialogueAudio[index].speaker && audio.activeId===`speaker-${index}`&&<AudioSpeaker/>}</span>
                 {/* BEFORE */}
-                <span>{question.before}</span>
+                <span style={{...fragmentStyle(`prefix-${index}`)}} {...fragmentProps(`prefix-${index}`,dialogueAudio[index].lead,`Hear ${dialogueAudio[index].speaker?"":question.speaker} ${question.before}`,true)}>{question.before}{audio.activeId===(`prefix-${index}`)&&<AudioSpeaker/>}</span>
                 {/* ANSWER LINE */}
-                <span
+                <span {...fragmentProps(`choices-${index}`,dialogueAudio[index].choices,`Sentence ${index+1}. Hear both choices${dialogueAudio[index].choicesIncludeEnding?" and the ending":""}. Current answer: ${selectedAnswers[index]||"not selected"}.`,true)}
+                  
+                  
                   style={{
                     display: "inline-block",
                     minWidth: "260px",
@@ -207,7 +324,13 @@ const WB_Unit5_Page30_Q3 = () => {
                     margin: "0 6px",
                     padding: "0 6px",
                     textAlign: "center",
-                  }}
+                    borderBottomColor:
+                      result[index] === true
+                        ? "#16a34a"
+                        : result[index] === false
+                          ? "#D1232A"
+                          : undefined,
+                  ...fragmentStyle(`choices-${index}`),borderRadius:0}}
                 >
                   {selectedAnswers[index] ? (
                     <span
@@ -221,7 +344,7 @@ const WB_Unit5_Page30_Q3 = () => {
                   ) : (
                     <span>&nbsp;</span>
                   )}
-                </span>
+                {audio.activeId===(`choices-${index}`)&&<AudioSpeaker/>}</span>
                 {/* OPTIONS */}(
                 {question.options.map((option, optionIndex) => {
                   const selected = selectedAnswers[index] === option;
@@ -231,6 +354,12 @@ const WB_Unit5_Page30_Q3 = () => {
                   return (
                     <React.Fragment key={option}>
                       <button
+                        aria-label={`Sentence ${index + 1}: ${option}. ${result[index] === true ? "Correct and locked." : wrong ? "Not correct. Choose another answer." : "Press to choose."}`}
+                        aria-pressed={selected}
+                        data-option={option}
+                        data-question={index}
+                        data-choice={true}
+                        {...activationKeys}
                         type="button"
                         disabled={locked || result[index] === true}
                         onClick={() => handleSelect(index, option)}
@@ -249,7 +378,15 @@ const WB_Unit5_Page30_Q3 = () => {
                               : "pointer",
                           color: "black",
                           fontWeight: "400",
-                        }}
+                          backgroundColor: selected ? "#dbeafe" : undefined,
+                          borderColor: selected
+                            ? result[index] === true
+                              ? "#16a34a"
+                              : wrong
+                                ? "#D1232A"
+                                : "#6D2980"
+                            : "transparent",
+                        ...(audio.activeId===`choices-${index}`?{backgroundColor:"#dbeafe",boxShadow:"0 0 0 3px #2563eb"}:{})}}
                       >
                         {option}
 
@@ -283,8 +420,8 @@ const WB_Unit5_Page30_Q3 = () => {
                   );
                 })}
                 ){/* AFTER */}
-                <span className="ml-1">{question.after}</span>
-              </div>
+                <span style={{...(dialogueAudio[index].ending || dialogueAudio[index].choicesIncludeEnding ? fragmentStyle(dialogueAudio[index].ending?`ending-${index}`:`choices-${index}`):{})}} {...(dialogueAudio[index].ending || dialogueAudio[index].choicesIncludeEnding ? fragmentProps(dialogueAudio[index].ending?`ending-${index}`:`choices-${index}`,dialogueAudio[index].ending || dialogueAudio[index].choices,`Hear ${question.after}`,!!dialogueAudio[index].ending):{})} className="ml-1">{question.after}{dialogueAudio[index].ending && audio.activeId===`ending-${index}` && <AudioSpeaker/>}</span>
+              </SentenceGroup>
             </div>
           ))}
         </div>
@@ -293,15 +430,36 @@ const WB_Unit5_Page30_Q3 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

@@ -1,8 +1,51 @@
+import soundL14 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_014_hot-air_balloon.mp3";
+import soundL13 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_013_recognize.mp3";
+import soundL12 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_012_landscape.mp3";
+import soundL11 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_011_second_home.mp3";
+import soundL10 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_010_fly_over.mp3";
+import soundL9 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_009_shocked.mp3";
+import soundL8 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_008_board_games.mp3";
+import soundL7 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_007_crowded.mp3";
+import soundL6 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_006_doubt.mp3";
+import soundL5 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_005_rainbow.mp3";
+import soundL4 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_004_volunteer.mp3";
+import soundL3 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_003_lean.mp3";
+import soundL2 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_002_pilot.mp3";
+import soundL1 from "../../../assets/audio/Workbook/Unit 8/Page 50 - L/Item_001_spot.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState, useRef } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
 
 const WB_Unit8_Page50_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const words = [
     "spot",
     "pilot",
@@ -531,202 +574,261 @@ const WB_Unit8_Page50_Q1 = () => {
     },
   ];
 
-  const gridRef = useRef(null);
-
-  const [selectedCells, setSelectedCells] = useState([]);
-
-  const [startCell, setStartCell] = useState(null);
-
-  const [isSelecting, setIsSelecting] = useState(false);
-
-  const [foundWords, setFoundWords] = useState([]);
-
-  const [foundSelections, setFoundSelections] = useState([]);
-
-  const [locked, setLocked] = useState(false);
-
-  const [showedAnswer, setShowedAnswer] = useState(false);
-
-  // ------------------------
-  // START
-  // ------------------------
-
-  const startSelection = (row, col) => {
-    if (locked || showedAnswer) return;
-
-    setStartCell({ row, col });
-
-    setSelectedCells([{ row, col }]);
-
-    setIsSelecting(true);
-  };
-
-  // ------------------------
-  // MOVE
-  // ------------------------
-
-  const addCell = (row, col) => {
-    if (!isSelecting || !startCell) return;
-
-    const dr = row - startCell.row;
-
-    const dc = col - startCell.col;
-
-    const stepRow = Math.sign(dr);
-
-    const stepCol = Math.sign(dc);
-
-    if (!(dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc))) return;
-
-    const length = Math.max(Math.abs(dr), Math.abs(dc));
-
-    const cells = [];
-
-    for (let i = 0; i <= length; i++) {
-      cells.push({
-        row: startCell.row + i * stepRow,
-
-        col: startCell.col + i * stepCol,
-      });
-    }
-
-    setSelectedCells(cells);
-  };
-
-  // ------------------------
-  // WORD
-  // ------------------------
-
-  const getWordFromCells = (cells) => {
-    let word = "";
-
-    cells.forEach((cell) => {
-      word += grid[cell.row][cell.col];
-    });
-
-    return word.toLowerCase();
-  };
-
-  // ------------------------
-  // END
-  // ------------------------
-
-  const endSelection = () => {
-    setIsSelecting(false);
-
-    if (selectedCells.length === 0) return;
-
-    const word = getWordFromCells(selectedCells);
-
-    const reversed = word.split("").reverse().join("");
-
-    const normalizedWords = words.map((w) =>
-      w.toLowerCase().replace(/\s/g, "").replace(/-/g, ""),
+  const gridRef = useRef(null),
+    pointerRef = useRef(null),
+    pendingRef = useRef(null);
+  const [selectedCells, setSelectedCells] = useState([]),
+    [startCell, setStartCell] = useState(null),
+    [foundWords, setFoundWords] = useState([]),
+    [foundSelections, setFoundSelections] = useState([]),
+    [locked, setLocked] = useState(false),
+    [showedAnswer, setShowedAnswer] = useState(false),
+    [activeCell, setActiveCell] = useState({ row: 0, col: 0 }),
+    [checked, setChecked] = useState(false);
+  const same = (a, b) => a?.row === b?.row && a?.col === b?.col;
+  const path = (a, b) => {
+    if (!a || !b) return [];
+    const dr = b.row - a.row,
+      dc = b.col - a.col;
+    if (dr && dc && Math.abs(dr) !== Math.abs(dc)) return [];
+    const cells = Array.from(
+      { length: Math.max(Math.abs(dr), Math.abs(dc)) + 1 },
+      (_, i) => ({
+        row: a.row + i * Math.sign(dr),
+        col: a.col + i * Math.sign(dc),
+      }),
     );
-
-    const normalizedWord = word.replace(/\s/g, "").replace(/-/g, "");
-
-    const normalizedReversed = reversed.replace(/\s/g, "").replace(/-/g, "");
-
-    const foundIndex = normalizedWords.indexOf(normalizedWord);
-
-    const reversedIndex = normalizedWords.indexOf(normalizedReversed);
-
-    if (foundIndex !== -1 || reversedIndex !== -1) {
-      const correctWord =
-        foundIndex !== -1 ? words[foundIndex] : words[reversedIndex];
-
-      const cellsToSave =
-        foundIndex !== -1 ? [...selectedCells] : [...selectedCells].reverse();
-
-      if (!foundWords.includes(correctWord)) {
-        setFoundWords((prev) => [...prev, correctWord]);
-
-        setFoundSelections((prev) => [
-          ...prev,
-          {
-            word: correctWord,
-            cells: cellsToSave,
-          },
-        ]);
+    return cells.every((c) => grid[c.row]?.[c.col] !== undefined) ? cells : [];
+  };
+  const releasePointer = () => {
+    const p = pointerRef.current;
+    pointerRef.current = null;
+    if (p)
+      try {
+        p.element.releasePointerCapture(p.id);
+      } catch {
+        /* capture already released */
       }
-    }
-
-    setSelectedCells([]);
-
+  };
+  const clearSelection = () => {
+    pendingRef.current = null;
     setStartCell(null);
-  };
-
-  // ------------------------
-  // RESET
-  // ------------------------
-
-  const resetAll = () => {
-    setFoundWords([]);
-
-    setFoundSelections([]);
-
     setSelectedCells([]);
-
-    setStartCell(null);
-
-    setIsSelecting(false);
-
-    setLocked(false);
-
-    setShowedAnswer(false);
   };
-
-  // ------------------------
-  // SHOW ANSWERS
-  // ------------------------
-
-  const showAnswers = () => {
-    setFoundWords(words);
-
-    setFoundSelections(answers);
-
-    setLocked(true);
-
-    setShowedAnswer(true);
+  const focusCell = (cell) => {
+    setActiveCell(cell);
+    gridRef.current
+      ?.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`)
+      ?.focus({ preventScroll: true });
   };
-
-  // ------------------------
-  // CHECK
-  // ------------------------
-
-  const checkAnswers = () => {
-    if (showedAnswer || locked) return;
-
-    if (foundWords.length < answers.length) {
-      ValidationAlert.info("Please find all the words first.");
-
+  const begin = (cell) => {
+    if (locked) return;
+    pendingRef.current = cell;
+    setStartCell(cell);
+    setSelectedCells([cell]);
+    setAnnouncement(
+      `Start row ${cell.row + 1}, column ${cell.col + 1}. Choose the last letter.`,
+    );
+  };
+  const complete = (end, start = pendingRef.current) => {
+    if (locked) return;
+    if (!start) {
+      begin(end);
       return;
     }
-
-    const score = foundWords.length;
-
-    const total = answers.length;
-
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
-
-    const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${score} / ${total}
-        </span>
-      </div>
-    `;
-
-    ValidationAlert.success(msg);
-
-    setLocked(true);
+    if (same(start, end)) {
+      clearSelection();
+      setAnnouncement("Selection cancelled.");
+      return;
+    }
+    const cells = path(start, end);
+    const match = answers.find(
+      (a) =>
+        a.cells.length === cells.length &&
+        (a.cells.every((c, i) => same(c, cells[i])) ||
+          [...a.cells].reverse().every((c, i) => same(c, cells[i]))),
+    );
+    if (!match) setAnnouncement("That is not a target word path.");
+    else if (foundWords.includes(match.word))
+      setAnnouncement(match.word + " was already found.");
+    else {
+      setFoundWords((prev) =>
+        prev.includes(match.word) ? prev : [...prev, match.word],
+      );
+      setFoundSelections((prev) =>
+        prev.some((a) => a.word === match.word) ? prev : [...prev, match],
+      );
+      setAnnouncement(match.word + " found.");
+    }
+    clearSelection();
   };
-
-  // ------------------------
-  // LINE
-  // ------------------------
-
+  const activate = (cell) =>
+    pendingRef.current ? complete(cell) : begin(cell);
+  const undo = () => {
+    if (locked) return;
+    if (pendingRef.current || pointerRef.current) {
+      releasePointer();
+      clearSelection();
+      setAnnouncement("Selection cancelled.");
+      return;
+    }
+    setFoundWords((prev) => prev.slice(0, -1));
+    setFoundSelections((prev) => prev.slice(0, -1));
+    setAnnouncement("Last discovery removed.");
+  };
+  const cellAt = (x, y) => {
+    const el = document.elementFromPoint(x, y)?.closest("[data-search-cell]");
+    if (!el || !gridRef.current?.contains(el)) return null;
+    const cell = { row: Number(el.dataset.row), col: Number(el.dataset.col) };
+    return grid[cell.row]?.[cell.col] === undefined ? null : cell;
+  };
+  const pointerDown = (e) => {
+    if (
+      locked ||
+      pointerRef.current ||
+      e.isPrimary === false ||
+      (e.pointerType === "mouse" && e.button !== 0)
+    )
+      return;
+    const cell = cellAt(e.clientX, e.clientY);
+    if (!cell) return;
+    e.preventDefault();
+    e.stopPropagation();
+    pointerRef.current = {
+      id: e.pointerId,
+      start: cell,
+      current: cell,
+      element: e.currentTarget,
+    };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* unavailable capture */
+    }
+    setActiveCell(cell);
+    if (!pendingRef.current) setSelectedCells([cell]);
+  };
+  const pointerMove = (e) => {
+    if (locked) return;
+    const p = pointerRef.current;
+    if (p && p.id !== e.pointerId) return;
+    const cell = cellAt(e.clientX, e.clientY);
+    if (!cell) return;
+    if (p) {
+      p.current = cell;
+      setSelectedCells(path(p.start, cell));
+    } else if (pendingRef.current && e.pointerType === "mouse")
+      setSelectedCells(path(pendingRef.current, cell));
+  };
+  const pointerUp = (e) => {
+    const p = pointerRef.current;
+    if (!p || p.id !== e.pointerId) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const end = cellAt(e.clientX, e.clientY);
+    releasePointer();
+    if (!end) {
+      clearSelection();
+      return;
+    }
+    if (!same(p.start, end)) complete(end, p.start);
+    else activate(end);
+  };
+  const pointerCancel = (e) => {
+    if (pointerRef.current?.id !== e.pointerId) return;
+    releasePointer();
+    clearSelection();
+    setAnnouncement("Selection cancelled.");
+  };
+  const cellKeys = (e, row, col) => {
+    const arrows = {
+      ArrowRight: [0, 1],
+      ArrowLeft: [0, -1],
+      ArrowDown: [1, 0],
+      ArrowUp: [-1, 0],
+    };
+    if (
+      !arrows[e.key] &&
+      !["Enter", " ", "Escape", "Backspace"].includes(e.key)
+    )
+      return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (locked) return;
+    if (arrows[e.key]) {
+      const [dr, dc] = arrows[e.key],
+        r = (row + dr + grid.length) % grid.length,
+        c = (col + dc + grid[r].length) % grid[r].length,
+        next = { row: r, col: c };
+      focusCell(next);
+      if (pendingRef.current) setSelectedCells(path(pendingRef.current, next));
+    } else if (!e.repeat) {
+      if (e.key === "Enter" || e.key === " ") activate({ row, col });
+      else if (e.key === "Backspace") undo();
+      else {
+        releasePointer();
+        clearSelection();
+        setAnnouncement("Selection cancelled.");
+      }
+    }
+  };
+  React.useEffect(
+    () => () => {
+      const p = pointerRef.current;
+      pointerRef.current = null;
+      if (p)
+        try {
+          p.element.releasePointerCapture(p.id);
+        } catch {
+          /* removed grid */
+        }
+    },
+    [],
+  );
+  const resetAll = () => {
+    audio.stop();
+    releasePointer();
+    clearSelection();
+    setFoundWords([]);
+    setFoundSelections([]);
+    setLocked(false);
+    setShowedAnswer(false);
+    setChecked(false);
+    setAnnouncement("Discoveries and feedback cleared.");
+  };
+  const showAnswers = () => {
+    audio.stop();
+    releasePointer();
+    clearSelection();
+    resetButtonRef.current?.focus({ preventScroll: true });
+    setFoundWords(words);
+    setFoundSelections(answers);
+    setLocked(true);
+    setShowedAnswer(true);
+    setChecked(false);
+    setAnnouncement("All word paths shown and locked.");
+  };
+  const checkAnswers = () => {
+    if (locked || showedAnswer) return;
+    audio.stop();
+    releasePointer();
+    clearSelection();
+    if (!foundWords.length) {
+      setAnnouncement("Please find at least one word before checking.");
+      ValidationAlert.info("Please find at least one word before checking.");
+      return;
+    }
+    setChecked(true);
+    const score = foundWords.length,
+      total = answers.length,
+      msg = `<div style="font-size:20px;text-align:center;color:${score === total ? "green" : "orange"}">Score: ${score} / ${total}</div>`;
+    setAnnouncement(`Score ${score} out of ${total}.`);
+    if (score === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
+      setLocked(true);
+      ValidationAlert.success(msg);
+    } else ValidationAlert.warning(msg);
+  };
   const renderLine = (cells, key, opacity = 0.65) => {
     if (!cells || cells.length < 2) return null;
 
@@ -751,7 +853,7 @@ const WB_Unit8_Page50_Q1 = () => {
         y1={y1}
         x2={x2}
         y2={y2}
-        stroke="#7D3C98"
+        stroke={locked ? "#16a34a" : "#7D3C98"}
         strokeWidth="18"
         strokeLinecap="round"
         opacity={opacity}
@@ -760,21 +862,29 @@ const WB_Unit8_Page50_Q1 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall w-full">
+    <div
+      data-exercise-scope={"WB_Unit8_Page50_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit8_Page50_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit8_Page50_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit8_Page50_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall w-full mb-10">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-5">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            L
-          </span>
-          Find and circle the words.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="L"
+          title={<>Find and circle the words.</>}
+          subTitle="Scan one line or row at a time and select only the complete target words or phrases, then review every mark before checking."
+        />
 
         {/* CONTENT */}
 
@@ -782,14 +892,40 @@ const WB_Unit8_Page50_Q1 = () => {
           {/* GRID */}
 
           <div
+            aria-description={
+              startCell
+                ? "Choose the final letter of the pending selection."
+                : "Choose the first and last letters of a word."
+            }
+            style={{ touchAction: "none" }}
+            aria-label={
+              "Word search. Use arrows to move, Enter or Space to choose endpoints, Escape to cancel and Backspace to undo."
+            }
+            role={"group"}
+            onLostPointerCapture={pointerCancel}
+            onPointerCancel={pointerCancel}
+            onPointerUp={pointerUp}
+            onPointerMove={pointerMove}
+            onPointerDown={pointerDown}
             ref={gridRef}
             className="relative select-none"
-            onMouseLeave={endSelection}
           >
             {grid.map((row, rowIndex) => (
               <div key={rowIndex} className="flex">
                 {row.map((letter, colIndex) => (
                   <span
+                    onKeyUp={activationKeys.onKeyUp}
+                    onKeyDown={(e) => cellKeys(e, rowIndex, colIndex)}
+                    aria-disabled={locked}
+                    aria-label={`Row ${rowIndex + 1}, column ${colIndex + 1}: ${letter}${foundSelections.some((a) => a.cells.some((c) => c.row === rowIndex && c.col === colIndex)) ? ". Found word." : ""}`}
+                    tabIndex={
+                      same(activeCell, { row: rowIndex, col: colIndex })
+                        ? 0
+                        : -1
+                    }
+                    role={"button"}
+                    data-choice={true}
+                    data-search-cell={true}
                     key={colIndex}
                     data-row={rowIndex}
                     data-col={colIndex}
@@ -810,31 +946,6 @@ const WB_Unit8_Page50_Q1 = () => {
                       color: "#3A2352",
                       touchAction: "none",
                     }}
-                    onMouseDown={() => startSelection(rowIndex, colIndex)}
-                    onMouseEnter={() => addCell(rowIndex, colIndex)}
-                    onMouseUp={endSelection}
-                    onTouchStart={() => startSelection(rowIndex, colIndex)}
-                    onTouchMove={(e) => {
-                      e.preventDefault();
-
-                      const touch = e.touches[0];
-
-                      const element = document.elementFromPoint(
-                        touch.clientX,
-                        touch.clientY,
-                      );
-
-                      if (!element) return;
-
-                      const row = element.getAttribute("data-row");
-
-                      const col = element.getAttribute("data-col");
-
-                      if (row !== null && col !== null) {
-                        addCell(Number(row), Number(col));
-                      }
-                    }}
-                    onTouchEnd={endSelection}
                   >
                     {letter}
                   </span>
@@ -844,7 +955,10 @@ const WB_Unit8_Page50_Q1 = () => {
 
             {/* LINES */}
 
-            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+            <svg
+              aria-hidden={true}
+              className="absolute top-0 left-0 w-full h-full pointer-events-none"
+            >
               {foundSelections.map((item, index) =>
                 renderLine(item.cells, `found-${index}`, 0.7),
               )}
@@ -866,6 +980,13 @@ const WB_Unit8_Page50_Q1 = () => {
           >
             {words.map((word, index) => (
               <div
+                style={{
+                  outline:
+                    checked && !foundWords.includes(word)
+                      ? "2px solid #D1232A"
+                      : undefined,
+                  borderRadius: 6,
+                }}
                 key={index}
                 className={`
                   text-center
@@ -876,7 +997,31 @@ const WB_Unit8_Page50_Q1 = () => {
                   }
                 `}
               >
-                {word}
+                <AudioText
+                  audio={audio}
+                  id={`word-${index}`}
+                  src={
+                    [
+                      soundL1,
+                      soundL2,
+                      soundL3,
+                      soundL4,
+                      soundL5,
+                      soundL6,
+                      soundL7,
+                      soundL8,
+                      soundL9,
+                      soundL10,
+                      soundL11,
+                      soundL12,
+                      soundL13,
+                      soundL14,
+                    ][index]
+                  }
+                  label={`Hear ${word}`}
+                >
+                  {word}
+                </AudioText>
               </div>
             ))}
           </div>
@@ -886,15 +1031,36 @@ const WB_Unit8_Page50_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          onClick={resetAll}
+          className="try-again-button"
+        >
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          onClick={showAnswers}
+          className="show-answer-btn"
+        >
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          onClick={checkAnswers}
+          className="check-button2"
+        >
           Check Answer ✓
         </button>
       </div>

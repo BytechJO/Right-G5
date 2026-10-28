@@ -1,8 +1,63 @@
+import soundA9 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_009_all_the_important_notes_on_my_notebook,_so_I_can_be_prepared_for_the_exa.mp3";
+import soundA11 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_011_the_time_I_spend_with_my_grandparents.mp3";
+import soundA10 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_010_lam.mp3";
+import soundA8 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_008_We_went_to_visit_the_children_in_the.mp3";
+import soundA7 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_007_after_injuring_her_leg_in_a_bike_accident.mp3";
+import soundA6 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_006_She_was.mp3";
+import soundA2 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_002_jotting_down.mp3";
+import soundA1 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_001_limping.mp3";
+import soundA4 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_004_treasure.mp3";
+import soundA3 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_003_orphanage.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit7_Page39_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const wordBank = ["orphanage", "treasure", "limping", "jotting down"];
 
   const answers = ["limping", "orphanage", "jotting down", "treasure"];
@@ -13,12 +68,7 @@ const WB_Unit7_Page39_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -48,11 +98,18 @@ const WB_Unit7_Page39_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -83,13 +140,32 @@ const WB_Unit7_Page39_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -98,6 +174,9 @@ const WB_Unit7_Page39_Q1 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResult([true, true, true, true]);
@@ -110,6 +189,8 @@ const WB_Unit7_Page39_Q1 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -124,6 +205,25 @@ const WB_Unit7_Page39_Q1 = () => {
   const inputField = (i, width) => (
     <div className="relative inline-block">
       <input
+        aria-invalid={result[i] === false}
+        placeholder={"Word or expression"}
+        title={
+          [
+            "She was ___ after injuring her leg in a bike accident.",
+            "We went to visit the children in the ___.",
+            "I am ___ all the important notes on my notebook, so I can be prepared for the exam.",
+            "I ___ the time I spend with my grandparents.",
+          ][i]
+        }
+        aria-label={
+          [
+            "She was ___ after injuring her leg in a bike accident.",
+            "We went to visit the children in the ___.",
+            "I am ___ all the important notes on my notebook, so I can be prepared for the exam.",
+            "I ___ the time I spend with my grandparents.",
+          ][i]
+        }
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -142,6 +242,12 @@ const WB_Unit7_Page39_Q1 = () => {
         `}
         style={{
           width,
+          borderBottomColor:
+            result[i] === true
+              ? "#16a34a"
+              : result[i] === false
+                ? "#D1232A"
+                : undefined,
         }}
       />
 
@@ -172,21 +278,29 @@ const WB_Unit7_Page39_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"WB_Unit7_Page39_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit7_Page39_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit7_Page39_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit7_Page39_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div className="div-forall text-[18px]">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[13vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
-          Read and write.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="A"
+          title={<>Read and write.</>}
+          subTitle="Read the full sentence first, then choose the word or expression that fits both the meaning and grammar."
+        />
 
         {/* WORD BANK */}
 
@@ -203,7 +317,14 @@ const WB_Unit7_Page39_Q1 = () => {
                   text-[18px]
                 "
             >
-              {word}
+              <AudioText
+                audio={audio}
+                id={`bank-${index}`}
+                src={[soundA3, soundA4, soundA1, soundA2][index]}
+                label={`Hear ${word}`}
+              >
+                {word}
+              </AudioText>
             </div>
           ))}
         </div>
@@ -216,11 +337,29 @@ const WB_Unit7_Page39_Q1 = () => {
           <div className="flex items-start gap-4 flex-wrap">
             <span className="font-bold">1</span>
 
-            <span>She was</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-0"}
+                src={soundA6}
+                label={"Hear She was"}
+              >
+                She was
+              </AudioText>
+            </span>
 
             {inputField(0, "220px")}
 
-            <span>after injuring her leg in a bike accident.</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-1"}
+                src={soundA7}
+                label={"Hear after injuring her leg in a bike accident."}
+              >
+                after injuring her leg in a bike accident.
+              </AudioText>
+            </span>
           </div>
 
           {/* 2 */}
@@ -228,7 +367,16 @@ const WB_Unit7_Page39_Q1 = () => {
           <div className="flex items-start gap-4 flex-wrap">
             <span className="font-bold">2</span>
 
-            <span>We went to visit the children in the</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-2"}
+                src={soundA8}
+                label={"Hear We went to visit the children in the"}
+              >
+                We went to visit the children in the
+              </AudioText>
+            </span>
 
             {inputField(1, "320px")}
 
@@ -239,9 +387,26 @@ const WB_Unit7_Page39_Q1 = () => {
 
           <div className="flex items-start gap-4 flex-wrap">
             <span className="font-bold">3</span>
-            <span>I am</span>
-            {inputField(2, "250px")}all the important notes on my notebook, so I
-            can be prepared for the exam.
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-3"}
+                src={soundA10}
+                label={"Hear I am"}
+              >
+                I am
+              </AudioText>
+            </span>
+            {inputField(2, "250px")}
+            <AudioText
+              audio={audio}
+              id="ending-2"
+              src={soundA9}
+              label="Hear all the important notes on my notebook, so I can be prepared for the exam."
+            >
+              all the important notes on my notebook, so I can be prepared for
+              the exam.
+            </AudioText>
             <span></span>
           </div>
 
@@ -254,7 +419,16 @@ const WB_Unit7_Page39_Q1 = () => {
 
             {inputField(3, "250px")}
 
-            <span>the time I spend with my grandparents.</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"fragment-4"}
+                src={soundA11}
+                label={"Hear the time I spend with my grandparents."}
+              >
+                the time I spend with my grandparents.
+              </AudioText>
+            </span>
           </div>
         </div>
       </div>
@@ -262,15 +436,36 @@ const WB_Unit7_Page39_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>
