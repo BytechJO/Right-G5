@@ -9,6 +9,18 @@ import video from "../../assets/videos/grade 5 unit 8 page 64.mp4";
 import longAudio from "../../assets/audio/ClassBook/U8/PG 64/cd36pg64-conversation.mp3";
 import audioBtn from "../../assets/Page 01/Audio btn.svg";
 import Conversation from "../Conversation";
+const posterActivationKeys = {
+  onKeyDown: (event) => {
+    if (event.target !== event.currentTarget || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {event.preventDefault();event.stopPropagation();}
+  },
+};
+
 const Posters_Page15 = ({ openPopup }) => {
   const data = [
     {
@@ -233,29 +245,29 @@ const Posters_Page15 = ({ openPopup }) => {
     ],
   ];
   return (
-    <div
+    <div data-poster-page="poster_page15"
       className="poster-wrapper"
       style={{ backgroundImage: `url(${page_15})` }}
-    >
+    ><style>{`[data-poster-page="poster_page15"] [data-poster-control]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:50%;}`}</style>
       <div
         className="headset-icon-CD-page15-p hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg role="button" tabIndex={0} data-poster-control {...posterActivationKeys} aria-label="Open poster 15 conversation"
           width="30"
           height="30"
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
               "html",
-              <div
+              <div data-poster-popup="poster_page15"
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   alignContent: "center",
                 }}
-              >
-                <Conversation
+              ><style>{`[data-poster-popup="poster_page15"] [data-conversation-control]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:50%;} [data-poster-popup="poster_page15"] [data-vocab-word]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:12px;}`}</style>
+                <Conversation keyboardAccessible pageId="poster_page15_conversation"
                   title="Conversation"
                   items={data}
                   sound={longAudio}

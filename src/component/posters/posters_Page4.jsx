@@ -19,6 +19,18 @@ import sound14 from "../../assets/audio/ClassBook/U2/PG 10/sound14.mp3";
 import sound15 from "../../assets/audio/ClassBook/U2/PG 10/sound15.mp3";
 import sound16 from "../../assets/audio/ClassBook/U2/PG 10/sound16.mp3";
 import Vocabulary from "../Vocabulary";
+const posterActivationKeys = {
+  onKeyDown: (event) => {
+    if (event.target !== event.currentTarget || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {event.preventDefault();event.stopPropagation();}
+  },
+};
+
 const Posters_Page4 = ({ openPopup }) => {
   const sounds = [
     sound1,
@@ -89,29 +101,29 @@ const Posters_Page4 = ({ openPopup }) => {
     { start: 51.18, end: 53.419 },
   ];
   return (
-    <div
+    <div data-poster-page="poster_page4"
       className="poster-wrapper"
       style={{ backgroundImage: `url(${page_1})` }}
-    >
+    ><style>{`[data-poster-page="poster_page4"] [data-poster-control]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:50%;}`}</style>
       <div
         className="headset-icon-CD-page2-p hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg role="button" tabIndex={0} data-poster-control {...posterActivationKeys} aria-label="Open poster 4 vocabulary"
           width="30"
           height="30"
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
               "html",
-              <div
+              <div data-poster-popup="poster_page4"
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   alignContent: "center",
                 }}
-              >
-                <Vocabulary
+              ><style>{`[data-poster-popup="poster_page4"] [data-conversation-control]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:50%;} [data-poster-popup="poster_page4"] [data-vocab-word]:focus-visible {outline:3px solid #2563eb !important;outline-offset:3px;border-radius:12px;}`}</style>
+                <Vocabulary keyboardAccessible pageId="poster_page4_vocabulary"
                   title="VOCABULARY"
                   subtitle="Listen and repeat. Find the words and expressions in the conversation above."
                   sound={VocabularAudio}
