@@ -24,7 +24,7 @@ const WritingSection_U1 = () => {
         <img
           src={img}
           alt=""
-          style={{ width: "auto", height: "500px", objectFit: "contain" }}
+          style={{ width: "auto", height: "375px", objectFit: "contain" }}
         />
         <WritingA />
         <WritingB />

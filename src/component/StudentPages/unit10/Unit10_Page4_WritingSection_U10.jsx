@@ -23,7 +23,7 @@ const WritingSection_U10 = () => {
       <div className="flex flex-col w-[60%] mx-auto space-y-10">
         <img
           src={img}
-          alt=""
+          alt={"It Was the Best Day! A personal narrative with a photograph of a bicycle. The writer helped his author father record book orders and carry envelopes to a distant mailbox. After a busy morning, his father went to town and returned with a new bicycle for those trips. The writer still has the bicycle and remembers receiving it. Writing tips: tell events in a clear order, introduce the main idea without giving the story away, include relevant details, and choose words that convey the mood and your feelings."}
           style={{ width: "auto", height: "100%", objectFit: "contain" }}
         />
         <WritingA />

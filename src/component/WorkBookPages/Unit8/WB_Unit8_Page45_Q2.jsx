@@ -1,3 +1,12 @@
+import soundB7 from "../../../assets/audio/Workbook/Unit 8/Page 45 - B/Item_007_is_so_colorful.mp3";
+import soundB6 from "../../../assets/audio/Workbook/Unit 8/Page 45 - B/Item_006_crosses_the_street.mp3";
+import soundB5 from "../../../assets/audio/Workbook/Unit 8/Page 45 - B/Item_005_The.mp3";
+import soundB2 from "../../../assets/audio/Workbook/Unit 8/Page 45 - B/Item_002_Let's_play_some.mp3";
+import soundB1 from "../../../assets/audio/Workbook/Unit 8/Page 45 - B/Item_001_I'm_up_so_high._I_feel_like_I'm_at_the.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioText,AudioFeedback,AudioSpeaker} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup,SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -7,8 +16,13 @@ import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 45
 import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 45/Asset 14.svg";
 import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 45/Asset 16.svg";
 import img4 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U8/Page 45/Asset 4.svg";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit8_Page45_Q2 = () => {
+
+const WB_Unit8_Page45_Q2 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     {
       image: img1,
@@ -49,12 +63,7 @@ const WB_Unit8_Page45_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -83,12 +92,12 @@ const WB_Unit8_Page45_Q2 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -119,13 +128,13 @@ const WB_Unit8_Page45_Q2 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -133,7 +142,7 @@ const WB_Unit8_Page45_Q2 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setStudentAnswers(questions.map((q) => q.answer));
 
     setResult([true, true, true, true]);
@@ -145,7 +154,7 @@ const WB_Unit8_Page45_Q2 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -159,7 +168,7 @@ const WB_Unit8_Page45_Q2 = () => {
 
   const inputField = (i, width = "220px") => (
     <div className="relative inline-block">
-      <input
+      <input aria-invalid={result[i]===false} placeholder={"Word / phrase"} title={`Picture ${i+1}: ${questions[i].sentence}`} aria-label={`Picture ${i+1}: ${questions[i].sentence}`} {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -178,7 +187,7 @@ const WB_Unit8_Page45_Q2 = () => {
         `}
         style={{
           width,
-        }}
+        borderBottomColor:(result[i]===true)?"#16a34a":(result[i]===false)?"#D1232A":undefined}}
       />
 
       {result[i] === false && (
@@ -208,21 +217,14 @@ const WB_Unit8_Page45_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit8_Page45_Q2.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit8_Page45_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit8_Page45_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit8_Page45_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            B
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="B" title={<>
+          
           Look, read, and write.
-        </h5>
+        </>} subTitle="Use the picture as the main clue, identify the action or detail shown, then write the complete question or sentence." />
 
         {/* QUESTIONS */}
 
@@ -236,7 +238,7 @@ const WB_Unit8_Page45_Q2 = () => {
 
                 <img
                   src={q.image}
-                  alt=""
+                  alt={["A colorful hot-air balloon in the sky near the sun.","Two children seated on the floor playing a board game.","A person walking across a zebra crossing in front of a vehicle.","A rainbow above white clouds."][index]}
                   style={{
                     width: "220px",
                     height: "auto",
@@ -255,20 +257,20 @@ const WB_Unit8_Page45_Q2 = () => {
                     {/* السطر الأول */}
 
                     <div className="flex items-end gap-3 flex-wrap">
-                      <span>{q.sentence.split("__________")[0]}</span>
+                      <span><AudioText audio={audio} id={`prefix-${index}`} src={soundB5} label={"Hear The"}>{q.sentence.split("__________")[0]}</AudioText></span>
 
                       {inputField(index)}
                     </div>
 
                     {/* السطر الثاني */}
 
-                    <div>{q.sentence.split("__________")[1]}</div>
+                    <div><AudioText audio={audio} id={`ending-${index}`} src={[null,null,soundB6,soundB7][index]} label={`Hear the ending of sentence ${index+1}`}>{q.sentence.split("__________")[1]}</AudioText></div>
                   </>
                 ) : (
                   <>
                     {/* الجملة */}
 
-                    <div>{q.sentence}</div>
+                    <div><AudioText audio={audio} id={`prefix-${index}`} src={[soundB1,soundB2][index]} label={`Hear sentence ${index+1}`}>{q.sentence}</AudioText></div>
 
                     {/* الانبوت تحت */}
 
@@ -286,15 +288,15 @@ const WB_Unit8_Page45_Q2 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

@@ -378,14 +378,36 @@ const Unit7_Page1 = ({ openPopup }) => {
 
   return (
     <div
+      data-page-access={"Unit7_Page1.jsx"}
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_1})` }}
     >
+      <style>{`[data-page-access="Unit7_Page1.jsx"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          aria-label={"Open conversation"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -400,6 +422,8 @@ const Unit7_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Conversation
+                  pageId={"sb_unit7_page1_conversation"}
+                  keyboardAccessible={true}
                   title="Conversation"
                   items={data}
                   sound={longAudio}
@@ -410,6 +434,7 @@ const Unit7_Page1 = ({ openPopup }) => {
                   openPopup={openPopup}
                   video={video}
                   imageWidth="300px"
+                  
                 />
               </div>,
             )
@@ -417,6 +442,7 @@ const Unit7_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -432,6 +458,26 @@ const Unit7_Page1 = ({ openPopup }) => {
         style={{ overflow: "visible" }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          aria-label={"Open vocabulary"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -446,6 +492,8 @@ const Unit7_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Vocabulary
+                  pageId={"sb_unit7_page1_vocabulary"}
+                  keyboardAccessible={true}
                   title="VOCABULARY"
                   subtitle="Listen and repeat. Find the words and expressions in the conversation above."
                   sound={VocabularAudio}
@@ -478,6 +526,7 @@ const Unit7_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -493,6 +542,26 @@ const Unit7_Page1 = ({ openPopup }) => {
         style={{ overflow: "visible" }}
       >
         <svg
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          aria-label={"Open critical thinking"}
+          data-launcher={true}
+          tabIndex={0}
+          role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -500,6 +569,7 @@ const Unit7_Page1 = ({ openPopup }) => {
             openPopup(
               "html",
               <CriticalThinking
+                keyboardAccessible={true}
                 title={"What does Grandma treasure?"}
               />,
             )
@@ -507,6 +577,7 @@ const Unit7_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"

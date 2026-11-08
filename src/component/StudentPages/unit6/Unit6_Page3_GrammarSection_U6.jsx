@@ -30,7 +30,7 @@ const GrammarSection_U1 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit6_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={1.8}
@@ -40,7 +40,7 @@ const GrammarSection_U1 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt={"Modal verbs chart. Statement pattern: subject, modal verb and not if negative, verb, complement. I might go to the concert. James should not take the backpack. Question pattern: modal verb, subject, main verb, complement. Shall we go to the concert? Should James take the backpack?"}
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

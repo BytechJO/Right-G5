@@ -1,8 +1,50 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 91 - D/Item_001_Larry_play_piano.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 91 - D/Item_002_Elaine_beat_drums.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 91 - D/Item_003_Diane_listen_to_the_music.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 91 - D/Item_004_Ben_and_Jake_take_tickets.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review10_Page2_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "Larry was playing the piano.",
     "Elaine was beating the drums.",
@@ -16,12 +58,7 @@ const Review10_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -43,11 +80,18 @@ const Review10_Page2_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -78,17 +122,39 @@ const Review10_Page2_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "Larry was playing the piano.",
       "Elaine was beating the drums.",
@@ -102,6 +168,8 @@ const Review10_Page2_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -111,7 +179,14 @@ const Review10_Page2_Q1 = () => {
 
   const inputField = (i, width) => (
     <span className={`relative inline-block ${width}`}>
-      <input
+      <input placeholder={"Sentence"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Concert item ${i + 1}, write a sentence using the given words`}
+        aria-label={`Concert item ${i + 1}, write a sentence using the given words`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -158,28 +233,39 @@ const Review10_Page2_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Review10_Page2_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review10_Page2_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review10_Page2_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review10_Page2_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall "
         style={{
-          minHeight: "65vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+       gap:"30px"
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-20">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          What was happening during the concert? Write the sentences using the
-          words <br /> given to find out. Use the past progressive tense.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="D"
+          title={
+            <>
+              What was happening during the concert? Write the sentences using
+              the words given to find out. Use the past progressive
+              tense.
+            </>
+          }
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15 text-[18px]">
@@ -187,7 +273,16 @@ const Review10_Page2_Q1 = () => {
           <div className="flex items-center w-[700px] gap-2">
             <span className="font-bold mr-2">1</span>
 
-            <span>Larry/play/piano</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"audio-0"}
+                src={clip0}
+                label={"Hear Larry/play/piano"}
+              >
+                Larry/play/piano
+              </AudioText>
+            </span>
 
             <div className="flex-1">{inputField(0, "w-full")}</div>
           </div>
@@ -196,7 +291,16 @@ const Review10_Page2_Q1 = () => {
           <div className="flex items-center w-[700px] gap-2">
             <span className="font-bold mr-2">2</span>
 
-            <span>Elaine/beat/drums</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"audio-1"}
+                src={clip1}
+                label={"Hear Elaine/beat/drums"}
+              >
+                Elaine/beat/drums
+              </AudioText>
+            </span>
 
             <div className="flex-1">{inputField(1, "w-full")}</div>
           </div>
@@ -205,7 +309,16 @@ const Review10_Page2_Q1 = () => {
           <div className="flex items-center w-[700px] gap-2">
             <span className="font-bold mr-2">3</span>
 
-            <span>Diane/listen/to the music</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"audio-2"}
+                src={clip2}
+                label={"Hear Diane/listen/to the music"}
+              >
+                Diane/listen/to the music
+              </AudioText>
+            </span>
 
             <div className="flex-1">{inputField(2, "w-full")}</div>
           </div>
@@ -214,7 +327,16 @@ const Review10_Page2_Q1 = () => {
           <div className="flex items-center w-[700px] gap-2">
             <span className="font-bold mr-2">4</span>
 
-            <span>Ben and Jake /take/tickets</span>
+            <span>
+              <AudioText
+                audio={audio}
+                id={"audio-3"}
+                src={clip3}
+                label={"Hear Ben and Jake /take/tickets"}
+              >
+                Ben and Jake /take/tickets
+              </AudioText>
+            </span>
 
             <div className="flex-1">{inputField(3, "w-full")}</div>
           </div>
@@ -223,15 +345,36 @@ const Review10_Page2_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

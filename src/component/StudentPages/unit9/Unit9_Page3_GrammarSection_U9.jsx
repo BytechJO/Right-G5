@@ -30,7 +30,7 @@ const GrammarSection_U9 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit9_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={2}
@@ -40,7 +40,7 @@ const GrammarSection_U9 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt={"First Conditional chart. At the beginning: If Helen kicks the ball, she will make a goal. When Helen kicks the ball, she will make a goal. At the end: Helen will make a goal if she kicks the ball. Helen will make a goal when she kicks the ball."}
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

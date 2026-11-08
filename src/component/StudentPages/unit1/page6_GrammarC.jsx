@@ -1,9 +1,136 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { createPortal } from "react-dom";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  useMouseSensor,
+  useTouchSensor,
+} from "@hello-pangea/dnd";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+
+function BankDragItem({ provided, snapshot, freeze, normalStyle, children }) {
+  const appearance = useRef({});
+  const originalRef = children.props.ref;
+  const measure = (node) => {
+    if (!node || snapshot.isDragging) return;
+    const computed = window.getComputedStyle(node);
+    const rect = node.getBoundingClientRect();
+    // offsetWidth rounds to whole pixels, which can enlarge the portalled text
+    // just enough to wrap inside the library's exact (fractional) width.
+    const cssWidth = parseFloat(computed.width);
+    const borderBoxWidth =
+      computed.boxSizing === "border-box"
+        ? cssWidth
+        : cssWidth +
+          [
+            "paddingLeft",
+            "paddingRight",
+            "borderLeftWidth",
+            "borderRightWidth",
+          ].reduce((sum, key) => sum + (parseFloat(computed[key]) || 0), 0);
+    const layoutWidth =
+      Number.isFinite(borderBoxWidth) && borderBoxWidth > 0
+        ? borderBoxWidth
+        : node.offsetWidth;
+    const scale = layoutWidth ? rect.width / layoutWidth : 1;
+    const next = {
+      fontFamily: computed.fontFamily,
+      fontWeight: computed.fontWeight,
+      color: computed.color,
+    };
+    for (const key of [
+      "fontSize",
+      "lineHeight",
+      "letterSpacing",
+      "paddingTop",
+      "paddingRight",
+      "paddingBottom",
+      "paddingLeft",
+      "borderTopWidth",
+      "borderRightWidth",
+      "borderBottomWidth",
+      "borderLeftWidth",
+      "borderRadius",
+    ]) {
+      const value = parseFloat(computed[key]);
+      if (Number.isFinite(value)) next[key] = value * scale;
+    }
+    appearance.current = next;
+  };
+  const ref = (node) => {
+    if (typeof originalRef === "function") originalRef(node);
+    else if (originalRef) originalRef.current = node;
+    measure(node);
+  };
+  const element = React.cloneElement(children, {
+    ref,
+    onPointerDownCapture: (event) => {
+      children.props.onPointerDownCapture?.(event);
+      measure(event.currentTarget);
+    },
+    style: {
+      ...normalStyle,
+      ...(snapshot.isDragging ? appearance.current : {}),
+      ...provided.draggableProps.style,
+      ...(snapshot.isDragging
+        ? {
+            // The bank makes this span a flex item; retain its single-line text
+            // alignment when the actual draggable is moved into the portal.
+            display: "flex",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+            opacity: 1,
+            visibility: "visible",
+            zIndex: 2147483647,
+            pointerEvents: "none",
+          }
+        : freeze
+          ? { transform: "none", transition: "none" }
+          : {}),
+    },
+  });
+  if (!snapshot.isDragging) return element;
+  const space = React.createElement(
+    children.type,
+    {
+      "aria-hidden": true,
+      className: children.props.className,
+      style: { ...normalStyle, visibility: "visible", pointerEvents: "none" },
+    },
+    children.props.children,
+  );
+  return (
+    <>
+      {space}
+      {createPortal(element, document.fullscreenElement || document.body)}
+    </>
+  );
+}
 
 const GrammarC = () => {
+  const resetButtonRef = useRef(null),
+    chipRefs = useRef({}),
+    slotRefs = useRef({}),
+    focusFrame = useRef(null);
+  const [pickedWord, setPickedWord] = useState(null);
+  const [dragging, setDragging] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [errors, setErrors] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -30,8 +157,117 @@ const GrammarC = () => {
     },
   ];
 
+  const cancelFocus = () => {
+    if (focusFrame.current !== null) {
+      cancelAnimationFrame(focusFrame.current);
+      focusFrame.current = null;
+    }
+  };
+  useEffect(
+    () => () => {
+      if (focusFrame.current !== null) cancelAnimationFrame(focusFrame.current);
+    },
+    [],
+  );
+  const slotLocked = (index) => locked || errors[index] === false;
+  const wordUsed = (word, current = answers, currentErrors = errors) =>
+    current.some(
+      (value, index) => value === word && currentErrors[index] !== true,
+    );
+  const cancelChoice = (returnFocus = false) => {
+    cancelFocus();
+    const source = pickedWord;
+    setPickedWord(null);
+    if (returnFocus && source)
+      chipRefs.current[source]?.focus({ preventScroll: true });
+  };
+  const place = (index, word) => {
+    if (
+      slotLocked(index) ||
+      !questions[0].options.includes(word) ||
+      wordUsed(word)
+    )
+      return null;
+    const changed = [];
+    const next = answers.map((value, i) => {
+      if (value === word && !slotLocked(i)) {
+        changed.push(i);
+        return "";
+      }
+      return value;
+    });
+    next[index] = word;
+    setAnswers(next);
+    setErrors((previous) => {
+      const clean = [...previous];
+      [index, ...changed].forEach((i) => delete clean[i]);
+      return clean;
+    });
+    setPickedWord(null);
+    setAnnouncement(word + " placed in blank " + (index + 1) + ".");
+    return next;
+  };
+  const chooseWord = (word) => {
+    if (locked || wordUsed(word)) return;
+    cancelFocus();
+    setPickedWord(word);
+    setAnnouncement(word + " selected. Choose a blank.");
+    const index = answers.findIndex((value, i) => !slotLocked(i) && !value);
+    const target =
+      index === -1 ? answers.findIndex((_, i) => !slotLocked(i)) : index;
+    slotRefs.current[target]?.focus({
+      preventScroll: true,
+    });
+  };
+  const returnWord = (index) => {
+    if (slotLocked(index) || !answers[index]) return;
+    setAnswers((previous) =>
+      previous.map((word, i) => (i === index ? "" : word)),
+    );
+    setErrors((previous) => {
+      const clean = [...previous];
+      delete clean[index];
+      return clean;
+    });
+    setAnnouncement("Word returned to the bank.");
+  };
+  const slotKey = (event, index) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      cancelChoice(true);
+      return;
+    }
+    if (event.key === "Delete" || event.key === "Backspace") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat && errors[index] === true) returnWord(index);
+      return;
+    }
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.repeat || slotLocked(index)) return;
+    if (pickedWord) {
+      const word = pickedWord,
+        next = place(index, word);
+      if (next) {
+        cancelFocus();
+        focusFrame.current = requestAnimationFrame(() => {
+          focusFrame.current = null;
+          const available = questions[0].options.find(
+            (option) => !next.includes(option),
+          );
+          (chipRefs.current[available] || resetButtonRef.current)?.focus({
+            preventScroll: true,
+          });
+        });
+      }
+    } else returnWord(index);
+  };
   const handleCheck = () => {
     if (locked) return;
+    cancelChoice();
 
     const isEmpty = answers.some((a) => !a || a.trim() === "");
 
@@ -53,6 +289,9 @@ const GrammarC = () => {
     });
 
     setErrors(newErrors);
+    setAnnouncement(
+      "Answers checked. Correct answers are locked; incorrect answers can be changed.",
+    );
 
     const total = questions.length;
 
@@ -69,6 +308,7 @@ const GrammarC = () => {
 
     if (correctCount === total) {
       setLocked(true); // 🔒 يقفل إذا كله صح
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -78,35 +318,56 @@ const GrammarC = () => {
   };
 
   const handleShow = () => {
+    cancelChoice();
+    setAnnouncement("Correct answers shown and locked.");
     const correctAnswers = questions.map((q) => q.correct);
     setAnswers(correctAnswers);
-    setErrors([]); // يمسح الأخطاء
+    setErrors(questions.map(() => false)); // يمسح الأخطاء
     setLocked(true);
   };
   const handleReset = () => {
+    cancelChoice();
+    setDragging(false);
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
     setErrors([]);
     setLocked(false);
   };
-  const onDragEnd = (res) => {
-    if (!res.destination || locked) return;
-
-    const { draggableId, destination } = res;
-
-    if (destination.droppableId.startsWith("bank")) return;
-
-    const word = draggableId.split("-").slice(1).join("-");
-    const index = Number(destination.droppableId.replace("drop-", ""));
-
-    const updated = [...answers];
-    updated[index] = word;
-
-    setAnswers(updated);
+  const onDragEnd = (result) => {
+    setDragging(false);
+    cancelChoice();
+    const { destination, draggableId } = result;
+    if (
+      !destination ||
+      destination.droppableId === "bank" ||
+      !/^drop-\d+$/.test(destination.droppableId)
+    )
+      return;
+    const index = Number(destination.droppableId.slice(5));
+    if (index < 0 || index >= questions.length) return;
+    place(index, draggableId.replace(/^bank-/, ""));
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div>
+    <DragDropContext
+      onDragEnd={onDragEnd}
+      enableDefaultSensors={false}
+      sensors={[useMouseSensor, useTouchSensor]}
+      onBeforeDragStart={() => {
+        cancelChoice();
+        setDragging(true);
+      }}
+    >
+      <div data-unit1-scope="grammar-c">
+        <style>{`[data-unit1-scope="grammar-c"] input:focus-visible,[data-unit1-scope="grammar-c"] textarea:focus-visible,[data-unit1-scope="grammar-c"] [data-choice]:focus-visible {outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
+        <div
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {announcement}
+        </div>
         {/* العنوان */}
         <h5 className="header-title-page8-read  mb-5">
           <span className="ex-A-read" style={{ marginRight: "10px" }}>
@@ -126,7 +387,7 @@ const GrammarC = () => {
               className="flex gap-3 px-4 py-2 rounded mb-10 w-fit mx-auto mt-10"
             >
               {questions[0].options.map((word, i) => {
-                const isUsed = answers.includes(word);
+                const isUsed = wordUsed(word);
 
                 return (
                   <Draggable
@@ -135,28 +396,76 @@ const GrammarC = () => {
                     index={i}
                     isDragDisabled={locked || isUsed}
                   >
-                    {(provided) => (
-                      <span
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
+                    {(provided, snapshot) => (
+                      <BankDragItem
+                        provided={provided}
+                        snapshot={snapshot}
+                        freeze={dragging}
+                        normalStyle={{
                           padding: "6px 14px",
                           border: "2px solid #6D2980",
                           borderRadius: "10px",
-                          background: "#fff",
+                          background: pickedWord === word ? "#dbeafe" : "#fff",
                           cursor: isUsed ? "not-allowed" : "grab",
                           opacity: isUsed ? 0.5 : 1,
-                          ...provided.draggableProps.style,
+                          outline:
+                            pickedWord === word
+                              ? "3px solid #2563eb"
+                              : undefined,
+                          outlineOffset: 2,
                         }}
                       >
-                        {word}
-                      </span>
+                        <span
+                          ref={(element) => {
+                            provided.innerRef(element);
+                            chipRefs.current[word] = element;
+                          }}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          role="button"
+                          tabIndex={pickedWord ? -1 : 0}
+                          data-choice
+                          aria-pressed={pickedWord === word}
+                          aria-disabled={locked || isUsed}
+                          aria-label={`${word}. Choose a blank to place it.`}
+                          onKeyDown={(event) => {
+                            if (event.key === "Escape") {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              cancelChoice(true);
+                            } else if (
+                              event.key === "Enter" ||
+                              event.key === " "
+                            ) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              if (!event.repeat) chooseWord(word);
+                            }
+                          }}
+                          onKeyUp={activationKeys.onKeyUp}
+                          style={{
+                            padding: "6px 14px",
+                            border: "2px solid #6D2980",
+                            borderRadius: "10px",
+                            background: "#fff",
+                            cursor: isUsed ? "not-allowed" : "grab",
+                            opacity: isUsed ? 0.5 : 1,
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {word}
+                        </span>
+                      </BankDragItem>
                     )}
                   </Draggable>
                 );
               })}
-              {provided.placeholder}
+              <span
+                style={{ display: dragging ? "none" : "contents" }}
+                aria-hidden="true"
+              >
+                {provided.placeholder}
+              </span>
             </div>
           )}
         </Droppable>
@@ -172,18 +481,45 @@ const GrammarC = () => {
 
                 {q.sentence.split("____")[0]}
 
-                <Droppable droppableId={`drop-${i}`}>
-                  {(provided) => (
+                <Droppable
+                  droppableId={`drop-${i}`}
+                  isDropDisabled={slotLocked(i)}
+                >
+                  {(provided, snapshot) => (
                     <span
-                      ref={provided.innerRef}
+                      ref={(element) => {
+                        provided.innerRef(element);
+                        slotRefs.current[i] = element;
+                      }}
                       {...provided.droppableProps}
+                      role="button"
+                      tabIndex={pickedWord && slotLocked(i) ? -1 : 0}
+                      data-choice
+                      aria-disabled={slotLocked(i)}
+                      aria-label={`Blank ${i + 1}. ${value || "Empty"}.${slotLocked(i) ? " Correct and locked." : errors[i] ? " Not correct." : ""}`}
+                      onKeyDown={(event) => slotKey(event, i)}
+                      onKeyUp={activationKeys.onKeyUp}
+                      onClick={() => returnWord(i)}
                       style={{
                         display: "inline-flex",
                         justifyContent: "center",
                         minWidth: "100px",
-                        borderBottom: errors[i]
-                          ? "2px solid #ef4444"
-                          : "2px solid #000",
+                        height: "20px",
+                        outline:
+                          snapshot.isDraggingOver && !slotLocked(i)
+                            ? "3px dashed #2563eb"
+                            : undefined,
+                        outlineOffset: 3,
+                        borderRadius: snapshot.isDraggingOver ? 6 : undefined,
+                        backgroundColor:
+                          snapshot.isDraggingOver && !slotLocked(i)
+                            ? "#dbeafe"
+                            : undefined,
+                        borderBottom: slotLocked(i)
+                          ? "2px solid #16a34a"
+                          : errors[i]
+                            ? "2px solid #ef4444"
+                            : "2px solid #000",
                         margin: "0 6px",
                         fontWeight: value ? "bold" : "normal",
                         color: value ? "#6D2980" : "#000",
@@ -196,12 +532,6 @@ const GrammarC = () => {
                           cursor: "pointer",
                           transition: "0.2s",
                         }}
-                        onClick={() => {
-                          if (errors[i] === false || locked) return;
-                          const updated = [...answers];
-                          updated[i] = ""; // 🔥 رجّعها للبنك
-                          setAnswers(updated);
-                        }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = "#E9D5FF"; // بنفسجي فاتح
                         }}
@@ -211,7 +541,9 @@ const GrammarC = () => {
                       >
                         {value}
                       </span>
-                      {provided.placeholder}
+                      <span style={{ display: "none" }} aria-hidden="true">
+                        {provided.placeholder}
+                      </span>
                     </span>
                   )}
                 </Droppable>
@@ -251,14 +583,18 @@ const GrammarC = () => {
         <div className="flex justify-center gap-6 mt-8">
           {/* Reset */}
           <div className="relative group">
-            <div
+            <button
+              type="button"
+              aria-label="Start Again"
+              {...activationKeys}
+              ref={resetButtonRef}
               onClick={handleReset}
               className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
             >
-              <div className="bg-white p-3 rounded-full shadow">
+              <span className="bg-white p-3 rounded-full shadow">
                 <FaRedo size={14} />
-              </div>
-            </div>
+              </span>
+            </button>
             <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
               Reset
             </span>
@@ -266,14 +602,17 @@ const GrammarC = () => {
 
           {/* Show */}
           <div className="relative group">
-            <div
+            <button
+              type="button"
+              aria-label="Show Answer"
+              {...activationKeys}
               onClick={handleShow}
               className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
             >
-              <div className="bg-white p-3 rounded-full shadow">
+              <span className="bg-white p-3 rounded-full shadow">
                 <FaEye size={14} />
-              </div>
-            </div>
+              </span>
+            </button>
             <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
               Show Answer
             </span>
@@ -281,14 +620,19 @@ const GrammarC = () => {
 
           {/* Check */}
           <div className="relative group">
-            <div
+            <button
+              type="button"
+              aria-label="Check Answer"
+              {...activationKeys}
+              disabled={locked}
+              style={{ cursor: locked ? "not-allowed" : "pointer" }}
               onClick={handleCheck}
               className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
             >
-              <div className="bg-white p-3 rounded-full shadow">
+              <span className="bg-white p-3 rounded-full shadow">
                 <FaCheck size={14} />
-              </div>
-            </div>
+              </span>
+            </button>
             <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
               Check Answer
             </span>

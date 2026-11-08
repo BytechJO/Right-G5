@@ -30,7 +30,7 @@ const GrammarSection_U10 = () => {
         </div>
       </div>
       <div className="w-[70%] mx-auto">
-        <QuestionAudioPlayer
+        <QuestionAudioPlayer pageId="sb_unit10_page3_grammar"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={3.4}
@@ -40,7 +40,7 @@ const GrammarSection_U10 = () => {
       <div className="flex flex-col w-[60%] mx-auto">
         <img
           src={img}
-          alt=""
+          alt={"Past progressive chart. Statements use subject, was or were, an ing verb and a complement. The players were winning the first game. My brother was playing in the finals. Questions move was or were before the subject: Were the players winning the first game? Was your brother playing in the finals?"}
           style={{ width: "100%", height: "auto" }}
           className="w-full object-contain"
         />

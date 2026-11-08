@@ -1,8 +1,23 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_001_It's_your_turn.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_002_huh.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_003_a_long_way_to_go.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_004_what_someone_says_when_it's_time_for_the_next_person_to_go.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_005_to_travel_or_go_a_long_distance.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U10/Page 86 - C/Item_006_what_someone_says_when_they_don't_understand_something_or_didn't_hear.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit10_Page5_Q3 = () => {
+
+const Unit10_Page5_Q3 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = ["It’s your turn.", "a long way to go", "huh?"];
 
   const [answers, setAnswers] = useState(["", "", ""]);
@@ -11,12 +26,7 @@ const Unit10_Page5_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -37,12 +47,12 @@ const Unit10_Page5_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -73,17 +83,17 @@ const Unit10_Page5_Q3 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers(["It’s your turn.", "a long way to go", "huh?"]);
 
     setResult([true, true, true]);
@@ -91,7 +101,7 @@ const Unit10_Page5_Q3 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
 
     setResult([]);
@@ -101,7 +111,7 @@ const Unit10_Page5_Q3 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Expression"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Definition ${i+1}, choose the expression from the box`} aria-label={`Definition ${i+1}, choose the expression from the box`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -148,7 +158,7 @@ const Unit10_Page5_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Unit10_Page5_Q3.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit10_Page5_Q3.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page5_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page5_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div
         className="div-forall"
         style={{
@@ -159,17 +169,10 @@ const Unit10_Page5_Q3 = () => {
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 ">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            C
-          </span>
+        <ExerciseHeader sectionLetter="C" title={<>
+          
           Write each expression next to its definition.
-        </h5>
+        </>} subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."/>
 
         {/* WORD BOX */}
         <div
@@ -185,11 +188,11 @@ const Unit10_Page5_Q3 = () => {
             fontSize: "18px",
           }}
         >
-          <span>It’s your turn.</span>
+          <span><AudioText audio={audio} id={"audio-0"} src={clip0} label={"Hear It’s your turn."}>It’s your turn.</AudioText></span>
 
-          <span>huh?</span>
+          <span><AudioText audio={audio} id={"audio-1"} src={clip1} label={"Hear huh?"}>huh?</AudioText></span>
 
-          <span>a long way to go</span>
+          <span><AudioText audio={audio} id={"audio-2"} src={clip2} label={"Hear a long way to go"}>a long way to go</AudioText></span>
         </div>
 
         {/* QUESTIONS */}
@@ -198,9 +201,9 @@ const Unit10_Page5_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold text-[18px]">1</span>
 
-            <span className="text-[18px]">
+            <span className="text-[18px]"><AudioText audio={audio} id={"audio-3"} src={clip3} label={"Hear what someone says when it’s time for the next person to go"}>
               what someone says when it’s time for the next person to go
-            </span>
+            </AudioText></span>
 
             {inputField(0, "w-[260px]")}
           </div>
@@ -209,7 +212,7 @@ const Unit10_Page5_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold text-[18px]">2</span>
 
-            <span className="text-[18px]">to travel or go a long distance</span>
+            <span className="text-[18px]"><AudioText audio={audio} id={"audio-4"} src={clip4} label={"Hear to travel or go a long distance"}>to travel or go a long distance</AudioText></span>
 
             {inputField(1, "w-[240px]")}
           </div>
@@ -218,10 +221,10 @@ const Unit10_Page5_Q3 = () => {
           <div className="flex items-center gap-4">
             <span className="font-bold text-[18px]">3</span>
 
-            <span className="text-[18px]">
+            <span className="text-[18px]"><AudioText audio={audio} id={"audio-5"} src={clip5} label={"Hear what someone says when they don’t understand something or didn’t hear"}>
               what someone says when they don’t understand something or didn’t
               hear
-            </span>
+            </AudioText></span>
 
             {inputField(2, "w-[200px]")}
           </div>
@@ -230,15 +233,15 @@ const Unit10_Page5_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

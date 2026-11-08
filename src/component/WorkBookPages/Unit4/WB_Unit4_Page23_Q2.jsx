@@ -1,7 +1,49 @@
+import soundG5 from "../../../assets/audio/Workbook/Unit 4/Page 23 - G/Item_005_Do_you_go_to_the_mall_(frequently).mp3";
+import soundG4 from "../../../assets/audio/Workbook/Unit 4/Page 23 - G/Item_004_How_often_do_you_go_to_school_(regularly).mp3";
+import soundG3 from "../../../assets/audio/Workbook/Unit 4/Page 23 - G/Item_003_How_often_does_Sarah_play_in_her_backyard_(occasionally).mp3";
+import soundG2 from "../../../assets/audio/Workbook/Unit 4/Page 23 - G/Item_002_How_often_do_you_go_to_the_grocery_store_(weekly).mp3";
+import soundG1 from "../../../assets/audio/Workbook/Unit 4/Page 23 - G/Item_001_How_often_do_you_eat_breakfast_(daily).mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useRef, useState } from "react";
 import img from "../../../assets/imgs/pages/workbook/Right Int WB G5 U4/Page 23/Asset 1.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
 
 const WB_Unit4_Page23_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       text: "How often do you eat breakfast?",
@@ -47,7 +89,7 @@ const WB_Unit4_Page23_Q2 = () => {
       return;
     }
 
-    const updated = [...answers];
+    const updated = answers.map((row) => (Array.isArray(row) ? [...row] : row));
 
     updated[qIndex][inputIndex] = value;
 
@@ -59,6 +101,8 @@ const WB_Unit4_Page23_Q2 = () => {
     }
   };
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers([
       ["", ""],
       ["", ""],
@@ -67,26 +111,32 @@ const WB_Unit4_Page23_Q2 = () => {
       ["", ""],
     ]);
 
-    setTimeout(() => {
-      inputRefs.current[0]?.[0]?.focus();
-    }, 0);
+    inputRefs.current[0]?.[0]?.focus();
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full ">
+    <div
+      data-exercise-scope={"WB_Unit4_Page23_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit4_Page23_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit4_Page23_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit4_Page23_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full " style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            G
-          </span>
-          Read and write.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="G"
+          title={<>Read and write.</>}
+          subTitle="Use the percentage, picture, or context clue to choose the adverb, then place it in the natural position in the sentence."
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-8 mb-10">
@@ -97,10 +147,21 @@ const WB_Unit4_Page23_Q2 = () => {
                 <span className="font-bold">{qIndex + 1}</span>
 
                 <span>
-                  {question.text} ({question.word})
+                  <AudioText
+                    audio={audio}
+                    id={`question-${qIndex}`}
+                    src={[soundG1, soundG2, soundG3, soundG4, soundG5][qIndex]}
+                    label={`Hear question ${qIndex + 1}: ${question.text} (${question.word})`}
+                  >
+                    {question.text} ({question.word})
+                  </AudioText>
                 </span>
 
                 <input
+                  placeholder={"Your answer"}
+                  title={`Question ${qIndex + 1}: ${question.text} (${question.word}), answer line 1`}
+                  aria-label={`Question ${qIndex + 1}: ${question.text} (${question.word}), answer line 1`}
+                  {...fieldKeys}
                   ref={(el) => {
                     if (!inputRefs.current[qIndex]) {
                       inputRefs.current[qIndex] = [];
@@ -131,6 +192,10 @@ const WB_Unit4_Page23_Q2 = () => {
               {/* السطر الثاني */}
               <div className="pl-7">
                 <input
+                  placeholder={"Continue your answer"}
+                  title={`Question ${qIndex + 1}: ${question.text} (${question.word}), answer line 2`}
+                  aria-label={`Question ${qIndex + 1}: ${question.text} (${question.word}), answer line 2`}
+                  {...fieldKeys}
                   ref={(el) => {
                     if (!inputRefs.current[qIndex]) {
                       inputRefs.current[qIndex] = [];
@@ -163,7 +228,9 @@ const WB_Unit4_Page23_Q2 = () => {
         <div className="flex justify-center">
           <img
             src={img}
-            alt="question"
+            alt={
+              "Children playing, watering plants, and picking flowers in a park."
+            }
             style={{
               width: "800px",
               height: "auto",
@@ -175,7 +242,14 @@ const WB_Unit4_Page23_Q2 = () => {
 
       {/* RESET BUTTON */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
       </div>

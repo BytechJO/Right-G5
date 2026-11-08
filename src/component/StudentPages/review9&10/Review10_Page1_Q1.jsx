@@ -1,8 +1,50 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 90 - A/Item_001_about_music.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 90 - A/Item_002_adjectives.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 90 - A/Item_003_about_farming.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 90 - A/Item_004_extra.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review10_Page1_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const categories = {
     music: ["symphony", "composers", "instrument", "moods"],
     adjectives: ["appealing", "enormous", "lively", "flexible"],
@@ -23,12 +65,7 @@ const Review10_Page1_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -56,16 +93,25 @@ const Review10_Page1_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const filledAnswers = answers.filter((a) => a.trim());
 
     if (filledAnswers.length < 10) {
-      ValidationAlert.info("Please fill in at least 10 blanks.");
+      (setAnnouncement(
+        String("Please fill in at least 10 blanks.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please fill in at least 10 blanks."));
 
       return;
     }
 
-    const usedWords = new Set();
+    const usedWords = new Set(
+      answers.filter((_, i) => result[i] === true).map(normalize),
+    );
 
     let correctCount = 0;
 
@@ -92,6 +138,10 @@ const Review10_Page1_Q1 = () => {
     ];
 
     const newResults = answers.map((answer, i) => {
+      if (result[i] === true) {
+        correctCount++;
+        return true;
+      }
       if (!answer.trim()) return undefined;
 
       const normalized = normalize(answer);
@@ -127,17 +177,39 @@ const Review10_Page1_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "symphony",
       "composers",
@@ -186,6 +258,8 @@ const Review10_Page1_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(Array(16).fill(""));
 
     setResult([]);
@@ -195,7 +269,14 @@ const Review10_Page1_Q1 = () => {
 
   const inputField = (i) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Word"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Category ${["about music", "adjectives", "about farming", "extra"][Math.floor(i / 4)]}, entry ${(i % 4) + 1}; unused slots may stay empty`}
+        aria-label={`Category ${["about music", "adjectives", "about farming", "extra"][Math.floor(i / 4)]}, entry ${(i % 4) + 1}; unused slots may stay empty`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -242,27 +323,33 @@ const Review10_Page1_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Review10_Page1_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review10_Page1_Q1.jsx"] input:focus-visible,[data-exercise-scope="Review10_Page1_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Review10_Page1_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall "
         style={{
-          minHeight: "65vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          gap: "50px",
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-25">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
-          Put the vocabulary words into the correct category.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="A"
+          title={<>Put the vocabulary words into the correct category.</>}
+          subTitle="Sort one word at a time by meaning, and recheck each group before submitting your answer."
+        />
 
         {/* CATEGORIES */}
         <div className="grid grid-cols-4 gap-x-10 text-[18px]">
@@ -277,7 +364,14 @@ const Review10_Page1_Q1 = () => {
                 textAlign: "center",
               }}
             >
-              about music
+              <AudioText
+                audio={audio}
+                id={"audio-0"}
+                src={clip0}
+                label={"Hear about music"}
+              >
+                about music
+              </AudioText>
             </div>
 
             {inputField(0)}
@@ -297,7 +391,14 @@ const Review10_Page1_Q1 = () => {
                 textAlign: "center",
               }}
             >
-              adjectives
+              <AudioText
+                audio={audio}
+                id={"audio-1"}
+                src={clip1}
+                label={"Hear adjectives"}
+              >
+                adjectives
+              </AudioText>
             </div>
 
             {inputField(4)}
@@ -317,7 +418,14 @@ const Review10_Page1_Q1 = () => {
                 textAlign: "center",
               }}
             >
-              about farming
+              <AudioText
+                audio={audio}
+                id={"audio-2"}
+                src={clip2}
+                label={"Hear about farming"}
+              >
+                about farming
+              </AudioText>
             </div>
 
             {inputField(8)}
@@ -337,7 +445,14 @@ const Review10_Page1_Q1 = () => {
                 textAlign: "center",
               }}
             >
-              extra
+              <AudioText
+                audio={audio}
+                id={"audio-3"}
+                src={clip3}
+                label={"Hear extra"}
+              >
+                extra
+              </AudioText>
             </div>
 
             {inputField(12)}
@@ -350,15 +465,36 @@ const Review10_Page1_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

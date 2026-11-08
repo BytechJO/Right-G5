@@ -1,11 +1,61 @@
+import soundD8 from "../../../assets/audio/Workbook/Unit 9/Page 52 - D/Item_008_If_they_can't_find_a_bus,_they_will_take_a_taxi.mp3";
+import soundD7 from "../../../assets/audio/Workbook/Unit 9/Page 52 - D/Item_007_If_we_finish_our_chores,_we_could_play_in_the_backyard.mp3";
+import soundD6 from "../../../assets/audio/Workbook/Unit 9/Page 52 - D/Item_006_When_my_dad_comes_home,_I_will_set_the_dinner_table.mp3";
+import soundD5 from "../../../assets/audio/Workbook/Unit 9/Page 52 - D/Item_005_Jack_will_open_the_window_if_he_wants_fresh_air.mp3";
+import soundD1 from "../../../assets/audio/Workbook/Unit 9/Page 52 - D/Item_001_They_will_take_a_taxi_if_they_can't_find_a_bus.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // IMAGE
 import taxiImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 52/Asset 2.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit9_Page52_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "They will take a taxi if they can’t find a bus.",
 
@@ -36,12 +86,7 @@ const WB_Unit9_Page52_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’',]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -71,11 +116,18 @@ const WB_Unit9_Page52_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -106,13 +158,32 @@ const WB_Unit9_Page52_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -121,6 +192,9 @@ const WB_Unit9_Page52_Q2 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResult([true, true, true, true, true]);
@@ -133,6 +207,8 @@ const WB_Unit9_Page52_Q2 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", ""]);
 
     setResult([]);
@@ -147,6 +223,19 @@ const WB_Unit9_Page52_Q2 = () => {
   const inputField = (i) => (
     <div className="relative w-full">
       <input
+        style={{
+          borderBottomColor:
+            result[i] === true
+              ? "#16a34a"
+              : result[i] === false
+                ? "#D1232A"
+                : undefined,
+        }}
+        placeholder={"Reordered sentence"}
+        aria-invalid={result[i] === false}
+        title={`Rewrite sentence ${i + 1} in the opposite clause order: ${questions[i]}`}
+        aria-label={`Rewrite sentence ${i + 1} in the opposite clause order: ${questions[i]}`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -193,21 +282,34 @@ const WB_Unit9_Page52_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit9_Page52_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit9_Page52_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit9_Page52_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit9_Page52_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full mb-12">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[8vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          Read and write each sentence in the opposite way from what is shown.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="D"
+          title={
+            <>
+              Read and write each sentence in the opposite way from what is
+              shown.
+            </>
+          }
+          subTitle="Keep the same idea but change it to the required opposite form, checking negatives and meaning carefully."
+        />
 
         {/* CONTENT */}
 
@@ -222,11 +324,17 @@ const WB_Unit9_Page52_Q2 = () => {
                 <div key={index}>
                   {/* QUESTION */}
 
-                  <div className="flex items-start gap-4 mb-2">
+                  <SentenceGroup
+                    label={`Hear sentence ${index + 1}: ${question}`}
+                    src={[soundD1, soundD5, soundD6, soundD7, soundD8][index]}
+                    id={`prompt-${index}`}
+                    audio={audio}
+                    className="flex items-start gap-4 mb-2"
+                  >
                     <span className="font-bold">{index + 1}</span>
 
                     <span className="leading-[1.8]">{question}</span>
-                  </div>
+                  </SentenceGroup>
 
                   {/* INPUT */}
 
@@ -239,7 +347,7 @@ const WB_Unit9_Page52_Q2 = () => {
 
             <img
               src={taxiImg}
-              alt=""
+              alt={"A yellow taxi with a driver and a TAXI sign on its roof."}
               style={{
                 width: "230px",
                 height: "auto",
@@ -258,11 +366,19 @@ const WB_Unit9_Page52_Q2 = () => {
                 <div key={realIndex}>
                   {/* QUESTION */}
 
-                  <div className="flex items-start gap-4 mb-2">
+                  <SentenceGroup
+                    label={`Hear sentence ${realIndex + 1}: ${question}`}
+                    src={
+                      [soundD1, soundD5, soundD6, soundD7, soundD8][realIndex]
+                    }
+                    id={`prompt-${realIndex}`}
+                    audio={audio}
+                    className="flex items-start gap-4 mb-2"
+                  >
                     <span className="font-bold">{realIndex + 1}</span>
 
                     <span className="leading-[1.8]">{question}</span>
-                  </div>
+                  </SentenceGroup>
 
                   {/* INPUT */}
 
@@ -277,15 +393,36 @@ const WB_Unit9_Page52_Q2 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

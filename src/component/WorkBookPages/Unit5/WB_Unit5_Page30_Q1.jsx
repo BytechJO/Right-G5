@@ -1,3 +1,7 @@
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -5,8 +9,42 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 // IMAGES
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 30/Asset 4.svg";
 import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 30/Asset 14.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page30_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const answers = [
     "I'd like the spaghetti and meatballs, please.",
 
@@ -19,12 +57,7 @@ const WB_Unit5_Page30_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -54,11 +87,18 @@ const WB_Unit5_Page30_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -89,13 +129,32 @@ const WB_Unit5_Page30_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -104,6 +163,9 @@ const WB_Unit5_Page30_Q1 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResult([true, true]);
@@ -116,6 +178,8 @@ const WB_Unit5_Page30_Q1 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", ""]);
 
     setResult([]);
@@ -130,6 +194,11 @@ const WB_Unit5_Page30_Q1 = () => {
   const inputField = (i, width = "100%") => (
     <div className="relative w-full">
       <input
+        aria-invalid={result[i] === false}
+        placeholder={"Polite request or statement"}
+        title={`Picture ${i + 1}: write a polite request or statement`}
+        aria-label={`Picture ${i + 1}: write a polite request or statement`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -149,6 +218,7 @@ const WB_Unit5_Page30_Q1 = () => {
         `}
         style={{
           width,
+          borderBottomColor: result[i] === true ? "#16a34a" : undefined,
         }}
       />
 
@@ -179,22 +249,35 @@ const WB_Unit5_Page30_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px]">
+    <div
+      data-exercise-scope={"WB_Unit5_Page30_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page30_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page30_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px]" style={{gap:"100px"}}>
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[20vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            H
-          </span>
-          Write a <span className="text-[#00AEEF]">polite request</span>  or
-          <span className="text-[#00AEEF]">statement</span> for each picture.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="H"
+          title={
+            <>
+              Write a <span className="text-[#00AEEF]">polite request</span> or
+              <span className="text-[#00AEEF]">statement</span> for each
+              picture.
+            </>
+          }
+          subTitle="Identify the direct request first, then rewrite it with an appropriate polite form while keeping the original meaning."
+        />
 
         {/* QUESTIONS */}
 
@@ -216,7 +299,9 @@ const WB_Unit5_Page30_Q1 = () => {
               </span>
               <img
                 src={img1}
-                alt=""
+                alt={
+                  "A woman seated at a dining table, thinking about a cup of tea."
+                }
                 style={{
                   width: "200px",
                   height: "auto",
@@ -247,7 +332,7 @@ const WB_Unit5_Page30_Q1 = () => {
               </span>
               <img
                 src={img2}
-                alt=""
+                alt={"A boy seated at a restaurant table, reading a menu."}
                 style={{
                   width: "200px",
                   height: "auto",
@@ -266,15 +351,36 @@ const WB_Unit5_Page30_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

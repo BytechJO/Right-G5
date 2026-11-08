@@ -6,22 +6,22 @@ import arrowBtn from "../../../assets/Page 01/Arrow.svg";
 
 const Unit6_Page4 = ({ openPopup }) => {
   return (
-    <div
+    <div data-page-access={"Unit6_Page4.jsx"}
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_4})` }}
-    >
+    ><style>{`[data-page-access="Unit6_Page4.jsx"] :focus-visible{outline:3px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page7 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
-        <svg
+        <svg onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));}}} aria-label={"Open activity 1"} data-launcher={true} tabIndex={0} role={"button"}
           width="22"
           height="22"
           viewBox="0 0 90 90"
           onClick={() => openPopup("html", <WritingSection_U2 />)}
           style={{ overflow: "visible" }}
         >
-          <image
+          <image aria-hidden={true}
             className="svg-img"
             href={arrowBtn}
             x="0"

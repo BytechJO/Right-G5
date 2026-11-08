@@ -1,10 +1,62 @@
+import soundA9 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_009_nt.mp3";
+import soundA10 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_010_m_=a_roofless_building_with_many_seats;_it_is_used_for_sports_events_and.mp3";
+import soundA8 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_008_t_=a_meeting_set_for_a_certain_time_and_place.mp3";
+import soundA7 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_007_=_to_become_part_of_something.mp3";
+import soundA6 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_006_=_asmall_group_that_certain_people_join.mp3";
+import soundA5 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_005_to_hurry.mp3";
+import soundA2 from "../../../assets/audio/Workbook/Unit 9/Page 51 - A/Item_002_g_=_cutting_(the_grass)_with_a_machine.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // IMAGE
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U9/Page 51/Asset 8.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit9_Page51_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const inputRefs = useRef([]);
   const questions = [
     {
@@ -77,12 +129,7 @@ const WB_Unit9_Page51_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, "")
-      .trim();
+  const normalize = (text) => normalizeAnswer(text).replace(/\s+/g, "");
 
   // ------------------------
   // HANDLE INPUT
@@ -112,11 +159,20 @@ const WB_Unit9_Page51_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
-    const hasEmpty = studentAnswers.some((a) => !a.trim());
+    const hasEmpty = studentAnswers.some(
+      (a, i) => a.replace(/\s/g, "").length !== questions[i].answer.length,
+    );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -147,13 +203,32 @@ const WB_Unit9_Page51_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -162,6 +237,9 @@ const WB_Unit9_Page51_Q1 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(questions.map((q) => q.answer));
 
     setResult([true, true, true, true, true, true]);
@@ -174,6 +252,8 @@ const WB_Unit9_Page51_Q1 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -195,7 +275,22 @@ const WB_Unit9_Page51_Q1 = () => {
       <div className="flex items-center flex-wrap gap-1">
         {parts.map((part, partIndex) => {
           if (!part.startsWith("input:")) {
-            return <span key={partIndex}>{part}</span>;
+            return (
+              <span key={partIndex}>
+                {(part === "nt" ? soundA9 : null) ? (
+                  <AudioText
+                    audio={audio}
+                    id={`fixed-${qIndex}-${partIndex}`}
+                    src={part === "nt" ? soundA9 : null}
+                    label={"Hear " + part}
+                  >
+                    {part}
+                  </AudioText>
+                ) : (
+                  part
+                )}
+              </span>
+            );
           }
 
           const letters = part.replace("input:", "").split("");
@@ -206,6 +301,55 @@ const WB_Unit9_Page51_Q1 = () => {
             return (
               <div key={`${partIndex}-${i}`} className="relative">
                 <input
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.stopPropagation();
+                      return;
+                    }
+                    if (
+                      ![
+                        "ArrowLeft",
+                        "ArrowRight",
+                        "Backspace",
+                        "Delete",
+                      ].includes(e.key)
+                    )
+                      return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (locked || result[qIndex] === true) return;
+                    let target = letterIndex;
+                    if (e.key === "ArrowLeft") target--;
+                    else if (e.key === "ArrowRight") target++;
+                    else {
+                      if (
+                        e.key === "Backspace" &&
+                        !studentAnswers[qIndex][letterIndex]?.trim()
+                      )
+                        target--;
+                      const chars = Array.from(
+                        { length: q.answer.length },
+                        (_, idx) => studentAnswers[qIndex][idx] || " ",
+                      );
+                      chars[Math.max(0, target)] = " ";
+                      handleChange(qIndex, chars.join(""));
+                    }
+                    const next = inputRefs.current[qIndex]?.[target];
+                    next?.focus();
+                    next?.select();
+                  }}
+                  style={{
+                    borderBottomColor:
+                      result[qIndex] === true
+                        ? "#16a34a"
+                        : result[qIndex] === false
+                          ? "#D1232A"
+                          : undefined,
+                  }}
+                  aria-invalid={result[qIndex] === false}
+                  title={`Word ${qIndex + 1}, missing letter ${letterIndex + 1} of ${q.answer.length}. Clue: ${q.meaning}`}
+                  aria-label={`Word ${qIndex + 1}, missing letter ${letterIndex + 1} of ${q.answer.length}. Clue: ${q.meaning}`}
+                  onKeyUp={fieldKeys.onKeyUp}
                   ref={(el) => {
                     if (!inputRefs.current[qIndex])
                       inputRefs.current[qIndex] = [];
@@ -213,25 +357,24 @@ const WB_Unit9_Page51_Q1 = () => {
                   }}
                   type="text"
                   maxLength={1}
-                  value={studentAnswers[qIndex][letterIndex] || ""}
+                  value={(studentAnswers[qIndex][letterIndex] || "").trim()}
                   disabled={locked || result[qIndex] === true}
                   onChange={(e) => {
-                    const value = e.target.value.toLowerCase();
-                    if (!value) return;
-
-                    const updated = [...q.answer].map(
-                      (_, idx) => studentAnswers[qIndex][idx] || "",
+                    if (locked || result[qIndex] === true) return;
+                    const value = e.target.value
+                      .toLowerCase()
+                      .replace(/[^a-z]/g, "")
+                      .slice(-1);
+                    const updated = Array.from(
+                      { length: q.answer.length },
+                      (_, idx) => studentAnswers[qIndex][idx] || " ",
                     );
-
-                    updated[letterIndex] = value;
+                    updated[letterIndex] = value || " ";
                     handleChange(qIndex, updated.join(""));
-
-                    const nextInput =
-                      inputRefs.current[qIndex]?.[letterIndex + 1];
-
-                    if (nextInput) {
-                      nextInput.focus();
-                      nextInput.select();
+                    if (value) {
+                      const next = inputRefs.current[qIndex]?.[letterIndex + 1];
+                      next?.focus();
+                      next?.select();
                     }
                   }}
                   onFocus={(e) => e.target.select()}
@@ -278,28 +421,36 @@ const WB_Unit9_Page51_Q1 = () => {
     );
   };
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit9_Page51_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit9_Page51_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit9_Page51_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit9_Page51_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full" style={{gap:"50px"}}>
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-[8vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            A
-          </span>
-          Read and write the missing letters.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="A"
+          title={<>Read and write the missing letters.</>}
+          subTitle="Say the whole word quietly, use the clue to identify the missing letters, then reread the completed spelling."
+        />
 
         {/* CONTENT */}
 
         <div className="flex  items-start ">
           {/* LEFT */}
 
-          <div className="flex-1 flex flex-col gap-12">
+          <div className="flex-1 flex flex-col gap-9">
             {questions.map((q, index) => (
               <div key={index}>
                 <div className="flex items-start gap-4">
@@ -313,7 +464,25 @@ const WB_Unit9_Page51_Q1 = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                       {renderLetterInputs(q, index)}
 
-                      <span>{q.meaning}</span>
+                      <span>
+                        <AudioText
+                          audio={audio}
+                          id={`meaning-${index}`}
+                          src={
+                            [
+                              soundA2,
+                              soundA5,
+                              soundA6,
+                              soundA7,
+                              soundA8,
+                              soundA10,
+                            ][index]
+                          }
+                          label={`Hear the clue for word ${index + 1}: ${q.meaning}`}
+                        >
+                          {q.meaning}
+                        </AudioText>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -326,7 +495,7 @@ const WB_Unit9_Page51_Q1 = () => {
             {" "}
             <img
               src={img1}
-              alt=""
+              alt={"A lawn mower on green grass outside a building."}
               style={{
                 width: "250px",
                 height: "auto",
@@ -340,15 +509,36 @@ const WB_Unit9_Page51_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

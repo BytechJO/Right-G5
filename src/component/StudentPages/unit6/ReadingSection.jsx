@@ -1,8 +1,12 @@
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+import { useReadingHighlight } from "../../useReadingHighlight";
 import React from "react";
 import ReadingBG from "../../../assets/imgs/conversation.svg";
 import think from "../../../assets/imgs/pages/classbook/think.svg";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import Button from "../../Button";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const ReadingSection = ({
   mainTitle,
@@ -13,9 +17,30 @@ const ReadingSection = ({
   sound,
   captions,
   stopAtSecond,
+  wordTimings,
+  timingAliases,
+  pageId,
+  onTimeUpdate,
+  imageAlt,
+  subTitle,
+  headerTitle,
 }) => {
+  const audio = useExerciseAudio();
+  const { highlight, onTimeUpdate: updateReadingTime } = useReadingHighlight(
+    wordTimings,
+    timingAliases,
+    true,
+  );
   return (
-    <div className="p-6 flex flex-col items-center ">
+    <div
+      className="p-6 flex flex-col items-center "
+      data-reading-access="unit6"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-reading-access="unit6"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+ <div className="flex items-center gap-4 mb-4 w-[70%]">
+        <ExerciseHeader title={headerTitle} subTitle={subTitle} />
+      </div>
       <div className="flex items-center gap-4 mb-4 w-[60%]">
         <div
           className="px-4 py-1 font-bold text-black"
@@ -29,24 +54,32 @@ const ReadingSection = ({
           Reading
         </div>
 
-        <h2 className="font-bold text-[18px] text-black">{mainTitle}</h2>
+        <h2 className="font-bold text-[18px] text-black">
+          {highlight(mainTitle)}
+        </h2>
       </div>
       <div className="w-[70%] mx-auto">
         <QuestionAudioPlayer
           src={sound}
+          onTimeUpdate={(time) => {
+            updateReadingTime(time);
+            onTimeUpdate?.(time);
+          }}
+          pageId={pageId}
           captions={captions}
           stopAtSecond={stopAtSecond}
         />
       </div>
       <div className="relative w-[60%] mt-2">
         <div className="absolute -top-3 left-4 bg-[#6D2980] text-white px-5 py-1 rounded-md text-sm font-bold">
-          {title}
+          {highlight(title)}
         </div>
 
         <div className="border-2 border-[#6D2980] rounded-2xl p-5 pt-7 bg-white">
           {/* الصورة مع float */}
           <img
             src={image}
+            alt={imageAlt}
             style={{ width: "200px", height: "auto", objectFit: "contain" }}
             className="float-left mr-5 mb-2 "
           />
@@ -64,11 +97,7 @@ const ReadingSection = ({
       </div>
 
       <div className="relative w-[60%]">
-        <img
-          src={think}
-          alt="think"
-          style={{ height: "150px", width: "auto" }}
-        />
+        <img src={think} alt="" style={{ height: "150px", width: "auto" }} />
 
         <div className="absolute top-1/2 left-10 -translate-y-1/2 text-[15px] text-black text-left max-w-[70%]">
           {question}

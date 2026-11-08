@@ -1,3 +1,18 @@
+import soundF5 from "../../../assets/audio/Workbook/Unit 10/Page 59 - F/Item_005_(eat_his_soup).mp3";
+import soundF4 from "../../../assets/audio/Workbook/Unit 10/Page 59 - F/Item_004_(read_a_book).mp3";
+import soundF3 from "../../../assets/audio/Workbook/Unit 10/Page 59 - F/Item_003_(ride_their_bikes).mp3";
+import soundF1 from "../../../assets/audio/Workbook/Unit 10/Page 59 - F/Item_001_(play_the_drums).mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -7,8 +22,42 @@ import drumsImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Pa
 import bikesImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 5.svg";
 import readingImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 6.svg";
 import soupImg from "../../../assets/imgs/pages/workbook/Right Int WB G5 U10/Page 59/Asset 7.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit_Test_Q30 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       clue: "(play the drums)",
@@ -43,12 +92,7 @@ const WB_Unit_Test_Q30 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[-.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -78,11 +122,18 @@ const WB_Unit_Test_Q30 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -113,13 +164,32 @@ const WB_Unit_Test_Q30 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
@@ -128,6 +198,9 @@ const WB_Unit_Test_Q30 = () => {
   // ------------------------
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(questions.map((q) => q.answer));
 
     setResult([true, true, true, true]);
@@ -140,6 +213,8 @@ const WB_Unit_Test_Q30 = () => {
   // ------------------------
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -154,6 +229,19 @@ const WB_Unit_Test_Q30 = () => {
   const inputField = (i) => (
     <div className="relative w-full">
       <input
+        style={{
+          borderBottomColor:
+            result[i] === true
+              ? "#16a34a"
+              : result[i] === false
+                ? "#D1232A"
+                : undefined,
+        }}
+        placeholder={"Past progressive sentence"}
+        aria-invalid={result[i] === false}
+        title={`Picture ${i + 1}: ${questions[i].clue}. Write a past progressive sentence.`}
+        aria-label={`Picture ${i + 1}: ${questions[i].clue}. Write a past progressive sentence.`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -200,25 +288,36 @@ const WB_Unit_Test_Q30 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[18px] w-full">
+    <div
+      data-exercise-scope={"WB_Unit10_Page59_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit10_Page59_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit10_Page59_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit10_Page59_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[18px] w-full mb-10">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-10 leading-[1.4]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            F
-          </span>
-          Look and write a sentence using the{" "}
-          <span className="text-[#00AEEF]">
-            past progressive tense
-            (was/were + verb + ing).
-          </span>
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="F"
+          title={
+            <>
+              Look and write a sentence using the{" "}
+              <span className="text-[#00AEEF]">
+                past progressive tense (was/were + verb + ing).
+              </span>
+            </>
+          }
+          subTitle="Match the subject with was or were, add the -ing verb, and check that the sentence describes an action in progress in the past."
+        />
 
         {/* QUESTIONS */}
 
@@ -243,13 +342,19 @@ const WB_Unit_Test_Q30 = () => {
 
               {/* RIGHT */}
 
-              <div className="flex-1 flex flex-col gap-8 pt-2">
+              <SentenceGroup
+                label={`Hear clue ${index + 1}: ${q.clue}`}
+                src={[soundF1, soundF3, soundF4, soundF5][index]}
+                id={`clue-${index}`}
+                audio={audio}
+                className="flex-1 flex flex-col gap-8 pt-2"
+              >
                 {/* LINE 1 */}
 
                 {inputField(index)}
                 {/* CLUE */}
                 <span className="text-[18px]">{q.clue}</span>
-              </div>
+              </SentenceGroup>
             </div>
           ))}
         </div>
@@ -258,15 +363,36 @@ const WB_Unit_Test_Q30 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

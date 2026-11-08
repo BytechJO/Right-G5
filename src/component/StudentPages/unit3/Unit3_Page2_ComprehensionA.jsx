@@ -1,8 +1,22 @@
+import { useExerciseAudio } from "./useExerciseAudio";
+import { AudioText,AudioFeedback,AudioSpeaker } from "./ExerciseAudioText";
+import { SentenceGroup } from "./SentenceAudio";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
 
+const activationKeys = {
+ onKeyDown: event => {if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},
+ onKeyUp: event => {if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}
+};
+
+
+
 const Unit3_Page2_ComprehensionA = () => {
+const audio=useExerciseAudio();
+const resetButtonRef=React.useRef(null);
+const [announcement,setAnnouncement]=useState("");
+
   const options = [
     "a wife and mother",
     "a chef",
@@ -27,22 +41,17 @@ const Unit3_Page2_ComprehensionA = () => {
   const [locked, setLocked] = useState(false);
 
   // 🎯 select
-  const toggle = (opt) => {
-    if (locked) return;
-
-    setSelected((prev) =>
-      prev.includes(opt) ? prev.filter((o) => o !== opt) : [...prev, opt],
-    );
-
-    setResult({});
-  };
+  const toggle = opt => {if(locked||result[opt]===true)return;setSelected(previous=>previous.includes(opt)?previous.filter(o=>o!==opt):[...previous,opt]);setResult(previous=>{const next={...previous};delete next[opt];return next;});setAnnouncement(opt+" selection changed.");};
 
   // ✅ check
-  const handleCheck = () => {
+  const handleCheck = () => {if(locked)return;
+
+audio.stop();
+
     if (locked) return;
 
     if (selected.length === 0) {
-      ValidationAlert.info("Select at least one answer.");
+      (setAnnouncement(String("Select at least one answer.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Select at least one answer."));
       return;
     }
 
@@ -65,32 +74,34 @@ const Unit3_Page2_ComprehensionA = () => {
 
     const msg = `Score: ${score} / ${correct.length}`;
 
-    if (score === correct.length) {
-      setLocked(true);
-      ValidationAlert.success(msg);
+    if (score === correct.length && !Object.values(res).includes(false)) {
+      resetButtonRef.current?.focus({preventScroll:true});
+setLocked(true);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // 👀 show
-  const handleShow = () => {
-    setSelected(correct);
-    setResult({});
-    setLocked(true);
-  };
+  const handleShow = ()=>{audio.stop();setSelected([...correct]);setResult(Object.fromEntries(correct.map(word=>[word,true])));setLocked(true);setAnnouncement("Correct phrases shown and locked.");};
 
   // 🔄 reset
   const handleReset = () => {
+audio.stop();
+setAnnouncement("Answers, feedback and locks cleared.");
+
     setSelected([]);
     setResult({});
     setLocked(false);
   };
 
   return (
-    <div>
+    <div data-exercise-scope="Unit3_Page2_ComprehensionA.jsx">
+<AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit3_Page2_ComprehensionA.jsx"] input:focus-visible,[data-exercise-scope="Unit3_Page2_ComprehensionA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit3_Page2_ComprehensionA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style><div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
+
       {/* HEADER */}
       <h5 className="header-title-page8-read  mb-5">
         <span className="ex-A-read" style={{ marginRight: "10px" }}>
@@ -107,7 +118,7 @@ const Unit3_Page2_ComprehensionA = () => {
           const isSelected = selected.includes(opt);
 
           return (
-            <div
+            <div {...activationKeys} aria-disabled={locked||result[opt]===true} aria-pressed={isSelected} aria-label={"Linda Robinson is " + opt} data-choice={true} tabIndex={0} role={"button"}
               key={i}
               onClick={() => toggle(opt)}
               className="cursor-pointer relative"
@@ -120,7 +131,7 @@ const Unit3_Page2_ComprehensionA = () => {
                     : isSelected
                       ? "2px solid #00AEEF" // 🔵 إذا مختار
                       : "2px solid transparent", // ⚪ غير مختار
-              }}
+              borderColor:result[opt]===true?"#16a34a":result[opt]===false?"red":isSelected?"#00AEEF":"transparent"}}
             >
               {opt}
 
@@ -158,14 +169,14 @@ const Unit3_Page2_ComprehensionA = () => {
       <div className="flex justify-center gap-6 mt-8">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button type="button" {...activationKeys} aria-label="Start Again" ref={resetButtonRef}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
           </span>
@@ -173,14 +184,14 @@ const Unit3_Page2_ComprehensionA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button type="button" {...activationKeys} aria-label="Show Answer"
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
           </span>
@@ -188,14 +199,14 @@ const Unit3_Page2_ComprehensionA = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button type="button" {...activationKeys} aria-label="Check Answer" disabled={locked} style={{cursor:locked?"not-allowed":"pointer"}}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer
           </span>

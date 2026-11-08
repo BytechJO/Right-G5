@@ -1,8 +1,21 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 91 - F/Item_001_doing_what_you_were_yesterday.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 91 - F/Item_002_at_Nora_parade_watching_was_a_9_00.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 91 - F/Item_003_students_on_cars_the_washing_were_Sunday.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 91 - F/Item_004_were_why_bus_stop_you_waiting_the_today_at.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Review10_Page2_Q3 = () => {
+
+const Review10_Page2_Q3 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "What were you doing yesterday?",
     "Nora was watching a parade at 9:00.",
@@ -23,12 +36,7 @@ const Review10_Page2_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -49,12 +57,12 @@ const Review10_Page2_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -85,17 +93,17 @@ const Review10_Page2_Q3 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       "What were you doing yesterday?",
       "Nora was watching a parade at 9:00.",
@@ -108,7 +116,7 @@ const Review10_Page2_Q3 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -118,7 +126,7 @@ const Review10_Page2_Q3 = () => {
 
   const inputField = (i) => (
     <div className="relative w-full">
-      <input
+      <input placeholder={"Sentence"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Item ${i+1}, unscramble the sentence or question`} aria-label={`Item ${i+1}, unscramble the sentence or question`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -165,27 +173,18 @@ const Review10_Page2_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Review10_Page2_Q3.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Review10_Page2_Q3.jsx"] input:focus-visible,[data-exercise-scope="Review10_Page2_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Review10_Page2_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div
         className="div-forall text-[18px]"
         style={{
-          minHeight: "70vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+         gap:"30px"
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-20">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            F
-          </span>
+        <ExerciseHeader isReview sectionLetter="F" title={<>
+          
           Unscramble and write the sentences or questions.
-        </h5>
+        </>} subTitle="Say the correct expression or sentence first, then reorder the words and check capitalization and punctuation."/>
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-8">
@@ -194,7 +193,7 @@ const Review10_Page2_Q3 = () => {
               <div className="flex items-center gap-4 flex-wrap">
                 <span className="font-bold">{i + 1}</span>
 
-                <span>{text}</span>
+                <span><AudioText audio={audio} id={`scrambled-${i}`} src={[clip0,clip1,clip2,clip3][i]} label={`Hear scrambled item ${i+1}: ${text}`}>{text}</AudioText></span>
               </div>
 
               <div className="w-full pl-7">{inputField(i)}</div>
@@ -205,15 +204,15 @@ const Review10_Page2_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

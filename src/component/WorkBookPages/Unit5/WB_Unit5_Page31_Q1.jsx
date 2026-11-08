@@ -1,3 +1,13 @@
+import soundK6 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_006_Could_you_please_help_me_carry_the_books.mp3";
+import soundK5 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_005_Would_you_please_close_the_door.mp3";
+import soundK4 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_004_I_would_prefer_steak,_please.mp3";
+import soundK3 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_003_We_would_like_to_order,_please.mp3";
+import soundK2 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_002_Would_you_please_eat_your_dinner.mp3";
+import soundK1 from "../../../assets/audio/Workbook/Unit 5/Page 31 - K/Item_001_Could_you_please_show_me_where_the_restroom_is.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
+import {AudioFeedback} from "../../StudentPages/unit5/ExerciseAudioText";
+import {SentenceGroup} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -9,8 +19,13 @@ import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 31
 import img4 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 31/Asset 8.svg";
 import img5 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 31/Asset 9.svg";
 import img6 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U5/Page 31/Asset 15.svg";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const WB_Unit5_Page31_Q1 = () => {
+
+const WB_Unit5_Page31_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const answers = ["4", "6", "2", "1", "3", "5"];
 
   const sentences = [
@@ -42,7 +57,7 @@ const WB_Unit5_Page31_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) => str.trim();
+  const normalize = normalizeAnswer;
 
   // ------------------------
   // HANDLE INPUT
@@ -54,7 +69,7 @@ const WB_Unit5_Page31_Q1 = () => {
     // فقط رقم واحد
     if (value && !/^[1-6]$/.test(value)) return;
 
-    const updated = [...studentAnswers];
+    if(value&&studentAnswers.some((answer,index)=>index!==i&&answer===value)){setAnnouncement(`Number ${value} is already used. Choose another number.`);return;}setAnnouncement(value?`Picture ${i+1}: sentence ${value} selected.`:`Picture ${i+1}: answer cleared.`);const updated = [...studentAnswers];
 
     updated[i] = value;
 
@@ -74,12 +89,12 @@ const WB_Unit5_Page31_Q1 = () => {
   // ------------------------
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a);
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -110,13 +125,13 @@ const WB_Unit5_Page31_Q1 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
@@ -124,7 +139,7 @@ const WB_Unit5_Page31_Q1 = () => {
   // SHOW ANSWERS
   // ------------------------
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setStudentAnswers(answers);
 
     setResult([true, true, true, true, true, true]);
@@ -136,7 +151,7 @@ const WB_Unit5_Page31_Q1 = () => {
   // RESET
   // ------------------------
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -150,7 +165,7 @@ const WB_Unit5_Page31_Q1 = () => {
 
   const inputField = (i) => (
     <div className="relative">
-      <input
+      <input onKeyUp={fieldKeys.onKeyUp} onKeyDown={event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();if(event.key==="ArrowUp"||event.key==="ArrowDown"){event.preventDefault();event.stopPropagation();if(locked||result[i]===true)return;const step=event.key==="ArrowUp"?1:-1;let next=Number(studentAnswers[i])||(step===1?0:1);for(let n=0;n<6;n++){next=(next+step+5)%6+1;if(!studentAnswers.some((value,index)=>index!==i&&value===String(next))){handleChange(i,String(next));return;}}}}} inputMode={"numeric"} aria-invalid={result[i]===false} title={`Picture ${i+1}: enter its sentence number, 1 to 6`} aria-label={`Picture ${i+1}: enter its sentence number, 1 to 6`} 
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -167,7 +182,7 @@ const WB_Unit5_Page31_Q1 = () => {
         `}
         style={{
           borderRadius: "3px",
-        }}
+        borderBottomStyle:result[i]!==undefined?"solid":undefined,borderBottomWidth:result[i]!==undefined?2:undefined,borderBottomColor:result[i]===true?"#16a34a":result[i]===false?"#D1232A":undefined}}
       />
 
       {result[i] === false && (
@@ -196,31 +211,24 @@ const WB_Unit5_Page31_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"WB_Unit5_Page31_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="WB_Unit5_Page31_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page31_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page31_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div className="div-forall text-[18px] w-full">
         {/* TITLE */}
 
-        <h5 className="header-title-page8 mb-8">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            K
-          </span>
+        <ExerciseHeader isWorkbook sectionLetter="K" title={<>
+          
           Read, look, and number.
-        </h5>
+        </>} subTitle="Read all choices once, then assign one number at a time so every item matches the intended order or picture." />
 
         {/* SENTENCES */}
 
         <div className="grid grid-cols-2 gap-2 mb-10">
           {sentences.map((sentence, index) => (
-            <div key={index} className="flex items-center gap-3">
+            <SentenceGroup label={`Hear sentence ${index+1}: ${sentence}`} src={[soundK1,soundK2,soundK3,soundK4,soundK5,soundK6][index]} id={`sentence-${index}`} audio={audio} key={index} className="flex items-center gap-3">
               <span className="font-bold w-[18px]">{index + 1}</span>
 
               <span>{sentence}</span>
-            </div>
+            </SentenceGroup>
           ))}
         </div>
 
@@ -231,7 +239,7 @@ const WB_Unit5_Page31_Q1 = () => {
             <div key={index} className="relative w-fit">
               <img
                 src={img}
-                alt=""
+                alt={["A waiter holding a plate of chicken beside a man thinking about steak.","A man carrying a stack of books beside a boy reaching toward them.","A family seated around a dinner table, with food on their plates.","A boy talking to a waiter, with a door in his thought bubble.","A waiter taking an order from two diners holding menus.","A girl beside a woman pointing toward an open door."][index]}
                 style={{
                   width: "205px",
                   height: "auto",
@@ -252,15 +260,15 @@ const WB_Unit5_Page31_Q1 = () => {
       {/* BUTTONS */}
 
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

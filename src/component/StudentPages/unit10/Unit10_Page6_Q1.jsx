@@ -1,3 +1,11 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 87 - D/Item_001_skating.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 87 - D/Item_002_hiking.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U10/Page 87 - D/Item_003_lifting_weights.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U10/Page 87 - D/Item_004_waterskiing.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import img1 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 87/SVG/Asset 8.svg";
@@ -6,8 +14,42 @@ import img3 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was th
 import img4 from "../../../assets/imgs/pages/classbook/Right 5 Unit 10 It Was the Best Day! Folder/Page 87/SVG/Asset 11.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Unit10_Page6_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "The mom and son were skating on a sunny day.",
     "They were hiking together in the woods.",
@@ -22,12 +64,7 @@ const Unit10_Page6_Q1 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (qIndex, value) => {
     if (locked || result[qIndex] === true) return;
@@ -49,11 +86,18 @@ const Unit10_Page6_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((answer) => !answer.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -84,17 +128,39 @@ const Unit10_Page6_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "The mom and son were skating on a sunny day.",
       "They were hiking together in the woods.",
@@ -108,6 +174,8 @@ const Unit10_Page6_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -117,7 +185,14 @@ const Unit10_Page6_Q1 = () => {
 
   const lineInput = (qIndex, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Sentence"}
+        style={{
+          ...(result[qIndex] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[qIndex] === false}
+        title={`Picture ${qIndex + 1}, write a past progressive sentence using ${hints[qIndex]}`}
+        aria-label={`Picture ${qIndex + 1}, write a past progressive sentence using ${hints[qIndex]}`}
+        {...fieldKeys}
         type="text"
         value={answers[qIndex]}
         disabled={locked || result[qIndex] === true}
@@ -164,21 +239,32 @@ const Unit10_Page6_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope={"Unit10_Page6_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit10_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page6_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall mb-10" style={{gap:"30px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            D
-          </span>
-          Look at the picture, and then write the correct past progressive verb
-          phrase.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="D"
+          title={
+            <>
+              Look at the picture, and then write the correct past progressive
+              verb phrase.
+            </>
+          }
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         {/* MAIN BOX */}
         <div>
@@ -191,7 +277,9 @@ const Unit10_Page6_Q1 = () => {
           >
             <img
               src={img1}
-              alt=""
+              alt={
+                "An adult and a child wearing helmets and protective pads, inline skating on a paved path."
+              }
               style={{
                 width: "150px",
                 height: "auto",
@@ -214,7 +302,14 @@ const Unit10_Page6_Q1 = () => {
                   marginLeft: "34px",
                 }}
               >
-                ({hints[0]})
+                <AudioText
+                  audio={audio}
+                  id={"hint-0"}
+                  src={clip0}
+                  label={`Hear clue: ${hints[0]}`}
+                >
+                  ({hints[0]})
+                </AudioText>
               </div>
             </div>
           </div>
@@ -228,7 +323,7 @@ const Unit10_Page6_Q1 = () => {
           >
             <img
               src={img2}
-              alt=""
+              alt={"Children carrying backpacks hiking along a woodland trail."}
               style={{
                 width: "150px",
                 height: "auto",
@@ -251,7 +346,14 @@ const Unit10_Page6_Q1 = () => {
                   marginLeft: "34px",
                 }}
               >
-                ({hints[1]})
+                <AudioText
+                  audio={audio}
+                  id={"hint-1"}
+                  src={clip1}
+                  label={`Hear clue: ${hints[1]}`}
+                >
+                  ({hints[1]})
+                </AudioText>
               </div>
             </div>
           </div>
@@ -265,7 +367,7 @@ const Unit10_Page6_Q1 = () => {
           >
             <img
               src={img3}
-              alt=""
+              alt={"A person wearing a life jacket waterskiing."}
               style={{
                 width: "150px",
                 height: "auto",
@@ -288,7 +390,14 @@ const Unit10_Page6_Q1 = () => {
                   marginLeft: "34px",
                 }}
               >
-                ({hints[2]})
+                <AudioText
+                  audio={audio}
+                  id={"hint-2"}
+                  src={clip2}
+                  label={`Hear clue: ${hints[2]}`}
+                >
+                  ({hints[2]})
+                </AudioText>
               </div>
             </div>
           </div>
@@ -302,7 +411,7 @@ const Unit10_Page6_Q1 = () => {
           >
             <img
               src={img4}
-              alt=""
+              alt={"A man lifting a barbell in a gym."}
               style={{
                 width: "150px",
                 height: "auto",
@@ -325,7 +434,14 @@ const Unit10_Page6_Q1 = () => {
                   marginLeft: "34px",
                 }}
               >
-                ({hints[3]})
+                <AudioText
+                  audio={audio}
+                  id={"hint-3"}
+                  src={clip3}
+                  label={`Hear clue: ${hints[3]}`}
+                >
+                  ({hints[3]})
+                </AudioText>
               </div>
             </div>
           </div>
@@ -334,15 +450,36 @@ const Unit10_Page6_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

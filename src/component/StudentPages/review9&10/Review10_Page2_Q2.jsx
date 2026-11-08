@@ -1,11 +1,51 @@
+import clip0 from "../../../assets/audio/ClassBook/U10/Page 91 - E/Item_001_Was_Elaine.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U10/Page 91 - E/Item_002_Were.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import trueImg from "../../../assets/imgs/true.svg";
 import flaseImg from "../../../assets/imgs/false.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review10_Page2_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       question: "Was Larry playing the piano?",
@@ -31,12 +71,7 @@ const Review10_Page2_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -58,11 +93,18 @@ const Review10_Page2_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -98,17 +140,39 @@ const Review10_Page2_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "Was Larry playing the piano?",
       "Yes, he was.",
@@ -129,6 +193,8 @@ const Review10_Page2_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", "", "", ""]);
 
     setResult([]);
@@ -138,7 +204,22 @@ const Review10_Page2_Q2 = () => {
 
   const inputField = (i, width) => (
     <span className={`relative inline-block ${width}`}>
-      <input
+      <input placeholder={i%2===0?"Question":"Short answer"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={
+          i % 2 === 0
+            ? `Item ${Math.floor(i / 2) + 1}, write the complete past progressive question`
+            : `Item ${Math.floor(i / 2) + 1}, write the short ${Math.floor(i / 2) === 0 || Math.floor(i / 2) === 3 ? "yes" : "no"} answer`
+        }
+        aria-label={
+          i % 2 === 0
+            ? `Item ${Math.floor(i / 2) + 1}, write the complete past progressive question`
+            : `Item ${Math.floor(i / 2) + 1}, write the short ${Math.floor(i / 2) === 0 || Math.floor(i / 2) === 3 ? "yes" : "no"} answer`
+        }
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -187,7 +268,7 @@ const Review10_Page2_Q2 = () => {
   const answerIcon = (answer) => (
     <img
       src={answer ? trueImg : flaseImg}
-      alt="icon"
+      alt={answer ? "Yes cue" : "No cue"}
       style={{
         width: "26px",
         height: "26px",
@@ -196,28 +277,45 @@ const Review10_Page2_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"Review10_Page2_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review10_Page2_Q2.jsx"] input:focus-visible,[data-exercise-scope="Review10_Page2_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="Review10_Page2_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall"
         style={{
-          minHeight: "59vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+       gap:"30px"
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-30">
-          <span
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            E
-          </span>
-          Use the sentences from Exercise D to ask and answer a question. (Use
-          short answers.)
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="E"
+          title={
+            <>
+              Use the sentences from Exercise D to ask and answer a question.
+              (Use short answers.)
+            </>
+          }
+          subTitle={
+            <>
+              Task 1: Use each sentence from Exercise D to form the matching
+              past-progressive question.
+              <br /> Task 2: Give the correct short answer based on the ✓ or ✗
+              cue.
+            </>
+          }
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15 text-[18px]">
@@ -237,7 +335,16 @@ const Review10_Page2_Q2 = () => {
             <span className="font-bold">2</span>
 
             <div className="flex items-center gap-2">
-              <span>Was Elaine</span>
+              <span>
+                <AudioText
+                  audio={audio}
+                  id={"question-opening-Was Elaine"}
+                  src={clip0}
+                  label={"Hear question opening: Was Elaine"}
+                >
+                  Was Elaine
+                </AudioText>
+              </span>
 
               <div className="flex-1">{inputField(2, "w-full")}</div>
 
@@ -265,7 +372,16 @@ const Review10_Page2_Q2 = () => {
             <span className="font-bold">4</span>
 
             <div className="flex items-center gap-2">
-              <span>Were</span>
+              <span>
+                <AudioText
+                  audio={audio}
+                  id={"question-opening-Were"}
+                  src={clip1}
+                  label={"Hear question opening: Were"}
+                >
+                  Were
+                </AudioText>
+              </span>
 
               <div className="flex-1">{inputField(6, "w-full")}</div>
 
@@ -281,15 +397,36 @@ const Review10_Page2_Q2 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

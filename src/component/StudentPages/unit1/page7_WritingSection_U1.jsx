@@ -24,7 +24,7 @@ const WritingSection_U1 = () => {
       <div className="flex flex-col  space-y-10">
         <img
           src={img}
-          alt=""
+          alt="Article about Ed Leedskalnin building Coral Castle in Florida."
           style={{ width: "auto", height: "500px", objectFit: "contain" }}
         />
         <WritingA />

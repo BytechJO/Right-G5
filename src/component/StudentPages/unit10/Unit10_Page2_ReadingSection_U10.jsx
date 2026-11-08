@@ -3,6 +3,7 @@ import ComprehensionA from "./Unit10_Page2_ComprehensionA";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 6 Shall We Should We Folder/Page 47/SVG/Asset 19.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U10/PG 83/cd48pg83-reading.mp3";
+import readingTimings from "../../../assets/json/cd48pg83-reading.mp3.json";
 
 const ReadingSection_U10 = () => {
   const paragraphs = [
@@ -117,11 +118,18 @@ const ReadingSection_U10 = () => {
         }
         title="A Cinderella Ending"
         image={imgReading}
+        imageAlt="A black horse running through a grassy field."
         paragraphs={paragraphs}
         question="Why do you think people cry sometimes when they’re happy?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        pageId="sb_unit10_page83_reading"
         captions={captions}
         stopAtSecond={8.6}
+        headerTitle={"Listen and read along: A Cinderella Ending."}
+        subTitle={
+          "Press Play, follow the text as it is read, then pause or replay any part you need to hear again."
+        }
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

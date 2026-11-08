@@ -1,9 +1,18 @@
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import grammer_u1 from "../../../assets/audio/ClassBook/U10/PG 87/cd50pg87-instruction.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-const Unit10_Page6_Q3 = () => {
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+
+const Unit10_Page6_Q3 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const captions = [
     {
       start: 0.079,
@@ -32,12 +41,7 @@ const Unit10_Page6_Q3 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (index, value) => {
     if (locked || result[index] === true) return;
@@ -58,21 +62,22 @@ const Unit10_Page6_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     const hasEmpty = answers.some((answer) => !answer.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
 
     let correctCount = 0;
 
-    const usedAnswers = [];
+    const usedAnswers = correctAnswers.flatMap((correct,i)=>answers.some((answer,j)=>result[j]===true&&normalize(answer)===normalize(correct))?[i]:[]);
 
-    const newResults = answers.map((answer) => {
+    const newResults = answers.map((answer,index) => {
+      if(result[index]===true){correctCount++;return true;}
       const normalizedAnswer = normalize(answer);
 
       const matchedIndex = correctAnswers.findIndex(
@@ -107,17 +112,17 @@ const Unit10_Page6_Q3 = () => {
     `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers([
       "congratulating",
       "playing",
@@ -128,12 +133,12 @@ const Unit10_Page6_Q3 = () => {
       "baking",
     ]);
 
-    setResult([true, true, true, true, true, true]);
+    setResult(correctAnswers.map(()=>true));
 
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", "", ""]);
 
     setResult([]);
@@ -143,7 +148,7 @@ const Unit10_Page6_Q3 = () => {
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input
+      <input placeholder={"Verb"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Listening response ${i+1}, write a past progressive verb`} aria-label={`Listening response ${i+1}, write a past progressive verb`} {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -190,7 +195,7 @@ const Unit10_Page6_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div data-exercise-scope={"Unit10_Page6_Q3.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit10_Page6_Q3.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page6_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page6_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       <div
         className="div-forall"
         style={{
@@ -201,19 +206,12 @@ const Unit10_Page6_Q3 = () => {
         }}
       >
         {/* TITLE */}
-        <h5 className="header-title-page8 ">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            F
-          </span>
+        <ExerciseHeader sectionLetter="F" title={<>
+          
           Listen to the sentences, and then write the verb that is in the past
           progressive.
-        </h5>
-        <QuestionAudioPlayer
+        </>} subTitle="Listen for one missing word at a time, replay if needed, then type exactly the word you hear."/>
+        <QuestionAudioPlayer pageId="sb_unit10_page6_q3"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={8}
@@ -239,15 +237,15 @@ const Unit10_Page6_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>

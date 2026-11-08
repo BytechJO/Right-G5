@@ -1,8 +1,17 @@
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { FaCheck, FaRedo, FaEye } from "react-icons/fa";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
 
-const Unit7_Page4_WritingA = () => {
+
+
+
+const Unit7_Page4_WritingA = () => {const quoteRefs=React.useRef({});const [quotePosition,setQuotePosition]=React.useState([0,0,0,0,0]);
+const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const [errors, setErrors] = useState([false, false, false, false, false]);
 
   const [correctLocked, setCorrectLocked] = useState([
@@ -62,7 +71,7 @@ const Unit7_Page4_WritingA = () => {
 
   // toggle quote
   const toggleQuote = (paragraphIndex, charIndex) => {
-    if (locked || correctLocked[paragraphIndex]) return;
+    if (locked || correctLocked[paragraphIndex]) return;setAnnouncement("Line "+(paragraphIndex+1)+", quotation mark "+(selectedQuotes[paragraphIndex].includes(charIndex)?"removed":"added")+" at position "+(charIndex+1)+".");
 
     const updated = [...selectedQuotes];
 
@@ -84,7 +93,7 @@ const Unit7_Page4_WritingA = () => {
 
   // check
   const handleCheck = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     let score = 0;
 
@@ -123,7 +132,7 @@ const Unit7_Page4_WritingA = () => {
     if (hasMissingQuotes) {
       setErrors([false, false, false, false, false]);
 
-      ValidationAlert.info("Please complete all quotation marks.");
+      (setAnnouncement(String("Please complete all quotation marks.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all quotation marks."));
 
       return;
     }
@@ -145,18 +154,18 @@ const Unit7_Page4_WritingA = () => {
   `;
 
     if (score === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (score === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
   // reset
-  const handleReset = () => {
+  const handleReset = () => {setQuotePosition([0,0,0,0,0]);audio.stop();setAnnouncement("Answers and feedback cleared.");
     setSelectedQuotes([[], [], [], [], []]);
 
     setErrors([false, false, false, false, false]);
@@ -167,7 +176,7 @@ const Unit7_Page4_WritingA = () => {
   };
 
   // show
-  const handleShow = () => {
+  const handleShow = () => {setCorrectLocked(paragraphs.map(()=>true));setErrors(paragraphs.map(()=>false));audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     const showAnswers = paragraphs.map((paragraph) =>
       paragraph.quotes.map((group) => group[0]),
     );
@@ -177,6 +186,7 @@ const Unit7_Page4_WritingA = () => {
     setLocked(true);
   };
 
+const onQuoteKey=(event,row,position)=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();if(!event.repeat){if(locked||correctLocked[row])setAnnouncement("Line "+(row+1)+" is correct and locked.");else toggleQuote(row,position);}return;}let nextRow=row,next=position;if(event.key==="ArrowRight")next=Math.min(paragraphs[row].text.length,position+1);else if(event.key==="ArrowLeft")next=Math.max(0,position-1);else if(event.key==="Home")next=0;else if(event.key==="End")next=paragraphs[row].text.length;else if(event.key==="ArrowDown"||event.key==="ArrowUp"){nextRow=Math.max(0,Math.min(paragraphs.length-1,row+(event.key==="ArrowDown"?1:-1)));next=Math.min(paragraphs[nextRow].text.length,position);}else return;event.preventDefault();event.stopPropagation();setQuotePosition(previous=>previous.map((old,i)=>i===nextRow?next:old));quoteRefs.current[nextRow+"-"+next]?.focus({preventScroll:true});};
   // render line
   const renderLine = (text, paragraphIndex) => {
     const chars = text.split("");
@@ -188,7 +198,7 @@ const Unit7_Page4_WritingA = () => {
 
           return (
             <span key={charIndex} className="relative">
-              <span
+              <span onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>onQuoteKey(event,paragraphIndex,charIndex)} onFocus={()=>setQuotePosition(previous=>previous.map((old,i)=>i===paragraphIndex?charIndex:old))} aria-label={`Line ${paragraphIndex+1}, quotation mark before ${char===" "?"the space":char}, position ${charIndex+1}`} aria-disabled={locked||correctLocked[paragraphIndex]} aria-pressed={selectedQuotes[paragraphIndex].includes(charIndex)} tabIndex={quotePosition[paragraphIndex]===charIndex?0:-1} role={"button"} ref={element=>{quoteRefs.current[`${paragraphIndex}-${charIndex}`]=element;}} data-quote-position={charIndex} data-quote-line={paragraphIndex} data-choice={true}
                 onClick={() => toggleQuote(paragraphIndex, charIndex)}
                 className="cursor-pointer"
               >
@@ -201,7 +211,7 @@ const Unit7_Page4_WritingA = () => {
         })}
 
         {/* clickable end area */}
-        <span
+        <span onKeyUp={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}} onKeyDown={event=>onQuoteKey(event,paragraphIndex,chars.length)} onFocus={()=>setQuotePosition(previous=>previous.map((old,i)=>i===paragraphIndex?chars.length:old))} aria-label={`Line ${paragraphIndex+1}, quotation mark at the end of the line, position ${chars.length+1}`} aria-disabled={locked||correctLocked[paragraphIndex]} aria-pressed={selectedQuotes[paragraphIndex].includes(chars.length)} tabIndex={quotePosition[paragraphIndex]===chars.length?0:-1} role={"button"} ref={element=>{quoteRefs.current[`${paragraphIndex}-${chars.length}`]=element;}} data-quote-position={chars.length} data-quote-line={paragraphIndex} data-choice={true}
           onClick={() => toggleQuote(paragraphIndex, chars.length)}
           className="cursor-pointer inline-block min-w-3"
         >
@@ -214,7 +224,7 @@ const Unit7_Page4_WritingA = () => {
   };
 
   return (
-    <div>
+    <div data-exercise-scope={"Unit7_Page4_WritingA.jsx"}><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit7_Page4_WritingA.jsx"] input:focus-visible,[data-exercise-scope="Unit7_Page4_WritingA.jsx"] textarea:focus-visible,[data-exercise-scope="Unit7_Page4_WritingA.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
       {/* HEADER */}
       <h5 className="header-title-page8-read mb-8">
         <span className="ex-A-read mr-2">A</span>
@@ -224,7 +234,7 @@ const Unit7_Page4_WritingA = () => {
       {/* PARAGRAPHS */}
       <div className="space-y-5 text-[18px] leading-relaxed mt-10">
         {paragraphs.map((paragraph, i) => (
-          <div key={i} className="relative">
+          <div style={{...(correctLocked[i]?{boxShadow:"inset 0 -2px #16a34a"}:{})}} key={i} className="relative">
             {renderLine(paragraph.text, i)}
 
             {errors[i] && (
@@ -259,14 +269,14 @@ const Unit7_Page4_WritingA = () => {
       <div className="flex justify-center gap-6 mt-10">
         {/* Reset */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"}
             onClick={handleReset}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#ffc107] hover:bg-[#e0a800] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaRedo size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
             Reset
@@ -275,14 +285,14 @@ const Unit7_Page4_WritingA = () => {
 
         {/* Show */}
         <div className="relative group">
-          <div
+          <button {...activationKeys} aria-label={"Show Answer"} type={"button"}
             onClick={handleShow}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#2c78b4] hover:bg-[#1a5a8a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaEye size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Show Answer
@@ -291,14 +301,14 @@ const Unit7_Page4_WritingA = () => {
 
         {/* Check */}
         <div className="relative group">
-          <div
+          <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"}
             onClick={handleCheck}
             className="flex items-center justify-center w-14 h-14 rounded-xl bg-[#55c271] hover:bg-[#449d5a] cursor-pointer transition shadow-sm"
           >
             <div className="bg-white p-3 rounded-full shadow">
               <FaCheck size={14} />
             </div>
-          </div>
+          </button>
 
           <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
             Check Answer

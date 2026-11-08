@@ -1,0 +1,2014 @@
+{
+  "language_code": null,
+  "segments": [
+    {
+      "text": "Page 29 reading. Are your parents always busy? What do they do? What do you usually do as a family during their free time? Mirror, mirror on the wall, who's the busiest of them all? Do you ever feel like you are always busy? Do you think being a parent is easy? Do you think it can be difficult? First of all, a parent is on the job all day. Even if they are away from their children, they are thinking about them. ",
+      "start_time": 0.36,
+      "end_time": 27.84,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Page",
+          "start_time": 0.36,
+          "end_time": 0.68
+        },
+        {
+          "text": " ",
+          "start_time": 0.68,
+          "end_time": 0.84
+        },
+        {
+          "text": "29",
+          "start_time": 0.88,
+          "end_time": 1.34
+        },
+        {
+          "text": " ",
+          "start_time": 1.34,
+          "end_time": 1.4
+        },
+        {
+          "text": "reading.",
+          "start_time": 1.4,
+          "end_time": 1.78
+        },
+        {
+          "text": " ",
+          "start_time": 1.78,
+          "end_time": 2.22
+        },
+        {
+          "text": "Are",
+          "start_time": 2.22,
+          "end_time": 2.3
+        },
+        {
+          "text": " ",
+          "start_time": 2.3,
+          "end_time": 2.36
+        },
+        {
+          "text": "your",
+          "start_time": 2.36,
+          "end_time": 2.5
+        },
+        {
+          "text": " ",
+          "start_time": 2.5,
+          "end_time": 2.56
+        },
+        {
+          "text": "parents",
+          "start_time": 2.56,
+          "end_time": 2.92
+        },
+        {
+          "text": " ",
+          "start_time": 2.92,
+          "end_time": 3.02
+        },
+        {
+          "text": "always",
+          "start_time": 3.02,
+          "end_time": 3.32
+        },
+        {
+          "text": " ",
+          "start_time": 3.32,
+          "end_time": 3.36
+        },
+        {
+          "text": "busy?",
+          "start_time": 3.36,
+          "end_time": 3.66
+        },
+        {
+          "text": " ",
+          "start_time": 3.66,
+          "end_time": 4.08
+        },
+        {
+          "text": "What",
+          "start_time": 4.08,
+          "end_time": 4.2
+        },
+        {
+          "text": " ",
+          "start_time": 4.2,
+          "end_time": 4.24
+        },
+        {
+          "text": "do",
+          "start_time": 4.24,
+          "end_time": 4.32
+        },
+        {
+          "text": " ",
+          "start_time": 4.32,
+          "end_time": 4.36
+        },
+        {
+          "text": "they",
+          "start_time": 4.36,
+          "end_time": 4.5
+        },
+        {
+          "text": " ",
+          "start_time": 4.5,
+          "end_time": 4.56
+        },
+        {
+          "text": "do?",
+          "start_time": 4.56,
+          "end_time": 4.84
+        },
+        {
+          "text": " ",
+          "start_time": 4.84,
+          "end_time": 4.84
+        },
+        {
+          "text": "What",
+          "start_time": 5.4,
+          "end_time": 5.56
+        },
+        {
+          "text": " ",
+          "start_time": 5.56,
+          "end_time": 5.62
+        },
+        {
+          "text": "do",
+          "start_time": 5.62,
+          "end_time": 5.78
+        },
+        {
+          "text": " ",
+          "start_time": 5.78,
+          "end_time": 5.86
+        },
+        {
+          "text": "you",
+          "start_time": 5.86,
+          "end_time": 6.02
+        },
+        {
+          "text": " ",
+          "start_time": 6.02,
+          "end_time": 6.12
+        },
+        {
+          "text": "usually",
+          "start_time": 6.12,
+          "end_time": 6.52
+        },
+        {
+          "text": " ",
+          "start_time": 6.52,
+          "end_time": 6.58
+        },
+        {
+          "text": "do",
+          "start_time": 6.58,
+          "end_time": 6.74
+        },
+        {
+          "text": " ",
+          "start_time": 6.74,
+          "end_time": 6.82
+        },
+        {
+          "text": "as",
+          "start_time": 6.82,
+          "end_time": 6.9
+        },
+        {
+          "text": " ",
+          "start_time": 6.9,
+          "end_time": 6.94
+        },
+        {
+          "text": "a",
+          "start_time": 6.94,
+          "end_time": 7.0
+        },
+        {
+          "text": " ",
+          "start_time": 7.0,
+          "end_time": 7.08
+        },
+        {
+          "text": "family",
+          "start_time": 7.08,
+          "end_time": 7.48
+        },
+        {
+          "text": " ",
+          "start_time": 7.48,
+          "end_time": 7.52
+        },
+        {
+          "text": "during",
+          "start_time": 7.52,
+          "end_time": 7.76
+        },
+        {
+          "text": " ",
+          "start_time": 7.76,
+          "end_time": 7.8
+        },
+        {
+          "text": "their",
+          "start_time": 7.8,
+          "end_time": 7.96
+        },
+        {
+          "text": " ",
+          "start_time": 7.96,
+          "end_time": 8.02
+        },
+        {
+          "text": "free",
+          "start_time": 8.039,
+          "end_time": 8.22
+        },
+        {
+          "text": " ",
+          "start_time": 8.22,
+          "end_time": 8.28
+        },
+        {
+          "text": "time?",
+          "start_time": 8.28,
+          "end_time": 8.58
+        },
+        {
+          "text": " ",
+          "start_time": 8.58,
+          "end_time": 8.58
+        },
+        {
+          "text": "Mirror,",
+          "start_time": 9.34,
+          "end_time": 9.64
+        },
+        {
+          "text": " ",
+          "start_time": 9.64,
+          "end_time": 9.78
+        },
+        {
+          "text": "mirror",
+          "start_time": 9.78,
+          "end_time": 10.22
+        },
+        {
+          "text": " ",
+          "start_time": 10.22,
+          "end_time": 10.32
+        },
+        {
+          "text": "on",
+          "start_time": 10.32,
+          "end_time": 10.46
+        },
+        {
+          "text": " ",
+          "start_time": 10.46,
+          "end_time": 10.5
+        },
+        {
+          "text": "the",
+          "start_time": 10.5,
+          "end_time": 10.58
+        },
+        {
+          "text": " ",
+          "start_time": 10.58,
+          "end_time": 10.62
+        },
+        {
+          "text": "wall,",
+          "start_time": 10.62,
+          "end_time": 10.86
+        },
+        {
+          "text": " ",
+          "start_time": 10.86,
+          "end_time": 11.26
+        },
+        {
+          "text": "who's",
+          "start_time": 11.26,
+          "end_time": 11.52
+        },
+        {
+          "text": " ",
+          "start_time": 11.52,
+          "end_time": 11.58
+        },
+        {
+          "text": "the",
+          "start_time": 11.58,
+          "end_time": 11.66
+        },
+        {
+          "text": " ",
+          "start_time": 11.66,
+          "end_time": 11.7
+        },
+        {
+          "text": "busiest",
+          "start_time": 11.7,
+          "end_time": 12.2
+        },
+        {
+          "text": " ",
+          "start_time": 12.2,
+          "end_time": 12.3
+        },
+        {
+          "text": "of",
+          "start_time": 12.3,
+          "end_time": 12.42
+        },
+        {
+          "text": " ",
+          "start_time": 12.42,
+          "end_time": 12.46
+        },
+        {
+          "text": "them",
+          "start_time": 12.46,
+          "end_time": 12.62
+        },
+        {
+          "text": " ",
+          "start_time": 12.62,
+          "end_time": 12.76
+        },
+        {
+          "text": "all?",
+          "start_time": 12.76,
+          "end_time": 13.02
+        },
+        {
+          "text": " ",
+          "start_time": 13.02,
+          "end_time": 13.02
+        },
+        {
+          "text": "Do",
+          "start_time": 13.62,
+          "end_time": 13.72
+        },
+        {
+          "text": " ",
+          "start_time": 13.72,
+          "end_time": 13.8
+        },
+        {
+          "text": "you",
+          "start_time": 13.8,
+          "end_time": 13.92
+        },
+        {
+          "text": " ",
+          "start_time": 13.92,
+          "end_time": 14.0
+        },
+        {
+          "text": "ever",
+          "start_time": 14.0,
+          "end_time": 14.24
+        },
+        {
+          "text": " ",
+          "start_time": 14.24,
+          "end_time": 14.32
+        },
+        {
+          "text": "feel",
+          "start_time": 14.32,
+          "end_time": 14.54
+        },
+        {
+          "text": " ",
+          "start_time": 14.54,
+          "end_time": 14.58
+        },
+        {
+          "text": "like",
+          "start_time": 14.58,
+          "end_time": 14.74
+        },
+        {
+          "text": " ",
+          "start_time": 14.74,
+          "end_time": 14.78
+        },
+        {
+          "text": "you",
+          "start_time": 14.78,
+          "end_time": 14.84
+        },
+        {
+          "text": " ",
+          "start_time": 14.84,
+          "end_time": 14.88
+        },
+        {
+          "text": "are",
+          "start_time": 14.88,
+          "end_time": 15.02
+        },
+        {
+          "text": " ",
+          "start_time": 15.02,
+          "end_time": 15.12
+        },
+        {
+          "text": "always",
+          "start_time": 15.12,
+          "end_time": 15.44
+        },
+        {
+          "text": " ",
+          "start_time": 15.44,
+          "end_time": 15.5
+        },
+        {
+          "text": "busy?",
+          "start_time": 15.5,
+          "end_time": 15.8
+        },
+        {
+          "text": " ",
+          "start_time": 15.8,
+          "end_time": 15.8
+        },
+        {
+          "text": "Do",
+          "start_time": 16.34,
+          "end_time": 16.46
+        },
+        {
+          "text": " ",
+          "start_time": 16.46,
+          "end_time": 16.5
+        },
+        {
+          "text": "you",
+          "start_time": 16.5,
+          "end_time": 16.64
+        },
+        {
+          "text": " ",
+          "start_time": 16.64,
+          "end_time": 16.7
+        },
+        {
+          "text": "think",
+          "start_time": 16.7,
+          "end_time": 16.94
+        },
+        {
+          "text": " ",
+          "start_time": 16.94,
+          "end_time": 16.98
+        },
+        {
+          "text": "being",
+          "start_time": 16.98,
+          "end_time": 17.18
+        },
+        {
+          "text": " ",
+          "start_time": 17.18,
+          "end_time": 17.22
+        },
+        {
+          "text": "a",
+          "start_time": 17.22,
+          "end_time": 17.28
+        },
+        {
+          "text": " ",
+          "start_time": 17.28,
+          "end_time": 17.36
+        },
+        {
+          "text": "parent",
+          "start_time": 17.36,
+          "end_time": 17.66
+        },
+        {
+          "text": " ",
+          "start_time": 17.66,
+          "end_time": 17.72
+        },
+        {
+          "text": "is",
+          "start_time": 17.72,
+          "end_time": 17.8
+        },
+        {
+          "text": " ",
+          "start_time": 17.8,
+          "end_time": 17.86
+        },
+        {
+          "text": "easy?",
+          "start_time": 17.86,
+          "end_time": 18.12
+        },
+        {
+          "text": " ",
+          "start_time": 18.12,
+          "end_time": 18.56
+        },
+        {
+          "text": "Do",
+          "start_time": 18.56,
+          "end_time": 18.64
+        },
+        {
+          "text": " ",
+          "start_time": 18.64,
+          "end_time": 18.68
+        },
+        {
+          "text": "you",
+          "start_time": 18.68,
+          "end_time": 18.8
+        },
+        {
+          "text": " ",
+          "start_time": 18.8,
+          "end_time": 18.86
+        },
+        {
+          "text": "think",
+          "start_time": 18.86,
+          "end_time": 19.02
+        },
+        {
+          "text": " ",
+          "start_time": 19.02,
+          "end_time": 19.06
+        },
+        {
+          "text": "it",
+          "start_time": 19.06,
+          "end_time": 19.12
+        },
+        {
+          "text": " ",
+          "start_time": 19.12,
+          "end_time": 19.16
+        },
+        {
+          "text": "can",
+          "start_time": 19.16,
+          "end_time": 19.28
+        },
+        {
+          "text": " ",
+          "start_time": 19.28,
+          "end_time": 19.32
+        },
+        {
+          "text": "be",
+          "start_time": 19.32,
+          "end_time": 19.42
+        },
+        {
+          "text": " ",
+          "start_time": 19.42,
+          "end_time": 19.46
+        },
+        {
+          "text": "difficult?",
+          "start_time": 19.46,
+          "end_time": 20.0
+        },
+        {
+          "text": " ",
+          "start_time": 20.0,
+          "end_time": 20.44
+        },
+        {
+          "text": "First",
+          "start_time": 20.44,
+          "end_time": 20.66
+        },
+        {
+          "text": " ",
+          "start_time": 20.66,
+          "end_time": 20.7
+        },
+        {
+          "text": "of",
+          "start_time": 20.7,
+          "end_time": 20.78
+        },
+        {
+          "text": " ",
+          "start_time": 20.78,
+          "end_time": 20.84
+        },
+        {
+          "text": "all,",
+          "start_time": 20.84,
+          "end_time": 20.98
+        },
+        {
+          "text": " ",
+          "start_time": 20.98,
+          "end_time": 21.24
+        },
+        {
+          "text": "a",
+          "start_time": 21.24,
+          "end_time": 21.32
+        },
+        {
+          "text": " ",
+          "start_time": 21.32,
+          "end_time": 21.4
+        },
+        {
+          "text": "parent",
+          "start_time": 21.4,
+          "end_time": 21.78
+        },
+        {
+          "text": " ",
+          "start_time": 21.78,
+          "end_time": 21.84
+        },
+        {
+          "text": "is",
+          "start_time": 21.84,
+          "end_time": 21.94
+        },
+        {
+          "text": " ",
+          "start_time": 21.94,
+          "end_time": 22.02
+        },
+        {
+          "text": "on",
+          "start_time": 22.02,
+          "end_time": 22.12
+        },
+        {
+          "text": " ",
+          "start_time": 22.12,
+          "end_time": 22.14
+        },
+        {
+          "text": "the",
+          "start_time": 22.14,
+          "end_time": 22.22
+        },
+        {
+          "text": " ",
+          "start_time": 22.22,
+          "end_time": 22.3
+        },
+        {
+          "text": "job",
+          "start_time": 22.3,
+          "end_time": 22.66
+        },
+        {
+          "text": " ",
+          "start_time": 22.66,
+          "end_time": 22.8
+        },
+        {
+          "text": "all",
+          "start_time": 22.8,
+          "end_time": 23.08
+        },
+        {
+          "text": " ",
+          "start_time": 23.08,
+          "end_time": 23.16
+        },
+        {
+          "text": "day.",
+          "start_time": 23.16,
+          "end_time": 23.54
+        },
+        {
+          "text": " ",
+          "start_time": 23.54,
+          "end_time": 23.54
+        },
+        {
+          "text": "Even",
+          "start_time": 24.52,
+          "end_time": 24.78
+        },
+        {
+          "text": " ",
+          "start_time": 24.78,
+          "end_time": 24.86
+        },
+        {
+          "text": "if",
+          "start_time": 24.86,
+          "end_time": 24.94
+        },
+        {
+          "text": " ",
+          "start_time": 24.94,
+          "end_time": 25.0
+        },
+        {
+          "text": "they",
+          "start_time": 25.0,
+          "end_time": 25.12
+        },
+        {
+          "text": " ",
+          "start_time": 25.12,
+          "end_time": 25.2
+        },
+        {
+          "text": "are",
+          "start_time": 25.2,
+          "end_time": 25.28
+        },
+        {
+          "text": " ",
+          "start_time": 25.28,
+          "end_time": 25.36
+        },
+        {
+          "text": "away",
+          "start_time": 25.36,
+          "end_time": 25.62
+        },
+        {
+          "text": " ",
+          "start_time": 25.62,
+          "end_time": 25.66
+        },
+        {
+          "text": "from",
+          "start_time": 25.66,
+          "end_time": 25.78
+        },
+        {
+          "text": " ",
+          "start_time": 25.78,
+          "end_time": 25.82
+        },
+        {
+          "text": "their",
+          "start_time": 25.82,
+          "end_time": 25.94
+        },
+        {
+          "text": " ",
+          "start_time": 25.94,
+          "end_time": 26.0
+        },
+        {
+          "text": "children,",
+          "start_time": 26.0,
+          "end_time": 26.38
+        },
+        {
+          "text": " ",
+          "start_time": 26.38,
+          "end_time": 26.62
+        },
+        {
+          "text": "they",
+          "start_time": 26.62,
+          "end_time": 26.7
+        },
+        {
+          "text": " ",
+          "start_time": 26.7,
+          "end_time": 26.76
+        },
+        {
+          "text": "are",
+          "start_time": 26.76,
+          "end_time": 26.84
+        },
+        {
+          "text": " ",
+          "start_time": 26.84,
+          "end_time": 26.9
+        },
+        {
+          "text": "thinking",
+          "start_time": 26.9,
+          "end_time": 27.2
+        },
+        {
+          "text": " ",
+          "start_time": 27.2,
+          "end_time": 27.26
+        },
+        {
+          "text": "about",
+          "start_time": 27.26,
+          "end_time": 27.48
+        },
+        {
+          "text": " ",
+          "start_time": 27.48,
+          "end_time": 27.54
+        },
+        {
+          "text": "them.",
+          "start_time": 27.54,
+          "end_time": 27.74
+        },
+        {
+          "text": " ",
+          "start_time": 27.74,
+          "end_time": 27.84
+        }
+      ]
+    },
+    {
+      "text": "They are always ready to stop everything to take care of them. If you ask most parents why they work, they will say that they work to be able to buy things their family needs. ",
+      "start_time": 28.94,
+      "end_time": 38.54,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "They",
+          "start_time": 28.94,
+          "end_time": 29.04
+        },
+        {
+          "text": " ",
+          "start_time": 29.04,
+          "end_time": 29.08
+        },
+        {
+          "text": "are",
+          "start_time": 29.08,
+          "end_time": 29.24
+        },
+        {
+          "text": " ",
+          "start_time": 29.24,
+          "end_time": 29.36
+        },
+        {
+          "text": "always",
+          "start_time": 29.36,
+          "end_time": 29.68
+        },
+        {
+          "text": " ",
+          "start_time": 29.68,
+          "end_time": 29.72
+        },
+        {
+          "text": "ready",
+          "start_time": 29.72,
+          "end_time": 29.94
+        },
+        {
+          "text": " ",
+          "start_time": 29.94,
+          "end_time": 29.98
+        },
+        {
+          "text": "to",
+          "start_time": 29.98,
+          "end_time": 30.08
+        },
+        {
+          "text": " ",
+          "start_time": 30.08,
+          "end_time": 30.16
+        },
+        {
+          "text": "stop",
+          "start_time": 30.16,
+          "end_time": 30.48
+        },
+        {
+          "text": " ",
+          "start_time": 30.48,
+          "end_time": 30.58
+        },
+        {
+          "text": "everything",
+          "start_time": 30.58,
+          "end_time": 31.0
+        },
+        {
+          "text": " ",
+          "start_time": 31.0,
+          "end_time": 31.04
+        },
+        {
+          "text": "to",
+          "start_time": 31.04,
+          "end_time": 31.12
+        },
+        {
+          "text": " ",
+          "start_time": 31.12,
+          "end_time": 31.16
+        },
+        {
+          "text": "take",
+          "start_time": 31.16,
+          "end_time": 31.34
+        },
+        {
+          "text": " ",
+          "start_time": 31.34,
+          "end_time": 31.36
+        },
+        {
+          "text": "care",
+          "start_time": 31.36,
+          "end_time": 31.5
+        },
+        {
+          "text": " ",
+          "start_time": 31.5,
+          "end_time": 31.56
+        },
+        {
+          "text": "of",
+          "start_time": 31.56,
+          "end_time": 31.64
+        },
+        {
+          "text": " ",
+          "start_time": 31.64,
+          "end_time": 31.7
+        },
+        {
+          "text": "them.",
+          "start_time": 31.7,
+          "end_time": 31.88
+        },
+        {
+          "text": " ",
+          "start_time": 31.88,
+          "end_time": 31.88
+        },
+        {
+          "text": "If",
+          "start_time": 32.759,
+          "end_time": 32.86
+        },
+        {
+          "text": " ",
+          "start_time": 32.86,
+          "end_time": 32.92
+        },
+        {
+          "text": "you",
+          "start_time": 32.92,
+          "end_time": 33.02
+        },
+        {
+          "text": " ",
+          "start_time": 33.02,
+          "end_time": 33.1
+        },
+        {
+          "text": "ask",
+          "start_time": 33.1,
+          "end_time": 33.34
+        },
+        {
+          "text": " ",
+          "start_time": 33.34,
+          "end_time": 33.4
+        },
+        {
+          "text": "most",
+          "start_time": 33.4,
+          "end_time": 33.62
+        },
+        {
+          "text": " ",
+          "start_time": 33.62,
+          "end_time": 33.7
+        },
+        {
+          "text": "parents",
+          "start_time": 33.7,
+          "end_time": 34.18
+        },
+        {
+          "text": " ",
+          "start_time": 34.18,
+          "end_time": 34.24
+        },
+        {
+          "text": "why",
+          "start_time": 34.24,
+          "end_time": 34.44
+        },
+        {
+          "text": " ",
+          "start_time": 34.44,
+          "end_time": 34.48
+        },
+        {
+          "text": "they",
+          "start_time": 34.5,
+          "end_time": 34.6
+        },
+        {
+          "text": " ",
+          "start_time": 34.6,
+          "end_time": 34.66
+        },
+        {
+          "text": "work,",
+          "start_time": 34.66,
+          "end_time": 34.94
+        },
+        {
+          "text": " ",
+          "start_time": 34.94,
+          "end_time": 35.22
+        },
+        {
+          "text": "they",
+          "start_time": 35.22,
+          "end_time": 35.32
+        },
+        {
+          "text": " ",
+          "start_time": 35.32,
+          "end_time": 35.36
+        },
+        {
+          "text": "will",
+          "start_time": 35.36,
+          "end_time": 35.5
+        },
+        {
+          "text": " ",
+          "start_time": 35.5,
+          "end_time": 35.6
+        },
+        {
+          "text": "say",
+          "start_time": 35.6,
+          "end_time": 35.82
+        },
+        {
+          "text": " ",
+          "start_time": 35.82,
+          "end_time": 35.86
+        },
+        {
+          "text": "that",
+          "start_time": 35.86,
+          "end_time": 35.96
+        },
+        {
+          "text": " ",
+          "start_time": 35.96,
+          "end_time": 36.0
+        },
+        {
+          "text": "they",
+          "start_time": 36.0,
+          "end_time": 36.14
+        },
+        {
+          "text": " ",
+          "start_time": 36.14,
+          "end_time": 36.2
+        },
+        {
+          "text": "work",
+          "start_time": 36.2,
+          "end_time": 36.48
+        },
+        {
+          "text": " ",
+          "start_time": 36.48,
+          "end_time": 36.52
+        },
+        {
+          "text": "to",
+          "start_time": 36.52,
+          "end_time": 36.6
+        },
+        {
+          "text": " ",
+          "start_time": 36.6,
+          "end_time": 36.62
+        },
+        {
+          "text": "be",
+          "start_time": 36.62,
+          "end_time": 36.7
+        },
+        {
+          "text": " ",
+          "start_time": 36.7,
+          "end_time": 36.76
+        },
+        {
+          "text": "able",
+          "start_time": 36.76,
+          "end_time": 36.9
+        },
+        {
+          "text": " ",
+          "start_time": 36.9,
+          "end_time": 36.94
+        },
+        {
+          "text": "to",
+          "start_time": 36.94,
+          "end_time": 37.02
+        },
+        {
+          "text": " ",
+          "start_time": 37.02,
+          "end_time": 37.06
+        },
+        {
+          "text": "buy",
+          "start_time": 37.06,
+          "end_time": 37.28
+        },
+        {
+          "text": " ",
+          "start_time": 37.28,
+          "end_time": 37.34
+        },
+        {
+          "text": "things",
+          "start_time": 37.34,
+          "end_time": 37.6
+        },
+        {
+          "text": " ",
+          "start_time": 37.6,
+          "end_time": 37.64
+        },
+        {
+          "text": "their",
+          "start_time": 37.64,
+          "end_time": 37.78
+        },
+        {
+          "text": " ",
+          "start_time": 37.78,
+          "end_time": 37.84
+        },
+        {
+          "text": "family",
+          "start_time": 37.84,
+          "end_time": 38.12
+        },
+        {
+          "text": " ",
+          "start_time": 38.12,
+          "end_time": 38.16
+        },
+        {
+          "text": "needs.",
+          "start_time": 38.16,
+          "end_time": 38.54
+        },
+        {
+          "text": " ",
+          "start_time": 38.54,
+          "end_time": 38.54
+        }
+      ]
+    },
+    {
+      "text": "When moms and dads are at home, they are always doing things to help their children. They often cook and do chores around the house. Sometimes they help their children with their homework. ",
+      "start_time": 40.28,
+      "end_time": 50.24,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "When",
+          "start_time": 40.28,
+          "end_time": 40.42
+        },
+        {
+          "text": " ",
+          "start_time": 40.42,
+          "end_time": 40.46
+        },
+        {
+          "text": "moms",
+          "start_time": 40.46,
+          "end_time": 40.72
+        },
+        {
+          "text": " ",
+          "start_time": 40.72,
+          "end_time": 40.74
+        },
+        {
+          "text": "and",
+          "start_time": 40.74,
+          "end_time": 40.86
+        },
+        {
+          "text": " ",
+          "start_time": 40.86,
+          "end_time": 40.92
+        },
+        {
+          "text": "dads",
+          "start_time": 40.92,
+          "end_time": 41.22
+        },
+        {
+          "text": " ",
+          "start_time": 41.22,
+          "end_time": 41.28
+        },
+        {
+          "text": "are",
+          "start_time": 41.28,
+          "end_time": 41.36
+        },
+        {
+          "text": " ",
+          "start_time": 41.36,
+          "end_time": 41.4
+        },
+        {
+          "text": "at",
+          "start_time": 41.4,
+          "end_time": 41.52
+        },
+        {
+          "text": " ",
+          "start_time": 41.52,
+          "end_time": 41.6
+        },
+        {
+          "text": "home,",
+          "start_time": 41.6,
+          "end_time": 41.9
+        },
+        {
+          "text": " ",
+          "start_time": 41.9,
+          "end_time": 41.9
+        },
+        {
+          "text": "they",
+          "start_time": 42.34,
+          "end_time": 42.44
+        },
+        {
+          "text": " ",
+          "start_time": 42.44,
+          "end_time": 42.48
+        },
+        {
+          "text": "are",
+          "start_time": 42.48,
+          "end_time": 42.62
+        },
+        {
+          "text": " ",
+          "start_time": 42.62,
+          "end_time": 42.72
+        },
+        {
+          "text": "always",
+          "start_time": 42.72,
+          "end_time": 43.02
+        },
+        {
+          "text": " ",
+          "start_time": 43.02,
+          "end_time": 43.06
+        },
+        {
+          "text": "doing",
+          "start_time": 43.06,
+          "end_time": 43.3
+        },
+        {
+          "text": " ",
+          "start_time": 43.3,
+          "end_time": 43.34
+        },
+        {
+          "text": "things",
+          "start_time": 43.34,
+          "end_time": 43.58
+        },
+        {
+          "text": " ",
+          "start_time": 43.58,
+          "end_time": 43.64
+        },
+        {
+          "text": "to",
+          "start_time": 43.64,
+          "end_time": 43.7
+        },
+        {
+          "text": " ",
+          "start_time": 43.7,
+          "end_time": 43.74
+        },
+        {
+          "text": "help",
+          "start_time": 43.74,
+          "end_time": 43.9
+        },
+        {
+          "text": " ",
+          "start_time": 43.9,
+          "end_time": 43.94
+        },
+        {
+          "text": "their",
+          "start_time": 43.94,
+          "end_time": 44.06
+        },
+        {
+          "text": " ",
+          "start_time": 44.06,
+          "end_time": 44.12
+        },
+        {
+          "text": "children.",
+          "start_time": 44.12,
+          "end_time": 44.56
+        },
+        {
+          "text": " ",
+          "start_time": 44.56,
+          "end_time": 44.56
+        },
+        {
+          "text": "They",
+          "start_time": 45.06,
+          "end_time": 45.22
+        },
+        {
+          "text": " ",
+          "start_time": 45.22,
+          "end_time": 45.32
+        },
+        {
+          "text": "often",
+          "start_time": 45.32,
+          "end_time": 45.64
+        },
+        {
+          "text": " ",
+          "start_time": 45.64,
+          "end_time": 45.7
+        },
+        {
+          "text": "cook",
+          "start_time": 45.7,
+          "end_time": 46.0
+        },
+        {
+          "text": " ",
+          "start_time": 46.0,
+          "end_time": 46.04
+        },
+        {
+          "text": "and",
+          "start_time": 46.04,
+          "end_time": 46.14
+        },
+        {
+          "text": " ",
+          "start_time": 46.14,
+          "end_time": 46.18
+        },
+        {
+          "text": "do",
+          "start_time": 46.18,
+          "end_time": 46.32
+        },
+        {
+          "text": " ",
+          "start_time": 46.32,
+          "end_time": 46.38
+        },
+        {
+          "text": "chores",
+          "start_time": 46.38,
+          "end_time": 46.66
+        },
+        {
+          "text": " ",
+          "start_time": 46.66,
+          "end_time": 46.72
+        },
+        {
+          "text": "around",
+          "start_time": 46.72,
+          "end_time": 46.92
+        },
+        {
+          "text": " ",
+          "start_time": 46.92,
+          "end_time": 46.96
+        },
+        {
+          "text": "the",
+          "start_time": 46.96,
+          "end_time": 47.02
+        },
+        {
+          "text": " ",
+          "start_time": 47.02,
+          "end_time": 47.08
+        },
+        {
+          "text": "house.",
+          "start_time": 47.08,
+          "end_time": 47.4
+        },
+        {
+          "text": " ",
+          "start_time": 47.4,
+          "end_time": 47.4
+        },
+        {
+          "text": "Sometimes",
+          "start_time": 47.94,
+          "end_time": 48.56
+        },
+        {
+          "text": " ",
+          "start_time": 48.56,
+          "end_time": 48.6
+        },
+        {
+          "text": "they",
+          "start_time": 48.6,
+          "end_time": 48.72
+        },
+        {
+          "text": " ",
+          "start_time": 48.72,
+          "end_time": 48.76
+        },
+        {
+          "text": "help",
+          "start_time": 48.76,
+          "end_time": 48.94
+        },
+        {
+          "text": " ",
+          "start_time": 48.94,
+          "end_time": 48.98
+        },
+        {
+          "text": "their",
+          "start_time": 48.98,
+          "end_time": 49.12
+        },
+        {
+          "text": " ",
+          "start_time": 49.12,
+          "end_time": 49.18
+        },
+        {
+          "text": "children",
+          "start_time": 49.18,
+          "end_time": 49.5
+        },
+        {
+          "text": " ",
+          "start_time": 49.5,
+          "end_time": 49.54
+        },
+        {
+          "text": "with",
+          "start_time": 49.54,
+          "end_time": 49.62
+        },
+        {
+          "text": " ",
+          "start_time": 49.62,
+          "end_time": 49.66
+        },
+        {
+          "text": "their",
+          "start_time": 49.66,
+          "end_time": 49.76
+        },
+        {
+          "text": " ",
+          "start_time": 49.76,
+          "end_time": 49.8
+        },
+        {
+          "text": "homework.",
+          "start_time": 49.8,
+          "end_time": 50.24
+        },
+        {
+          "text": " ",
+          "start_time": 50.24,
+          "end_time": 50.24
+        }
+      ]
+    },
+    {
+      "text": "Even though parents have one of the hardest jobs in the world, they almost always say that being a mom or dad is the best job in the world. They love their children, and they do so much for them. A parent's love is for always.",
+      "start_time": 51.78,
+      "end_time": 65.44,
+      "speaker": {
+        "id": "speaker_0",
+        "name": "Speaker 0"
+      },
+      "words": [
+        {
+          "text": "Even",
+          "start_time": 51.78,
+          "end_time": 52.02
+        },
+        {
+          "text": " ",
+          "start_time": 52.02,
+          "end_time": 52.08
+        },
+        {
+          "text": "though",
+          "start_time": 52.08,
+          "end_time": 52.26
+        },
+        {
+          "text": " ",
+          "start_time": 52.26,
+          "end_time": 52.34
+        },
+        {
+          "text": "parents",
+          "start_time": 52.34,
+          "end_time": 52.74
+        },
+        {
+          "text": " ",
+          "start_time": 52.74,
+          "end_time": 52.8
+        },
+        {
+          "text": "have",
+          "start_time": 52.8,
+          "end_time": 52.94
+        },
+        {
+          "text": " ",
+          "start_time": 52.94,
+          "end_time": 53.0
+        },
+        {
+          "text": "one",
+          "start_time": 53.02,
+          "end_time": 53.1
+        },
+        {
+          "text": " ",
+          "start_time": 53.1,
+          "end_time": 53.12
+        },
+        {
+          "text": "of",
+          "start_time": 53.12,
+          "end_time": 53.18
+        },
+        {
+          "text": " ",
+          "start_time": 53.18,
+          "end_time": 53.22
+        },
+        {
+          "text": "the",
+          "start_time": 53.22,
+          "end_time": 53.32
+        },
+        {
+          "text": " ",
+          "start_time": 53.32,
+          "end_time": 53.36
+        },
+        {
+          "text": "hardest",
+          "start_time": 53.36,
+          "end_time": 53.7
+        },
+        {
+          "text": " ",
+          "start_time": 53.7,
+          "end_time": 53.76
+        },
+        {
+          "text": "jobs",
+          "start_time": 53.76,
+          "end_time": 54.0
+        },
+        {
+          "text": " ",
+          "start_time": 54.0,
+          "end_time": 54.02
+        },
+        {
+          "text": "in",
+          "start_time": 54.02,
+          "end_time": 54.08
+        },
+        {
+          "text": " ",
+          "start_time": 54.08,
+          "end_time": 54.12
+        },
+        {
+          "text": "the",
+          "start_time": 54.12,
+          "end_time": 54.18
+        },
+        {
+          "text": " ",
+          "start_time": 54.18,
+          "end_time": 54.22
+        },
+        {
+          "text": "world,",
+          "start_time": 54.22,
+          "end_time": 54.52
+        },
+        {
+          "text": " ",
+          "start_time": 54.52,
+          "end_time": 54.9
+        },
+        {
+          "text": "they",
+          "start_time": 54.9,
+          "end_time": 55.04
+        },
+        {
+          "text": " ",
+          "start_time": 55.04,
+          "end_time": 55.14
+        },
+        {
+          "text": "almost",
+          "start_time": 55.14,
+          "end_time": 55.56
+        },
+        {
+          "text": " ",
+          "start_time": 55.56,
+          "end_time": 55.68
+        },
+        {
+          "text": "always",
+          "start_time": 55.68,
+          "end_time": 55.94
+        },
+        {
+          "text": " ",
+          "start_time": 55.94,
+          "end_time": 56.02
+        },
+        {
+          "text": "say",
+          "start_time": 56.02,
+          "end_time": 56.26
+        },
+        {
+          "text": " ",
+          "start_time": 56.26,
+          "end_time": 56.32
+        },
+        {
+          "text": "that",
+          "start_time": 56.32,
+          "end_time": 56.44
+        },
+        {
+          "text": " ",
+          "start_time": 56.44,
+          "end_time": 56.5
+        },
+        {
+          "text": "being",
+          "start_time": 56.5,
+          "end_time": 56.7
+        },
+        {
+          "text": " ",
+          "start_time": 56.7,
+          "end_time": 56.76
+        },
+        {
+          "text": "a",
+          "start_time": 56.76,
+          "end_time": 56.82
+        },
+        {
+          "text": " ",
+          "start_time": 56.82,
+          "end_time": 56.9
+        },
+        {
+          "text": "mom",
+          "start_time": 56.9,
+          "end_time": 57.22
+        },
+        {
+          "text": " ",
+          "start_time": 57.22,
+          "end_time": 57.28
+        },
+        {
+          "text": "or",
+          "start_time": 57.28,
+          "end_time": 57.4
+        },
+        {
+          "text": " ",
+          "start_time": 57.4,
+          "end_time": 57.46
+        },
+        {
+          "text": "dad",
+          "start_time": 57.46,
+          "end_time": 57.78
+        },
+        {
+          "text": " ",
+          "start_time": 57.78,
+          "end_time": 57.86
+        },
+        {
+          "text": "is",
+          "start_time": 57.86,
+          "end_time": 57.96
+        },
+        {
+          "text": " ",
+          "start_time": 57.96,
+          "end_time": 58.02
+        },
+        {
+          "text": "the",
+          "start_time": 58.02,
+          "end_time": 58.18
+        },
+        {
+          "text": " ",
+          "start_time": 58.18,
+          "end_time": 58.24
+        },
+        {
+          "text": "best",
+          "start_time": 58.24,
+          "end_time": 58.5
+        },
+        {
+          "text": " ",
+          "start_time": 58.5,
+          "end_time": 58.58
+        },
+        {
+          "text": "job",
+          "start_time": 58.58,
+          "end_time": 58.76
+        },
+        {
+          "text": " ",
+          "start_time": 58.76,
+          "end_time": 58.8
+        },
+        {
+          "text": "in",
+          "start_time": 58.8,
+          "end_time": 58.84
+        },
+        {
+          "text": " ",
+          "start_time": 58.84,
+          "end_time": 58.88
+        },
+        {
+          "text": "the",
+          "start_time": 58.88,
+          "end_time": 58.94
+        },
+        {
+          "text": " ",
+          "start_time": 58.94,
+          "end_time": 59.0
+        },
+        {
+          "text": "world.",
+          "start_time": 59.0,
+          "end_time": 59.32
+        },
+        {
+          "text": " ",
+          "start_time": 59.32,
+          "end_time": 59.42
+        },
+        {
+          "text": "They",
+          "start_time": 59.9,
+          "end_time": 60.06
+        },
+        {
+          "text": " ",
+          "start_time": 60.06,
+          "end_time": 60.16
+        },
+        {
+          "text": "love",
+          "start_time": 60.16,
+          "end_time": 60.34
+        },
+        {
+          "text": " ",
+          "start_time": 60.34,
+          "end_time": 60.38
+        },
+        {
+          "text": "their",
+          "start_time": 60.38,
+          "end_time": 60.54
+        },
+        {
+          "text": " ",
+          "start_time": 60.54,
+          "end_time": 60.6
+        },
+        {
+          "text": "children,",
+          "start_time": 60.6,
+          "end_time": 61.0
+        },
+        {
+          "text": " ",
+          "start_time": 61.0,
+          "end_time": 61.0
+        },
+        {
+          "text": "and",
+          "start_time": 61.54,
+          "end_time": 61.66
+        },
+        {
+          "text": " ",
+          "start_time": 61.66,
+          "end_time": 61.68
+        },
+        {
+          "text": "they",
+          "start_time": 61.68,
+          "end_time": 61.82
+        },
+        {
+          "text": " ",
+          "start_time": 61.82,
+          "end_time": 61.88
+        },
+        {
+          "text": "do",
+          "start_time": 61.88,
+          "end_time": 62.04
+        },
+        {
+          "text": " ",
+          "start_time": 62.04,
+          "end_time": 62.14
+        },
+        {
+          "text": "so",
+          "start_time": 62.14,
+          "end_time": 62.32
+        },
+        {
+          "text": " ",
+          "start_time": 62.32,
+          "end_time": 62.36
+        },
+        {
+          "text": "much",
+          "start_time": 62.36,
+          "end_time": 62.58
+        },
+        {
+          "text": " ",
+          "start_time": 62.58,
+          "end_time": 62.66
+        },
+        {
+          "text": "for",
+          "start_time": 62.66,
+          "end_time": 62.84
+        },
+        {
+          "text": " ",
+          "start_time": 62.84,
+          "end_time": 62.9
+        },
+        {
+          "text": "them.",
+          "start_time": 62.9,
+          "end_time": 63.12
+        },
+        {
+          "text": " ",
+          "start_time": 63.12,
+          "end_time": 63.12
+        },
+        {
+          "text": "A",
+          "start_time": 63.56,
+          "end_time": 63.62
+        },
+        {
+          "text": " ",
+          "start_time": 63.62,
+          "end_time": 63.7
+        },
+        {
+          "text": "parent's",
+          "start_time": 63.7,
+          "end_time": 64.06
+        },
+        {
+          "text": " ",
+          "start_time": 64.06,
+          "end_time": 64.14
+        },
+        {
+          "text": "love",
+          "start_time": 64.14,
+          "end_time": 64.4
+        },
+        {
+          "text": " ",
+          "start_time": 64.4,
+          "end_time": 64.459
+        },
+        {
+          "text": "is",
+          "start_time": 64.459,
+          "end_time": 64.58
+        },
+        {
+          "text": " ",
+          "start_time": 64.58,
+          "end_time": 64.62
+        },
+        {
+          "text": "for",
+          "start_time": 64.62,
+          "end_time": 64.78
+        },
+        {
+          "text": " ",
+          "start_time": 64.78,
+          "end_time": 64.879
+        },
+        {
+          "text": "always.",
+          "start_time": 64.879,
+          "end_time": 65.44
+        }
+      ]
+    }
+  ]
+}

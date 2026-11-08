@@ -25,7 +25,7 @@ const WritingSection_U9 = () => {
       <div className="flex flex-col w-[60%] mx-auto space-y-10">
         <img
           src={img}
-          alt=""
+          alt={"If: model poem with four moods and actions. Happy: clap your hands. Sad: cry some tears. Angry: stomp your feet. Excited: shout Hooray. Each stanza repeats If you are [mood] and you know it, followed by the action, twice; then repeats the if line, adds And you really want to show it, repeats the if line, and ends with the action. A photograph shows two smiling children clapping. Writing tips: decide the mood of your poem and use exact word choices and rhythm to communicate it to the reader. In an if poem, make the if part lead to the second part. A stronger change at the end gives the reader a stronger message."}
           style={{ width: "auto", height: "100%", objectFit: "contain" }}
         />
         <WritingA />

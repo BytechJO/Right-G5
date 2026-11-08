@@ -1,3 +1,16 @@
+import missingNew0 from "../../../assets/audio/G5-missing/How many apples do you have.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/How tall are you.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/How old are you.mp3";
+
+
+
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -7,8 +20,26 @@ import flaseImg from "../../../assets/imgs/false.svg";
 import img1 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 13 (2).svg";
 import img2 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 11.svg";
 import img3 from "../../../assets/imgs/pages/workbook/Right Int WB G5 U1/Page 6/Asset 12.svg";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
 
 const WB_Unit1_Page6_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     {
       image: img1,
@@ -35,6 +66,7 @@ const WB_Unit1_Page6_Q1 = () => {
 
   const handleSelect = (i, value) => {
     if (locked || result[i] === true) return;
+    setAnnouncement("Item " + (i + 1) + " selected: " + value + ".");
 
     const updated = [...answers];
 
@@ -53,11 +85,18 @@ const WB_Unit1_Page6_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a);
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -88,17 +127,39 @@ const WB_Unit1_Page6_Q1 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers(["false", "false", "true"]);
 
     setResult([true, true, true]);
@@ -107,6 +168,8 @@ const WB_Unit1_Page6_Q1 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
 
     setResult([]);
@@ -140,6 +203,10 @@ const WB_Unit1_Page6_Q1 = () => {
 
   const markBox = (i, value, img) => (
     <button
+      {...activationKeys}
+      aria-label={`Picture ${i + 1}, mark ${value}: ${questions[i].text}`}
+      aria-pressed={answers[i] === value}
+      data-choice={true}
       type="button"
       disabled={locked || result[i] === true}
       onClick={() => handleSelect(i, value)}
@@ -148,15 +215,20 @@ const WB_Unit1_Page6_Q1 = () => {
         width: "34px",
         height: "34px",
         border: "2px solid #6D2980",
-        borderRadius: "6px",
-        background: "transparent",
+
+        background: answers[i] === value ? "#dbeafe" : "transparent",
         cursor: locked || result[i] === true ? "default" : "pointer",
+        borderRadius: 6,
+        ...(answers[i] === value && result[i] !== undefined
+          ? { boxShadow: result[i] ? "0 0 0 2px #16a34a" : "0 0 0 2px #D1232A" }
+          : {}),
       }}
     >
       {answers[i] === value && (
         <img
+          aria-hidden={true}
           src={img}
-          alt={value}
+          alt={""}
           style={{
             width: "24px",
             height: "24px",
@@ -167,22 +239,34 @@ const WB_Unit1_Page6_Q1 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall ">
+    <div
+      data-exercise-scope={"WB_Unit1_Page6_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page6_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall " style={{gap:"100px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-39">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            I
-          </span>
-          Look, read, and write{" "}
-          <span className="font-bold text-[#D1252B]"> ✓</span> or
-          <span className="font-bold text-[#D1252B]">✕</span> .
-        </h5>
+        <ExerciseHeader
+          subTitle="Check the picture or text evidence carefully, then choose the two-way answer only after confirming the key detail."
+          isWorkbook
+          sectionLetter="I"
+          title={
+            <>
+              Look, read, and write{" "}
+              <span className="font-bold text-[#D1252B]"> ✓</span> or
+              <span className="font-bold text-[#D1252B]">✕</span> .
+            </>
+          }
+        />
 
         {/* QUESTIONS */}
         <div className="grid grid-cols-3 gap-10 text-[18px]">
@@ -193,7 +277,13 @@ const WB_Unit1_Page6_Q1 = () => {
 
                 <img
                   src={q.image}
-                  alt={`question-${i + 1}`}
+                  alt={
+                    [
+                      "A boy carrying a basket containing apples outdoors.",
+                      "A boy standing on a weighing scale while another boy looks on.",
+                      "Two girls facing each other outdoors.",
+                    ][i]
+                  }
                   style={{
                     width: "250px",
                     height: "auto",
@@ -203,7 +293,18 @@ const WB_Unit1_Page6_Q1 = () => {
               </div>
 
               <div className="flex items-center gap-6 ml-6">
-                <p className="leading-[1.2] w-[150px]">{q.text}</p>
+                <p className="leading-[1.2] w-[150px]">
+                  {(
+                    <AudioText
+                      audio={audio}
+                      id={`picture-question-${i}`}
+                      src={[missingNew0,missingNew1,missingNew2][i]}
+                      label={`Hear ${q.text}`}
+                    >
+                      {q.text}
+                    </AudioText>
+                  )}
+                </p>
 
                 <div className="relative flex items-center gap-2">
                   {markBox(i, "true", trueImg)}
@@ -220,15 +321,36 @@ const WB_Unit1_Page6_Q1 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

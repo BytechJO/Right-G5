@@ -1,8 +1,51 @@
-import React, { useState } from "react";
+import { SentenceGroup } from "../unit2/SentenceAudio";
+import clip0 from "../../../assets/audio/ClassBook/U2/Page 19 - F/Item_001_Mary_is_a_good_teacher._She_works_at_the_school_in_our_neighborhood.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U2/Page 19 - F/Item_002_I_think_the_repairman_fixed_the_computer._The_computer_was_broken.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U2/Page 19 - F/Item_003_We_went_to_the_restaurant._The_restaurant_had_just_opened_yesterday.mp3";
+import { useExerciseAudio } from "../unit2/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+  AudioSpeaker,
+} from "../unit2/ExerciseAudioText";
+import ExerciseHeader from "../../ExerciseHeader";
+import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Button from "../../Button";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Review2_Page2_Q3 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = useRef(null);
+  const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
   const [result, setResult] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -13,10 +56,11 @@ const Review2_Page2_Q3 = () => {
     "We went to the restaurant that had just opened yesterday.",
   ];
 
-  const normalize = (t) => t.toLowerCase().replace(/[.,]/g, "").trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, val) => {
-    if (result[i] === true) return;
+    if (locked || result[i] === true) return;
+    if (locked || result[i] === true) return;
 
     const updated = [...answers];
     updated[i] = val;
@@ -31,8 +75,13 @@ const Review2_Page2_Q3 = () => {
 
   const handleCheck = () => {
     if (locked) return;
+    audio.stop();
+    setAnnouncement(
+      "Answers checked. Correct answers stay locked; incorrect answers can be changed.",
+    );
 
     if (answers.some((a) => !a.trim())) {
+      setAnnouncement("Complete all answers.");
       ValidationAlert.info("Complete all answers.");
       return;
     }
@@ -51,6 +100,7 @@ const Review2_Page2_Q3 = () => {
 
     if (correctCount === 3) {
       setLocked(true);
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -60,32 +110,56 @@ const Review2_Page2_Q3 = () => {
   };
 
   const handleShow = () => {
+    audio.stop();
+    setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
-    setResult([]);
+    setResult(correct.map(() => true));
     setLocked(true);
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", ""]);
     setResult([]);
     setLocked(false);
   };
 
   const input = (i) => (
-    <span style={{position:"relative "}}>
+    <span style={{ position: "relative " }}>
       <input
+        placeholder="Combine the sentences"
+        {...fieldKeys}
+        aria-label={
+          [
+            "Item 1, combine the two sentences about Mary and the school using a relative clause.",
+            "Item 2, combine the two sentences about the repairman and the broken computer using a relative clause.",
+            "Item 3, combine the two sentences about the newly opened restaurant using a relative clause.",
+          ][i]
+        }
+        title={
+          [
+            "Item 1, combine the two sentences about Mary and the school using a relative clause.",
+            "Item 2, combine the two sentences about the repairman and the broken computer using a relative clause.",
+            "Item 3, combine the two sentences about the newly opened restaurant using a relative clause.",
+          ][i]
+        }
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
-        disabled={result[i] === true}
+        disabled={locked || result[i] === true}
         style={{
           width: "100%",
-          borderBottom:
-            result[i] === false ? "1px solid red" : "1px solid black",
           outline: "none",
           fontSize: "18px",
           fontWeight: "bold",
           color: "#6D2980",
           background: "transparent",
+          borderBottom:
+            locked || result[i] === true
+              ? "2px solid #16a34a"
+              : result[i] === false
+                ? "2px solid #ef4444"
+                : "1px solid",
         }}
       />
       {result[i] === false && answers[i] && (
@@ -118,57 +192,110 @@ const Review2_Page2_Q3 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div
+      data-exercise-scope="Review2_Page2_Q3.jsx"
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Review2_Page2_Q3.jsx"] input:focus-visible,[data-exercise-scope="Review2_Page2_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Review2_Page2_Q3.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{gap:"30px"}}>
         {/* HEADER */}
-        <h5 className="header-title-page8 mb-20">
-          <span className="mr-2">F</span>
-          Make one sentence into a relative clause, and then rewrite the
-          sentence.
-        </h5>
+        <ExerciseHeader
+          isReview
+          sectionLetter="F"
+          title={
+            <>
+              Make one sentence into a relative clause, and then rewrite the
+              sentence.
+            </>
+          }
+          subTitle="Use the prompt and grammar pattern to write a complete sentence, then reread it for meaning, tense, and punctuation."
+        />
 
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-15 text-[20px]">
+        <div className="flex flex-col gap-10 text-[20px]">
           {/* 1 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: 1 Mary is a good teacher. She works at the school in our neighborhood. blank">
             <div>
               <span className="font-bold mr-3">1</span>
-              Mary is a good teacher. She works at the school in our
-              neighborhood.
+              
+                Mary is a good teacher. She works at the school in our
+                neighborhood.
+              
             </div>
 
-            <div className="ml-[30px] mt-10">{input(0)}</div>
-          </div>
+            <div className="ml-[30px] mt-2">{input(0)}</div>
+          </SentenceGroup>
 
           {/* 2 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: 2 I think the repairman fixed the computer. The computer was broken. blank">
             <div>
-              <span className="font-bold mr-3">2</span>I think the repairman
-              fixed the computer. The computer was broken.
+              <span className="font-bold mr-3">2</span>
+              
+                I think the repairman fixed the computer. The computer was
+                broken.
+              
             </div>
 
             <div className="ml-[30px] mt-2">{input(1)}</div>
-          </div>
+          </SentenceGroup>
 
           {/* 3 */}
-          <div>
+          <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: 3 We went to the restaurant. The restaurant had just opened yesterday. blank">
             <div>
               <span className="font-bold mr-3">3</span>
-              We went to the restaurant. The restaurant had just opened
-              yesterday.
+              
+                We went to the restaurant. The restaurant had just opened
+                yesterday.
+              
             </div>
 
             <div className="ml-[30px] mt-2">{input(2)}</div>
-          </div>
+          </SentenceGroup>
         </div>
       </div>
 
       {/* BUTTONS */}
-      <Button
-        handleShowAnswer={handleShow}
-        handleStartAgain={handleReset}
-        checkAnswers={handleCheck}
-      />
+      <div className="action-buttons-container">
+        <button
+          type="button"
+          {...activationKeys}
+          aria-label="Start Again"
+          ref={resetButtonRef}
+          onClick={handleReset}
+          className="try-again-button"
+        >
+          Start Again ↻
+        </button>
+        <button
+          type="button"
+          {...activationKeys}
+          aria-label="Show Answer"
+          onClick={handleShow}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
+        </button>
+        <button
+          type="button"
+          {...activationKeys}
+          aria-label="Check Answer"
+          onClick={handleCheck}
+          className="check-button2"
+          disabled={locked}
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+        >
+          Check Answer ✓
+        </button>
+      </div>
     </div>
   );
 };

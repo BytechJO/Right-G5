@@ -39,10 +39,14 @@ const Reading_Unit2_Page2 = ({ audioRef, activeAudio, setActiveAudio }) => {
 
   return (
     <div
+      role="group"
+      aria-label="unit2 Reading_Unit2_Page2"
+      data-page-access="unit2/Reading_Unit2_Page2.jsx"
       className="page1-img-wrapper"
       onClick={handleImageClick}
       style={{ backgroundImage: `url(${page25})` }}
     >
+      <style>{`[data-page-access="unit2/Reading_Unit2_Page2.jsx"] [data-launcher]:focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       {/* <img
         src={page25}
         style={{ display: "block" }}
@@ -51,6 +55,23 @@ const Reading_Unit2_Page2 = ({ audioRef, activeAudio, setActiveAudio }) => {
 
       {clickableAreas.map((area, index) => (
         <div
+          role="button"
+          tabIndex={0}
+          data-launcher
+          aria-label={`Read story section ${index + 1}`}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat) event.currentTarget.click();
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
           key={index}
           className={`clickable-area ${
             hoveredAreaIndex === index || activeAudio === `page2-${index}`

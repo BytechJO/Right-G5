@@ -297,14 +297,38 @@ const Unit3_Page1 = ({ openPopup }) => {
   ];
   return (
     <div
+      role="group"
+      aria-label="Unit 3, page 1"
+      data-page-access="unit3-page1"
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_1})` }}
     >
+      <style>{`[data-page-access="unit3-page1"] :focus-visible{outline:4px solid #2563eb;outline-offset:3px;border-radius:6px;}`}</style>
       <div
         className="headset-icon-CD-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
+          role="button"
+          tabIndex={0}
+          data-launcher
+          aria-label="Open conversation"
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -319,6 +343,8 @@ const Unit3_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Conversation
+                  keyboardAccessible
+                  pageId="sb_unit3_page1_conversation"
                   title="Conversation"
                   items={data}
                   sound={longAudio}
@@ -335,6 +361,7 @@ const Unit3_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden="true"
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -350,6 +377,26 @@ const Unit3_Page1 = ({ openPopup }) => {
         style={{ overflow: "visible" }}
       >
         <svg
+          role="button"
+          tabIndex={0}
+          data-launcher
+          aria-label="Open vocabulary"
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -364,6 +411,8 @@ const Unit3_Page1 = ({ openPopup }) => {
                 }}
               >
                 <Vocabulary
+                  keyboardAccessible
+                  pageId="sb_unit3_page1_vocabulary"
                   title="VOCABULARY"
                   subtitle="Listen and repeat. Find the words and expressions in the conversation above."
                   sound={VocabularAudio}
@@ -397,6 +446,7 @@ const Unit3_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden="true"
             className="svg-img"
             href={audioBtn}
             x="0"
@@ -412,6 +462,26 @@ const Unit3_Page1 = ({ openPopup }) => {
         style={{ overflow: "visible" }}
       >
         <svg
+          role="button"
+          tabIndex={0}
+          data-launcher
+          aria-label="Open critical thinking"
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.repeat)
+                event.currentTarget.dispatchEvent(
+                  new MouseEvent("click", { bubbles: true }),
+                );
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
           width="22"
           height="22"
           viewBox="0 0 90 90"
@@ -419,6 +489,7 @@ const Unit3_Page1 = ({ openPopup }) => {
             openPopup(
               "html",
               <CriticalThinking
+                keyboardAccessible
                 title={
                   "Why do you think Sarah asks to make the sandwich herself?"
                 }
@@ -428,6 +499,7 @@ const Unit3_Page1 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
         >
           <image
+            aria-hidden="true"
             className="svg-img"
             href={arrowBtn}
             x="0"

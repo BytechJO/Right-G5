@@ -4,6 +4,7 @@ import ComprehensionB from "./page5_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 1 How Late Am I Folder/Page 5/SVG/Asset 5.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U1/PG 5/readingU1.mp3";
+import readingTimings from "../../../assets/json/readingU1.mp3.json";
 
 const ReadingSection_U1 = () => {
   const paragraphs = [
@@ -47,9 +48,18 @@ const ReadingSection_U1 = () => {
         mainTitle="Is there something that you can do better than most people?"
         title="Radical Records and Fantastic Facts"
         image={imgReading}
+        imageAlt="A white car parallel parked in a tight space between two other cars."
         paragraphs={paragraphs}
         question="Why do you think many people like to set records?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[
+          { printed: ["Moffatt"], spoken: ["Moffat"] },
+          { printed: ["cm"], spoken: ["centimeters"] },
+        ]}
+        pageId="sb_unit1_page5_reading"
+        subTitle="Press Play, follow the text as it is read, then pause or replay any part you need to hear again."
+        headerTitle="Listen and read along: Editorial Records and Fantastic Facts."
         captions={captions}
         stopAtSecond={6.1}
       />

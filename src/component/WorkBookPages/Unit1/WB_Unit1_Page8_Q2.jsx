@@ -1,8 +1,66 @@
+import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_001_Teacher_How_long.mp3";
+
+import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_002_Student_I_only_studied_for_about_an_hour.mp3";
+
+import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_004_Nancy_How_deep_can_you_dive.mp3";
+import clip4 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_005_Paula.mp3";
+
+import clip6 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_007_Team_member_How_far_do_we_have_to_run_today.mp3";
+import clip7 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_008_Coach.mp3";
+
+import clip9 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_010_Team_member_I_do_50_push-ups_every_morning_during_football_season.mp3";
+
+import clip11 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_012_Student_1.mp3";
+import clip12 from "../../../assets/audio/Workbook/Unit 1/Page 8 - M/Item_013_Student_2_It's_for_30_minutes,_and_then_I_have_to_go_back_to_class.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import {
+  AudioText,
+  AudioFeedback,
+} from "../../StudentPages/unit5/ExerciseAudioText";
+import {
+  SentenceGroup,
+  SentencePart,
+} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit1_Page8_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const questions = [
     "did you study",
     "I can dive two feet.",
@@ -17,12 +75,7 @@ const WB_Unit1_Page8_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’'%]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = (text) => normalizeAnswer(text).replace(/%/g, "");
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -44,11 +97,18 @@ const WB_Unit1_Page8_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -79,17 +139,39 @@ const WB_Unit1_Page8_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "did you study",
       "I can dive two feet.",
@@ -104,6 +186,8 @@ const WB_Unit1_Page8_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
 
     setResult([]);
@@ -114,6 +198,14 @@ const WB_Unit1_Page8_Q2 = () => {
   const inputField = (i, width = "w-full") => (
     <div className="relative inline-block flex-1">
       <input
+        placeholder={"Your reply"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Dialogue blank ${i + 1}, complete the question or reply using the surrounding lines`}
+        aria-label={`Dialogue blank ${i + 1}, complete the question or reply using the surrounding lines`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -160,54 +252,108 @@ const WB_Unit1_Page8_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
+    <div
+      data-exercise-scope={"WB_Unit1_Page8_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit1_Page8_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit1_Page8_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit1_Page8_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div
         className="div-forall text-[18px]"
         style={{
           lineHeight: "1.8",
+         
         }}
       >
+       
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-10 leading-normal">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            M
-          </span>
-          Read and write questions for answers and answer some of the questions.
-        </h5>
-
+        <ExerciseHeader
+          subTitle="Use the prompt and grammar pattern to write one complete answer at a time, then reread it before checking."
+          isWorkbook
+          sectionLetter="M"
+          title={
+            <>
+              Read and write questions for answers and answer some of the
+              questions.
+            </>
+          }
+        />
+ <div>
         {/* 1 */}
         <div className="mb-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold">Teacher:</span>
+            <span className="font-bold">
+              <SentencePart
+                audio={audio}
+                id="teacher-how-long"
+                src={clip0}
+                label="Hear Teacher: How long"
+                first={true}
+              >
+                Teacher:
+              </SentencePart>
+            </span>
 
-            <span>How long</span>
+            <span>
+              <SentencePart
+                audio={audio}
+                id="teacher-how-long"
+                src={clip0}
+                label="Hear Teacher: How long"
+                first={false}
+              >
+                How long
+              </SentencePart>
+            </span>
 
             {inputField(0)}
 
             <span>?</span>
           </div>
 
-          <div>
+          <SentenceGroup
+            label={"Hear dialogue line: I only studied for about an hour."}
+            src={clip1}
+            id={"dialogue-line-1"}
+            audio={audio}
+          >
             <span className="font-bold">Student:</span> I only studied for about
             an hour.
-          </div>
+          </SentenceGroup>
         </div>
 
         <div className="mb-2 font-bold">*************</div>
 
         {/* 2 */}
         <div className="mb-2">
-          <div>
+          <SentenceGroup
+            label={"Hear dialogue line: How deep can you dive?"}
+            src={clip3}
+            id={"dialogue-line-3"}
+            audio={audio}
+          >
             <span className="font-bold">Nancy:</span> How deep can you dive?
-          </div>
+          </SentenceGroup>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold">Paula:</span>
+            <span className="font-bold">
+              <AudioText
+                audio={audio}
+                id="dialogue-line-4"
+                src={clip4}
+                label="Hear Paula:"
+              >
+                Paula:
+              </AudioText>
+            </span>
 
             {inputField(1)}
           </div>
@@ -217,13 +363,27 @@ const WB_Unit1_Page8_Q2 = () => {
 
         {/* 3 */}
         <div className="mb-2">
-          <div>
+          <SentenceGroup
+            label={"Hear dialogue line: How far do we have to run today?"}
+            src={clip6}
+            id={"dialogue-line-6"}
+            audio={audio}
+          >
             <span className="font-bold">Team member:</span> How far do we have
             to run today?
-          </div>
+          </SentenceGroup>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold">Coach:</span>
+            <span className="font-bold">
+              <AudioText
+                audio={audio}
+                id="dialogue-line-7"
+                src={clip7}
+                label="Hear Coach:"
+              >
+                Coach:
+              </AudioText>
+            </span>
 
             {inputField(2)}
           </div>
@@ -234,17 +394,33 @@ const WB_Unit1_Page8_Q2 = () => {
         {/* 4 */}
         <div className="mb-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold">Coach:</span>
+            <span className="font-bold">
+              <AudioText
+                audio={audio}
+                id="coach-question"
+                src={clip7}
+                label="Hear Coach"
+              >
+                Coach:
+              </AudioText>
+            </span>
 
             {inputField(3)}
 
             <span>?</span>
           </div>
 
-          <div>
+          <SentenceGroup
+            label={
+              "Hear dialogue line: I do 50 push-ups every morning during football season."
+            }
+            src={clip9}
+            id={"dialogue-line-9"}
+            audio={audio}
+          >
             <span className="font-bold">Team member:</span> I do 50 push-ups
             every morning during football season.
-          </div>
+          </SentenceGroup>
         </div>
 
         <div className="mb-2 font-bold">*************</div>
@@ -252,31 +428,68 @@ const WB_Unit1_Page8_Q2 = () => {
         {/* 5 */}
         <div className="mb-10">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold">Student 1:</span>
+            <span className="font-bold">
+              <AudioText
+                audio={audio}
+                id="dialogue-line-11"
+                src={clip11}
+                label="Hear Student 1:"
+              >
+                Student 1:
+              </AudioText>
+            </span>
 
             {inputField(4)}
 
             <span>?</span>
           </div>
 
-          <div>
+          <SentenceGroup
+            label={
+              "Hear dialogue line: It’s for 30 minutes, and then I have to go back to class."
+            }
+            src={clip12}
+            id={"dialogue-line-12"}
+            audio={audio}
+          >
             <span className="font-bold">Student 2:</span> It’s for 30 minutes,
             and then I have to go back to class.
-          </div>
+          </SentenceGroup>
         </div>
       </div>
-
+</div>
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

@@ -4,6 +4,7 @@ import ComprehensionB from "./Unit2_Page2_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 2 Whos the One Folder/Page 11/SVG/Asset 1.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U2/PG 11/reading_U2.mp3";
+import readingTimings from "../../../assets/json/reading_U2.mp3.json";
 
 const ReadingSection_U2 = () => {
   const paragraphs = [
@@ -47,11 +48,29 @@ const ReadingSection_U2 = () => {
         }
         title="Unusual Sets of Twins"
         image={imgReading}
+        imageAlt="Two smiling boys in matching plaid shirts, one with his arm around the other."
         paragraphs={paragraphs}
         question="Think of two other things that would be unusual about being a twin."
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[
+          {
+            printed: ["Unusual", "Sets", "of", "Twins"],
+            spoken: ["Unusual", "set", "of", "Twins"],
+            whole: true,
+          },
+          {
+            printed: ["born", "very", "so", "often"],
+            spoken: ["born", "every", "so", "often"],
+          },
+        ]}
+        pageId="sb_unit2_page11_reading"
         captions={captions}
         stopAtSecond={8.5}
+        headerTitle={"Listen and read along: Unusual Sets of Twins."}
+        subTitle={
+          "Press Play, follow the text as it is read, then pause or replay any part you need to hear again."
+        }
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

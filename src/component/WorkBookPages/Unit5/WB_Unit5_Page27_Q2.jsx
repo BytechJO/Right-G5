@@ -1,8 +1,50 @@
+import soundB4 from "../../../assets/audio/Workbook/Unit 5/Page 27 - B/Item_004_wtaw_owudl_yuo_elik.mp3";
+import soundB3 from "../../../assets/audio/Workbook/Unit 5/Page 27 - B/Item_003_heer_yuo_og.mp3";
+import soundB2 from "../../../assets/audio/Workbook/Unit 5/Page 27 - B/Item_002_ehav_ni_midn.mp3";
+import soundB1 from "../../../assets/audio/Workbook/Unit 5/Page 27 - B/Item_001_ogdo_culk_ot_oyu_obht.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
+import { AudioFeedback } from "../../StudentPages/unit5/ExerciseAudioText";
+import { SentenceGroup } from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WB_Unit5_Page27_Q2 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
+
   const answers = [
     "good luck to you both",
     "have in mind",
@@ -23,12 +65,7 @@ const WB_Unit5_Page27_Q2 = () => {
 
   const [locked, setLocked] = useState(false);
 
-  const normalize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[.?!,’']/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const normalize = normalizeAnswer;
 
   const handleChange = (i, value) => {
     if (locked || result[i] === true) return;
@@ -50,11 +87,18 @@ const WB_Unit5_Page27_Q2 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
+    audio.stop();
 
     const hasEmpty = studentAnswers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -85,17 +129,39 @@ const WB_Unit5_Page27_Q2 = () => {
     `;
 
     if (correctCount === total) {
+      resetButtonRef.current?.focus({ preventScroll: true });
       setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
   const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setStudentAnswers(answers);
 
     setResult([true, true, true, true]);
@@ -104,6 +170,8 @@ const WB_Unit5_Page27_Q2 = () => {
   };
 
   const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setStudentAnswers(["", "", "", ""]);
 
     setResult([]);
@@ -114,6 +182,14 @@ const WB_Unit5_Page27_Q2 = () => {
   const inputField = (i) => (
     <div className="relative flex-1">
       <input
+        style={{
+          borderBottomColor: result[i] === true ? "#16a34a" : undefined,
+        }}
+        aria-invalid={result[i] === false}
+        placeholder={"Sentence"}
+        title={`Unscramble sentence ${i + 1}: ${sentences[i]}`}
+        aria-label={`Unscramble sentence ${i + 1}: ${sentences[i]}`}
+        {...fieldKeys}
         type="text"
         value={studentAnswers[i]}
         disabled={locked || result[i] === true}
@@ -160,46 +236,82 @@ const WB_Unit5_Page27_Q2 = () => {
   );
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall text-[20px]">
+    <div
+      data-exercise-scope={"WB_Unit5_Page27_Q2.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="WB_Unit5_Page27_Q2.jsx"] input:focus-visible,[data-exercise-scope="WB_Unit5_Page27_Q2.jsx"] textarea:focus-visible,[data-exercise-scope="WB_Unit5_Page27_Q2.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:var(--exercise-focus-radius,6px);}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall text-[20px]" style={{gap:"70px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-[15vh]">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            B
-          </span>
-          Unscramble and write.
-        </h5>
+        <ExerciseHeader
+          isWorkbook
+          sectionLetter="B"
+          title={<>Unscramble and write.</>}
+          subTitle="Say the correct word, expression, or sentence first, then reorder it and check spelling, capitalization, and punctuation."
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-15">
           {sentences.map((sentence, index) => (
-            <div key={index} className="flex items-center w-full gap-3">
+            <SentenceGroup
+              label={`Hear scrambled expression ${index + 1}: ${sentence}`}
+              src={[soundB1, soundB2, soundB3, soundB4][index]}
+              id={`scramble-${index}`}
+              audio={audio}
+              key={index}
+              className="flex items-center w-full gap-3"
+            >
               <span className="font-bold w-5">{index + 1}</span>
 
               <span>{sentence}</span>
 
               {inputField(index)}
-            </div>
+            </SentenceGroup>
           ))}
         </div>
       </div>
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

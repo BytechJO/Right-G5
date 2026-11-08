@@ -4,6 +4,7 @@ import ComprehensionB from "./Unit4_Page2_ComprehensionB";
 
 import imgReading from "../../../assets/imgs/pages/classbook/Right 5 Unit 4 Shopping with Our Friends Folder/Page 29/SVG/Asset 37.svg";
 import readingAudio from "../../../assets/audio/ClassBook/U4/PG 29/cd18pg29-reading.mp3";
+import readingTimings from "../../../assets/json/cd18pg29-reading.mp3.json";
 
 const ReadingSection_U2 = () => {
   const paragraphs = [
@@ -63,11 +64,27 @@ const ReadingSection_U2 = () => {
         }
         title="Mirror, Mirror on the Wall, Who’s the Busiest of Them All?"
         image={imgReading}
+        imageAlt="Two parents and two children sitting together and stacking their hands."
         paragraphs={paragraphs}
         question="What are some things that your parents do for you?"
         sound={readingAudio}
+        wordTimings={readingTimings}
+        timingAliases={[
+          { printed: ["buy", "the", "things"], spoken: ["buy", "", "things"] },
+          {
+            printed: ["mom", "or", "a", "dad"],
+            spoken: ["mom", "or", "", "dad"],
+          },
+        ]}
+        pageId="sb_unit4_page29_reading"
         captions={captions}
         stopAtSecond={8.7}
+        headerTitle={
+          "Listen and read along: Mirror, Mirror on the Wall, Who's the Busiest of Them All?"
+        }
+        subTitle={
+          "Press Play, follow the text as it is read, then pause or replay any part you need to hear again."
+        }
       />
 
       <div className="w-[60%] mt-4 space-y-6 ">

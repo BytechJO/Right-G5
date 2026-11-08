@@ -1,8 +1,23 @@
+import clip0 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_001_to_move_or_do_something_very_quickly.mp3";
+import clip1 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_002_metal_that_supports_your_teeth.mp3";
+import clip2 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_003_to_call_on_the_telephone.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_004_agreement_to_meet_with_someone_at_a_certain_time.mp3";
+import clip4 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_005_a_place_where_sports_are_played.mp3";
+import clip5 from "../../../assets/audio/ClassBook/U9/Page 80 - C/Item_006_a_group_with_the_same_interests.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
+import {useExerciseAudio} from "../unit5/useExerciseAudio";
+import {AudioText,AudioFeedback} from "../unit5/ExerciseAudioText";
+
 import React, { useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
+const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
+const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
 
-const Unit9_Page5_Q3 = () => {
+
+const Unit9_Page5_Q3 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+
   const questions = [
     "rush",
     "braces",
@@ -31,45 +46,14 @@ const Unit9_Page5_Q3 = () => {
 
   const inputRefs = useRef([]);
 
-  const handleChange = (questionIndex, charIndex, value) => {
-    if (locked) return;
+  const handleChange = (questionIndex,charIndex,value)=>{if(locked||result[questionIndex]===true)return;const char=value.slice(-1);setAnswers(previous=>previous.map((word,i)=>i===questionIndex?word.map((old,j)=>j===charIndex?char:old):word));setResult(previous=>{const next=[...previous];next[questionIndex]=undefined;return next;});if(char){const next=inputRefs.current[`${questionIndex}-${charIndex+1}`];next?.focus();next?.select();}};
 
-    const char = value.slice(-1);
+  const handleBackspace = (event,questionIndex,charIndex)=>{if(event.key==="Enter"||event.key===" "){event.stopPropagation();return;}if(event.key==="Backspace"||event.key==="Delete")event.stopPropagation();if(locked||result[questionIndex]===true)return;let target=charIndex,targetQuestion=questionIndex;if(event.key==="ArrowLeft")target=Math.max(0,charIndex-1);else if(event.key==="ArrowRight")target=Math.min(questions[questionIndex].length-1,charIndex+1);else if(event.key==="ArrowUp"||event.key==="ArrowDown"){const delta=event.key==="ArrowDown"?1:-1;let row=questionIndex+delta;while(row>=0&&row<questions.length&&result[row]===true)row+=delta;if(row>=0&&row<questions.length){targetQuestion=row;target=Math.min(charIndex,questions[row].length-1);}}else if(event.key==="Home")target=0;else if(event.key==="End")target=questions[questionIndex].length-1;else if(event.key==="Backspace"&&!answers[questionIndex][charIndex])target=Math.max(0,charIndex-1);else return;event.preventDefault();event.stopPropagation();const element=inputRefs.current[`${targetQuestion}-${target}`];element?.focus();element?.select();};
 
-    const updated = [...answers];
-
-    // حط الحرف الجديد مباشرة
-    updated[questionIndex][charIndex] = char;
-
-    setAnswers(updated);
-
-    setResult([]);
-
-    // انتقل مباشرة للخانة اللي بعدها
-    if (char) {
-      const nextRef = inputRefs.current[`${questionIndex}-${charIndex + 1}`];
-
-      if (nextRef) {
-        nextRef.focus();
-
-        // امسح اللي فيها عشان الكتابة الجديدة تستبدله
-        nextRef.select();
-      }
-    }
-  };
-
-  const handleBackspace = (e, questionIndex, charIndex) => {
-    if (e.key === "Backspace" && !answers[questionIndex][charIndex]) {
-      if (inputRefs.current[`${questionIndex}-${charIndex - 1}`]) {
-        inputRefs.current[`${questionIndex}-${charIndex - 1}`].focus();
-      }
-    }
-  };
-
-  const normalize = (arr) => arr.join("").toLowerCase().trim();
+  const normalize = letters=>normalizeAnswer(letters.join(""));
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked) return;audio.stop();
 
     // VALIDATION
     const hasEmpty = answers.some((word) =>
@@ -77,7 +61,7 @@ const Unit9_Page5_Q3 = () => {
     );
 
     if (hasEmpty) {
-      ValidationAlert.info("Please complete all answers.");
+      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -108,17 +92,17 @@ const Unit9_Page5_Q3 = () => {
   `;
 
     if (correctCount === total) {
-      setLocked(true);
+      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
 
-      ValidationAlert.success(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      ValidationAlert.error(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
     } else {
-      ValidationAlert.warning(msg);
+      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {
+  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
     setAnswers(questions.map((q) => q.split("")));
 
     setResult([true, true, true, true, true, true]);
@@ -126,7 +110,7 @@ const Unit9_Page5_Q3 = () => {
     setLocked(true);
   };
 
-  const handleReset = () => {
+  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
     setAnswers(questions.map((q) => Array(q.length).fill("")));
 
     setResult([]);
@@ -135,23 +119,16 @@ const Unit9_Page5_Q3 = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-[30px]">
-      <div className="div-forall">
+    <div data-exercise-scope={"Unit9_Page5_Q3.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit9_Page5_Q3.jsx"] input:focus-visible,[data-exercise-scope="Unit9_Page5_Q3.jsx"] textarea:focus-visible,[data-exercise-scope="Unit9_Page5_Q3.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
+      <div className="div-forall" style={{gap:"50px"}}>
         {/* TITLE */}
-        <h5 className="header-title-page8 mb-14">
-          <span
-            className="ex-A"
-            style={{
-              marginRight: "10px",
-            }}
-          >
-            C
-          </span>
+        <ExerciseHeader sectionLetter="C" title={<>
+          
           Fill in the blanks to make a word that matches each definition.
-        </h5>
+        </>} subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."/>
 
         {/* QUESTIONS */}
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-5">
           {questions.map((word, qIndex) => (
             <div key={qIndex} className="flex items-center gap-8">
               {/* NUMBER */}
@@ -163,7 +140,7 @@ const Unit9_Page5_Q3 = () => {
               <div className="flex gap-[3px]">
                 {word.split("").map((_, charIndex) => (
                   <div key={charIndex} className="relative">
-                    <input
+                    <input style={{...(result[qIndex] === true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={!!(result[qIndex] === false)} title={`Word ${qIndex+1}, letter ${charIndex+1} of ${word.length}; clue: ${definitions[qIndex]}`} aria-label={`Word ${qIndex+1}, letter ${charIndex+1} of ${word.length}; clue: ${definitions[qIndex]}`} {...fieldKeys}
                       ref={(el) =>
                         (inputRefs.current[`${qIndex}-${charIndex}`] = el)
                       }
@@ -199,7 +176,7 @@ const Unit9_Page5_Q3 = () => {
               </div>
 
               {/* DEFINITION */}
-              <span className="text-[18px]">{definitions[qIndex]}</span>
+              <span className="text-[18px]"><AudioText audio={audio} id={`definition-${qIndex}`} src={[clip0,clip1,clip2,clip3,clip4,clip5][qIndex]} label={`Hear definition ${qIndex+1}: ${definitions[qIndex]}`}>{definitions[qIndex]}</AudioText></span>
 
               {/* X */}
               {result[qIndex] === false && (
@@ -229,15 +206,15 @@ const Unit9_Page5_Q3 = () => {
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn" onClick={showAnswers}>
+        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>
