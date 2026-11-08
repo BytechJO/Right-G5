@@ -1,3 +1,5 @@
+import missingNew1 from "../../../assets/audio/G5-missing/I.mp3";
+import missingNew0 from "../../../assets/audio/G5-missing/We.mp3";
 import soundM14 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_014_(shall_will_).mp3";
 import soundM13 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_013_Let's_ride_on_the_Ferris_wheel,.mp3";
 import soundM12 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_012_(_could_would_).mp3";
@@ -10,7 +12,7 @@ import soundM6 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_006_
 import soundM5 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_005_(_May_Would_).mp3";
 import soundM4 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_004_you_help_me_pass_out_the_papers.mp3";
 import soundM3 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_003_(_might_must_).mp3";
-import soundM2 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_002_We.mp3";
+
 import soundM1 from "../../../assets/audio/Workbook/Unit 6/Page 38 - M/Item_001_have_snow_this_afternoon_if_the_weather_forecast_is_correct.mp3";
 import ExerciseHeader from "../../ExerciseHeader";
 import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
@@ -202,7 +204,7 @@ const WB_Unit6_Page38_Q1 = () => {const audio=useExerciseAudio();const resetButt
   // OPTION BUTTON
   // ------------------------
 
-  const narration = [{lead:soundM2, choices:soundM3, ending:soundM1},{choices:soundM5,ending:soundM4},{lead:soundM7,choices:soundM8,ending:soundM6},{lead:soundM2,choices:soundM10,ending:soundM9},{choices:soundM12,ending:soundM11},{lead:soundM13,choices:soundM14}];
+  const narration = [{lead:missingNew0, choices:soundM3, ending:soundM1},{choices:soundM5,ending:soundM4},{lead:soundM7,choices:soundM8,ending:soundM6},{lead:missingNew0,choices:soundM10,ending:soundM9},{lead:missingNew1,choices:soundM12,ending:soundM11},{lead:soundM13,choices:soundM14,ending:missingNew0}];
 const optionButton = (questionIndex, option) => {
     const selected = selectedAnswers[questionIndex] === option;
 

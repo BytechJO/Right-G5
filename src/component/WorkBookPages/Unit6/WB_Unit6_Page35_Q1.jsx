@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/What will they do in the science fair.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/When should they be home.mp3";
 import soundF8 from "../../../assets/audio/Workbook/Unit 6/Page 35 - F/Item_008_Circle_each_modal_verb_in_the_story._@.mp3";
 import soundF6 from "../../../assets/audio/Workbook/Unit 6/Page 35 - F/Item_006_Their_parents_would_worry_if_they_stay_later_than_6_p.m.mp3";
 import soundF5 from "../../../assets/audio/Workbook/Unit 6/Page 35 - F/Item_005_go_to_the_park_a_few_blocks_away._They_shouldn't_stay_later_than_6_p.m.mp3";
@@ -609,7 +611,7 @@ Fred and his friends might meet at the science fair tomorrow. Each one of them w
           <div className="flex items-start gap-4 mb-4">
             <span className="font-bold">2</span>
 
-            <span>What will they do in the science fair?</span>
+            <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear What will they do in the science fair?">What will they do in the science fair?</AudioText></span>
           </div>
 
           <div className="pl-[35px]">{inputField(0)}</div>
@@ -621,7 +623,7 @@ Fred and his friends might meet at the science fair tomorrow. Each one of them w
           <div className="flex items-start gap-4 mb-4">
             <span className="font-bold">3</span>
 
-            <span>When should they be home? Why?</span>
+            <span><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear When should they be home?">When should they be home?</AudioText> Why?</span>
           </div>
 
           <div className="pl-[35px]">{inputField(1)}</div>

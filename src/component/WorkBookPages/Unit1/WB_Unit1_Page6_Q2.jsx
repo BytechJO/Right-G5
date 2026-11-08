@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/it is.mp3";
 import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 6 - J/Item_001_deep.mp3";
 import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 6 - J/Item_002_much.mp3";
 import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 6 - J/Item_003_far.mp3";
@@ -405,7 +406,7 @@ const WB_Unit1_Page6_Q2 = () => {
               <div className="flex items-center gap-2">
                 <span>A:</span>
 
-                <span>It is</span>
+                <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear It is">It is</AudioText></span>
 
                 {inputField(1, "w-[300px]")}
 

@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I.mp3";
 import soundA9 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_009_all_the_important_notes_on_my_notebook,_so_I_can_be_prepared_for_the_exa.mp3";
 import soundA11 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_011_the_time_I_spend_with_my_grandparents.mp3";
 import soundA10 from "../../../assets/audio/Workbook/Unit 7/Page 39 - A/Item_010_lam.mp3";
@@ -415,7 +416,7 @@ const WB_Unit7_Page39_Q1 = () => {
           <div className="flex items-start gap-4 flex-wrap">
             <span className="font-bold">4</span>
 
-            <span>I</span>
+            <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear I">I</AudioText></span>
 
             {inputField(3, "250px")}
 

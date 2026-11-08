@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Of why our teas do taste so great..mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/Don’t worry, I’ll be quick; you won’t be late.”.mp3";
 import soundL25 from "../../../assets/audio/Workbook/Unit 5/Page 32 - L/Item_025_And_then_I'll_gi.mp3";
 import soundL24 from "../../../assets/audio/Workbook/Unit 5/Page 32 - L/Item_024_I'll_give_you_fir.mp3";
 import soundL23 from "../../../assets/audio/Workbook/Unit 5/Page 32 - L/Item_023_For_our_special_blend_of_spice_tea.mp3";
@@ -300,9 +302,9 @@ const WB_Unit5_Page32_Q1 = () => {const audio=useExerciseAudio();const resetButt
 
           <div><AudioText audio={audio} id="poem-fragment-17" src={soundL25} label="Hear And then I’ll give you a quick">And then I’ll give you a quick</AudioText> {inputField(5, "260px")}</div>
 
-          <div>Of why our teas do taste so great.</div>
+          <div><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear Of why our teas do taste so great.">Of why our teas do taste so great.</AudioText></div>
 
-          <div>Don’t worry, I’ll be quick; you won’t be late.”</div>
+          <div><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear Don’t worry, I’ll be quick; you won’t be late.”">Don’t worry, I’ll be quick; you won’t be late.”</AudioText></div>
 
           {/* IMAGE */}
 

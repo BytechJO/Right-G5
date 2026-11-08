@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Fred usually has a busy week..mp3";
 import storyH1 from "../../../assets/audio/Workbook/Unit 4/Page 24 - H/Item_001_Fred.mp3";
 import storyH2 from "../../../assets/audio/Workbook/Unit 4/Page 24 - H/Item_002_usually_has.mp3";
 import storyH3 from "../../../assets/audio/Workbook/Unit 4/Page 24 - H/Item_003_busy_week.mp3";
@@ -367,7 +368,7 @@ const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [an
         <ExerciseHeader isWorkbook sectionLetter="H" title="Read and write." subTitle="Use the passage as evidence: mark the target adverbs first, then answer the questions by referring back to the relevant sentence."/>
 
         {/* STORY */}
-        <SentenceGroup data-return-story={true} audio={audio} id="fred-story" src={STORY_AUDIO} label="Hear the story about Fred’s week. Press Enter or Space to play the recordings in order."
+        <SentenceGroup data-return-story={true} audio={audio} id="fred-story" src={missingNew0} label="Hear the story about Fred’s week. Press Enter or Space to listen to the full story."
           className="mb-10 leading-loose"
           style={{
             maxWidth: "1000px",

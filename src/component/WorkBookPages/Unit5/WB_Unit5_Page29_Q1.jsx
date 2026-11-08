@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I.mp3";
 import soundE10 from "../../../assets/audio/Workbook/Unit 5/Page 29 - E/Item_010_to_my_class_about_the_ways_to_study_for_an_exam.mp3";
 import soundE8 from "../../../assets/audio/Workbook/Unit 5/Page 29 - E/Item_008_my_day_with_a_bowl_of_cereal.mp3";
 import soundE7 from "../../../assets/audio/Workbook/Unit 5/Page 29 - E/Item_007_about_sharks_in_the_library.mp3";
@@ -326,11 +327,11 @@ const WB_Unit5_Page29_Q1 = () => {
 
               <div className="flex flex-wrap items-center gap-2 leading-[1.8]">
                 <span>
-                  {[soundE6, null, soundE9, soundE11][index] ? (
+                  {[soundE6, missingNew0, soundE9, soundE11][index] ? (
                     <AudioText
                       audio={audio}
                       id={`before-${index}`}
-                      src={[soundE6, null, soundE9, soundE11][index]}
+                      src={[soundE6, missingNew0, soundE9, soundE11][index]}
                       label={`Hear ${sentence.before}`}
                     >
                       {sentence.before}

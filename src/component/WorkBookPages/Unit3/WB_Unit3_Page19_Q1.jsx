@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/How does everyone feel.mp3";
 import soundI11 from "../../../assets/audio/Workbook/Unit 3/Page 19 - I/Item_011_4A_Wow_does_the_food_taste.mp3";
 import soundI10 from "../../../assets/audio/Workbook/Unit 3/Page 19 - I/Item_010_What_did_Sarah_and_her_family_bring_with_them_to_the_picnic.mp3";
 import soundI9 from "../../../assets/audio/Workbook/Unit 3/Page 19 - I/Item_009_How_does_the_weather_feel_in_the_story.mp3";
@@ -292,7 +293,7 @@ const WB_Unit3_Page19_Q1 = () => {
             <div className="flex gap-3 mb-4">
               <span className="font-bold">5</span>
 
-              <span>How does everyone feel?</span>
+              <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear How does everyone feel?">How does everyone feel?</AudioText></span>
             </div>
 
             <div className="pl-7">{inputField(3)}</div>

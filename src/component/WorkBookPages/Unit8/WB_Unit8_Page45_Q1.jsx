@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I.mp3";
 import soundA21 from "../../../assets/audio/Workbook/Unit 8/Page 45 - A/Item_021_¢_fly_over.mp3";
 import soundA20 from "../../../assets/audio/Workbook/Unit 8/Page 45 - A/Item_020_¢_volunteer.mp3";
 import soundA19 from "../../../assets/audio/Workbook/Unit 8/Page 45 - A/Item_019_b=_shocked.mp3";
@@ -173,7 +174,7 @@ const WB_Unit8_Page45_Q1 = () => {const audio=useExerciseAudio();const resetButt
 
     return (
       <div className="leading-[1.8]">
-        {([null,soundA1,[soundA11,soundA15],soundA12][qIndex])?<AudioText audio={audio} id={`prefix-${qIndex}`} src={[null,soundA1,[soundA11,soundA15],soundA12][qIndex]} label={`Hear the beginning of sentence ${qIndex+1}`}>{parts[0]}</AudioText>:parts[0]}
+        {([missingNew0,soundA1,[soundA11,soundA15],soundA12][qIndex])?<AudioText audio={audio} id={`prefix-${qIndex}`} src={[missingNew0,soundA1,[soundA11,soundA15],soundA12][qIndex]} label={`Hear the beginning of sentence ${qIndex+1}`}>{parts[0]}</AudioText>:parts[0]}
 
         <span style={{borderBottomColor:value&&questions.some((q,i)=>result[i]===true&&selectedAnswers[i]===value)?"#16a34a":undefined}} aria-label={`Chosen answer: ${value||"empty"}`} role={"status"}
           className="

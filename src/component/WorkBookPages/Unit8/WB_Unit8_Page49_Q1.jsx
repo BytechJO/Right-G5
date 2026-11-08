@@ -1,3 +1,7 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Everyone brought water..mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/Someone brought sandwiches..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/Someone brought cookies..mp3";
+import missingNew3 from "../../../assets/audio/G5-missing/Everybody brought hot dogs..mp3";
 import soundJ7 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_007_2_Nobody_brought_cake.mp3";
 import soundJ6 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_006_1_No_one_brought_chips.mp3";
 import soundJ1 from "../../../assets/audio/Workbook/Unit 8/Page 49 - J/Item_001_Helen_and_her_friends_went_on_a_field_trip._Everyone_packed_their_backpa.mp3";
@@ -262,7 +266,7 @@ const WB_Unit8_Page49_Q1 = () => {const audio=useExerciseAudio();const resetButt
 
         <div className="grid grid-cols-2 gap-y-6 gap-x-10 mb-10">
           {questions.map((q, index) => (
-            <SentenceGroup label={`Hear statement ${index+1}: ${q.sentence}`} src={[soundJ6,soundJ7,null,null,null,null][index]} id={`sentence-${index}`} audio={audio} key={index} className="flex items-center gap-3">
+            <SentenceGroup label={`Hear statement ${index+1}: ${q.sentence}`} src={[soundJ6,soundJ7,missingNew0,missingNew1,missingNew2,missingNew3][index]} id={`sentence-${index}`} audio={audio} key={index} className="flex items-center gap-3">
               {inputField(index)}
 
               <span className="font-bold">{index + 1}</span>

@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Who eats apple pie on his birthday.mp3";
 import { SentenceGroup } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_001_Who_goes_to_the_carnival_and_probably_wins_a_trophy_on_Friday.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_002_Who_is_helping_his_dad_with_the_car_engine.mp3";
@@ -17,24 +18,36 @@ import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const activationKeys = {
   onKeyDown: (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault(); event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     if (!event.repeat) event.currentTarget.click();
   },
   onKeyUp: (event) => {
-    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },
 };
 const fieldKeys = {
-  onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
-  onKeyUp: (event) => { if (event.key === "Enter" || event.key === " ") event.stopPropagation(); },
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
 };
-const normalizeAnswer = (text) => text.normalize("NFKC").toLowerCase()
-  .replace(/[‘’']/g, "")
-  .replace(/[.,!?;:…“”"–—-]/g, " ")
-  .replace(/\s+/g, " ").trim();
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const Page9_Q3 = () => {
- const audio=useExerciseAudio();
+  const audio = useExerciseAudio();
   const resetButtonRef = useRef(null);
   const [announcement, setAnnouncement] = useState("");
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
@@ -66,7 +79,34 @@ const Page9_Q3 = () => {
 
   const input = (i) => (
     <span className="relative mx-2">
-      <input style={{borderBottom:locked || result[i] === true ? "2px solid #16a34a" : result[i] === false ? "2px solid #ef4444" : undefined}} {...fieldKeys} aria-label={["Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?","Question 2, matching picture letter: Who is helping his dad with the car engine?","Question 3, matching picture letter: Who gets a trophy on Tuesday?","Question 4, matching picture letter: Who gets a trophy on Tuesday?","Question 5, matching picture letter: Who eats apple pie on his birthday?"][i]} title={["Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?","Question 2, matching picture letter: Who is helping his dad with the car engine?","Question 3, matching picture letter: Who gets a trophy on Tuesday?","Question 4, matching picture letter: Who gets a trophy on Tuesday?","Question 5, matching picture letter: Who eats apple pie on his birthday?"][i]}
+      <input
+        style={{
+          borderBottom:
+            locked || result[i] === true
+              ? "2px solid #16a34a"
+              : result[i] === false
+                ? "2px solid #ef4444"
+                : undefined,
+        }}
+        {...fieldKeys}
+        aria-label={
+          [
+            "Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?",
+            "Question 2, matching picture letter: Who is helping his dad with the car engine?",
+            "Question 3, matching picture letter: Who rides the Ferris wheel on Monday?",
+            "Question 4, matching picture letter: Who gets a trophy on Tuesday?",
+            "Question 5, matching picture letter: Who eats apple pie on his birthday?",
+          ][i]
+        }
+        title={
+          [
+            "Question 1, matching picture letter: Who goes to the carnival and probably wins a trophy on Friday?",
+            "Question 2, matching picture letter: Who is helping his dad with the car engine?",
+            "Question 3, matching picture letter:Who rides the Ferris wheel on Monday?",
+            "Question 4, matching picture letter: Who gets a trophy on Tuesday?",
+            "Question 5, matching picture letter: Who eats apple pie on his birthday?",
+          ][i]
+        }
         disabled={locked || result[i] === true}
         value={answers[i]}
         onChange={(e) => handleChange(i, e.target.value)}
@@ -111,8 +151,10 @@ const Page9_Q3 = () => {
   // ====================
   const checkAnswers = () => {
     if (locked) return;
- audio.stop();
-    setAnnouncement("Answers checked. Correct answers stay locked; incorrect answers can be changed.");
+    audio.stop();
+    setAnnouncement(
+      "Answers checked. Correct answers stay locked; incorrect answers can be changed.",
+    );
 
     if (answers.some((a) => !a.trim())) {
       setAnnouncement("Please complete all fields.");
@@ -145,7 +187,7 @@ const Page9_Q3 = () => {
 
     if (correctCount === total) {
       setLocked(true);
-      resetButtonRef.current?.focus({preventScroll:true});
+      resetButtonRef.current?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -158,7 +200,7 @@ const Page9_Q3 = () => {
   // 👀 SHOW ANSWERS
   // ====================
   const showAnswers = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Correct answers shown and locked.");
     setAnswers(correct);
     setLocked(true);
@@ -169,7 +211,7 @@ const Page9_Q3 = () => {
   // 🔄 RESET
   // ====================
   const reset = () => {
- audio.stop();
+    audio.stop();
     setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", ""]);
     setLocked(false);
@@ -177,13 +219,28 @@ const Page9_Q3 = () => {
   };
 
   return (
-    <div data-exercise-scope="Unit2_Page6_Q1.jsx" className="p-8 flex flex-col items-center">
-<AudioFeedback audio={audio} />
-<style>{`[data-exercise-scope="Unit2_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
-<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</div>
-        <div className="div-forall">
-        <ExerciseHeader sectionLetter="C" title={<>Listen, read, and match</>} subTitle="Start with one item, find the matching partner, then connect the pair before moving to the next one." />
-        <QuestionAudioPlayer pageId="sb_unit2_page6_q1"
+    <div
+      data-exercise-scope="Unit2_Page6_Q1.jsx"
+      className="p-8 flex flex-col items-center"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit2_Page6_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit2_Page6_Q1.jsx"] [data-choice]:focus-visible {outline:4px solid #2563eb !important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall">
+        <ExerciseHeader
+          sectionLetter="C"
+          title={<>Listen, read, and match</>}
+          subTitle="Start with one item, find the matching partner, then connect the pair before moving to the next one."
+        />
+        <QuestionAudioPlayer
+          pageId="sb_unit2_page6_q1"
           src={grammer_u1}
           captions={captions}
           stopAtSecond={6.6}
@@ -192,30 +249,55 @@ const Page9_Q3 = () => {
           {" "}
           {/* LEFT */}
           <div className="space-y-25">
-            <SentenceGroup audio={audio} id="sentence-0" src={clip0} label="Hear the sentence: blank 1 Who goes to the carnival and probably wins a trophy on Friday?">
+            <SentenceGroup
+              audio={audio}
+              id="sentence-0"
+              src={clip0}
+              label="Hear the sentence: blank 1 Who goes to the carnival and probably wins a trophy on Friday?"
+            >
               {input(0)} <span className="font-bold mr-2">1</span> Who goes to
               the carnival and probably wins a trophy on Friday?
             </SentenceGroup>
 
-            <SentenceGroup audio={audio} id="sentence-1" src={clip1} label="Hear the sentence: blank 2 Who is helping his dad with the car engine?">
+            <SentenceGroup
+              audio={audio}
+              id="sentence-1"
+              src={clip1}
+              label="Hear the sentence: blank 2 Who is helping his dad with the car engine?"
+            >
               {input(1)} <span className="font-bold mr-2 ">2</span> Who is
               helping his dad with the car engine?
             </SentenceGroup>
 
-            <SentenceGroup audio={audio} id="sentence-2" src={clip2} label="Hear the sentence: blank 3 Who gets a trophy on Tuesday?">
-              {input(2)} <span className="font-bold mr-2">3</span> Who gets a
-              trophy on Tuesday?
+            <SentenceGroup
+              audio={audio}
+              id="sentence-2"
+              src={clip2}
+              label="Hear the sentence: blank 3 Who rides the Ferris wheel on Monday?"
+            >
+              {input(2)} <span className="font-bold mr-2">3</span> Who rides the
+              Ferris wheel on Monday?
             </SentenceGroup>
 
-            <SentenceGroup audio={audio} id="sentence-3" src={clip2} label="Hear the sentence: blank 4 Who gets a trophy on Tuesday?">
+            <SentenceGroup
+              audio={audio}
+              id="sentence-3"
+              src={clip2}
+              label="Hear the sentence: blank 4 Who gets a trophy on Tuesday?"
+            >
               {input(3)} <span className="font-bold mr-2">4</span> Who gets a
               trophy on Tuesday?
             </SentenceGroup>
 
-            <div>
+            <SentenceGroup
+              audio={audio}
+              id="sentence-4"
+              src={missingNew0}
+              label="Hear Who eats apple pie on his birthday?"
+            >
               {input(4)} <span className="font-bold mr-2">5</span> Who eats
               apple pie on his birthday?
-            </div>
+            </SentenceGroup>
           </div>
           {/* RIGHT */}
           <div className="space-y-10 flex flex-col items-end">
@@ -264,15 +346,36 @@ const Page9_Q3 = () => {
 
       {/* Buttons */}
       <div className="action-buttons-container mt-6">
-        <button type="button" aria-label="Start Again" {...activationKeys} ref={resetButtonRef} className="try-again-button" onClick={reset}>
+        <button
+          type="button"
+          aria-label="Start Again"
+          {...activationKeys}
+          ref={resetButtonRef}
+          className="try-again-button"
+          onClick={reset}
+        >
           Start Again ↻
         </button>
 
-        <button type="button" aria-label="Show Answer" {...activationKeys} onClick={showAnswers} className="show-answer-btn">
+        <button
+          type="button"
+          aria-label="Show Answer"
+          {...activationKeys}
+          onClick={showAnswers}
+          className="show-answer-btn"
+        >
           Show Answer
         </button>
 
-        <button type="button" aria-label="Check Answer" {...activationKeys} disabled={locked} style={{cursor:locked ? "not-allowed":"pointer"}} className="check-button2" onClick={checkAnswers}>
+        <button
+          type="button"
+          aria-label="Check Answer"
+          {...activationKeys}
+          disabled={locked}
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>

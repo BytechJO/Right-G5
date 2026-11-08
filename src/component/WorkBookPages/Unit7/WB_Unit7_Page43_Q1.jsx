@@ -1,3 +1,7 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Everyone is getting bored..mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/Stella is smelling the flowers..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/Harley is eating a sandwich..mp3";
+import missingNew3 from "../../../assets/audio/G5-missing/Tom is watching the football game..mp3";
 import soundJ12 from "../../../assets/audio/Workbook/Unit 7/Page 43 - J/Item_012_Helen_and_her_friends_are_catching_grasshoppers.mp3";
 import soundJ11 from "../../../assets/audio/Workbook/Unit 7/Page 43 - J/Item_011_true.mp3";
 import soundJ10 from "../../../assets/audio/Workbook/Unit 7/Page 43 - J/Item_010_false.mp3";
@@ -398,7 +402,7 @@ const WB_Unit7_Page43_Q1 = () => {
 
               <SentenceGroup
                 label={`Hear statement ${index + 1}: ${q.sentence}`}
-                src={[soundJ9, soundJ12, null, null, null, null][index]}
+                src={[soundJ9, soundJ12, missingNew0, missingNew1, missingNew2, missingNew3][index]}
                 id={`sentence-${index}`}
                 audio={audio}
                 className="flex items-center gap-3 flex-1"

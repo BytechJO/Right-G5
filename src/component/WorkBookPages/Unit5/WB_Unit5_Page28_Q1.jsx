@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/2How would you politely ask the server for a second plate of shish kebabs.mp3";
+import { AudioText } from "../../StudentPages/unit5/ExerciseAudioText";
 import soundC10 from "../../../assets/audio/Workbook/Unit 5/Page 28 - C/Item_010_Underline_all_the_vocabulary_words_and_write_them_down_below._@.mp3";
 import soundC9 from "../../../assets/audio/Workbook/Unit 5/Page 28 - C/Item_009_lots_of_fun_there.mp3";
 import soundC8 from "../../../assets/audio/Workbook/Unit 5/Page 28 - C/Item_008_everything_was_written_in_an_information_booklet_in_English._We_had.mp3";
@@ -732,8 +734,8 @@ return (
             <div className="flex-1">
               <div className="mb-5">
                 <span className="font-bold mr-2">2</span>
-                How would you politely ask the server for a second plate of
-                shish kebabs?
+                <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear How would you politely ask the server for a second plate of shish kebabs?">How would you politely ask the server for a second plate of
+                shish kebabs?</AudioText>
               </div>
 
               {inputField(

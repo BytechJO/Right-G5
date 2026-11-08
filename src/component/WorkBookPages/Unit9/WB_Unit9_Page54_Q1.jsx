@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/When will Ben get his test results.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/What will happen if Ben gets an A on his test.mp3";
 import soundG12 from "../../../assets/audio/Workbook/Unit 9/Page 54 - G/Item_012_,_his_mother_will_pack_his_lunch_in_the_morning.mp3";
 import soundG11 from "../../../assets/audio/Workbook/Unit 9/Page 54 - G/Item_011_His_mother_will_give_him_money.mp3";
 import soundG10 from "../../../assets/audio/Workbook/Unit 9/Page 54 - G/Item_010_If_he_wakes_up_early,.mp3";
@@ -293,7 +295,7 @@ const WB_Unit9_Page54_Q1 = () => {const audio=useExerciseAudio();const resetButt
             <span className="font-bold shrink-0">6</span>
 
             <span className="shrink-0">
-              When will Ben get his test results?
+              <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear When will Ben get his test results?">When will Ben get his test results?</AudioText>
             </span>
 
             <div className="flex-1">{inputField(5, "100%")}</div>
@@ -305,7 +307,7 @@ const WB_Unit9_Page54_Q1 = () => {const audio=useExerciseAudio();const resetButt
             <span className="font-bold shrink-0">7</span>
 
             <span className="shrink-0">
-              What will happen if Ben gets an A on his test?
+              <AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear What will happen if Ben gets an A on his test?">What will happen if Ben gets an A on his test?</AudioText>
             </span>
 
             <div className="flex-1">{inputField(6, "100%")}</div>

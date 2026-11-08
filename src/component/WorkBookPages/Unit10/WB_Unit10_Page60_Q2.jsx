@@ -1,13 +1,17 @@
-import soundI11 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_011_smart_correct.mp3";
-import soundI10 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_010_telling_someone_that_what_they_said_is.mp3";
+import missingNew0 from "../../../assets/audio/G5-missing/if something is far off, it will take.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/what someone says when it’s time for the next person to go.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/what someone says when they don’t understand something or didn’t hear.mp3";
+import missingNew3 from "../../../assets/audio/G5-missing/telling someone that what they said is smart.mp3";
+
+
 import soundI9 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_009_long_way_to_go.mp3";
-import soundI8 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_008_something_or_didn't_hear.mp3";
+
 import soundI7 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_007_It's_your_turn.mp3";
-import soundI6 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_006_what_someone_says_when_they_don't_understand.mp3";
-import soundI5 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_005_person_to_go.mp3";
-import soundI4 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_004_what_someone_says_when_it's_time_for_the_next.mp3";
+
+
+
 import soundI3 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_003_That's_a_good_point!.mp3";
-import soundI2 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_002_if_something_is_far_off,_it_will_take.mp3";
+
 import soundI1 from "../../../assets/audio/Workbook/Unit 10/Page 60 - I/Item_001_huh.mp3";
 import ExerciseHeader from "../../ExerciseHeader";
 import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
@@ -374,10 +378,10 @@ const WB_Unit10_Page60_Q2 = () => {
                 label={`Hear meaning ${meanings[index].letter}: ${meanings[index].text}`}
                 src={
                   [
-                    soundI2,
-                    [soundI4, soundI5],
-                    [soundI6, soundI8],
-                    [soundI10, soundI11],
+                    missingNew0,
+                    missingNew1,
+                    missingNew2,
+                    missingNew3,
                   ][index]
                 }
                 id={`right-${index}`}

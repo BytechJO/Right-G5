@@ -1,6 +1,9 @@
-import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 6 - I/Item_003_How_tall_are_you_C)_C).mp3";
-import clip3 from "../../../assets/audio/Workbook/Unit 1/Page 6 - I/Item_004_How_many_apples.mp3";
-import clip4 from "../../../assets/audio/Workbook/Unit 1/Page 6 - I/Item_005_do_you_have.mp3";
+import missingNew0 from "../../../assets/audio/G5-missing/How many apples do you have.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/How tall are you.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/How old are you.mp3";
+
+
+
 import ExerciseHeader from "../../ExerciseHeader";
 import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
 import {
@@ -291,17 +294,15 @@ const WB_Unit1_Page6_Q1 = () => {
 
               <div className="flex items-center gap-6 ml-6">
                 <p className="leading-[1.2] w-[150px]">
-                  {i < 2 ? (
+                  {(
                     <AudioText
                       audio={audio}
                       id={`picture-question-${i}`}
-                      src={i === 0 ? [clip3, clip4] : clip2}
+                      src={[missingNew0,missingNew1,missingNew2][i]}
                       label={`Hear ${q.text}`}
                     >
                       {q.text}
                     </AudioText>
-                  ) : (
-                    q.text
                   )}
                 </p>
 

@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/He never goes (Scuba) diving..mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/0-100.mp3";
 import clip0 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_001_60.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_002_40.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U4/Page 36 - C/Item_003_80.mp3";
@@ -392,7 +394,7 @@ const Review4_Page1_Q3 = () => {
           </div>
 
           {/* 5 */}
-          <div
+          <SentenceGroup audio={audio} id="diving-sentence" src={missingNew0} label="Hear sentence 5"
             style={{
               display: "grid",
               gridTemplateColumns: "40px 120px 80px 1fr",
@@ -419,11 +421,11 @@ const Review4_Page1_Q3 = () => {
                 fontSize: "20px",
               }}
             >
-              0%
+              <AudioText audio={audio} id="frequency-4" src={missingNew1} label="Hear zero percent">0%</AudioText>
             </span>
 
             {input(4)}
-          </div>
+          </SentenceGroup>
         </div>
       </div>
 

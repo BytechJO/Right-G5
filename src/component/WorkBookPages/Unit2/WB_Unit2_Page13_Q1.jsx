@@ -1,3 +1,6 @@
+import missingNew0 from "../../../assets/audio/G5-missing/3 Where is the carnival that the narrator and her sister go to.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/4 How often do they go to this carnival.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/5 What kinds of rides does the narrator like.mp3";
 import soundJ9 from "../../../assets/audio/Workbook/unit 2/Page 13 - J/Item_009_Write_all_the_vocabulary_words_and_expressions_used_in_the_story.mp3";
 import soundJ8 from "../../../assets/audio/Workbook/unit 2/Page 13 - J/Item_008_Underline_the_relative_clauses_in_the_story._@.mp3";
 import soundJ7 from "../../../assets/audio/Workbook/unit 2/Page 13 - J/Item_007_sister_who_is_so_cute.mp3";
@@ -531,8 +534,8 @@ const WB_Unit2_Page13_Q1 = () => {
         {/* Q3 */}
         <div className="mb-10">
           <div className="mb-4">
-            <span className="font-bold mr-2">3</span> Where is the carnival that
-            the narrator and her sister go to?
+            <span className="font-bold mr-2">3</span> <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear Where is the carnival that the narrator and her sister go to?">Where is the carnival that
+            the narrator and her sister go to?</AudioText>
           </div>
 
           {inputField(
@@ -547,8 +550,8 @@ const WB_Unit2_Page13_Q1 = () => {
         {/* Q4 */}
         <div className="mb-10">
           <div className="mb-4">
-            <span className="font-bold mr-2">4</span> How often do they go to
-            this carnival?
+            <span className="font-bold mr-2">4</span> <AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear How often do they go to this carnival?">How often do they go to
+            this carnival?</AudioText>
           </div>
 
           {inputField(
@@ -563,8 +566,8 @@ const WB_Unit2_Page13_Q1 = () => {
         {/* Q5 */}
         <div className="mb-10">
           <div className="mb-4">
-            <span className="font-bold mr-2">5</span> What kinds of rides does
-            the narrator like?
+            <span className="font-bold mr-2">5</span> <AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear What kinds of rides does the narrator like?">What kinds of rides does
+            the narrator like?</AudioText>
           </div>
 
           {inputField(

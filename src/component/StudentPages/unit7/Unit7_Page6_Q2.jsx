@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Jimmy is feeling disappointed..mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/John doesn’t want to play basketball..mp3";
 import { PassageAudio } from "../review3&4/PassageAudio";
 import clip0 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_001_David_and_his_little_brother,_Jimmy,_are_playing_basketball_in_their_bac.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U7/Page 63 - D/Item_002_His_brother_does_not_like_this._He_walks_away_from_the_game._Are_you_lea.mp3";
@@ -326,7 +328,7 @@ const Unit7_Page6_Q2 = () => {
               {/* QUESTION */}
               <SentenceGroup
                 label={`Hear statement ${i + 1}: ${q.question}`}
-                src={[clip6, clip7][i]}
+                src={[clip6, clip7, missingNew0, missingNew1][i]}
                 id={`statement-${i}`}
                 audio={audio}
                 className="text-[18px] w-[470px]"

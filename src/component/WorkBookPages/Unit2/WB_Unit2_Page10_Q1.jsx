@@ -1,3 +1,6 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I’m going to go on all the.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/rides!.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/Not me! I will settle for the simple rides, like the.mp3";
 import soundC25 from "../../../assets/audio/Workbook/unit 2/Page 10 - C/Item_025_Dad_That's_not_a_lo!.mp3";
 import soundC24 from "../../../assets/audio/Workbook/unit 2/Page 10 - C/Item_024_Jack_I_don't_like_to.mp3";
 import soundC23 from "../../../assets/audio/Workbook/unit 2/Page 10 - C/Item_023_Dad_Well,_it_may_be_30_minutes.mp3";
@@ -641,11 +644,11 @@ const WB_Unit2_Page10_Q1 = () => {
               </AudioText>
             </span>
 
-            <span>I’m going to go on all the</span>
+            <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear I’m going to go on all the">I’m going to go on all the</AudioText></span>
 
             {inputField(6, "w-[140px]")}
 
-            <span>rides!</span>
+            <span><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear rides!">rides!</AudioText></span>
           </div>
 
           {/* DAD + IMAGE */}
@@ -662,7 +665,7 @@ const WB_Unit2_Page10_Q1 = () => {
                 </AudioText>
               </span>
 
-              <span>Not me! I will settle for the simple rides, like the</span>
+              <span><AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear Not me! I will settle for the simple rides, like the">Not me! I will settle for the simple rides, like the</AudioText></span>
 
               {inputField(7, "w-[220px]")}
 

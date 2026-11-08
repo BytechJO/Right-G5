@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I.mp3";
 import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_001_late.mp3";
 import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_002_How.mp3";
 import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 5 - H/Item_003_am.mp3";
@@ -284,12 +285,13 @@ const WB_Unit1_Page5_Q4 = () => {
               <div className="flex items-center gap-8 min-w-[380px]">
                 {words.map((word, index) => (
                   <span key={index}>
-                    {word.toLowerCase().replace(/\?/g, "") !== "i" ? (
+                    {(
                       <AudioText
                         audio={audio}
                         id={`scrambled-${i}-${index}`}
                         src={
                           {
+                            i: missingNew0,
                             late: clip0,
                             how: clip1,
                             am: clip2,
@@ -308,8 +310,6 @@ const WB_Unit1_Page5_Q4 = () => {
                       >
                         {word}
                       </AudioText>
-                    ) : (
-                      word
                     )}
                   </span>
                 ))}

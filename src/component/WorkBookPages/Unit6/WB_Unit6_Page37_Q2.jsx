@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/We might ride the train..mp3";
 import soundL6 from "../../../assets/audio/Workbook/Unit 6/Page 37 - L/Item_006_She_couldn't_go_to_school_today.mp3";
 import soundL5 from "../../../assets/audio/Workbook/Unit 6/Page 37 - L/Item_005_She_can_ride_a_bike.mp3";
 import soundL2 from "../../../assets/audio/Workbook/Unit 6/Page 37 - L/Item_002_We_will_go_to_the_museum.mp3";
@@ -396,11 +397,11 @@ const WB_Unit_Page_Q29 = () => {
               {/* SENTENCE */}
 
               <div className="text-center leading-[1.4]">
-                {[soundL1, soundL2, soundL5, soundL6, null][index] ? (
+                {[soundL1, soundL2, soundL5, soundL6, missingNew0][index] ? (
                   <AudioText
                     audio={audio}
                     id={`sentence-${index}`}
-                    src={[soundL1, soundL2, soundL5, soundL6, null][index]}
+                    src={[soundL1, soundL2, soundL5, soundL6, missingNew0][index]}
                     label={`Hear sentence ${index + 1}: ${item.sentence}`}
                   >
                     {item.sentence}

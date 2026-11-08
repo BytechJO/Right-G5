@@ -1,3 +1,8 @@
+import missingNew0 from "../../../assets/audio/G5-missing/instructions to make a food dish.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/all.mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/referring to two things.mp3";
+import missingNew3 from "../../../assets/audio/G5-missing/a meal prepared outside, using a grill.mp3";
+import missingNew4 from "../../../assets/audio/G5-missing/an activity performed in front of people to explain or show something.mp3";
 import soundA7 from "../../../assets/audio/Workbook/Unit 5/Page 27 - A/Item_007_ind_books_ina.mp3";
 import soundA3 from "../../../assets/audio/Workbook/Unit 5/Page 27 - A/Item_003_job_or_task_that_is_given_to_someone.mp3";
 import soundA6 from "../../../assets/audio/Workbook/Unit 5/Page 27 - A/Item_006_facts_about_people.mp3";
@@ -304,7 +309,7 @@ const tabCell=!cellLocked(activeCell)?activeCell:Object.keys(cells).sort((a,b)=>
             <h3 className="text-center font-bold mb-3"><AudioText audio={audio} id={"fragment-0"} src={soundA1} label={"Hear Down"}>Down</AudioText></h3>
 
             {cluesDown.map((clue) => (
-              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">{({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7})[clue[0]]?<SentenceGroup audio={audio} id={`clue-${clue[0]}`} src={({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7})[clue[0]]} label={`Hear clue ${clue[0]}: ${clue[1]}`} className="flex gap-3 leading-[1.2]">
+              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">{({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7,"5":missingNew0,"6":missingNew1,"8":missingNew2,"9":missingNew3,"10":missingNew4})[clue[0]]?<SentenceGroup audio={audio} id={`clue-${clue[0]}`} src={({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7,"5":missingNew0,"6":missingNew1,"8":missingNew2,"9":missingNew3,"10":missingNew4})[clue[0]]} label={`Hear clue ${clue[0]}: ${clue[1]}`} className="flex gap-3 leading-[1.2]">
                 <span className="font-bold">{clue[0]}</span>
                 <span>{clue[1]}</span>
               </SentenceGroup>:<>
@@ -318,7 +323,7 @@ const tabCell=!cellLocked(activeCell)?activeCell:Object.keys(cells).sort((a,b)=>
             <h3 className="text-center font-bold mb-3"><AudioText audio={audio} id={"fragment-1"} src={soundA2} label={"Hear Across"}>Across</AudioText></h3>
 
             {cluesAcross.map((clue) => (
-              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">{({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7})[clue[0]]?<SentenceGroup audio={audio} id={`clue-${clue[0]}`} src={({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7})[clue[0]]} label={`Hear clue ${clue[0]}: ${clue[1]}`} className="flex gap-3 leading-[1.2]">
+              <div key={clue[0]} className="flex gap-3 leading-[1.2] mb-1">{({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7,"5":missingNew0,"6":missingNew1,"8":missingNew2,"9":missingNew3,"10":missingNew4})[clue[0]]?<SentenceGroup audio={audio} id={`clue-${clue[0]}`} src={({"1":soundA4,"2":soundA5,"3":soundA6,"4":soundA3,"7":soundA7,"5":missingNew0,"6":missingNew1,"8":missingNew2,"9":missingNew3,"10":missingNew4})[clue[0]]} label={`Hear clue ${clue[0]}: ${clue[1]}`} className="flex gap-3 leading-[1.2]">
                 <span className="font-bold">{clue[0]}</span>
                 <span>{clue[1]}</span>
               </SentenceGroup>:<>

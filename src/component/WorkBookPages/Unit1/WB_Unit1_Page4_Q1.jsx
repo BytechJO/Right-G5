@@ -1,3 +1,6 @@
+import missingNew0 from "../../../assets/audio/G5-missing/He said,.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/I was at a monster party last night..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/thought I was prepared,.mp3";
 import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_001_face.mp3";
 import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_002_actually.mp3";
 import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_003_on_one_side.mp3";
@@ -22,7 +25,7 @@ import clip20 from "../../../assets/audio/Workbook/Unit 1/Page 4 - C/Item_021_Th
 import ExerciseHeader from "../../ExerciseHeader";
 import {useExerciseAudio} from "../../StudentPages/unit5/useExerciseAudio";
 import {AudioText,AudioFeedback} from "../../StudentPages/unit5/ExerciseAudioText";
-import {SentenceGroup} from "../../StudentPages/unit5/SentenceAudio";
+import {SentenceGroup, SentencePart} from "../../StudentPages/unit5/SentenceAudio";
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -294,24 +297,24 @@ const WB_Unit1_Page4_Q1 = () => {const audio=useExerciseAudio();const resetButto
           <SentenceGroup label={"Hear poem line 12"} src={clip20} id={"poem-line-11"} audio={audio}>That’s not a face of a teacher.”</SentenceGroup>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span>He said, “</span>
+            <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear He said,">He said,</AudioText> “</span>
 
             {inputField(7, "w-[140px]")}
 
-            <span>! I was at a monster party last night.</span>
+            <span>! <SentencePart first audio={audio} id="missing-1" src={missingNew1} label={"Hear I was at a monster party last night. I’m sorry if I had given you a fright."}>I was at a monster party last night.</SentencePart></span>
           </div>
 
-          <div>I’m sorry if I had given you a fright.</div>
+          <div><SentencePart audio={audio} id="missing-1" src={missingNew1} label={"Hear I was at a monster party last night. I’m sorry if I had given you a fright."}>I’m sorry if I had given you a fright.</SentencePart></div>
 
           <div className="flex flex-wrap items-center gap-2">
             <span>I</span>
 
             {inputField(8, "w-[170px]")}
 
-            <span>thought I was prepared,</span>
+            <span><SentencePart first audio={audio} id="missing-2" src={missingNew2} label={"Hear thought I was prepared, I did not mean to make you scared!”"}>thought I was prepared,</SentencePart></span>
           </div>
 
-          <div>I did not mean to make you scared!”</div>
+          <div><SentencePart audio={audio} id="missing-2" src={missingNew2} label={"Hear thought I was prepared, I did not mean to make you scared!”"}>I did not mean to make you scared!”</SentencePart></div>
         </div>
       </div>
 

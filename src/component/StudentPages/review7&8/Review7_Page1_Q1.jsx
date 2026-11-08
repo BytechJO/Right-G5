@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Anyway, now the workers are starting to wonder if maybe this was a donation. As the older man walked away,.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/I thought to myself that I hoped the treasure box really was a donation and that the orphanage could keep the money..mp3";
 import clip0 from "../../../assets/audio/ClassBook/U8/Page 70 - A/Item_001_limping.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U8/Page 70 - A/Item_002_stiff.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U8/Page 70 - A/Item_003_oddly.mp3";
@@ -612,11 +614,11 @@ const Review7_Page1_Q1 = () => {
 
           {/* Paragraph 3 */}
           <p>
-            Anyway, now the workers are starting to wonder if maybe this was a
-            donation. As the older man walked away, {inputField(7, "w-[180px]")}{" "}
-            and {inputField(8, "w-[160px]")}, I thought to myself that I hoped
+            <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear Anyway, now the workers are starting to wonder if maybe this was a donation. As the older man walked away,">Anyway, now the workers are starting to wonder if maybe this was a
+            donation. As the older man walked away,</AudioText> {inputField(7, "w-[180px]")}{" "}
+            and {inputField(8, "w-[160px]")}, <AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear I thought to myself that I hoped the treasure box really was a donation and that the orphanage could keep the money.">I thought to myself that I hoped
             the treasure box really was a donation and that the orphanage could
-            keep the money.
+            keep the money.</AudioText>
           </p>
         </div>
       </div>

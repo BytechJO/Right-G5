@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/You’re always in for something fun to do!.mp3";
 import soundK24 from "../../../assets/audio/Workbook/unit 2/Page 14 - K/Item_024_Whether_you_go_on_many_rides_or_only_a.mp3";
 import soundK23 from "../../../assets/audio/Workbook/unit 2/Page 14 - K/Item_023_They_can_make_us_la.mp3";
 import soundK22 from "../../../assets/audio/Workbook/unit 2/Page 14 - K/Item_022_Rides_are_funny_and_scary_because_they_go_up_and_down,.mp3";
@@ -262,7 +263,7 @@ const WB_Unit2_Page14_Q1 = () => {
             <span>,</span>
           </div>
 
-          <div>You’re always in for something fun to do!</div>
+          <div><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear You’re always in for something fun to do!">You’re always in for something fun to do!</AudioText></div>
         </div>
 
         {/* IMAGE */}

@@ -1,3 +1,4 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I.mp3";
 import soundC9 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_009_snowman._(make).mp3";
 import soundC8 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_008_While_the_snow_fell,_she.mp3";
 import soundC7 from "../../../assets/audio/Workbook/Unit 10/Page 58 - C/Item_007_their_favorite_songs._(sing).mp3";
@@ -350,11 +351,11 @@ const WB_Unit_Test_Q27 = () => {
               {/* BEFORE */}
 
               <span>
-                {[soundC2, soundC4, null, soundC6, soundC8][index] ? (
+                {[soundC2, soundC4, missingNew0, soundC6, soundC8][index] ? (
                   <AudioText
                     audio={audio}
                     id={`before-${index}`}
-                    src={[soundC2, soundC4, null, soundC6, soundC8][index]}
+                    src={[soundC2, soundC4, missingNew0, soundC6, soundC8][index]}
                     label={"Hear " + q.before}
                   >
                     {q.before}

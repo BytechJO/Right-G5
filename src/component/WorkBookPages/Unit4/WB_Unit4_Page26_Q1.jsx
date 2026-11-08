@@ -1,3 +1,9 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Then, we went to the.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/store to buy a new cell phone..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/Then, it was time to.mp3";
+import missingNew3 from "../../../assets/audio/G5-missing/to the parking lot, get in the car, and go home..mp3";
+import missingNew4 from "../../../assets/audio/G5-missing/I.mp3";
+import missingNew5 from "../../../assets/audio/G5-missing/We all had fun shopping..mp3";
 import soundK30 from "../../../assets/audio/Workbook/Unit 4/Page 26 - K/Item_030_and_black_leather.mp3";
 import soundK29 from "../../../assets/audio/Workbook/Unit 4/Page 26 - K/Item_029_He_had_bought_blue.mp3";
 import soundK26 from "../../../assets/audio/Workbook/Unit 4/Page 26 - K/Item_026_makes_the_best_food.mp3";
@@ -283,7 +289,7 @@ const WB_Unit4_Page26_Q1 = () => {const audio=useExerciseAudio();const resetButt
           <p><AudioText audio={audio} id="fragment-4" src={soundK18} label="Hear Dad needed clothes, so he went to the">Dad needed clothes, so he went to the</AudioText> {inputField(2, "180px")}.</p>
 
           <p>
-            “{inputField(3, "180px")},” I <AudioText audio={audio} id="fragment-5" src={soundK19} label="Hear said, as">said, as</AudioText> I <AudioText audio={audio} id="fragment-6" src={soundK20} label="Hear saw my mom in the">saw my mom in the</AudioText>{" "}
+            “{inputField(3, "180px")},” <AudioText audio={audio} id="missing-5" src={missingNew4} label="Hear I">I</AudioText> <AudioText audio={audio} id="fragment-5" src={soundK19} label="Hear said, as">said, as</AudioText> <AudioText audio={audio} id="missing-4" src={missingNew4} label="Hear I">I</AudioText> <AudioText audio={audio} id="fragment-6" src={soundK20} label="Hear saw my mom in the">saw my mom in the</AudioText>{" "}
             {inputField(4, "180px")} <AudioText audio={audio} id="fragment-7" src={soundK21} label="Hear looking for some food to">looking for some food to</AudioText> <AudioText audio={audio} id="fragment-8" src={soundK22} label="Hear eat.">eat.</AudioText> </p>
 
           <p> “<AudioText audio={audio} id="fragment-9" src={soundK23} label="Hear I’m hungry, too. Let’s">I’m hungry, too. Let’s</AudioText> {inputField(5, "180px")} a <AudioText audio={audio} id="fragment-10" src={soundK24} label="Hear place that sells cooked meat. The one here">place that sells cooked meat. The one here</AudioText> {inputField(6, "220px")} <AudioText audio={audio} id="fragment-11" src={soundK25} label="Hear of us">of us</AudioText> <AudioText audio={audio} id="fragment-12" src={soundK26} label="Hear makes the best food.">makes the best food.</AudioText>” </p>
@@ -297,15 +303,15 @@ const WB_Unit4_Page26_Q1 = () => {const audio=useExerciseAudio();const resetButt
           </p>
 
           <p>
-            Then, we went to the {inputField(9, "180px")} store to buy a new
-            cell phone.
+            <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear Then, we went to the">Then, we went to the</AudioText> {inputField(9, "180px")} <AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear store to buy a new cell phone.">store to buy a new
+            cell phone.</AudioText>
           </p>
 
-          <p><AudioText audio={audio} id="fragment-17" src={soundK16} label="Hear We">We</AudioText> all had fun shopping.</p>
+          <p><AudioText audio={audio} id="fragment-17" src={missingNew5} label="Hear We all had fun shopping">We all had fun shopping.</AudioText></p>
 
           <p>
-            Then, it was time to {inputField(10, "220px")} to the parking lot,
-            get in the car, and go home.
+            <AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear Then, it was time to">Then, it was time to</AudioText> {inputField(10, "220px")} <AudioText audio={audio} id="missing-3" src={missingNew3} label="Hear to the parking lot, get in the car, and go home.">to the parking lot,
+            get in the car, and go home.</AudioText>
           </p>
         </div>
       </div>

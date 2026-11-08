@@ -1,3 +1,6 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I’m scared of.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/is one of my favorite rides..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/I.mp3";
 import soundA15 from "../../../assets/audio/Workbook/unit 2/Page 9 - A/Item_015_this_summer!.mp3";
 import soundA14 from "../../../assets/audio/Workbook/unit 2/Page 9 - A/Item_014_to_fun_places_on_the_weekend.mp3";
 import soundA13 from "../../../assets/audio/Workbook/unit 2/Page 9 - A/Item_013_We_are_going_to_Europe.mp3";
@@ -352,7 +355,7 @@ const WB_Unit2_Page9_Q1 = () => {
             <div className="flex items-center gap-3 mb-4">
               <span className="font-bold">3</span>
 
-              <span>I</span>
+              <span><AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear I">I</AudioText></span>
 
               {inputField(2, "w-[160px]")}
 
@@ -457,7 +460,7 @@ const WB_Unit2_Page9_Q1 = () => {
               {inputField(4, "w-[220px]")}
             </div>
 
-            <div className="ml-7 mb-4">is one of my favorite rides.</div>
+            <div className="ml-7 mb-4"><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear is one of my favorite rides.">is one of my favorite rides.</AudioText></div>
 
             <div className="flex gap-4">
               <img src={questions[4].image} alt={"A colorful carousel with a striped roof."} style={{
@@ -500,7 +503,7 @@ const WB_Unit2_Page9_Q1 = () => {
             <div className="flex items-center gap-3 mb-4">
               <span className="font-bold">6</span>
 
-              <span>I’m scared of</span>
+              <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear I’m scared of">I’m scared of</AudioText></span>
 
               {inputField(5, "w-[150px]")}
             </div>

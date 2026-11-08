@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/Why do you think everyone was getting hungry.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/Underline the past progressive phrases in the story..mp3";
 import soundK12 from "../../../assets/audio/Workbook/Unit 10/Page 61 - K/Item_012_Why_were_the_narrator_and_his_family_having_a_special_dinner_last_night.mp3";
 import soundK11 from "../../../assets/audio/Workbook/Unit 10/Page 61 - K/Item_011_think_I_ate_too_much!.mp3";
 import soundK10 from "../../../assets/audio/Workbook/Unit 10/Page 61 - K/Item_010_was_getting_sleepy.mp3";
@@ -694,7 +696,7 @@ from the cupboard. My sister, Ana, was putting the plates neatly on the table. S
           <div className="flex items-start gap-4 mb-5">
             <span className="font-bold">2</span>
 
-            <span>Why do you think everyone was getting hungry?</span>
+            <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear Why do you think everyone was getting hungry?">Why do you think everyone was getting hungry?</AudioText></span>
           </div>
 
           <div className="pl-[35px]">{inputField(1)}</div>
@@ -707,7 +709,7 @@ from the cupboard. My sister, Ana, was putting the plates neatly on the table. S
             <span className="font-bold">3</span>
 
             <span className="flex items-center gap-2">
-              Underline the past progressive phrases in the story.
+              <AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear Underline the past progressive phrases in the story.">Underline the past progressive phrases in the story.</AudioText>
               <HiArrowUpCircle
                 onClick={returnToStory}
                 aria-label={"Return to the story above"}

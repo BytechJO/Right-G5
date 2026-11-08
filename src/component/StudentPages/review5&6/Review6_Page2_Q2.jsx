@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/But then we might.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/Of trying.mp3";
 import clip0 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_001_It_could_be_a_feather.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_002_It_could_be.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_003_It_might_be_a_toad.mp3";
@@ -599,7 +601,7 @@ const Review6_Page2_Q1 = () => {
 
             {/* 11 */}
             <div className="flex items-end text-[18px]">
-              <span>But then we might</span>
+              <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear But then we might">But then we might</AudioText></span>
 
               <input placeholder={"Your line"}
                 title={"Your poem, response 11"}
@@ -625,7 +627,7 @@ const Review6_Page2_Q1 = () => {
 
             {/* 12 */}
             <div className="flex items-end text-[18px]">
-              <span>Of trying</span>
+              <span><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear Of trying">Of trying</AudioText></span>
 
               <input placeholder={"Your line"}
                 title={"Your poem, response 12"}

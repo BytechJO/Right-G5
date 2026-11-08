@@ -1,3 +1,5 @@
+import missingNew0 from "../../../assets/audio/G5-missing/What should John do next time before an exam.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/How long does it take you to study.mp3";
 import clip0 from "../../../assets/audio/Workbook/Unit 1/Page 7 - K/Item_001_How_many_hours_do_you_spend_studying_for_an_exam_How_many_times_have.mp3";
 import clip1 from "../../../assets/audio/Workbook/Unit 1/Page 7 - K/Item_002_you_fallen_asleep_while_doing_your_homework_or_studying_Did_you_ever_sle.mp3";
 import clip2 from "../../../assets/audio/Workbook/Unit 1/Page 7 - K/Item_003_on_your_books_This_happens_to_almost_every_student._Studying_takes_up_a.mp3";
@@ -264,7 +266,7 @@ const WB_Unit1_Page7_Q1 = () => {const audio=useExerciseAudio();const resetButto
             <div className="flex gap-3 mb-4">
               <span className="font-bold">3</span>
 
-              <span>What should John do next time before an exam?</span>
+              <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear What should John do next time before an exam?">What should John do next time before an exam?</AudioText></span>
             </div>
 
             <div className="pl-7">{inputField(2)}</div>
@@ -275,7 +277,7 @@ const WB_Unit1_Page7_Q1 = () => {const audio=useExerciseAudio();const resetButto
             <div className="flex gap-3 mb-4">
               <span className="font-bold">4</span>
 
-              <span>How long does it take you to study?</span>
+              <span><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear How long does it take you to study?">How long does it take you to study?</AudioText></span>
             </div>
 
             <div className="pl-7">{inputField(3, "Answers will vary")}</div>

@@ -1,3 +1,6 @@
+import missingNew0 from "../../../assets/audio/G5-missing/I got a 40.mp3";
+import missingNew1 from "../../../assets/audio/G5-missing/on this pair of jeans..mp3";
+import missingNew2 from "../../../assets/audio/G5-missing/I like to.mp3";
 import soundA19 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/Item_019_new.mp3";
 import soundD2 from "../../../assets/audio/Workbook/Unit 6/Page 34 - D/Item_002_half_price.mp3";
 import soundD10 from "../../../assets/audio/Workbook/Unit 6/Page 34 - D/Item_010_made_it.mp3";
@@ -699,12 +702,12 @@ const WB_Unit6_Page33_Q1 = () => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap"> I got a 40%</span>
+                  <span className="whitespace-nowrap"> <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear I got a 40%">I got a 40%</AudioText></span>
 
                   {inputField(4, "w-[180px]")}
                 </div>
 
-                <span className="mt-2">on this pair of jeans.</span>
+                <span className="mt-2"><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear on this pair of jeans.">on this pair of jeans.</AudioText></span>
               </div>
             </div>
             <div className="flex gap-4">
@@ -756,7 +759,7 @@ const WB_Unit6_Page33_Q1 = () => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap"> I like to </span>
+                  <span className="whitespace-nowrap"> <AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear I like to">I like to</AudioText> </span>
                   {inputField(5, "w-[180px]")}{" "}
                   <AudioText
                     audio={audio}
