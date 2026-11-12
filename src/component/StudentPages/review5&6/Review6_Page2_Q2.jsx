@@ -17,6 +17,11 @@ import clip13 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_014_No,_
 import clip14 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_015_I_know!_It_could_be_snow.mp3";
 import clip15 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_016_I_know!.mp3";
 import clip16 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Item_017_We_could_have_all_the_answers.mp3";
+import clip17 from "../../../assets/audio/ClassBook/U6/Page 55 - F/By looking inside.mp3";
+import clip18 from "../../../assets/audio/ClassBook/U6/Page 55 - F/But then we might miss all the fun.mp3";
+import clip19 from "../../../assets/audio/ClassBook/U6/Page 55 - F/Of trying to decide.mp3";
+import clip20 from "../../../assets/audio/ClassBook/U6/Page 55 - F/We could.mp3";
+import clip21 from "../../../assets/audio/ClassBook/U6/Page 55 - F/By_.mp3";
 import ExerciseHeader from "../../ExerciseHeader";
 import { useExerciseAudio } from "../unit5/useExerciseAudio";
 import {
@@ -139,7 +144,7 @@ const Review6_Page2_Q1 = () => {
       >
         {announcement}
       </div>
-      <div className="div-forall" style={{gap:"30px"}}>
+      <div className="div-forall" style={{ gap: "30px" }}>
         {/* TITLE */}
         <ExerciseHeader
           isReview
@@ -194,6 +199,9 @@ const Review6_Page2_Q1 = () => {
                       clip12,
                       clip14,
                       clip16,
+                      clip17,
+                      clip18,
+                      clip19,
                     ][lineIndex]
                   }
                   id={`poem-${lineIndex}`}
@@ -283,7 +291,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It could be</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 1"}
                 aria-label={"Your poem, response 1"}
                 {...fieldKeys}
@@ -317,7 +326,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It might be</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 2"}
                 aria-label={"Your poem, response 2"}
                 {...fieldKeys}
@@ -351,7 +361,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Might it be a</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 3"}
                 aria-label={"Your poem, response 3"}
                 {...fieldKeys}
@@ -385,7 +396,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>It couldn’t be a</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 4"}
                 aria-label={"Your poem, response 4"}
                 {...fieldKeys}
@@ -419,7 +431,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Will you</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 5"}
                 aria-label={"Your poem, response 5"}
                 {...fieldKeys}
@@ -453,7 +466,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>Would you</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 6"}
                 aria-label={"Your poem, response 6"}
                 {...fieldKeys}
@@ -487,7 +501,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>No, let’s</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 7"}
                 aria-label={"Your poem, response 7"}
                 {...fieldKeys}
@@ -521,7 +536,8 @@ const Review6_Page2_Q1 = () => {
             >
               <span>I know!</span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 8"}
                 aria-label={"Your poem, response 8"}
                 {...fieldKeys}
@@ -547,16 +563,24 @@ const Review6_Page2_Q1 = () => {
 
             {/* 9 */}
             <div className="flex items-end text-[18px]">
-              <span>We could</span>
+              <SentenceGroup
+                label="Hear your poem starter 9"
+                src={clip20}
+                id="writing-clue-8"
+                audio={audio}
+                className="flex items-end text-[18px]"
+              >
+                <span>We could</span>
 
-              <input placeholder={"Your line"}
-                title={"Your poem, response 9"}
-                aria-label={"Your poem, response 9"}
-                {...fieldKeys}
-                type="text"
-                value={answers[8]}
-                onChange={(e) => handleChange(8, e.target.value)}
-                className="
+                <input
+                  placeholder={"Your line"}
+                  title={"Your poem, response 9"}
+                  aria-label={"Your poem, response 9"}
+                  {...fieldKeys}
+                  type="text"
+                  value={answers[8]}
+                  onChange={(e) => handleChange(8, e.target.value)}
+                  className="
                   flex-1
                   border-0
                   border-b
@@ -568,21 +592,30 @@ const Review6_Page2_Q1 = () => {
                   ml-2
                   text-[#6D2980]
                 "
-              />
+                />
+              </SentenceGroup>
             </div>
 
             {/* 10 */}
             <div className="flex items-end text-[18px]">
-              <span>By</span>
+              <SentenceGroup
+                label="Hear your poem starter 10"
+                src={clip21}
+                id="writing-clue-9"
+                audio={audio}
+                className="flex items-end text-[18px]"
+              >
+                <span>By</span>
 
-              <input placeholder={"Your line"}
-                title={"Your poem, response 10"}
-                aria-label={"Your poem, response 10"}
-                {...fieldKeys}
-                type="text"
-                value={answers[9]}
-                onChange={(e) => handleChange(9, e.target.value)}
-                className="
+                <input
+                  placeholder={"Your line"}
+                  title={"Your poem, response 10"}
+                  aria-label={"Your poem, response 10"}
+                  {...fieldKeys}
+                  type="text"
+                  value={answers[9]}
+                  onChange={(e) => handleChange(9, e.target.value)}
+                  className="
                   flex-1
                   border-0
                   border-b
@@ -594,16 +627,27 @@ const Review6_Page2_Q1 = () => {
                   ml-2
                   text-[#6D2980]
                 "
-              />
+                />
+              </SentenceGroup>
 
               <span>.</span>
             </div>
 
             {/* 11 */}
             <div className="flex items-end text-[18px]">
-              <span><AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear But then we might">But then we might</AudioText></span>
+              <span>
+                <AudioText
+                  audio={audio}
+                  id="missing-0"
+                  src={missingNew0}
+                  label="Hear But then we might"
+                >
+                  But then we might
+                </AudioText>
+              </span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 11"}
                 aria-label={"Your poem, response 11"}
                 {...fieldKeys}
@@ -627,9 +671,19 @@ const Review6_Page2_Q1 = () => {
 
             {/* 12 */}
             <div className="flex items-end text-[18px]">
-              <span><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear Of trying">Of trying</AudioText></span>
+              <span>
+                <AudioText
+                  audio={audio}
+                  id="missing-1"
+                  src={missingNew1}
+                  label="Hear Of trying"
+                >
+                  Of trying
+                </AudioText>
+              </span>
 
-              <input placeholder={"Your line"}
+              <input
+                placeholder={"Your line"}
                 title={"Your poem, response 12"}
                 aria-label={"Your poem, response 12"}
                 {...fieldKeys}

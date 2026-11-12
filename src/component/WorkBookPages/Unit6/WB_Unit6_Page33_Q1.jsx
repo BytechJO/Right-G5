@@ -22,6 +22,10 @@ import soundA4 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/Item_004_
 import soundA3 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/Item_003_of_gifts_for_my_birthday.mp3";
 import soundA2 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/Item_002_Iwonanice.mp3";
 import soundA1 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/Item_001_My_dad_gave_mea.mp3";
+import soundb0 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/games and see if I like them..mp3";
+import soundb1 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/discount.mp3";
+import soundb2 from "../../../assets/audio/Workbook/Unit 6/Page 33 - A/doll.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 import { useExerciseAudio } from "../../StudentPages/unit5/useExerciseAudio";
 import {
@@ -83,6 +87,8 @@ const WB_Unit6_Page33_Q1 = () => {
       "try out": soundD8,
       "made it": soundD10,
       "half price": soundD2,
+      discount: soundb1,
+      doll: soundb2,
     })[word];
   const [announcement, setAnnouncement] = React.useState("");
 
@@ -337,9 +343,7 @@ const WB_Unit6_Page33_Q1 = () => {
           width: "fit-content",
           borderRadius: 999,
           backgroundColor:
-            audio.activeId === `word-${i}-${option}` 
-              ? "#dbeafe"
-              : undefined,
+            audio.activeId === `word-${i}-${option}` ? "#dbeafe" : undefined,
           boxShadow:
             audio.activeId === `word-${i}-${option}`
               ? "0 0 0 3px #2563eb"
@@ -702,12 +706,31 @@ const WB_Unit6_Page33_Q1 = () => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap"> <AudioText audio={audio} id="missing-0" src={missingNew0} label="Hear I got a 40%">I got a 40%</AudioText></span>
+                  <span className="whitespace-nowrap">
+                    {" "}
+                    <AudioText
+                      audio={audio}
+                      id="missing-0"
+                      src={missingNew0}
+                      label="Hear I got a 40%"
+                    >
+                      I got a 40%
+                    </AudioText>
+                  </span>
 
                   {inputField(4, "w-[180px]")}
                 </div>
 
-                <span className="mt-2"><AudioText audio={audio} id="missing-1" src={missingNew1} label="Hear on this pair of jeans.">on this pair of jeans.</AudioText></span>
+                <span className="mt-2">
+                  <AudioText
+                    audio={audio}
+                    id="missing-1"
+                    src={missingNew1}
+                    label="Hear on this pair of jeans."
+                  >
+                    on this pair of jeans.
+                  </AudioText>
+                </span>
               </div>
             </div>
             <div className="flex gap-4">
@@ -759,7 +782,17 @@ const WB_Unit6_Page33_Q1 = () => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap"> <AudioText audio={audio} id="missing-2" src={missingNew2} label="Hear I like to">I like to</AudioText> </span>
+                  <span className="whitespace-nowrap">
+                    {" "}
+                    <AudioText
+                      audio={audio}
+                      id="missing-2"
+                      src={missingNew2}
+                      label="Hear I like to"
+                    >
+                      I like to
+                    </AudioText>{" "}
+                  </span>
                   {inputField(5, "w-[180px]")}{" "}
                   <AudioText
                     audio={audio}
@@ -771,7 +804,16 @@ const WB_Unit6_Page33_Q1 = () => {
                   </AudioText>
                 </div>
 
-                <span className="mt-2">games and see if I like them.</span>
+                <span className="mt-2">
+                  <AudioText
+                    audio={audio}
+                    id="missing-3"
+                    src={soundb0}
+                    label="Hear I like to"
+                  >
+                    games and see if I like them.
+                  </AudioText>
+                </span>
               </div>
             </div>
 

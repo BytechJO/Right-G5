@@ -3,6 +3,7 @@ import { SentenceGroup } from "./SentenceAudio";
 import clip0 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_001_Who_goes_to_the_carnival_and_probably_wins_a_trophy_on_Friday.mp3";
 import clip1 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_002_Who_is_helping_his_dad_with_the_car_engine.mp3";
 import clip2 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Item_003_Who_gets_a_trophy_on_Tuesday.mp3";
+import clip3 from "../../../assets/audio/ClassBook/U2/Page 15 - C/Who rides the Ferris wheel on Monday.mp3";
 import { useExerciseAudio } from "./useExerciseAudio";
 import { AudioText, AudioFeedback, AudioSpeaker } from "./ExerciseAudioText";
 import ExerciseHeader from "../../ExerciseHeader";
@@ -272,7 +273,7 @@ const Page9_Q3 = () => {
             <SentenceGroup
               audio={audio}
               id="sentence-2"
-              src={clip2}
+              src={clip3}
               label="Hear the sentence: blank 3 Who rides the Ferris wheel on Monday?"
             >
               {input(2)} <span className="font-bold mr-2">3</span> Who rides the

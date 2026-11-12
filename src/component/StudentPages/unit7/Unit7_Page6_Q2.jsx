@@ -338,7 +338,8 @@ const Unit7_Page6_Q2 = () => {
 
               {/* INPUT */}
               <div className="relative">
-                <input placeholder={"True/false"}
+                <input
+                  placeholder={"True/false"}
                   style={{
                     ...(result[i] === true
                       ? { borderBottomColor: "#16a34a" }

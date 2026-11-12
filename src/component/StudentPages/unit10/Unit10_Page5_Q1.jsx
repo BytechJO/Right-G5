@@ -9,19 +9,49 @@ import clip7 from "../../../assets/audio/ClassBook/U10/Page 86 - A/Item_008_To_h
 import clip8 from "../../../assets/audio/ClassBook/U10/Page 86 - A/Item_009_Happy,_sad,_lively,_or_mad,.mp3";
 import clip9 from "../../../assets/audio/ClassBook/U10/Page 86 - A/Item_010_These_can_be_good_or_sometimes_bad.mp3";
 import clip10 from "../../../assets/audio/ClassBook/U10/Page 86 - A/Item_011_A_piano_is_one,_and_so_is_a_violin,.mp3";
+import clip11 from "../../../assets/audio/ClassBook/U10/Page 86 - A/Almost any will make me grin.mp3";
 import ExerciseHeader from "../../ExerciseHeader";
-import {useExerciseAudio} from "../unit5/useExerciseAudio";
-import {AudioText,AudioFeedback} from "../unit5/ExerciseAudioText";
+import { useExerciseAudio } from "../unit5/useExerciseAudio";
+import { AudioText, AudioFeedback } from "../unit5/ExerciseAudioText";
 
 import React, { useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-const activationKeys={onKeyDown:event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();event.stopPropagation();if(!event.repeat)event.currentTarget.click();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();event.stopPropagation();}}};
-const fieldKeys={onKeyDown:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();},onKeyUp:event=>{if(event.key==="Enter"||event.key===" ")event.stopPropagation();}};
-const normalizeAnswer=text=>text.normalize("NFKC").toLowerCase().replace(/[‘’']/g,"").replace(/[.,!?;:…“”"–—-]/g," ").replace(/\s+/g," ").trim();
+const activationKeys = {
+  onKeyDown: (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) event.currentTarget.click();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+};
+const fieldKeys = {
+  onKeyDown: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+  onKeyUp: (event) => {
+    if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+  },
+};
+const normalizeAnswer = (text) =>
+  text
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[‘’']/g, "")
+    .replace(/[.,!?;:…“”"–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-
-const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonRef=React.useRef(null);const [announcement,setAnnouncement]=React.useState("");
+const Unit10_Page5_Q1 = () => {
+  const audio = useExerciseAudio();
+  const resetButtonRef = React.useRef(null);
+  const [announcement, setAnnouncement] = React.useState("");
 
   const questions = [
     "symphony",
@@ -59,12 +89,19 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
   };
 
   const checkAnswers = () => {
-    if (locked) return;audio.stop();
+    if (locked) return;
+    audio.stop();
 
     const hasEmpty = answers.some((a) => !a.trim());
 
     if (hasEmpty) {
-      (setAnnouncement(String("Please complete all answers.").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.info("Please complete all answers."));
+      (setAnnouncement(
+        String("Please complete all answers.")
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.info("Please complete all answers."));
 
       return;
     }
@@ -95,17 +132,39 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
     `;
 
     if (correctCount === total) {
-      resetButtonRef.current?.focus({preventScroll:true});setLocked(true);
+      resetButtonRef.current?.focus({ preventScroll: true });
+      setLocked(true);
 
-      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.success(msg));
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.success(msg));
     } else if (correctCount === 0) {
-      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.error(msg));
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.error(msg));
     } else {
-      (setAnnouncement(String(msg).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()),ValidationAlert.warning(msg));
+      (setAnnouncement(
+        String(msg)
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+        ValidationAlert.warning(msg));
     }
   };
 
-  const showAnswers = () => {audio.stop();setAnnouncement("Model answers shown and locked.");resetButtonRef.current?.focus({preventScroll:true});
+  const showAnswers = () => {
+    audio.stop();
+    setAnnouncement("Model answers shown and locked.");
+    resetButtonRef.current?.focus({ preventScroll: true });
     setAnswers([
       "symphony",
       "harvesting",
@@ -120,7 +179,9 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
     setLocked(true);
   };
 
-  const handleReset = () => {audio.stop();setAnnouncement("Answers and feedback cleared.");
+  const handleReset = () => {
+    audio.stop();
+    setAnnouncement("Answers and feedback cleared.");
     setAnswers(["", "", "", "", "", ""]);
 
     setResult([]);
@@ -130,7 +191,15 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
 
   const inputField = (i, width) => (
     <span className="relative inline-block">
-      <input placeholder={"Word"} style={{...(result[i]===true?{borderBottomColor:"#16a34a"}:{})}} aria-invalid={result[i]===false} title={`Riddle ${i+1}, write its vocabulary word`} aria-label={`Riddle ${i+1}, write its vocabulary word`} {...fieldKeys}
+      <input
+        placeholder={"Word"}
+        style={{
+          ...(result[i] === true ? { borderBottomColor: "#16a34a" } : {}),
+        }}
+        aria-invalid={result[i] === false}
+        title={`Riddle ${i + 1}, write its vocabulary word`}
+        aria-label={`Riddle ${i + 1}, write its vocabulary word`}
+        {...fieldKeys}
         type="text"
         value={answers[i]}
         disabled={locked || result[i] === true}
@@ -177,13 +246,27 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
   );
 
   return (
-    <div data-exercise-scope={"Unit10_Page5_Q1.jsx"} className="flex flex-col items-center p-[30px]"><AudioFeedback audio={audio}/><style>{`[data-exercise-scope="Unit10_Page5_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page5_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page5_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style><div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</div>
-      <div className="div-forall" style={{gap:"30px"}}>
+    <div
+      data-exercise-scope={"Unit10_Page5_Q1.jsx"}
+      className="flex flex-col items-center p-[30px]"
+    >
+      <AudioFeedback audio={audio} />
+      <style>{`[data-exercise-scope="Unit10_Page5_Q1.jsx"] input:focus-visible,[data-exercise-scope="Unit10_Page5_Q1.jsx"] textarea:focus-visible,[data-exercise-scope="Unit10_Page5_Q1.jsx"] [data-choice]:focus-visible{outline:4px solid #2563eb!important;outline-offset:3px;border-radius:6px;}`}</style>
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
+      <div className="div-forall" style={{ gap: "30px" }}>
         {/* TITLE */}
-        <ExerciseHeader sectionLetter="A" title={<>
-          
-          Read the riddles and write the correct vocabulary word.
-        </>} subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."/>
+        <ExerciseHeader
+          sectionLetter="A"
+          title={<>Read the riddles and write the correct vocabulary word.</>}
+          subTitle="Use the picture, definition, chart, or grammar clue, then complete each answer before checking."
+        />
 
         {/* QUESTIONS */}
         <div className="flex flex-col gap-5 mb-10">
@@ -224,7 +307,16 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
                   maxWidth: "760px",
                 }}
               >
-                <div className="text-[18px]"><AudioText audio={audio} id={`riddle-${i}-line1`} src={[clip0,clip2,clip4,clip6,clip8,clip10][i]} label={`Hear riddle ${i+1}, first line: ${item.line1}`}>{item.line1}</AudioText></div>
+                <div className="text-[18px]">
+                  <AudioText
+                    audio={audio}
+                    id={`riddle-${i}-line1`}
+                    src={[clip0, clip2, clip4, clip6, clip8, clip10][i]}
+                    label={`Hear riddle ${i + 1}, first line: ${item.line1}`}
+                  >
+                    {item.line1}
+                  </AudioText>
+                </div>
 
                 <div
                   className="flex items-center justify-between mt-1"
@@ -232,7 +324,27 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
                     minHeight: "40px",
                   }}
                 >
-                  <span className="text-[18px]">{i<5?<AudioText audio={audio} id={`riddle-${i}-line2`} src={[clip1,clip3,clip5,clip7,clip9][i]} label={`Hear riddle ${i+1}, second line: ${item.line2}`}>{item.line2}</AudioText>:item.line2}</span>
+                  <span className="text-[18px]">
+                    {i < 5 ? (
+                      <AudioText
+                        audio={audio}
+                        id={`riddle-${i}-line2`}
+                        src={[clip1, clip3, clip5, clip7, clip9][i]}
+                        label={`Hear riddle ${i + 1}, second line: ${item.line2}`}
+                      >
+                        {item.line2}
+                      </AudioText>
+                    ) : (
+                      <AudioText
+                        audio={audio}
+                        id={`riddle-${i}-line2`}
+                        src={clip11}
+                        label={`Hear riddle ${i + 1}, second line: ${item.line2}`}
+                      >
+                        {item.line2}
+                      </AudioText>
+                    )}
+                  </span>
 
                   <div
                     style={{
@@ -252,15 +364,36 @@ const Unit10_Page5_Q1 = () => {const audio=useExerciseAudio();const resetButtonR
 
       {/* BUTTONS */}
       <div className="action-buttons-container">
-        <button {...activationKeys} ref={resetButtonRef} aria-label={"Start Again"} type={"button"} className="try-again-button" onClick={handleReset}>
+        <button
+          {...activationKeys}
+          ref={resetButtonRef}
+          aria-label={"Start Again"}
+          type={"button"}
+          className="try-again-button"
+          onClick={handleReset}
+        >
           Start Again ↻
         </button>
 
-        <button {...activationKeys} aria-label={"Show Answer"} type={"button"} className="show-answer-btn" onClick={showAnswers}>
+        <button
+          {...activationKeys}
+          aria-label={"Show Answer"}
+          type={"button"}
+          className="show-answer-btn"
+          onClick={showAnswers}
+        >
           Show Answer
         </button>
 
-        <button style={{cursor:locked?"not-allowed":"pointer"}} {...activationKeys} disabled={locked} aria-label={"Check Answer"} type={"button"} className="check-button2" onClick={checkAnswers}>
+        <button
+          style={{ cursor: locked ? "not-allowed" : "pointer" }}
+          {...activationKeys}
+          disabled={locked}
+          aria-label={"Check Answer"}
+          type={"button"}
+          className="check-button2"
+          onClick={checkAnswers}
+        >
           Check Answer ✓
         </button>
       </div>
